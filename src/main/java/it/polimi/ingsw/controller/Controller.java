@@ -11,7 +11,7 @@ public class Controller implements Observer {
 
     private Model model;
     private View view;
-    private int moment;
+    private int moment = -1;
     private int numberOfPlayers;
 
     public Controller(Model model, View view) {
@@ -38,8 +38,8 @@ public class Controller implements Observer {
 
         } else if (arg instanceof String) {
             try {
-                model.turnHan( moment%numberOfPlayers, (String) arg);
                 moment++;
+                model.turnHan( moment%numberOfPlayers, (String) arg);
                 System.out.println(moment+ " <- moment capsule molli");
             } catch (Exception e) {
                 e.printStackTrace();
