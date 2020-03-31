@@ -49,15 +49,13 @@ public class View extends Observable implements Runnable, Observer {
     @Override
     public void update(Observable o, Object arg) {
 
-        System.out.println(arg);
+        System.out.println((IslandBoard)arg);
         i++;
         if (i > 1) {
             System.out.println("Stampa turno");
             setChanged();
             notifyObservers(in.nextLine());
         }
-        setChanged();
-        notifyObservers(in.nextLine());
     }
 
 
