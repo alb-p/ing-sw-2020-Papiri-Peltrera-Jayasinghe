@@ -37,7 +37,7 @@ public class Controller implements Observer {
 
 
         } else if (arg instanceof String) {
-                 try {
+            try {
                 if (model.getPlayer(moment%numberOfPlayers).hasDone()) {
                     moment++;
                 }

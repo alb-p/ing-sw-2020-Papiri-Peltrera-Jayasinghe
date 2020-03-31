@@ -41,14 +41,14 @@ public class BasicGodCard {
 
 
     public boolean turnHandler(Player player, IslandBoard board, String string, boolean halfDone) throws Exception {
-        // MOVE 0,0 IN 3,2 & BUILD 2,1
+        // MOVE 0,0 IN 3,2 & BUILD IN 2,1
         String[] words = string.split(" ");
         if (!halfDone && words[0].toUpperCase().equals("MOVE")) {
 
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
 
         }if (!halfDone && words.length>4) {
-            this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[6]), board, new Floor());
+            this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[7]), board, new Floor());
             return true;
         }
         if(halfDone && words[0].toUpperCase().equals("BUILD")){

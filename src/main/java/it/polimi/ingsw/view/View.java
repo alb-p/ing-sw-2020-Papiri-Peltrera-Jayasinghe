@@ -13,6 +13,7 @@ public class View extends Observable implements Runnable, Observer {
     private Scanner in;
     private PrintStream out;
     private int i=0;
+    private int numberOfPlayers =  0 ;
 
 
     public View() {
@@ -25,24 +26,22 @@ public class View extends Observable implements Runnable, Observer {
     public void run() {
 
         System.out.println("WeLcOmE!'' on Santorini");
-        //setChanged();
-        //notifyObservers("new");
         setPlayersNumber();
     }
 
     private void setPlayersNumber(){
 
-        int k = 3;
+        int numberOfPlayers= 3;
         System.out.println("2 or 3 plaYers?");
-        k = in.nextInt();
-        while (k != 2 && k != 3) {
+        numberOfPlayers= in.nextInt();
+        while (numberOfPlayers!= 2 && numberOfPlayers!= 3) {
             System.out.println("Invalid number, 2 or 3 plaYers?");
-            k = in.nextInt();
+            numberOfPlayers= in.nextInt();
 
         }
         in.nextLine();
         setChanged();
-        notifyObservers((Integer) k);
+        notifyObservers((Integer) numberOfPlayers);
     }
 
 
@@ -51,7 +50,7 @@ public class View extends Observable implements Runnable, Observer {
 
         System.out.println((IslandBoard)arg);
         i++;
-        if (i > 1) {
+        if (i > numberOfPlayers - 1) {
             System.out.println("Stampa turno");
             setChanged();
             notifyObservers(in.nextLine());
