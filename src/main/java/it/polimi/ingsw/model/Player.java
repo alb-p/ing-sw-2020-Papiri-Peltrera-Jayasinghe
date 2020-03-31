@@ -13,7 +13,8 @@ public class Player {
 
     private String nickName;
     private BasicGodCard card;
-
+    private boolean done=false;
+    private boolean halfDone=false;
 
     public Player(String nickName, String color) {
 
@@ -83,11 +84,16 @@ public class Player {
         return this.workers.get(i);
     }
 
-    public void turnHan(IslandBoard board, String message)throws Exception{
-        this.card.turnHandler(this, board, message);
-        return;
+    public void turnHandler(IslandBoard board, String message)throws Exception{
+
+        this.done = this.card.turnHandler(this, board, message,  this.halfDone);
+        if(!done)halfDone=true;
+        if(done)halfDone=false;
     }
 
 
+    public boolean hasDone(){
+        return this.done;
+    }
 
 }

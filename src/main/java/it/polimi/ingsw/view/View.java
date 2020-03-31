@@ -12,6 +12,7 @@ public class View extends Observable implements Runnable, Observer {
 
     private Scanner in;
     private PrintStream out;
+    private int i=0;
 
 
     public View() {
@@ -41,7 +42,7 @@ public class View extends Observable implements Runnable, Observer {
         }
         in.nextLine();
         setChanged();
-        notifyObservers(k);
+        notifyObservers((Integer) k);
     }
 
 
@@ -49,6 +50,12 @@ public class View extends Observable implements Runnable, Observer {
     public void update(Observable o, Object arg) {
 
         System.out.println(arg);
+        i++;
+        if (i > 1) {
+            System.out.println("Stampa turno");
+            setChanged();
+            notifyObservers(in.nextLine());
+        }
         setChanged();
         notifyObservers(in.nextLine());
     }

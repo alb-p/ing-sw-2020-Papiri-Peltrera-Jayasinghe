@@ -39,21 +39,25 @@ public class BasicGodCard {
         return false;
     }
 
-    public void turnHandler(Player player, IslandBoard board, String string) throws Exception {
+
+    public boolean turnHandler(Player player, IslandBoard board, String string, boolean halfDone) throws Exception {
         // MOVE 0,0 IN 3,2 & BUILD 2,1
         String[] words = string.split(" ");
-        System.out.println("QUI");
-        if (words[0].toUpperCase().equals("MOVE")) {
+        if (!halfDone && words[0].toUpperCase().equals("MOVE")) {
 
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
 
-            if (words[5].toUpperCase().equals("BUILD")) {
-                this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[6]), board, new Floor());
-            }
+        }if (!halfDone && words.length>4) {
+            this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[6]), board, new Floor());
+            return true;
+        }
+        if(halfDone && words[0].toUpperCase().equals("BUILD")){
+            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board, new Floor());
+            return true;
 
         }
 
-        return;
+return false;
     }
 
     public Coordinate stringToCoord (String string){
