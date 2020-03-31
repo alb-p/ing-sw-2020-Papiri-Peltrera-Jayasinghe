@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.gods.Artemis;
-import it.polimi.ingsw.gods.Atlas;
+//import it.polimi.ingsw.gods.Artemis;
+//import it.polimi.ingsw.gods.Atlas;
 
 import java.util.Scanner;
 import java.util.ArrayList;
@@ -27,10 +27,10 @@ public class Player {
     public void setCard(String card) {
         BasicGodCard godCard = new BasicGodCard();
         if(card.equals("ATLAS")){
-            this.card = new Atlas();
+          //  this.card = new Atlas();
             return;
         } else if(card.equals("ARTEMIS")){
-            this.card = new Artemis();
+          //  this.card = new Artemis();
             return;
         }
         else {this.card = godCard;}
