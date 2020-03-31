@@ -33,10 +33,6 @@ public class Model extends Observable {
         return this.players.get(i);
     }
 
-    public IslandBoard getBoard(){
-        return this.board;
-    }
-
     public void turnHandler(int i, String message) throws  Exception{
         players.get(i).turnHandler(this.board, message);
         setChanged();
