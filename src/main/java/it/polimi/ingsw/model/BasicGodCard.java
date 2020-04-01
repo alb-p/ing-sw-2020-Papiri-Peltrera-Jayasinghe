@@ -56,15 +56,12 @@ public class BasicGodCard {
             return true;
 
         }
-
-return false;
+        return false;
     }
 
     public Coordinate stringToCoord (String string){
         String[] coords = string.split(",");
         return new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-
-
     }
 }
 

@@ -16,7 +16,6 @@ public class Model extends Observable {
 
     public void addWorker(int playerPosition, Coordinate c, int workerPosition) throws Exception {
 
-
         board.infoSlot(c).occupy(players.get(playerPosition).getWorker(workerPosition));
         players.get(playerPosition).getWorker(workerPosition).setPosition(c);
 
@@ -34,6 +33,7 @@ public class Model extends Observable {
     }
 
     public void turnHandler(int i, String message) throws  Exception{
+
         players.get(i).turnHandler(this.board, message);
         setChanged();
         notifyObservers(board);

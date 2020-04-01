@@ -71,7 +71,6 @@ public class View extends Observable implements Runnable, Observer {
     public String setColor(ArrayList<String> listaColori,String nick) {
 
         String color;
-
         do {
             System.out.println("Ok " + nick + ", which color do you prefer?");
             for (String s : listaColori) {
@@ -80,7 +79,6 @@ public class View extends Observable implements Runnable, Observer {
             System.out.print("\n");
             color = in.nextLine().toUpperCase();
         } while (!listaColori.contains(color));
-
         return color.toUpperCase();
     }
 
