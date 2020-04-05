@@ -6,11 +6,14 @@ public class BasicGodCard {
 
     public void move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         //necessario dare anche la board alla carta per poter segnare la propria mossa
-        if (w.getPosition().isAdjacent(coord)) {
-            Slot slot = board.infoSlot(coord);
-            if (slot.isFree()) {
-                board.infoSlot(w.getPosition()).free();
-                slot.occupy(w);
+        Slot workerSlot = board.infoSlot(w.getPosition());
+        Slot destSlot = board.infoSlot(coord);
+        if (w.getPosition().isAdjacent(coord) && (workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() >= -1 ||
+                workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() <= 1)) {
+
+            if (destSlot.isFree()) {
+                workerSlot.free();
+                destSlot.occupy(w);
                 w.setPosition(coord);
             } else {
                 throw new Exception("The selected slot is not free");
@@ -18,11 +21,15 @@ public class BasicGodCard {
         }
     }
 
-    public void build(Worker w, Coordinate coord, IslandBoard board, Construction construction) throws Exception {
-        if (w.getPosition().isAdjacent(coord)) {
+    public void build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
+        if (w.getPosition().isAdjacent(coord) && board.infoSlot(coord).isFree()) {
             Slot slot = board.infoSlot(coord);
             //construction.build(slot);
-            slot.construct(construction);
+            if (board.infoSlot(coord).getConstructionLevel() < 3) {
+                slot.construct(Construction.FLOOR);
+            } else {
+                slot.construct(Construction.DOME);
+            }
         } else {
             throw new Exception("Invalid build");
         }
@@ -47,21 +54,25 @@ public class BasicGodCard {
 
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
 
-        }if (!halfDone && words.length>4) {
-            this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[7]), board, new Floor());
+        }
+        if (!halfDone && words.length > 4) {
+            this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[7]), board);
             return true;
         }
-        if(halfDone && words[0].toUpperCase().equals("BUILD")){
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board, new Floor());
+        if (halfDone && words[0].toUpperCase().equals("BUILD")) {
+            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
             return true;
 
         }
+
         return false;
     }
 
-    public Coordinate stringToCoord (String string){
+    public Coordinate stringToCoord(String string) {
         String[] coords = string.split(",");
         return new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
+
+
     }
 }
 

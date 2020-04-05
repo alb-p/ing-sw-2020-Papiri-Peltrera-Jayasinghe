@@ -35,8 +35,9 @@ public class Model extends Observable {
     public void turnHandler(int i, String message) throws  Exception{
 
         players.get(i).turnHandler(this.board, message);
+
         setChanged();
-        notifyObservers(board);
+        notifyObservers(board.clone());
 
     }
 }

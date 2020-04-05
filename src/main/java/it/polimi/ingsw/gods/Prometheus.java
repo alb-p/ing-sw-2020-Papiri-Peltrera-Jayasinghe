@@ -24,12 +24,12 @@ public class Prometheus extends BasicGodCard {
 
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
             if (words.length > 4) {
-                this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[7]), board, new Floor());
+                this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[7]), board);
                 return true;
             }
         }
         if (halfDone && words[0].toUpperCase().equals("BUILD")) {
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board, new Floor());
+            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
             return true;
 
         }
@@ -37,9 +37,9 @@ public class Prometheus extends BasicGodCard {
         if (!halfDone && words[0].toUpperCase().equals("BUILD") &&
                 board.infoSlot(stringToCoord(words[1])).getConstructionLevel() >=
                         board.infoSlot(stringToCoord(words[7])).getConstructionLevel()) {
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board, new Floor());
+            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[7]), board);
-            this.build(player.getWorker(stringToCoord(words[7])), stringToCoord(words[11]), board, new Floor());
+            this.build(player.getWorker(stringToCoord(words[7])), stringToCoord(words[11]), board);
         }
         return false;
     }

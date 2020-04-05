@@ -20,18 +20,18 @@ public class Demeter extends BasicGodCard {
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
 
         }if (!halfDone && words.length>4) {
-            this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[7]), board, new Floor());
+            this.build(player.getWorker(stringToCoord(words[3])),stringToCoord(words[7]), board);
             if(words.length>9){
                 if(!(stringToCoord(words[7])).equals(stringToCoord(words[10]))){
-                    this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[10]), board, new Floor());
+                    this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[10]), board);
                 }
             }
             return true;
         }
         if(halfDone && words[0].toUpperCase().equals("BUILD")){
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board, new Floor());
+            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
             if(!(stringToCoord(words[3])).equals(stringToCoord(words[6]))){
-                this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[6]), board, new Floor());
+                this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[6]), board);
             }
             return true;
         }
