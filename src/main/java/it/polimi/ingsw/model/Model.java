@@ -30,9 +30,9 @@ public class Model extends Observable {
     public void setCard(int playerPosition, String card) throws CloneNotSupportedException {
 
         players.get(playerPosition).setCard(card.toUpperCase());
-        modelListeners.firePropertyChange("setCard", null, board.clone());
-
+        modelListeners.firePropertyChange("initialBoard", null, board.clone());
     }
+
     public Player getPlayer(int i){
         return this.players.get(i);
     }

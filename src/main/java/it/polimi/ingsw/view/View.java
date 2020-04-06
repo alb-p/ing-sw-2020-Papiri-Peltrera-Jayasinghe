@@ -13,11 +13,13 @@ public class View implements Runnable, PropertyChangeListener {
 
     private Scanner in;
     private PrintStream out;
-    private int i=0;
-    private int numberOfPlayers = 0 ;
+    private int i = 0;
+    private int numberOfPlayers = 0;
+    private IslandBoard board;
+
     private PropertyChangeSupport viewListeners = new PropertyChangeSupport(this);
 
-    public void addViewListener(PropertyChangeListener listener){
+    public void addViewListener(PropertyChangeListener listener) {
         viewListeners.addPropertyChangeListener(listener);
     }
 
@@ -37,19 +39,18 @@ public class View implements Runnable, PropertyChangeListener {
     }
 
 
-    private void setPlayersNumber(){
+    private void setPlayersNumber() {
 
-        numberOfPlayers= 3;
+        numberOfPlayers = 3;
         System.out.println("2 or 3 plaYers?");
-        numberOfPlayers= in.nextInt();
-        while (numberOfPlayers!= 2 && numberOfPlayers!= 3) {
+        numberOfPlayers = in.nextInt();
+        while (numberOfPlayers != 2 && numberOfPlayers != 3) {
             System.out.println("Invalid number, 2 or 3 plaYers?");
-            numberOfPlayers= in.nextInt();
+            numberOfPlayers = in.nextInt();
         }
         in.nextLine();
         viewListeners.firePropertyChange("playersNumber", null, numberOfPlayers);
     }
-
 
 
     public String setNick(int i) {
@@ -59,8 +60,7 @@ public class View implements Runnable, PropertyChangeListener {
     }
 
 
-
-    public String setColor(ArrayList<String> listaColori,String nick) {
+    public String setColor(ArrayList<String> listaColori, String nick) {
 
         String color;
         do {
@@ -83,7 +83,7 @@ public class View implements Runnable, PropertyChangeListener {
         int col = in.nextInt();
 
         in.nextLine();
-        return(new Coordinate(row,col));
+        return (new Coordinate(row, col));
     }
 
 
@@ -97,16 +97,21 @@ public class View implements Runnable, PropertyChangeListener {
 
     public String requestTask() {
 
-        return(in.nextLine());
+        return (in.nextLine());
     }
 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println(evt.getNewValue());
-        i++;
-        System.out.println("Valore i in update di view "+i);
-        if (i > numberOfPlayers -1) {
+        //At the beginning of the game, Model sends a board copy
+        if (evt.getPropertyName().equals("initialBoard")) {
+            board = (IslandBoard) evt.getNewValue();
+            System.out.println(board);
+        }
+
+        if (evt.getPropertyName().equals("turnHandler") && i > numberOfPlayers - 1) {
+            i++;
+            System.out.println(board);
             System.out.println("Stampa turno");
             viewListeners.firePropertyChange("playerAction", null, in.nextLine());
         }
