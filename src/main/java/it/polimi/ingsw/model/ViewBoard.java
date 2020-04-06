@@ -1,26 +1,28 @@
 package it.polimi.ingsw.model;
 
-public class IslandBoard implements Cloneable{
+public class ViewBoard {
 
-    Slot[][] board = new Slot[5][5];
 
-    public IslandBoard(){
-        for(int i=0; i<5; i++){
-            for(int j=0 ; j<5; j++){
-                board[i][j]= new Slot();
+    ViewSlot[][] board = new ViewSlot[5][5];
+
+    public ViewBoard() {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                board[i][j] = new ViewSlot();
             }
         }
     }
 
-    public Slot infoSlot(Coordinate coord) throws Exception {
-        if(coord.getCol()>=0 && coord.getCol()<5 &&
-                coord.getRow()>=0 && coord.getRow()<5){
-            return board[coord.getRow()][coord.getCol()];
+    public ViewBoard(IslandBoard realBoard){
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 5; j++) {
+                board[i][j] = new ViewSlot(realBoard.getSlot(i,j),new Coordinate(i,j));
+
+            }
         }
-        else{
-            throw new Exception("Invalid Row or Column value");
-        }
+
     }
+
 
 
     public String toString (){
@@ -43,17 +45,14 @@ public class IslandBoard implements Cloneable{
         return (total.toString());
     }
 
-    public Slot getSlot(int i,int j){
+    public ViewSlot getSlot(int i,int j){
         return board[i][j];
 
     }
 
-    @Override
-    protected Object clone() throws CloneNotSupportedException {
-        final IslandBoard result = new IslandBoard();
-        for(int i = 0; i < 5; i++){
-            result.board[i] = board[i].clone();
-        }
-        return result;
+    public void add(ViewSlot vSlot) {
+
+        this.board[vSlot.getCoord().getRow()][vSlot.getCoord().getCol()]=vSlot;
+
     }
 }

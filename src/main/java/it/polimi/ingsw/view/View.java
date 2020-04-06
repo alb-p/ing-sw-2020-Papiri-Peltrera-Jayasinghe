@@ -15,7 +15,8 @@ public class View implements Runnable, PropertyChangeListener {
     private PrintStream out;
     private int i = 0;
     private int numberOfPlayers = 0;
-    private IslandBoard board;
+    private ViewBoard vBoard;
+
 
     private PropertyChangeSupport viewListeners = new PropertyChangeSupport(this);
 
@@ -28,6 +29,7 @@ public class View implements Runnable, PropertyChangeListener {
 
         in = new Scanner(System.in);
         out = new PrintStream(System.out);
+        vBoard = new ViewBoard();
     }
 
 
@@ -95,25 +97,26 @@ public class View implements Runnable, PropertyChangeListener {
         return cardName.toUpperCase();
     }
 
-    public String requestTask() {
 
-        return (in.nextLine());
-    }
 
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //At the beginning of the game, Model sends a board copy
-        if (evt.getPropertyName().equals("initialBoard")) {
-            board = (IslandBoard) evt.getNewValue();
-            System.out.println(board);
+
+        if (evt.getPropertyName().equals("turnHandler") ){
+            i++;
+            if (i > numberOfPlayers - 1) {
+
+                System.out.println(vBoard);
+                System.out.println("Stampa turno");
+                viewListeners.firePropertyChange("playerAction", null, in.nextLine());
+            }else System.out.println(vBoard);
+
+
+        }else if (evt.getPropertyName().equals("deltaUpdate")) {
+            vBoard.add((ViewSlot) evt.getNewValue());
         }
 
-        if (evt.getPropertyName().equals("turnHandler") && i > numberOfPlayers - 1) {
-            i++;
-            System.out.println(board);
-            System.out.println("Stampa turno");
-            viewListeners.firePropertyChange("playerAction", null, in.nextLine());
-        }
+
     }
 }

@@ -39,6 +39,7 @@ public class Controller implements PropertyChangeListener {
                 if (model.getPlayer(moment%numberOfPlayers).hasDone()) {
                     moment++;
                 }
+
                 model.turnHandler(moment % numberOfPlayers, (String) evt.getNewValue());
             } catch (Exception e) {
                 e.printStackTrace();

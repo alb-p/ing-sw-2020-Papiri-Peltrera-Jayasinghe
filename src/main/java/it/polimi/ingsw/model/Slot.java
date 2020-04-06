@@ -2,7 +2,7 @@ package it.polimi.ingsw.model;
 
 import java.io.IOException;
 
-public class Slot{
+public class Slot {
 
     private Construction buildings[] = new Construction[4];
     private boolean free;
@@ -96,8 +96,6 @@ public class Slot{
     public Worker getWorker() {
         return this.worker;
     }
-
-
 
 
 }
