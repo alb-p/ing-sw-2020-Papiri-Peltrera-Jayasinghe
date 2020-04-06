@@ -3,16 +3,20 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.view.View;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
-public class Controller implements Observer {
+public class Controller implements PropertyChangeListener {
 
     private Model model;
     private View view;
     private int moment = 0;
     private int numberOfPlayers;
+
+
 
     public Controller(Model model, View view) {
 
@@ -20,15 +24,9 @@ public class Controller implements Observer {
         this.view = view;
     }
 
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-        if (o != view) {
-            System.out.println("Error!");
-        } else if (arg instanceof Integer) {
-
-            numberOfPlayers = (Integer) arg;
+    public void propertyChange(PropertyChangeEvent evt){
+        if (evt.getPropertyName().equals("playersNumber")) {
+            numberOfPlayers = (Integer) evt.getNewValue();
             try {
                 initPlayers(numberOfPlayers);
             } catch (Exception e) {
@@ -36,18 +34,16 @@ public class Controller implements Observer {
             }
 
 
-        } else if (arg instanceof String) {
+        } else if (evt.getPropertyName().equals("playerAction")) {
             try {
                 if (model.getPlayer(moment%numberOfPlayers).hasDone()) {
                     moment++;
                 }
-                model.turnHandler(moment % numberOfPlayers, (String) arg);
+                model.turnHandler(moment % numberOfPlayers, (String) evt.getNewValue());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-
     }
 
     private void initPlayers(Integer k) throws Exception {

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Observable;
 
@@ -8,7 +10,7 @@ public class Model extends Observable {
 
     private ArrayList<Player> players = new ArrayList<Player>();
     private IslandBoard board = new IslandBoard();
-
+    private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
 
     public void addPlayer(Player p) {
         players.add(p);
@@ -21,23 +23,25 @@ public class Model extends Observable {
 
     }
 
+    public void addModelListener(PropertyChangeListener listener){
+        modelListeners.addPropertyChangeListener(listener);
+    }
+
     public void setCard(int playerPosition, String card) throws CloneNotSupportedException {
 
         players.get(playerPosition).setCard(card.toUpperCase());
-        setChanged();
-        notifyObservers(board.clone());
+        modelListeners.firePropertyChange("setCard", null, board.clone());
 
     }
     public Player getPlayer(int i){
         return this.players.get(i);
     }
 
+
     public void turnHandler(int i, String message) throws  Exception{
 
         players.get(i).turnHandler(this.board, message);
-
-        setChanged();
-        notifyObservers(board.clone());
+        modelListeners.firePropertyChange("turnHandler", null, board.clone());
 
     }
 }
