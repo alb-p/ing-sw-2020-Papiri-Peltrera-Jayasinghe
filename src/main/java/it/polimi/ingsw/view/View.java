@@ -2,18 +2,24 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.PrintStream;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
 import java.util.Scanner;
 
-public class View extends Observable implements Runnable, Observer {
+public class View implements Runnable, PropertyChangeListener {
 
     private Scanner in;
     private PrintStream out;
     private int i=0;
     private int numberOfPlayers = 0 ;
+    private PropertyChangeSupport viewListeners = new PropertyChangeSupport(this);
+
+    public void addViewListener(PropertyChangeListener listener){
+        viewListeners.addPropertyChangeListener(listener);
+    }
 
 
     public View() {
@@ -22,12 +28,14 @@ public class View extends Observable implements Runnable, Observer {
         out = new PrintStream(System.out);
     }
 
+
     @Override
     public void run() {
 
         System.out.println("WeLcOmE!'' on Santorini");
         setPlayersNumber();
     }
+
 
     private void setPlayersNumber(){
 
@@ -37,25 +45,9 @@ public class View extends Observable implements Runnable, Observer {
         while (numberOfPlayers!= 2 && numberOfPlayers!= 3) {
             System.out.println("Invalid number, 2 or 3 plaYers?");
             numberOfPlayers= in.nextInt();
-
         }
         in.nextLine();
-        setChanged();
-        notifyObservers((Integer) numberOfPlayers);
-    }
-
-
-    @Override
-    public void update(Observable o, Object arg) {
-
-        System.out.println((IslandBoard)arg);
-        i++;
-        System.out.println("Valore i in update di view "+i);
-        if (i > numberOfPlayers -1) {
-            System.out.println("Stampa turno");
-            setChanged();
-            notifyObservers(in.nextLine());
-        }
+        viewListeners.firePropertyChange("playersNumber", null, numberOfPlayers);
     }
 
 
@@ -83,7 +75,6 @@ public class View extends Observable implements Runnable, Observer {
     }
 
 
-
     public Coordinate setWorkers(int j) {
 
         System.out.println("Set position for worker no " + j + ":\n\trow :");
@@ -94,7 +85,6 @@ public class View extends Observable implements Runnable, Observer {
         in.nextLine();
         return(new Coordinate(row,col));
     }
-
 
 
     public String setCard(int i) {
@@ -108,5 +98,17 @@ public class View extends Observable implements Runnable, Observer {
     public String requestTask() {
 
         return(in.nextLine());
+    }
+
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println(evt.getNewValue());
+        i++;
+        System.out.println("Valore i in update di view "+i);
+        if (i > numberOfPlayers -1) {
+            System.out.println("Stampa turno");
+            viewListeners.firePropertyChange("playerAction", null, in.nextLine());
+        }
     }
 }
