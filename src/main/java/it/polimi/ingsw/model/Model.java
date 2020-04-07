@@ -11,7 +11,7 @@ public class Model {
     private ArrayList<Player> players = new ArrayList<Player>();
     private IslandBoard board = new IslandBoard();
     private ViewBoard oldBoard;
-    ViewSlot vSlot;
+    private ViewSlot vSlot;
 
     private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
 

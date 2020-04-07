@@ -39,7 +39,8 @@ public class Worker{
         return this.color.toString();
     }
 
-    public Worker getCollega(IslandBoard board) throws Exception {
+    //TODO is it necessary?
+    public Worker getColleague(IslandBoard board) throws Exception {
         Coordinate coord;
         Slot slot;
         for(int i=0;i<board.board.length;i++){
