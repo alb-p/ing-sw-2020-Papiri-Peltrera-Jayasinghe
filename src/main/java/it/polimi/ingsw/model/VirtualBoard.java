@@ -1,23 +1,23 @@
 package it.polimi.ingsw.model;
 
-public class ViewBoard {
+public class VirtualBoard {
 
 
-    ViewSlot[][] board = new ViewSlot[5][5];
+    VirtualSlot[][] board = new VirtualSlot[5][5];
 
-    public ViewBoard() {
+    public VirtualBoard() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                board[i][j] = new ViewSlot();
+                board[i][j] = new VirtualSlot();
             }
         }
     }
 
-    public ViewBoard(IslandBoard realBoard){
+    public VirtualBoard(IslandBoard realBoard){
+        System.out.println("SONO IL COSTRUTTORE VIRTUAL BOARD");
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                board[i][j] = new ViewSlot(realBoard.getSlot(i,j),new Coordinate(i,j));
-
+                board[i][j] = new VirtualSlot(realBoard.getSlot(i,j),new Coordinate(i,j));
             }
         }
 
@@ -45,12 +45,12 @@ public class ViewBoard {
         return (total.toString());
     }
 
-    public ViewSlot getSlot(int i,int j){
+    public VirtualSlot getSlot(int i, int j){
         return board[i][j];
 
     }
 
-    public void add(ViewSlot vSlot) {
+    public void add(VirtualSlot vSlot) {
 
         this.board[vSlot.getCoord().getRow()][vSlot.getCoord().getCol()]=vSlot;
 

@@ -3,15 +3,14 @@ package it.polimi.ingsw.model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Observable;
 
 public class Model {
 
 
     private ArrayList<Player> players = new ArrayList<Player>();
     private IslandBoard board = new IslandBoard();
-    private ViewBoard oldBoard;
-    private ViewSlot vSlot;
+    private VirtualBoard oldBoard;
+    private VirtualSlot vSlot;
 
     private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
 
@@ -25,7 +24,7 @@ public class Model {
         board.infoSlot(c).occupy(players.get(playerPosition).getWorker(workerPosition));
         players.get(playerPosition).getWorker(workerPosition).setPosition(c);
 
-        vSlot = new ViewSlot(board.infoSlot(c), c);
+        vSlot = new VirtualSlot(board.infoSlot(c), c);
 
         modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
 
@@ -51,7 +50,7 @@ public class Model {
 
 
     public void turnHandler(int i, String message) throws Exception {
-        oldBoard = new ViewBoard(board);
+        oldBoard = new VirtualBoard(board);
         players.get(i).turnHandler(this.board, message);
         notifyChanges();
 
@@ -62,13 +61,13 @@ public class Model {
 
     private void notifyChanges() {
 
-        ViewSlot oldVSlot;
+        VirtualSlot oldVSlot;
 
         for (int i = 0; i < board.board.length; i++) {
             for (int j = 0; j < board.board.length; j++) {
 
                 oldVSlot = oldBoard.getSlot(i, j);
-                vSlot = new ViewSlot(board.getSlot(i, j), new Coordinate(i, j));
+                vSlot = new VirtualSlot(board.getSlot(i, j), new Coordinate(i, j));
 
                 modelListeners.firePropertyChange("deltaUpdate", oldVSlot, vSlot);
             }

@@ -15,7 +15,7 @@ public class View implements Runnable, PropertyChangeListener {
     private PrintStream out;
     private int i = 0;
     private int numberOfPlayers = 0;
-    private ViewBoard vBoard;
+    private VirtualBoard vBoard;
 
 
     private PropertyChangeSupport viewListeners = new PropertyChangeSupport(this);
@@ -29,7 +29,7 @@ public class View implements Runnable, PropertyChangeListener {
 
         in = new Scanner(System.in);
         out = new PrintStream(System.out);
-        vBoard = new ViewBoard();
+        vBoard = new VirtualBoard();
     }
 
 
@@ -114,7 +114,7 @@ public class View implements Runnable, PropertyChangeListener {
 
 
         }else if (evt.getPropertyName().equals("deltaUpdate")) {
-            vBoard.add((ViewSlot) evt.getNewValue());
+            vBoard.add((VirtualSlot)evt.getNewValue());
         }
 
 

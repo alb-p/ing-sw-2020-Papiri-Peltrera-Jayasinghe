@@ -1,21 +1,19 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.view.View;
-
-public class ViewSlot {
+public class VirtualSlot {
 
 
     private String content;
     private Coordinate coord;
 
-    public ViewSlot(Slot s, Coordinate c) {
+    public VirtualSlot(Slot s, Coordinate c) {
 
         this.content = s.toString();
         this.coord = c;
     }
 
 
-    public ViewSlot() {
+    public VirtualSlot() {
         this.coord = null;
         this.content = "  ";
     }
@@ -33,8 +31,8 @@ public class ViewSlot {
     @Override
     public boolean equals(Object that) {
 
-        if (that instanceof ViewSlot)
-            return this.content.equals(((ViewSlot) that).content);
+        if (that instanceof VirtualSlot)
+            return this.content.equals(((VirtualSlot) that).content);
 
         return false;
     }
