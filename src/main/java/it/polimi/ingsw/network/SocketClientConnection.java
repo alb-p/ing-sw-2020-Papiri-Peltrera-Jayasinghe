@@ -8,7 +8,7 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-import static jdk.internal.net.http.common.Utils.close;
+//import static jdk.internal.net.http.common.Utils.close;
 
 public class SocketClientConnection implements Runnable {
 
@@ -55,7 +55,7 @@ public class SocketClientConnection implements Runnable {
         } catch (IOException | NoSuchElementException e) {
             System.err.println("Error!" + e.getMessage());
         }finally{
-            close();
+            //close();
         }
     }
 

@@ -20,12 +20,9 @@ public class Model {
     }
 
     public void addWorker(int playerPosition, Coordinate c, int workerPosition) throws Exception {
-
         board.infoSlot(c).occupy(players.get(playerPosition).getWorker(workerPosition));
         players.get(playerPosition).getWorker(workerPosition).setPosition(c);
-
         vSlot = new VirtualSlot(board.infoSlot(c), c);
-
         modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
 
     }
@@ -37,7 +34,6 @@ public class Model {
 
 
     public void setCard(int playerPosition, String card) throws CloneNotSupportedException {
-
         players.get(playerPosition).setCard(card.toUpperCase());
         modelListeners.firePropertyChange("turnHandler", null, true);
 
@@ -48,15 +44,18 @@ public class Model {
         return this.players.get(i);
     }
 
+    public boolean nameDuplicate(String name){
+        for(Player p: players){
+            if(p.getNickName().equals(name)) return true;
+        }
+        return false;
+    }
 
     public void turnHandler(int i, String message) throws Exception {
         oldBoard = new VirtualBoard(board);
         players.get(i).turnHandler(this.board, message);
         notifyChanges();
-
         modelListeners.firePropertyChange("turnHandler", null, true);
-
-
     }
 
     private void notifyChanges() {

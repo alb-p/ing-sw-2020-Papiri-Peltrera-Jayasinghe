@@ -81,7 +81,6 @@ public class Player {
     }
 
     public String getNickName() {
-
         return this.nickName;
     }
 

@@ -49,15 +49,23 @@ public class Controller implements PropertyChangeListener {
 
     private void initPlayers(Integer k) throws Exception {
 
+        boolean sameName;
+        String nick = null;
         String color;
         ArrayList<String> colorList = new ArrayList<String>();
         for (Color c : Color.values().clone()) {
             colorList.add(c.getName());
         }
 
+        //TODO rename k var
         for (int i = 0; i < k; i++) {
 
-            String nick = this.view.setNick(i);
+            sameName = false;
+            while(!sameName) {
+                // TODO verify all names are different
+                nick = this.view.setNick(i);
+                if (!model.nameDuplicate(nick)) sameName = true;
+            }
 
             if (i == 2) {
                 color = colorList.get(0);
