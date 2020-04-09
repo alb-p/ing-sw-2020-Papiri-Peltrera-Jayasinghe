@@ -5,17 +5,15 @@ import it.polimi.ingsw.view.View;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
+import java.util.*;
 
 public class Controller implements PropertyChangeListener {
+
 
     private Model model;
     private View view;
     private int moment = 0;
     private int numberOfPlayers;
-
 
 
     public Controller(Model model, View view) {

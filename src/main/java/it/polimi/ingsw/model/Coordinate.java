@@ -33,7 +33,7 @@ public class Coordinate{
     }
 
     public String toString(){
-        return "\nRow_:"+this.row+"\nCol :"+this.col;
+        return "\nRow :"+this.row+"\nCol :"+this.col;
     }
 
 

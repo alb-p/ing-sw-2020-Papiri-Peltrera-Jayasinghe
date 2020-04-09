@@ -26,6 +26,7 @@ public class CoordinateTest {
 
     }
 
+
     @Test
     public void equalsTest(){
         Coordinate c1= new Coordinate(0,0);
@@ -48,4 +49,13 @@ public class CoordinateTest {
 
 
     }
+
+    @Test
+    public void toStringTest(){
+        Coordinate c1= new Coordinate(3,2);
+
+        Assert.assertEquals("\nRow :3\nCol :2", c1.toString());
+
+    }
+
 }
