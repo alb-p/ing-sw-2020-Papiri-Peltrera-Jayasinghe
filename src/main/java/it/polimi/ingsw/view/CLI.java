@@ -37,6 +37,7 @@ public class CLI extends RemoteView implements Runnable, PropertyChangeListener 
         if (evt.getPropertyName().equals("initialBoard")) {
             board = (IslandBoard) evt.getNewValue();
             System.out.println(board);
+            
         }
     }
 
