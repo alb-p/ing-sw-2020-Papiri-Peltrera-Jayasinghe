@@ -89,7 +89,6 @@ public class View implements Runnable, PropertyChangeListener {
 
 
     public Coordinate setWorkers(int j) {
-
         System.out.println("Set position for worker no " + j + ":\n\trow :");
         int row = in.nextInt();
         System.out.println("\tcol :");

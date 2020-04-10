@@ -5,7 +5,7 @@ public enum Construction {
 
     private String symbol;
 
-    private Construction(String symbol){
+    Construction(String symbol){
         this.symbol=symbol;
     }
 

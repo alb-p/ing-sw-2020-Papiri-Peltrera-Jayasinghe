@@ -20,9 +20,7 @@ public class Player {
     private boolean halfDone = false;
 
     public Player(String nickName, String color) {
-
         this.nickName = nickName;
-
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
 
@@ -50,34 +48,7 @@ public class Player {
     }
 
     public BasicGodCard getCard() {
-
         return this.card;
-    }
-
-
-    public void setWorker(IslandBoard board) throws Exception {
-
-        Scanner in = new Scanner(System.in);
-
-        for (int i = 0; i < workers.size(); i++) {
-            System.out.println("Set position for worker no " + i + ":\n\trow :");
-            int row = in.nextInt();
-            System.out.println("\tcol :");
-            int col = in.nextInt();
-            Coordinate coord = new Coordinate(row, col);
-            while (!board.infoSlot(coord).isFree()) {
-
-                System.out.println("Invalid position,\nSet new position for worker no " + i + ":\n\trow :");
-                row = in.nextInt();
-                System.out.println("\tcol :");
-                col = in.nextInt();
-                coord = new Coordinate(row, col);
-
-            }
-            board.infoSlot(coord).occupy(workers.get(i));
-            workers.get(i).setPosition(coord);
-
-        }
     }
 
     public String getNickName() {
@@ -86,7 +57,6 @@ public class Player {
 
 
     public Worker getWorker(Coordinate c) {
-
         for (int i = 0; i < workers.size(); i++) {
             if (c.equals(workers.get(i).getPosition())) {
                 return workers.get(i);
@@ -100,7 +70,6 @@ public class Player {
     }
 
     public void turnHandler(IslandBoard board, String message) throws Exception {
-
         this.done = this.card.turnHandler(this, board, message, this.halfDone);
         if (!done) halfDone = true;
         if (done) halfDone = false;
