@@ -53,7 +53,6 @@ public class View implements Runnable, PropertyChangeListener {
 
 
     private void setPlayersNumber() {
-
         numberOfPlayers = 3;
         System.out.println("2 or 3 plaYers?");
         numberOfPlayers = in.nextInt();
@@ -67,14 +66,12 @@ public class View implements Runnable, PropertyChangeListener {
 
 
     public String setNick(int i) {
-
         System.out.println("Insert nickname for player " + (i + 1) + ": ");
         return (in.nextLine());
     }
 
 
     public String setColor(ArrayList<String> listaColori, String nick) {
-
         String color;
         do {
             System.out.println("Ok " + nick + ", which color do you prefer?");

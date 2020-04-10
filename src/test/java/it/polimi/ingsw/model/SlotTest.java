@@ -4,8 +4,7 @@ package it.polimi.ingsw.model;
 import org.junit.Assert;
 import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SlotTest {
 
@@ -24,17 +23,7 @@ public class SlotTest {
         s.construct(Construction.DOME);
         Assert.assertEquals(3,s.getConstructionLevel());
     }
-/*
-    @Test
-    public void constructionTwoDomeTest() throws Exception{
-        Slot s = new Slot();
-        s.construct(Construction.DOME);
-        Assert.assertEquals(0, s.getConstructionLevel());
 
-        Exception exception = assertThrows(Exception.class, () -> s.construct(Construction.DOME));
-        assertEquals("Invalid construction error", exception.getMessage());
-    }
-*/
     @Test
     public void hasADomeTest() throws Exception {
         Slot s = new Slot();
@@ -46,6 +35,22 @@ public class SlotTest {
         s = new Slot();
         s.construct(Construction.FLOOR);
         Assert.assertFalse(s.hasADome());
+    }
 
+    @Test
+    public void occupyTest() throws Exception {
+        Slot s = new Slot();
+        s.occupy(new Worker(3,4, "WHITE"));
+        Assert.assertFalse(s.isFree());
+    }
+
+    @Test
+    public void freeTest() throws Exception {
+        Coordinate c = new Coordinate(2,3);
+        Slot s = new Slot();
+        Worker w = new Worker(c, "BLUE");
+        s.occupy(w);
+        s.free();
+        Assert.assertTrue(s.isFree());
     }
 }
