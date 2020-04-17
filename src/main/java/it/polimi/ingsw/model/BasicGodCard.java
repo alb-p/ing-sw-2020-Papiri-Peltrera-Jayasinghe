@@ -75,5 +75,13 @@ public class BasicGodCard {
 
 
     }
+
+    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
+        TreeActionNode tree= new TreeActionNode(null);
+
+        //creazione effettiva delle mosse possibili
+        return tree;
+
+    }
 }
 

@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model;
 
-//import it.polimi.ingsw.gods.Artemis;
-//import it.polimi.ingsw.gods.Atlas;
+import it.polimi.ingsw.gods.*;
 
-import it.polimi.ingsw.gods.Demeter;
-import it.polimi.ingsw.gods.Prometheus;
-
+import java.awt.*;
+import java.io.ObjectInputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.ArrayList;
 
@@ -13,6 +13,7 @@ public class Player {
 
 
     private ArrayList<Worker> workers = new ArrayList<Worker>();
+    private HashMap<Worker,TreeActionNode> treeMap = new HashMap<Worker, TreeActionNode>();
 
     private String nickName;
     private BasicGodCard card;
@@ -23,6 +24,9 @@ public class Player {
         this.nickName = nickName;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
+        treeMap.put(getWorker(0),null);
+        treeMap.put(getWorker(1),null);
+
 
     }
 
@@ -69,7 +73,22 @@ public class Player {
         return this.workers.get(i);
     }
 
+    public ArrayList<TreeActionNode> playerTreeSetup(IslandBoard board){
+        TreeActionNode treeW0 = this.card.cardTreeSetup(this.getWorker(0),board);
+        TreeActionNode treeW1 = this.card.cardTreeSetup(this.getWorker(1),board);
+        ArrayList<TreeActionNode> list= new ArrayList<TreeActionNode>();
+
+        treeMap.put(this.getWorker(0),treeW0);
+        treeMap.put(this.getWorker(1),treeW1);
+        list.add(treeW0);
+        list.add(treeW1);
+        return list;
+
+    }
+
+
     public void turnHandler(IslandBoard board, String message) throws Exception {
+
         this.done = this.card.turnHandler(this, board, message, this.halfDone);
         if (!done) halfDone = true;
         if (done) halfDone = false;
