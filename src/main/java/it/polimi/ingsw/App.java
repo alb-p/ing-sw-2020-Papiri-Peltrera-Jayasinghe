@@ -21,7 +21,6 @@ public class App
         view.addViewListener(controller);
         model.addModelListener(view);
         view.run();
-        Action ac = new Build(new Coordinate(0,0), new Coordinate(0,0));
 
     }
 }

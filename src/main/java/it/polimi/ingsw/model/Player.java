@@ -24,8 +24,8 @@ public class Player {
         this.nickName = nickName;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
-        treeMap.put(getWorker(0),null);
-        treeMap.put(getWorker(1),null);
+        treeMap.put(getWorker(0),null); //necessario? guarda riga 81
+        treeMap.put(getWorker(1),null); //necessario? guarda riga 82
 
 
     }
