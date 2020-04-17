@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+//TODO renderla classe astratta
 
 public class BasicGodCard {
     private boolean flag;

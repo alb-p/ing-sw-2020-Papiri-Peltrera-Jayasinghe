@@ -1,10 +1,12 @@
 package it.polimi.ingsw;
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.view.View;
 
 import java.beans.PropertyChangeListener;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Hello world!
@@ -19,6 +21,7 @@ public class App
         view.addViewListener(controller);
         model.addModelListener(view);
         view.run();
+        Action ac = new Build(new Coordinate(0,0), new Coordinate(0,0));
 
     }
 }

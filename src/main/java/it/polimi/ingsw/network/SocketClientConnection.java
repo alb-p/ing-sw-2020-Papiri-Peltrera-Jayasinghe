@@ -67,7 +67,7 @@ public class SocketClientConnection implements Runnable {
         try {
             inSocket = new Scanner(socket.getInputStream());
             outSocket = new ObjectOutputStream(socket.getOutputStream());
-            send("Welcome!\nWhat is your name?");
+            send("How many players for the game");
             String read = inSocket.nextLine();
             numOfPlayers = Integer.parseInt(read);
             while (numOfPlayers != 2 || numOfPlayers != 3) {
