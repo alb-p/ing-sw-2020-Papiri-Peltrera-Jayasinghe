@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.InitSetup;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.view.VirtualView;
@@ -34,8 +35,14 @@ public class Room {
 
     public void start() {
         Model model = new Model();
+        InitSetup initSetup =new InitSetup();
         VirtualView view = new VirtualView(connections);
+        GameHandler gameHandler=new GameHandler(initSetup);
 
+        //manca controller da aggiungere come listener della virualview
+        view.addModelListener(gameHandler);
+        model.addModelListener(view);
+        initSetup.addModelListener(view);
         //
     }
 }
