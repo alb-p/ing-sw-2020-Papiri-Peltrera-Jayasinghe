@@ -94,7 +94,7 @@ public class BasicGodCard {
                 TreeActionNode buildNode = new TreeActionNode(new Build(c1, w.getPosition()));  //aggiungo possibilità di build nella primissima posizione di partenza
                 moveNode.addChild(buildNode);
                 tree.addChild(moveNode);
-//per apollo mettere controllo collegamento per nodo move
+                //per apollo mettere controllo collegamento per nodo move
 
             }
         }
