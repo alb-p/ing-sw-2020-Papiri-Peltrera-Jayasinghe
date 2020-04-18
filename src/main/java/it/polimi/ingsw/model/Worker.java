@@ -71,18 +71,5 @@ public class Worker{
         return this.color;
     }
 
-    public ArrayList<Coordinate> getAdiacentCoords(){        //it returns a list of adiacent coordinates
-        ArrayList<Coordinate> lista= new ArrayList<>();
-        for(int i=-1;i<2;i++){
-            for(int j=-1;j<2;j++){
-                if(this.getPosition().getCol()+i<5 && this.getPosition().getCol()+i>=0
-                && this.getPosition().getRow()+j<5 && this.getPosition().getRow()+j>=0
-                && (i!=0 || j!=0))
-                    lista.add(new Coordinate(this.getPosition().getRow()+j,this.getPosition().getCol()+i));
-            }
-        }
-
-    return lista;
-    }
 }
 

@@ -24,10 +24,6 @@ public class Player {
         this.nickName = nickName;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
-        treeMap.put(getWorker(0),null); //necessario? guarda riga 81
-        treeMap.put(getWorker(1),null); //necessario? guarda riga 82
-
-
     }
 
     public void setCard(String card) {
@@ -73,7 +69,7 @@ public class Player {
         return this.workers.get(i);
     }
 
-    public ArrayList<TreeActionNode> playerTreeSetup(IslandBoard board){
+    public ArrayList<TreeActionNode> playerTreeSetup(IslandBoard board) throws Exception {
         TreeActionNode treeW0 = this.card.cardTreeSetup(this.getWorker(0),board);
         TreeActionNode treeW1 = this.card.cardTreeSetup(this.getWorker(1),board);
         ArrayList<TreeActionNode> list= new ArrayList<TreeActionNode>();
