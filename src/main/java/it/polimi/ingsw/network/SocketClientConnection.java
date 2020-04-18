@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.controller.Controller;
 
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
@@ -14,11 +15,20 @@ public class SocketClientConnection implements Runnable {
 
     private Socket socket;
     private ObjectOutputStream outSocket;
-    private Scanner inSocket;
+    private ObjectInputStream inSocket;
 
     private Server server;
 
     private boolean active = true;
+
+    public SocketClientConnection(Socket newSocket) {
+        try {
+            socket = newSocket;
+            outSocket = new ObjectOutputStream(newSocket.getOutputStream());
+            inSocket = new ObjectInputStream(newSocket.getInputStream());
+        } catch (IOException e) {
+        }
+    }
 
     private synchronized boolean isActive() {
         return active;
@@ -36,47 +46,48 @@ public class SocketClientConnection implements Runnable {
 
     }
 
-    @Override
-    public void run() {
+    /*
+        @Override
+        public void run() {
 
-        String name;
-        try {
-            inSocket = new Scanner(socket.getInputStream());
-            outSocket = new ObjectOutputStream(socket.getOutputStream());
-            send("Welcome!\nWhat is your name?");
-            String read = inSocket.nextLine();
-            name = read;
-            //  new Controller().getInstance().lobby(this, name);
-            // TODO attendo che la partita sia pronta
-            // TODO collegare la virtualView del player al Client connesso a lui
-            while (isActive()) {
-                read = inSocket.nextLine();
-                // TODO mettere in relazione come listener il socket sul controller
+            String name;
+            try {
+                inSocket = new Scanner(socket.getInputStream());
+                outSocket = new ObjectOutputStream(socket.getOutputStream());
+                send("Welcome!\nWhat is your name?");
+                String read = inSocket.nextLine();
+                name = read;
+                //  new Controller().getInstance().lobby(this, name);
+                // TODO attendo che la partita sia pronta
+                // TODO collegare la virtualView del player al Client connesso a lui
+                while (isActive()) {
+                    read = inSocket.nextLine();
+                    // TODO mettere in relazione come listener il socket sul controller
 
+                }
+            } catch (IOException | NoSuchElementException e) {
+                System.err.println("Error!" + e.getMessage());
+            } finally {
+                //close();
             }
-        } catch (IOException | NoSuchElementException e) {
-            System.err.println("Error!" + e.getMessage());
-        } finally {
-            //close();
         }
-    }
-
+    */
     public int askNumofPlayers() {
         int numOfPlayers = 0;
 
         try {
-            inSocket = new Scanner(socket.getInputStream());
-            outSocket = new ObjectOutputStream(socket.getOutputStream());
+            //inSocket = new Scanner(socket.getInputStream());
+            //outSocket = new ObjectOutputStream(socket.getOutputStream());
             send("How many players for the game");
-            String read = inSocket.nextLine();
+            String read = (String) inSocket.readObject();
             numOfPlayers = Integer.parseInt(read);
             while (numOfPlayers != 2 || numOfPlayers != 3) {
                 send("Welcome!\nWhat is your name?");
-                read = inSocket.nextLine();
+                read =(String) inSocket.readObject();
                 numOfPlayers = Integer.parseInt(read);
             }
 
-        } catch (IOException | NoSuchElementException e) {
+        } catch (IOException | NoSuchElementException | ClassNotFoundException e) {
             System.err.println("Error!" + e.getMessage());
         }
 
@@ -86,5 +97,17 @@ public class SocketClientConnection implements Runnable {
 
     public void notifyGamePlaying() {
         send("The Lobby is full!! Please Wait");
+    }
+
+    public String askNick() throws IOException, ClassNotFoundException {
+        send("Write your nick:\n>>");
+        String read =(String) inSocket.readObject();
+        return read;
+
+    }
+
+    @Override
+    public void run() {
+            while(socket.isConnected());
     }
 }

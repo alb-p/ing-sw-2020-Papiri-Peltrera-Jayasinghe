@@ -8,7 +8,7 @@ public class ClientMain {
     public static void main(String[] args){
 
         String ip = "127.0.0.1";
-        int port = 12345;
+        int port = 4567;
 
         if(args.length!=0){
             ip = args[0];

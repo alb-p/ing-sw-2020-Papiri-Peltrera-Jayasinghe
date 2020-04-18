@@ -20,23 +20,21 @@ public class Client{
     private RemoteView view;
     private ObjectInputStream inputStream;
     private PrintWriter printStream;
-    private PropertyChangeSupport socketListeners = new PropertyChangeSupport(this);
+   // private PropertyChangeSupport socketListeners = new PropertyChangeSupport(this);
 
 
     public Client(String ip, int port) {
         this.ip = ip;
         this.port = port;
-
-
-
     }
 
 
     public void start(){
         try {
-            final Socket socket = new Socket(ip, port);
-            this.view = new CLI(socket);
-            socketListeners.addPropertyChangeListener(this.view);
+            System.out.println("TRY 34");
+            Socket socket = new Socket(ip, port);
+            //this.view = new CLI(socket);
+            //socketListeners.addPropertyChangeListener(this.view);
             this.online = true;
             inputStream = new ObjectInputStream(socket.getInputStream());
 
@@ -49,7 +47,7 @@ public class Client{
                     try {
                         while(online){
                             Object inputObject = inputStream.readObject();
-                            socketListeners.firePropertyChange("Sock",null , inputObject);
+                           // socketListeners.firePropertyChange("Sock",null , inputObject);
                             // TODO collegarsi alla remoteView (CLI) del client
 
                         }

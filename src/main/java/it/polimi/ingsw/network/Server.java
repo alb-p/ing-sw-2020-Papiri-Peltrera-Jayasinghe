@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Room;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -12,21 +13,24 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
-    private static final int PORT = 12345;
-    private ServerSocket serverSocket;
+    private static final int PORT = 4567;
+    private ServerSocket serverSocket = new ServerSocket(PORT);
     private int numOfPlayers;
     private Room room;
 
     private ExecutorService executor = Executors.newFixedThreadPool(128);
     private ArrayList<SocketClientConnection> waitingList = new ArrayList<SocketClientConnection>();
 
+    public Server() throws IOException {
+    }
 
 
     public void run() {
         while (true) {
             try {
                 Socket newSocket = serverSocket.accept();
-                SocketClientConnection socketConnection = new SocketClientConnection();
+                System.out.println("trewc");
+                SocketClientConnection socketConnection = new SocketClientConnection(newSocket);
                 executor.submit(socketConnection);
                 /*TODO CREAZIONE STANZA
                 inserico i giocatori nella waiting list
@@ -54,7 +58,7 @@ public class Server {
                 }
 
             } catch (Exception e) {
-                e.printStackTrace();
+               // e.printStackTrace();
             }
         }
 

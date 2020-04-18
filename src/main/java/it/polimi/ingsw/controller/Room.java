@@ -1,6 +1,8 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.network.SocketClientConnection;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 
@@ -31,6 +33,9 @@ public class Room {
 
 
     public void start() {
+        Model model = new Model();
+        VirtualView view = new VirtualView(connections);
+
         //
     }
 }

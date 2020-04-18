@@ -4,6 +4,7 @@ import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -18,12 +19,6 @@ public class ServerMain {
     private int numOfPlayers;
 
     public static void main(String[] args){
-        Model model = new Model();
-        View view = new View();
-        Controller controller = new Controller(model, view);
-        view.addViewListener(controller);
-        model.addModelListener(view);
-        view.run();
 
         Server server;
         try {
