@@ -31,7 +31,7 @@ public class GameHandler implements PropertyChangeListener {
             if (!data.isInUser(name))
                 data.setUsername(name);
             playerCreationQueue(message);
-            data.askColor(message.getIndentificativo());
+            data.askColor(message.getId());
             //else
             //data.wrongUsername(evt);
         }else if (evt.getPropertyName().equals("colorMessageResponse")) {
@@ -54,10 +54,10 @@ public class GameHandler implements PropertyChangeListener {
 
     private void playerCreationQueue(Object value) {
         if(value instanceof NicknameMessage ){
-            playersMap.put(((NicknameMessage) value).getIndentificativo(),((NicknameMessage) value).getNick());
+            playersMap.put(((NicknameMessage) value).getId(),((NicknameMessage) value).getNick());
         }else if(value instanceof ColorMessage){
             ColorMessage message= (ColorMessage)value;
-            model.addPlayer(new Player(playersMap.get(message.getIndentificativo()),message.getColor()));
+            model.addPlayer(new Player(playersMap.get(message.getId()),message.getColor()));
         }
 
     }

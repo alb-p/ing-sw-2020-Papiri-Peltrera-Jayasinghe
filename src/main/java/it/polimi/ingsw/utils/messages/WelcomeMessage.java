@@ -4,6 +4,7 @@ public class WelcomeMessage implements Message {
 
     String message;
 
+
     public WelcomeMessage(String s){
         this.message=s;
 
@@ -14,5 +15,14 @@ public class WelcomeMessage implements Message {
         return this.message;
     }
 
+    @Override
+    public void setId(int i) {
+
+    }
+
+    @Override
+    public int getId() {
+        return -1;
+    }
 
 }

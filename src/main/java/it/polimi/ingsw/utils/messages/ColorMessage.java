@@ -10,7 +10,7 @@ public class ColorMessage implements Message, Serializable {
 
     private String message;
     private String color;
-    private int indentificativo;
+    private int id;
 
     public ColorMessage(){
         this.message = "Inserisci il colore";
@@ -21,7 +21,7 @@ public class ColorMessage implements Message, Serializable {
     public ColorMessage(int i,ArrayList<String> colors){
         this.message = "Inserisci il colore "+color;
         this.color=null;
-        indentificativo=i;
+        id=i;
     }
 
 
@@ -37,8 +37,14 @@ public class ColorMessage implements Message, Serializable {
         return this.message;
     }
 
-    public int getIndentificativo() {
-        return indentificativo;
+    @Override
+    public void setId(int i) {
+        this.id=i;
+    }
+
+    @Override
+    public int getId() {
+        return this.id;
     }
 
 }

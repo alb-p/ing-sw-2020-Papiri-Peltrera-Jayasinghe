@@ -13,7 +13,7 @@ import java.util.TreeMap;
  *
  */
 public class App 
-{
+{/*
     public static void main( String[] args )throws Exception{
         Model model = new Model();
         View view = new View();
@@ -22,5 +22,5 @@ public class App
         model.addModelListener(view);
         view.run();
 
-    }
+    }*/
 }

@@ -2,22 +2,22 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
-public class NicknameMessage implements Message{
+public class NicknameMessage implements Message {
 
     private String message;
     private String nick;
-    private int indentificativo;
+    private int id;
 
-    public NicknameMessage(){
+    public NicknameMessage() {
         this.message = "Inserisci il nickname";
-        this.nick=null;
+        this.nick = null;
 
     }
 
-    public NicknameMessage(int i){
+    public NicknameMessage(int i) {
         this.message = "Inserisci il nickname";
-        this.nick=null;
-        indentificativo=i;
+        this.nick = null;
+        id = i;
     }
 
 
@@ -33,8 +33,13 @@ public class NicknameMessage implements Message{
         return this.message;
     }
 
+    @Override
+    public void setId(int i) {
+        this.id = i;
+    }
 
-    public int getIndentificativo() {
-        return indentificativo;
+    @Override
+    public int getId() {
+        return this.id;
     }
 }

@@ -6,18 +6,17 @@ public class GodMessage implements Message{
 
     String message;
     String god;
-    private SocketClientConnection scc;
+    int id;
 
     public GodMessage(){
         this.message = "Inserisci divinità";
         this.god=null;
-        this.scc=null;
     }
 
-    public GodMessage(SocketClientConnection socket){
+    public GodMessage(int i){
         this.message = "Inserisci divinità";
         this.god=null;
-        this.scc=socket;
+        this.id=i;
     }
 
 
@@ -31,6 +30,16 @@ public class GodMessage implements Message{
 
     public String getMessage() {
         return this.message;
+    }
+
+    @Override
+    public void setId(int i) {
+        this.id=i;
+    }
+
+    @Override
+    public int getId() {
+        return this.id;
     }
 
 }
