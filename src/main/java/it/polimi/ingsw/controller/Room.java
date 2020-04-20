@@ -40,9 +40,8 @@ public class Room {
         GameHandler gameHandler=new GameHandler(initSetup);
 
         //manca controller da aggiungere come listener della virualview
-        view.addModelListener(gameHandler);
+        view.addVirtualViewListener(gameHandler);
         model.addModelListener(view);
-        initSetup.addModelListener(view);
-        //
+        initSetup.addInitSetupListener(view);
     }
 }

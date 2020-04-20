@@ -6,19 +6,19 @@ import java.io.Serializable;
 
 public class ColorMessage implements Message, Serializable {
 
-    private String message ;
-    private Color color;
+    private String message = "Inserisci il colore";
+    private String color;
 
-    public ColorMessage(String message, Color color){
-        this.message = message;
+
+    public void setColor(String color) {
         this.color = color;
     }
 
-    public Color getColor(){
+    public String getColor() {
         return this.color;
     }
 
-    public String getMessage(){
+    public String getMessage() {
         return this.message;
     }
 

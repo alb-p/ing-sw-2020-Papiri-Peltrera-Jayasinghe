@@ -32,9 +32,11 @@ public class InitSetup {
         gods.add("Pan");
         gods.add("Prometheus");
 
+
+
     }
 
-    public void addModelListener(PropertyChangeListener listener) {
+    public void addInitSetupListener(PropertyChangeListener listener) {
         initSetupListeners.addPropertyChangeListener(listener);
     }
 

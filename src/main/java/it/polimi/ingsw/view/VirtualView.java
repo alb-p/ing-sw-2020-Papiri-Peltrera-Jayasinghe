@@ -23,7 +23,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         }
 
 
-    public void addModelListener(PropertyChangeListener listener) {
+    public void addVirtualViewListener(PropertyChangeListener listener) {
         virtualViewListeners.addPropertyChangeListener(listener);
     }
     @Override
