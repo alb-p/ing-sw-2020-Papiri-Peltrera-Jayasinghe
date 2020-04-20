@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
-public class GodMessage {
+public class GodMessage implements Message{
 
     String message = "Inserisci la divinità";
     String god;

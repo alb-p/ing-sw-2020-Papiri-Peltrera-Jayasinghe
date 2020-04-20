@@ -2,7 +2,7 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
-public class NicknameMessage {
+public class NicknameMessage implements Message{
 
     String message = "Inserisci il nickname";
     String nick;
