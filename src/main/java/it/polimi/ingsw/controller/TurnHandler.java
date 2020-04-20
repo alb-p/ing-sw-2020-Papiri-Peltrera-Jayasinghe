@@ -10,6 +10,7 @@ public class TurnHandler implements PropertyChangeListener {
     private Model model;
     private int playersPerGame;
     private int totalTurnCounter = 0;
+    private boolean firstAction = true;
 
  //int indice giocatore inziale
     public TurnHandler(Model model, int playersPerGame) {
@@ -27,19 +28,26 @@ public class TurnHandler implements PropertyChangeListener {
         }
     }
 
-    private void turnManager(ActionMessage message){
+    private void turnManager(ActionMessage message) {
         //arriva azione, o inzio turno o n-azione
-        model.getPlayer(message.getId());
+        //model.getPlayer(totalTurnCounter%playersPerGame);
+        if(firstAction){
+            firstAction = model.getPlayer(totalTurnCounter%playersPerGame).
+                    selectWorker(message.getAction().getStart());
+        }
+        model.turnHandler(totalTurnCounter%playersPerGame, message.getAction());
+    }
+
+
+    public void endTurnManager(ActionMessage message){
+        model.getPlayer(totalTurnCounter%playersPerGame).setNotDone();
+        totalTurnCounter++;
+        firstAction = true;
+        //changePlayerPlaying()
+        model.buildPlayerTree(totalTurnCounter%playersPerGame);
     }
 
     public void setTotalTurnCounter(int tt){
         this.totalTurnCounter = tt;
-    }
-
-    public void endTurnManager(ActionMessage message){
-        //model.getPlayer(totalTurnCounter
-        totalTurnCounter++;
-        //changePlayerPlaying()
-        //crea gli alberi (è inizio turno nuovo)
     }
 }

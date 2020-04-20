@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.gods.*;
+import it.polimi.ingsw.utils.messages.ActionMessage;
 
 import java.awt.*;
 import java.io.ObjectInputStream;
@@ -20,6 +21,7 @@ public class Player {
     private boolean done = false;
     private boolean halfDone = false;
     private int id;
+    private Worker actualWorker = null;
 
     public Player(String nickName, String color) {
         this.nickName = nickName;
@@ -83,6 +85,7 @@ public class Player {
 
         treeMap.put(this.getWorker(0),treeW0);
         treeMap.put(this.getWorker(1),treeW1);
+        //TODO list è necessaria???
         list.add(treeW0);
         list.add(treeW1);
         return list;
@@ -90,11 +93,27 @@ public class Player {
     }
 
 
-    public void turnHandler(IslandBoard board, String message) throws Exception {
+    public void turnHandler(IslandBoard board, Action message) throws Exception {
+        //TODO controllo se worker esiste in quella posizone esiste è rimandata al client NON VERO
 
+        //
+        TreeActionNode node = treeMap.get(actualWorker).search(message);
+        if(node == null) {
+            //mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico
+            return;
+        } else if(node.getChildren().isEmpty()){
+            done = true;
+            actualWorker = null;
+        } else{
+            treeMap.remove(actualWorker);
+            treeMap.put(actualWorker,node);
+        }
         this.done = this.card.turnHandler(this, board, message, this.halfDone);
         if (!done) halfDone = true;
-        if (done) halfDone = false;
+        if (done){
+            halfDone = false;
+            actualWorker = null;
+        }
     }
 
 
@@ -105,4 +124,26 @@ public class Player {
     public int getId() {
         return id;
     }
+
+    public void setNotDone(){
+        this.done = false;
+    }
+
+    public boolean selectWorker(Coordinate coord){
+        for(int i = 0; i<workers.size(); i++){
+            if(workers.get(i).getPosition().equals(coord)){
+                actualWorker = workers.get(i);
+            }
+        }
+        return (actualWorker != null);
+    }
+
+    public Worker getActualWorker(){
+        return this.actualWorker;
+    }
+
+
+
+
+
 }

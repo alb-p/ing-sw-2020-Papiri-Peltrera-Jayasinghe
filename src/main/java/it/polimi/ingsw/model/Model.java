@@ -58,9 +58,13 @@ public class Model {
         return false;
     }
 
-    public void turnHandler(int i, String message) throws Exception {
+    public void turnHandler(int i, Action message) {
         oldBoard = new VirtualBoard(board);
-        players.get(i).turnHandler(this.board, message);
+        try {
+            players.get(i).turnHandler(this.board, message);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         notifyChanges();
         modelListeners.firePropertyChange("turnHandler", null, true);
     }
@@ -79,6 +83,14 @@ public class Model {
             }
         }
 
+    }
+
+    public void buildPlayerTree(int i) {
+        try {
+            players.get(i).playerTreeSetup(board);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

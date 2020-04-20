@@ -33,4 +33,11 @@ public class TreeActionNode {
     public boolean isLeaf(){
         return this.children.isEmpty();
     }
+
+    public TreeActionNode search(Action action){
+        for(TreeActionNode t: children){
+            if(t.data.equals(action)) return t;
+        }
+        return null;
+    }
 }

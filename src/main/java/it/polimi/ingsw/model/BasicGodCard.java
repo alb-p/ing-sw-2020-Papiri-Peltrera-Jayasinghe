@@ -48,9 +48,9 @@ public class BasicGodCard {
     }
 
 
-    public boolean turnHandler(Player player, IslandBoard board, String string, boolean halfDone) throws Exception {
+    public boolean turnHandler(Player player, IslandBoard board, Action action, boolean halfDone) throws Exception {
         // MOVE 0,0 IN 3,2 & BUILD IN 2,1
-        String[] words = string.split(" ");
+        /*String[] words = string.split(" ");
         if (!halfDone && words[0].toUpperCase().equals("MOVE")) {
 
             this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
@@ -65,7 +65,12 @@ public class BasicGodCard {
             return true;
 
         }
-
+        */
+        if(action instanceof Move) {
+            this.move(player.getActualWorker(), action.getEnd(), board);
+        }else if(action instanceof Build){
+            this.build(player.getActualWorker(), action.getEnd(), board);
+        }
         return false;
     }
 
