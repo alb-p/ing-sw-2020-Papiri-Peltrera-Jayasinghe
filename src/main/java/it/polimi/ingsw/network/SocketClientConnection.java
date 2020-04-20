@@ -1,10 +1,9 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.VirtualView;
+import jdk.tools.jaotc.binformat.GotSymbol;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -168,17 +167,18 @@ public class SocketClientConnection implements Runnable {
         try {
             while (isActive()) {
                 Object inputObject = inSocket.readObject();
-                // socketListeners.firePropertyChange("Sock",null , inputObject);
-                // TODO collegarsi alla remoteView (CLI) del client
+
                 if (inputObject instanceof Message) {
                     Message message = (Message) inputObject;
                     message.setId(this.id);
                     if (inputObject instanceof NicknameMessage) {
                         view.receiveNick((NicknameMessage) message);
                     } else if (inputObject instanceof ColorMessage) {
-
-                    } else if (inputObject instanceof NicknameMessage) {
-
+                        view.receiveColor((ColorMessage)message);
+                    } else if (inputObject instanceof ActionMessage) {
+                        view.receiveAction((ActionMessage)message);
+                    } else if (inputObject instanceof GodMessage){
+                        view.receiveGod((GodMessage)message);
                     }
                 } else {
                     socket.close();

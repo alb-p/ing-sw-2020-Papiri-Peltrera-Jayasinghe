@@ -2,9 +2,7 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.network.SocketClientConnection;
-import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.utils.messages.WelcomeMessage;
+import it.polimi.ingsw.utils.messages.*;
 import org.w3c.dom.ls.LSOutput;
 
 import java.beans.PropertyChangeEvent;
@@ -38,21 +36,29 @@ public class VirtualView implements Runnable, PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         //io sono in ascolto sia del model che del socketCC.
-        if (evt.getPropertyName().equals("sendNick")) {
-            //manda a client un nicknameMessage
-            //manda a quello specifico
-        } else if (evt.getPropertyName().equals("sendColor")) {
-            //manda a client specifico la scelta del colore
-        } else if (evt.getPropertyName().equals("delColor")) {
-            ColorMessage message = (ColorMessage) evt.getNewValue();
-            //invia a tutti tranne uno che i colori sono cambiati
+        if (evt.getNewValue() instanceof Message) {
+            Message message = (Message)evt.getNewValue();
+            if (evt.getPropertyName().equals("sendNick")) {
+                //manda a client un nicknameMessage
+                //manda a quello specifico
+                getConnection(message.getId()).send(evt);
+            } else if (evt.getPropertyName().equals("sendColor")) {
+                //manda a client specifico la scelta del colore
+                getConnection(message.getId()).send(evt);
+            } else if (evt.getPropertyName().equals("delColor")) {
+                message = (ColorMessage)message;
 
+                //invia a tutti tranne uno che i colori sono cambiati
+
+            } else if (evt.getPropertyName().equals("sendAction")){
+                getConnection(message.getId()).send(evt);
+
+            }
         }
 
     }
 
     /************************************************************************************************/
-
 
 
     public void run() {
@@ -71,7 +77,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                 "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
                 "SE");
 
-        for(SocketClientConnection c: connections){
+        for (SocketClientConnection c : connections) {
 
             c.send(new WelcomeMessage("X"));
             try {
@@ -87,45 +93,25 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
 
     public void receiveNick(NicknameMessage message) {
-
         virtualViewListeners.firePropertyChange("nickMessageResponse", null, message);
-
-
     }
 
     public void receiveColor(ColorMessage message) {
-
         virtualViewListeners.firePropertyChange("colorMessageResponse", null, message);
-
-
     }
 
-
-
-
-    public void playersSetup() {
-
+    public void receiveAction(ActionMessage message) {
+        virtualViewListeners.firePropertyChange("actionMessageResponse", null, message);
     }
 
-    private void serializeAsk(int i) {
-        new Thread() {
-            public void run() {
-                try {
-                    fun(2);
-
-                } catch (Exception e) {
-                }
-            }
-        }.start();
+    public void receiveGod(GodMessage message) {
+        virtualViewListeners.firePropertyChange("godMessageResponse", null, message);
     }
 
-    public void fun(int i) throws IOException, ClassNotFoundException {
-        String val = "VAL";
-
-        while (!val.equals("VAL")) {
-            val = connections.get(i).askNick();
+    private SocketClientConnection getConnection(int i) {
+        for (SocketClientConnection c : connections) {
+            if (c.getId() == i) return c;
         }
-
+        return null;
     }
-
 }
