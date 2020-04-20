@@ -2,6 +2,9 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.network.SocketClientConnection;
+import it.polimi.ingsw.utils.messages.ColorMessage;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
+import org.w3c.dom.ls.LSOutput;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,17 +26,64 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         }
 
 
+/**********************************************************************************************/
     public void addVirtualViewListener(PropertyChangeListener listener) {
         virtualViewListeners.addPropertyChangeListener(listener);
     }
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         //io sono in ascolto sia del model che del socketCC.
-        if(evt.getPropertyName().equals("playersSetup")){
+        if(evt.getPropertyName().equals("sendNick")){
+            //manda a client un nicknameMessage
+            //se scc è null manda a tutti, altrimenti a quello specifico
+        }else if(evt.getPropertyName().equals("receiveNick")){
+            //manda a controller il nick
+            virtualViewListeners.firePropertyChange("nickMessageResponse", null, evt.getNewValue());
 
+        }else if(evt.getPropertyName().equals("setNick")){
+            //imposta nick in view
+            NicknameMessage message = (NicknameMessage) evt.getNewValue();
+            playersMap.put(message.getNick(),message.getScc());
+        }else if(evt.getPropertyName().equals("sendColor")){
+            //manda a client specifico la scelta del colore
+        }else if(evt.getPropertyName().equals("receiveColor")){
+            //manda a controller il colore
+            virtualViewListeners.firePropertyChange("colorMessageResponse", null, evt.getNewValue());
+        }else if(evt.getPropertyName().equals("delColor")){
+            ColorMessage message=(ColorMessage) evt.getNewValue();
+            for(SocketClientConnection c: connections){
+                if(c!=message.getScc()){
+                    //invia nuovi colori
+                }
+            }
 
         }
+
     }
+
+/************************************************************************************************/
+
+
+
+//////////// QUANDO  ROOM  AVVIA LA VIEW
+////////////
+//////////// System.out.println("Welcome to Santorini");
+//////////// NicknameMessage message=new NicknameMessage();
+//////////// manda a tutti message
+////////////
+////////////
+////////////
+////////////
+
+
+
+
+
+
+
+
+
+
 
     @Override
     public void run() {

@@ -35,11 +35,12 @@ public class Room {
 
     public void start() {
         Model model = new Model();
-        InitSetup initSetup =new InitSetup();
         VirtualView view = new VirtualView(connections);
-        GameHandler gameHandler=new GameHandler(initSetup);
+        Controller controller=new Controller(model,view);
+        InitSetup initSetup =new InitSetup();
+        GameHandler gameHandler=new GameHandler(initSetup,model);
 
-        //manca controller da aggiungere come listener della virualview
+        view.addVirtualViewListener(controller);
         view.addVirtualViewListener(gameHandler);
         model.addModelListener(view);
         initSetup.addInitSetupListener(view);

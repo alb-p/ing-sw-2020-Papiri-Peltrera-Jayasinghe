@@ -4,9 +4,22 @@ import it.polimi.ingsw.network.SocketClientConnection;
 
 public class NicknameMessage implements Message{
 
-    String message = "Inserisci il nickname";
-    String nick;
+    private String message;
+    private String nick;
     private SocketClientConnection scc;
+
+    public NicknameMessage(){
+        this.message = "Inserisci il nickname";
+        this.nick=null;
+        this.scc=null;
+    }
+
+    public NicknameMessage(SocketClientConnection socket){
+        this.message = "Inserisci il nickname";
+        this.nick=null;
+        this.scc=socket;
+    }
+
 
     public void setNick(String nick) {
         this.nick = nick;
@@ -21,4 +34,7 @@ public class NicknameMessage implements Message{
     }
 
 
+    public SocketClientConnection getScc() {
+        return scc;
+    }
 }

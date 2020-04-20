@@ -1,7 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.view.View;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -11,12 +11,12 @@ public class Controller implements PropertyChangeListener {
 
 
     private Model model;
-    private View view;
+    private VirtualView view;
     private int moment = 0;
     private int numberOfPlayers;
 
 
-    public Controller(Model model, View view) {
+    public Controller(Model model, VirtualView view) {
 
         this.model = model;
         this.view = view;
@@ -26,7 +26,7 @@ public class Controller implements PropertyChangeListener {
         if (evt.getPropertyName().equals("playersNumber")) {
             numberOfPlayers = (Integer) evt.getNewValue();
             try {
-                initPlayers(numberOfPlayers);
+                //initPlayers(numberOfPlayers);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -45,6 +45,7 @@ public class Controller implements PropertyChangeListener {
         }
     }
 
+    /*
     private void initPlayers(Integer k) throws Exception {
 
         boolean sameName;
@@ -83,5 +84,5 @@ public class Controller implements PropertyChangeListener {
             String card = this.view.setCard(i);
             this.model.setCard(i, card);
         }
-    }
+    }*/
 }

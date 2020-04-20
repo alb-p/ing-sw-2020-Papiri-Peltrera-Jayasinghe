@@ -16,7 +16,7 @@ public class WorkerTest {
     }
 
     @Test
-    public void getOldPositionTest() {
+    public void getOldPositionTest() throws Exception {
         Worker worker = new Worker(3, 3, "WHITE");
         worker.setPosition(new Coordinate(0, 0));
         assertEquals(new Coordinate(3, 3).getRow(), worker.getOldPosition().getRow());

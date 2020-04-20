@@ -1,14 +1,24 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.network.SocketClientConnection;
+import it.polimi.ingsw.utils.messages.ColorMessage;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
+
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+
 
 public class InitSetup {
 
     ArrayList<String> colors;
     ArrayList<String> username;
     ArrayList<String> gods;
+    ArrayList<String> chosenGods;
+
+
 
     private PropertyChangeSupport initSetupListeners = new PropertyChangeSupport(this);
 
@@ -17,6 +27,8 @@ public class InitSetup {
         colors = new ArrayList<>();
         username = new ArrayList<>();
         gods = new ArrayList<>();
+        chosenGods =new ArrayList<>();
+
 
         for (Color c : Color.values().clone()) {
             colors.add(c.getName());
@@ -33,12 +45,20 @@ public class InitSetup {
         gods.add("Prometheus");
 
 
-
     }
 
     public void addInitSetupListener(PropertyChangeListener listener) {
         initSetupListeners.addPropertyChangeListener(listener);
     }
+
+    public void askColor(NicknameMessage oldmessage){
+
+        ColorMessage newmessage=new ColorMessage(oldmessage.getScc(),this.colors);
+        initSetupListeners.firePropertyChange("setNick", false, oldmessage);
+        initSetupListeners.firePropertyChange("sendColor", false, newmessage);
+
+    }
+
 
     public ArrayList<String> getUsername() {
         return username;
@@ -50,6 +70,10 @@ public class InitSetup {
 
     public ArrayList<String> getGods() {
         return gods;
+    }
+
+    public ArrayList<String> getChosenGods(){
+        return chosenGods;
     }
 
     public boolean isInUser(String name) {
@@ -88,9 +112,9 @@ public class InitSetup {
 
     }
 
-    public void delColor(String color){
-        colors.remove(color);
-       initSetupListeners.firePropertyChange("delColor", null, colors.clone());
+    public void delColor(ColorMessage message){
+        colors.remove(message.getColor());
+       initSetupListeners.firePropertyChange("delColor", null, message);
 
     }
 
