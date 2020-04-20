@@ -1,6 +1,7 @@
 package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.network.SocketClientConnection;
 
 import java.io.Serializable;
 
@@ -8,6 +9,7 @@ public class ColorMessage implements Message, Serializable {
 
     private String message = "Inserisci il colore";
     private String color;
+    private SocketClientConnection scc;
 
 
     public void setColor(String color) {
