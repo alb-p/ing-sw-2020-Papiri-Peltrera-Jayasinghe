@@ -44,9 +44,13 @@ public class Model {
         return this.players.get(i);
     }
 
-    public boolean nameDuplicate(String name){
-        for(Player p: players){
-            if(p.getNickName().equals(name)) return true;
+    public ArrayList<Player> getPlayers() {
+        return this.players;
+    }
+
+    public boolean nameDuplicate(String name) {
+        for (Player p : players) {
+            if (p.getNickName().equals(name)) return true;
         }
         return false;
     }
