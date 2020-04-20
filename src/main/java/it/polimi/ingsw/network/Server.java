@@ -46,8 +46,10 @@ public class Server {
                         int numOfPlayers  = socketConnection.askNumofPlayers();
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
+                        socketConnection.setId(0);
                     }else if(!room.isReady()){
                         room.addPlayer(socketConnection);
+                        socketConnection.setId(room.currentPlayerId());
                         if(room.isReady())room.start();
                     }else{
                         socketConnection.notifyGamePlaying();

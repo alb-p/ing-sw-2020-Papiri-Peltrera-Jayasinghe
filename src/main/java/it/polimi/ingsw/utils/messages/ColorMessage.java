@@ -10,18 +10,18 @@ public class ColorMessage implements Message, Serializable {
 
     private String message;
     private String color;
-    private SocketClientConnection scc;
+    private int indentificativo;
 
     public ColorMessage(){
         this.message = "Inserisci il colore";
         this.color=null;
-        this.scc=null;
+
     }
 
-    public ColorMessage(SocketClientConnection socket,ArrayList<String> colors){
+    public ColorMessage(int i,ArrayList<String> colors){
         this.message = "Inserisci il colore "+color;
         this.color=null;
-        this.scc=socket;
+        indentificativo=i;
     }
 
 
@@ -37,8 +37,8 @@ public class ColorMessage implements Message, Serializable {
         return this.message;
     }
 
-    public SocketClientConnection getScc() {
-        return scc;
+    public int getIndentificativo() {
+        return indentificativo;
     }
 
 }

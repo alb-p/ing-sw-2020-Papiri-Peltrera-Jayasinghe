@@ -15,7 +15,7 @@ import java.util.HashMap;
 public class GameHandler implements PropertyChangeListener {
 
     InitSetup data;
-    HashMap< SocketClientConnection, String> playersMap=new HashMap<>();
+    HashMap< Integer, String> playersMap=new HashMap<>();
     Model model;
 
     public GameHandler(InitSetup initSetup, Model m) {
@@ -31,7 +31,7 @@ public class GameHandler implements PropertyChangeListener {
             if (!data.isInUser(name))
                 data.setUsername(name);
             playerCreationQueue(message);
-            data.askColor(message);
+            data.askColor(message.getIndentificativo());
             //else
             //data.wrongUsername(evt);
         }else if (evt.getPropertyName().equals("colorMessageResponse")) {
@@ -54,10 +54,10 @@ public class GameHandler implements PropertyChangeListener {
 
     private void playerCreationQueue(Object value) {
         if(value instanceof NicknameMessage ){
-            playersMap.put(((NicknameMessage) value).getScc(),((NicknameMessage) value).getNick());
+            playersMap.put(((NicknameMessage) value).getIndentificativo(),((NicknameMessage) value).getNick());
         }else if(value instanceof ColorMessage){
             ColorMessage message= (ColorMessage)value;
-            model.addPlayer(new Player(playersMap.get(message.getScc()),message.getColor()));
+            model.addPlayer(new Player(playersMap.get(message.getIndentificativo()),message.getColor()));
         }
 
     }

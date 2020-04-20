@@ -51,11 +51,11 @@ public class InitSetup {
         initSetupListeners.addPropertyChangeListener(listener);
     }
 
-    public void askColor(NicknameMessage oldmessage){
+    public void askColor(int id){
 
-        ColorMessage newmessage=new ColorMessage(oldmessage.getScc(),this.colors);
-        initSetupListeners.firePropertyChange("setNick", false, oldmessage);
-        initSetupListeners.firePropertyChange("sendColor", false, newmessage);
+        ColorMessage newMessage=new ColorMessage(id,this.colors);
+
+        initSetupListeners.firePropertyChange("sendColor", false, newMessage);
 
     }
 

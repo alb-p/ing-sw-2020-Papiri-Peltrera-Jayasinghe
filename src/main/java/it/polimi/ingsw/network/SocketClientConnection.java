@@ -1,6 +1,10 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.controller.Controller;
+import it.polimi.ingsw.utils.messages.ColorMessage;
+import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.view.VirtualView;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -17,6 +21,10 @@ public class SocketClientConnection implements Runnable {
     private ObjectOutputStream outSocket;
     private ObjectInputStream inSocket;
 
+    private VirtualView view;
+
+
+    private int id;
     private Server server;
 
     private boolean active = true;
@@ -35,7 +43,7 @@ public class SocketClientConnection implements Runnable {
     }
 
 
-    private synchronized void send(Object message) {
+    public synchronized void send(Object message) {
         try {
             outSocket.reset();
             outSocket.writeObject(message);
@@ -83,7 +91,7 @@ public class SocketClientConnection implements Runnable {
             numOfPlayers = Integer.parseInt(read);
             while (numOfPlayers != 2 || numOfPlayers != 3) {
                 send("Welcome!\nWhat is your name?");
-                read =(String) inSocket.readObject();
+                read = (String) inSocket.readObject();
                 numOfPlayers = Integer.parseInt(read);
             }
 
@@ -101,13 +109,83 @@ public class SocketClientConnection implements Runnable {
 
     public String askNick() throws IOException, ClassNotFoundException {
         send("Write your nick:\n>>");
-        String read =(String) inSocket.readObject();
+        String read = (String) inSocket.readObject();
         return read;
 
     }
 
+   /* @Override
+    public void run() {
+            while(socket.isConnected()){
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            while(isActive()){
+                                Object inputObject = inSocket.readObject();
+                                // socketListeners.firePropertyChange("Sock",null , inputObject);
+                                // TODO collegarsi alla remoteView (CLI) del client
+                                if(inputObject instanceof Message){
+                                    Message message=(Message) inputObject;
+                                    message.setId(this.id);
+                                    if(inputObject instanceof NicknameMessage){
+
+                                    }else if(inputObject instanceof ColorMessage){
+
+                                    }else if(inputObject instanceof NicknameMessage){
+
+                                    }
+                                }else{
+                                    socket.close();
+                                }
+                            }
+                        }catch (Exception e){
+                            active=false;
+                        }
+
+                    }
+                }).start();
+            }
+    }*/
+
+
+    public void setId(int i) {
+
+        this.id = i;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setView(VirtualView view) {
+        this.view = view;
+    }
+
+
     @Override
     public void run() {
-            while(socket.isConnected());
+        try {
+            while (isActive()) {
+                Object inputObject = inSocket.readObject();
+                // socketListeners.firePropertyChange("Sock",null , inputObject);
+                // TODO collegarsi alla remoteView (CLI) del client
+                if (inputObject instanceof Message) {
+                    Message message = (Message) inputObject;
+                    message.setId(this.id);
+                    if (inputObject instanceof NicknameMessage) {
+                        view.receiveNick((NicknameMessage) message);
+                    } else if (inputObject instanceof ColorMessage) {
+
+                    } else if (inputObject instanceof NicknameMessage) {
+
+                    }
+                } else {
+                    socket.close();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

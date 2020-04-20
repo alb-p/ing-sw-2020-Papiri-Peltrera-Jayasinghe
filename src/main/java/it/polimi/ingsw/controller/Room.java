@@ -36,6 +36,8 @@ public class Room {
     public void start() {
         Model model = new Model();
         VirtualView view = new VirtualView(connections);
+        for(SocketClientConnection c: connections) c.setView(view);
+
         Controller controller=new Controller(model,view);
         InitSetup initSetup =new InitSetup();
         GameHandler gameHandler=new GameHandler(initSetup,model);
@@ -44,5 +46,9 @@ public class Room {
         view.addVirtualViewListener(gameHandler);
         model.addModelListener(view);
         initSetup.addInitSetupListener(view);
+    }
+
+    public int currentPlayerId() {
+        return this.connections.size();
     }
 }

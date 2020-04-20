@@ -6,18 +6,18 @@ public class NicknameMessage implements Message{
 
     private String message;
     private String nick;
-    private SocketClientConnection scc;
+    private int indentificativo;
 
     public NicknameMessage(){
         this.message = "Inserisci il nickname";
         this.nick=null;
-        this.scc=null;
+
     }
 
-    public NicknameMessage(SocketClientConnection socket){
+    public NicknameMessage(int i){
         this.message = "Inserisci il nickname";
         this.nick=null;
-        this.scc=socket;
+        indentificativo=i;
     }
 
 
@@ -34,7 +34,7 @@ public class NicknameMessage implements Message{
     }
 
 
-    public SocketClientConnection getScc() {
-        return scc;
+    public int getIndentificativo() {
+        return indentificativo;
     }
 }

@@ -5,4 +5,6 @@ import it.polimi.ingsw.network.SocketClientConnection;
 public interface Message {
 
     String getMessage();
+    void setId(int i);
+    int getId();
 }
