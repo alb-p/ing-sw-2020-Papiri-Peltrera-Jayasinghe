@@ -19,9 +19,16 @@ public class Player {
     private BasicGodCard card;
     private boolean done = false;
     private boolean halfDone = false;
+    private int id;
 
     public Player(String nickName, String color) {
         this.nickName = nickName;
+        workers.add(new Worker(0, 0, color));
+        workers.add(new Worker(0, 0, color));
+    }
+    public Player(int id, String nickName, String color) {
+        this.nickName = nickName;
+        this.id = id;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
     }
@@ -95,4 +102,7 @@ public class Player {
         return this.done;
     }
 
+    public int getId() {
+        return id;
+    }
 }

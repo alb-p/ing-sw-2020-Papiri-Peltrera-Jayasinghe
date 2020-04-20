@@ -1,15 +1,17 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.messages.ColorMessage;
+import it.polimi.ingsw.utils.messages.Message;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.utils.messages.WelcomeMessage;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.PrintStream;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.Socket;
 
 public class Client{
@@ -19,7 +21,7 @@ public class Client{
     boolean online = false;
     private RemoteView view;
     private ObjectInputStream inputStream;
-    private PrintWriter printStream;
+    private ObjectOutputStream printStream;
    // private PropertyChangeSupport socketListeners = new PropertyChangeSupport(this);
 
 
@@ -37,8 +39,7 @@ public class Client{
             //socketListeners.addPropertyChangeListener(this.view);
             this.online = true;
             inputStream = new ObjectInputStream(socket.getInputStream());
-
-            printStream = new PrintWriter(socket.getOutputStream());
+            printStream = new ObjectOutputStream(socket.getOutputStream());
 
             // OPEN READER
             new Thread(new Runnable() {
@@ -47,6 +48,12 @@ public class Client{
                     try {
                         while(online){
                             Object inputObject = inputStream.readObject();
+                            if(inputObject instanceof WelcomeMessage){
+                                send(view.askNumPlayer((NicknameMessage) inputObject));
+                            }else if(inputObject instanceof NicknameMessage){
+                                send(view.askNumPlayer((NicknameMessage) inputObject));
+                            }
+
                            // socketListeners.firePropertyChange("Sock",null , inputObject);
                             // TODO collegarsi alla remoteView (CLI) del client
 
@@ -65,5 +72,18 @@ public class Client{
         // writer che sarà chiamato dalla update dopo la chiamatea della cli
 
     }
+
+    private synchronized void send(Object message) {
+        try {
+            printStream.reset();
+            printStream.writeObject(message);
+            printStream.flush();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
+
+    }
+
+
 
 }

@@ -12,6 +12,7 @@ public class Room {
     private ArrayList<SocketClientConnection> connections = new ArrayList<SocketClientConnection>();
     private int playersPerGame = 0;
 
+
     public synchronized void addPlayer(SocketClientConnection connection) throws Exception {
         if (this.playersPerGame < connections.size()) {
             this.connections.add(connection);
@@ -40,7 +41,9 @@ public class Room {
 
         Controller controller=new Controller(model,view);
         InitSetup initSetup =new InitSetup();
-        GameHandler gameHandler=new GameHandler(initSetup,model);
+        GameHandler gameHandler=new GameHandler(initSetup,model, playersPerGame);
+        TurnHandler turnHandler = new TurnHandler(model, playersPerGame);
+        gameHandler.setTurnhandler(turnHandler);
 
         view.addVirtualViewListener(controller);
         view.addVirtualViewListener(gameHandler);
@@ -51,4 +54,6 @@ public class Room {
     public int currentPlayerId() {
         return this.connections.size();
     }
+
+
 }

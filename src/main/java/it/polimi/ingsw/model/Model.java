@@ -40,12 +40,15 @@ public class Model {
     }
 
 
-    public Player getPlayer(int i) {
-        return this.players.get(i);
+    public Player getPlayer(int id) {
+        for(Player p: players){
+            if(p.getId() == id) return p;
+        }
+        return null;
     }
 
-    public ArrayList<Player> getPlayers() {
-        return this.players;
+    public int getNumOfPlayers() {
+        return this.players.size();
     }
 
     public boolean nameDuplicate(String name) {

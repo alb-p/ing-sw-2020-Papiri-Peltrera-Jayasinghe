@@ -56,12 +56,12 @@ public class Controller implements PropertyChangeListener {
             colorList.add(c.getName());
         }
 
-        //TODO rename k var
+        // rename k var
         for (int i = 0; i < k; i++) {
 
             sameName = false;
             while(!sameName) {
-                // TODO verify all names are different
+                // verify all names are different
                 nick = this.view.setNick(i);
                 if (!model.nameDuplicate(nick)) sameName = true;
             }

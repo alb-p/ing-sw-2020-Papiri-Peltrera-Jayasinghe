@@ -20,7 +20,6 @@ public class NicknameMessage implements Message {
         id = i;
     }
 
-
     public void setNick(String nick) {
         this.nick = nick;
     }

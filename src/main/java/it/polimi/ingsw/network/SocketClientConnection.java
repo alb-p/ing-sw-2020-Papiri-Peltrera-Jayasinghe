@@ -81,7 +81,6 @@ public class SocketClientConnection implements Runnable {
     */
     public int askNumofPlayers() {
         int numOfPlayers = 0;
-
         try {
             //inSocket = new Scanner(socket.getInputStream());
             //outSocket = new ObjectOutputStream(socket.getOutputStream());
@@ -93,13 +92,10 @@ public class SocketClientConnection implements Runnable {
                 read = (String) inSocket.readObject();
                 numOfPlayers = Integer.parseInt(read);
             }
-
         } catch (IOException | NoSuchElementException | ClassNotFoundException e) {
             System.err.println("Error!" + e.getMessage());
         }
-
         return numOfPlayers;
-
     }
 
     public void notifyGamePlaying() {

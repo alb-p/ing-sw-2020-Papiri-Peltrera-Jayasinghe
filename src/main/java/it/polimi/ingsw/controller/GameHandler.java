@@ -13,13 +13,16 @@ import java.util.HashMap;
 
 public class GameHandler implements PropertyChangeListener {
 
-    InitSetup data;
-    HashMap<Integer, String> playersMap = new HashMap<>();                        //associazione    numero -> nome
-    Model model;
+    private InitSetup data;
+    private HashMap<Integer, String> playersMap = new HashMap<>();                        //associazione    numero -> nome
+    private Model model;
+    private TurnHandler turnHandler;
+    private int playersPerGame;
 
-    public GameHandler(InitSetup initSetup, Model m) {
+    public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
         data = initSetup;
         model = m;
+        this.playersPerGame = playersPerGame;
     }
 
     @Override
@@ -58,10 +61,13 @@ public class GameHandler implements PropertyChangeListener {
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());     // 2 -> Luca
         } else if (value instanceof ColorMessage) {                                                     // 3 -> Andrea
             ColorMessage message = (ColorMessage) value;                                                //quando arriva il colore si procede alla
-            model.addPlayer(new Player(playersMap.get(message.getId()), message.getColor()));           //creazione del player
+            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));           //creazione del player
         }
 
     }
 
 
+    public void setTurnhandler(TurnHandler turnHandler) {
+        this.turnHandler = turnHandler;
+    }
 }
