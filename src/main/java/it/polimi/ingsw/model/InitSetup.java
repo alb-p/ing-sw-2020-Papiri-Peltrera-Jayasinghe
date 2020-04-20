@@ -52,10 +52,8 @@ public class InitSetup {
     }
 
     public void askColor(int id){
-
-        ColorMessage newMessage=new ColorMessage(id,this.colors);
-
-        initSetupListeners.firePropertyChange("sendColor", false, newMessage);
+        ColorMessage newMessage=new ColorMessage(id,this.colors);                                       //viene inviato un messaggio con i colori rimanenti a
+        initSetupListeners.firePropertyChange("sendColor", false, newMessage);      //chi ha ha finito di mettere il nick o colore sbagliato
 
     }
 
@@ -111,8 +109,8 @@ public class InitSetup {
         initSetupListeners.firePropertyChange("delGod", null, gods.clone());
 
     }
-
-    public void delColor(ColorMessage message){
+                                                        //un giocatore x ha secondo un colore che deve essere ora cancellato dalla lista
+    public void delColor(ColorMessage message){        //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
         colors.remove(message.getColor());
        initSetupListeners.firePropertyChange("delColor", null, message);
 
@@ -122,4 +120,8 @@ public class InitSetup {
         username.add(user);
     }
 
+    public void WrongUsername(int id) {
+        NicknameMessage message=new NicknameMessage(id);
+        initSetupListeners.firePropertyChange("sendNick", false, message);
+    }
 }

@@ -21,36 +21,29 @@ public class VirtualView implements Runnable, PropertyChangeListener {
     private PropertyChangeSupport virtualViewListeners = new PropertyChangeSupport(this);
 
 
-    public VirtualView(ArrayList<SocketClientConnection> connections) {
+    public VirtualView(ArrayList<SocketClientConnection> connections) {         // crea arraylist dei scc
         this.connections = connections;
-        colorSet.addAll(Arrays.asList(Color.values()));
-
     }
 
 
-    /**********************************************************************************************/
-    public void addVirtualViewListener(PropertyChangeListener listener) {
+    public void addVirtualViewListener(PropertyChangeListener listener) {       //aggiunge listener della virtualview
         virtualViewListeners.addPropertyChangeListener(listener);
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        //io sono in ascolto sia del model che del socketCC.
+
         if (evt.getNewValue() instanceof Message) {
-            Message message = (Message)evt.getNewValue();
-            if (evt.getPropertyName().equals("sendNick")) {
-                //manda a client un nicknameMessage
-                //manda a quello specifico
-                getConnection(message.getId()).send(evt);
-            } else if (evt.getPropertyName().equals("sendColor")) {
-                //manda a client specifico la scelta del colore
-                getConnection(message.getId()).send(evt);
-            } else if (evt.getPropertyName().equals("delColor")) {
-                message = (ColorMessage)message;
+            Message message = (Message) evt.getNewValue();
+            if (evt.getPropertyName().equals("sendNick")) {                     //richiede nick ad un client (nick precedente non valido)
+                getConnection(message.getId()).send(message);
+            } else if (evt.getPropertyName().equals("sendColor")) {             //richiede colore ad un client che ha dato nick
+                getConnection(message.getId()).send(message);
+            } else if (evt.getPropertyName().equals("delColor")) {              //cancella colore perchè scelto da qualcuno
+                message = (ColorMessage) message;
 
-                //invia a tutti tranne uno che i colori sono cambiati
 
-            } else if (evt.getPropertyName().equals("sendAction")){
+            } else if (evt.getPropertyName().equals("sendAction")) {
                 getConnection(message.getId()).send(evt);
 
             }
@@ -77,8 +70,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                 "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
                 "SE");
 
-        for (SocketClientConnection c : connections) {
-
+        for (SocketClientConnection c : connections) {   //invia a tutti WelcomeMessage e richiesta  inserimento nick
             c.send(new WelcomeMessage("X"));
             try {
                 sleep(1314);
@@ -92,23 +84,23 @@ public class VirtualView implements Runnable, PropertyChangeListener {
     }
 
 
-    public void receiveNick(NicknameMessage message) {
+    public void receiveNick(NicknameMessage message) {  //arriva nick da scc che viene inoltrato a GameHandler (controller)
         virtualViewListeners.firePropertyChange("nickMessageResponse", null, message);
     }
 
-    public void receiveColor(ColorMessage message) {
+    public void receiveColor(ColorMessage message) {    //arriva scelta colore da scc che viene inoltrato a GameHandler (controller)
         virtualViewListeners.firePropertyChange("colorMessageResponse", null, message);
     }
 
-    public void receiveAction(ActionMessage message) {
+    public void receiveAction(ActionMessage message) {  //arriva action da scc che viene inoltrato a GameHandler (controller)
         virtualViewListeners.firePropertyChange("actionMessageResponse", null, message);
     }
 
-    public void receiveGod(GodMessage message) {
+    public void receiveGod(GodMessage message) {        //arriva scelta god da scc che viene inoltrato a GameHandler (controller)
         virtualViewListeners.firePropertyChange("godMessageResponse", null, message);
     }
 
-    private SocketClientConnection getConnection(int i) {
+    private SocketClientConnection getConnection(int i) { //restituisce il scc associato all'id (ad es. di un messaggio)
         for (SocketClientConnection c : connections) {
             if (c.getId() == i) return c;
         }
