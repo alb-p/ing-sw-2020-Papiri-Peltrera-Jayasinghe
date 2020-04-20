@@ -2,6 +2,8 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
+import java.util.ArrayList;
+
 public class GodMessage implements Message{
 
     String message;
@@ -13,8 +15,8 @@ public class GodMessage implements Message{
         this.god=null;
     }
 
-    public GodMessage(int i){
-        this.message = "Inserisci divinità";
+    public GodMessage(int i, ArrayList<String> gods){
+        this.message = "Inserisci divinità "+gods;
         this.god=null;
         this.id=i;
     }

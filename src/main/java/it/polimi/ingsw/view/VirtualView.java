@@ -39,11 +39,21 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                 getConnection(message.getId()).send(message);
             } else if (evt.getPropertyName().equals("sendColor")) {             //richiede colore ad un client che ha dato nick
                 getConnection(message.getId()).send(message);
-            } else if (evt.getPropertyName().equals("delColor")) {              //cancella colore perchè scelto da qualcuno
-                message = (ColorMessage) message;
-
-
-            } else if (evt.getPropertyName().equals("sendAction")) {
+            } else if (evt.getPropertyName().equals("delColor")) {              //cancella colore perchè scelto da qualcuno e notifica gli altri dei nuovi colori
+                for(SocketClientConnection c: connections){
+                    if(c.getId()!=((Message) evt.getNewValue()).getId())
+                        c.send(message);
+                }
+            }else if (evt.getPropertyName().equals("3cards")) {             //richiede colore ad un client che ha dato nick
+                getConnection(message.getId()).send(message);
+            }else if (evt.getPropertyName().equals("sendGod")) {             //richiede colore ad un client che ha dato nick
+                getConnection(message.getId()).send(message);
+            } else if (evt.getPropertyName().equals("delGod")) {              //cancella colore perchè scelto da qualcuno e notifica gli altri dei nuovi colori
+                for(SocketClientConnection c: connections){
+                    if(c.getId()!=((Message) evt.getNewValue()).getId())
+                        c.send(message);
+                }
+            }            else if (evt.getPropertyName().equals("sendAction")) {
                 getConnection(message.getId()).send(evt);
 
             }
@@ -94,6 +104,10 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
     public void receiveAction(ActionMessage message) {  //arriva action da scc che viene inoltrato a GameHandler (controller)
         virtualViewListeners.firePropertyChange("actionMessageResponse", null, message);
+    }
+
+    public void threeGods(Select3GodsMessage message) {        //arriva scelta dei tre god da scc che viene inoltrato a GameHandler (controller)
+        virtualViewListeners.firePropertyChange("3godsResponse", null, message);
     }
 
     public void receiveGod(GodMessage message) {        //arriva scelta god da scc che viene inoltrato a GameHandler (controller)
