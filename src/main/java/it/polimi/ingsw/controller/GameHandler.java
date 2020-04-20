@@ -6,10 +6,13 @@ import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.messages.ColorMessage;
 import it.polimi.ingsw.utils.messages.GodMessage;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.utils.messages.Select3GodsMessage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 
 public class GameHandler implements PropertyChangeListener {
 
@@ -46,22 +49,42 @@ public class GameHandler implements PropertyChangeListener {
             }else{
                 data.askColor(message.getId());
             }
-        } else if (evt.getPropertyName().equals("godMessageResponse")) {        //arriva un god da virtualview arrivata da scc
+        } else if (evt.getPropertyName().equals("3godsResponse")) {        //arriva un god da virtualview arrivata da scc
+            Select3GodsMessage message = (Select3GodsMessage) evt.getNewValue();
+            ArrayList<String> listGods = message.getSelectedList();
+            int check=0;
+            for(String s:listGods){
+                if (!data.isInListGod(s)) check++;
+            }
+            if (check==0) data.setChosenGods(listGods,message.getId());
+            else data.choose3cards(message.getId());
+
+
+        }else if (evt.getPropertyName().equals("godMessageResponse")) {        //arriva un god da virtualview arrivata da scc
             GodMessage message = (GodMessage) evt.getNewValue();
             String god = message.getGod();
-            if (data.isInGod(god))
-                data.delGod(god);
-            //else
-            //data.wrongGod(evt);
+            if (data.isInGod(god)) {                                        //se il colore è valido lo cancella da InitSetup
+                data.delGod(message);                                         // e passa alla creazione del player
+                playerCreationQueue(message);
+            }else{
+                data.askColor(message.getId());
+            }
         }
     }
 
-    private void playerCreationQueue(Object value) {                                                    //la mappa è del tipo
-        if (value instanceof NicknameMessage) {                                                         // 1 -> Mario
-            playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());     // 2 -> Luca
-        } else if (value instanceof ColorMessage) {                                                     // 3 -> Andrea
-            ColorMessage message = (ColorMessage) value;                                                //quando arriva il colore si procede alla
-            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));           //creazione del player
+    private void playerCreationQueue(Object value) {                                                                        //la mappa è del tipo
+        if (value instanceof NicknameMessage) {                                                                             // 1 -> Mario
+            playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());                         // 2 -> Luca
+        } else if (value instanceof ColorMessage) {                                                                         // 3 -> Andrea
+            ColorMessage message = (ColorMessage) value;                                                                    //quando arriva il colore si procede alla
+            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));              //creazione del player
+
+            if(model.getNumOfPlayers()==this.playersPerGame){
+                Random random=new Random();
+                int firstplayerID=random.nextInt(3);
+                data.choose3cards(firstplayerID);
+
+            }
         }
 
     }
@@ -71,3 +94,42 @@ public class GameHandler implements PropertyChangeListener {
         this.turnHandler = turnHandler;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
