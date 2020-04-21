@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class Room {
 
-    private ArrayList<SocketClientConnection> connections = new ArrayList<SocketClientConnection>();
+    private ArrayList<SocketClientConnection> connections = new ArrayList<>();
     private int playersPerGame = 0;
 
 
@@ -29,7 +29,7 @@ public class Room {
         this.playersPerGame = playersPerGame;
     }
 
-    public synchronized boolean isUninitializated() {
+    public synchronized boolean isUninitialized() {
         return this.connections.size() == this.playersPerGame && this.playersPerGame == 0;
     }
 
@@ -39,13 +39,11 @@ public class Room {
         VirtualView view = new VirtualView(connections);
         for(SocketClientConnection c: connections) c.setView(view);
 
-        Controller controller=new Controller(model,view);
         InitSetup initSetup =new InitSetup();
         GameHandler gameHandler=new GameHandler(initSetup,model, playersPerGame);
         TurnHandler turnHandler = new TurnHandler(model, playersPerGame);
         gameHandler.setTurnhandler(turnHandler);
 
-        view.addVirtualViewListener(controller);
         view.addVirtualViewListener(gameHandler);
         model.addModelListener(view);
         initSetup.addInitSetupListener(view);

@@ -1,16 +1,13 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.VirtualView;
-import jdk.tools.jaotc.binformat.GotSymbol;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 //import static jdk.internal.net.http.common.Utils.close;
 

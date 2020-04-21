@@ -1,7 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.controller.Controller;
-import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.utils.messages.*;
 
 

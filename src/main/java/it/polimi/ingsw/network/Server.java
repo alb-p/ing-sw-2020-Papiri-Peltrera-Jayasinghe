@@ -40,7 +40,7 @@ public class Server {
 
                  */
                 synchronized (room) {
-                    if (room.isUninitializated()) {
+                    if (room.isUninitialized()) {
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
