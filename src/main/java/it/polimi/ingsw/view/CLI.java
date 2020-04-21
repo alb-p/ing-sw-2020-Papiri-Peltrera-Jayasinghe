@@ -13,7 +13,6 @@ import java.util.Scanner;
 public class CLI extends RemoteView implements Runnable {
 
     private Scanner scanner;
-    private PrintWriter socketOut;
     private PrintStream printer;
     private Console console;
     private String playerChoice;
@@ -22,9 +21,8 @@ public class CLI extends RemoteView implements Runnable {
 
 
 
-    public CLI(Socket socket) throws IOException {
+    public CLI(){
         this.scanner = new Scanner(System.in);
-        this.socketOut = new PrintWriter(socket.getOutputStream());
         this.printer= System.out;
     }
 

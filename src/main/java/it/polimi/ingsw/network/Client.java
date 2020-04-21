@@ -27,13 +27,14 @@ public class Client {
         try {
             this.socket = new Socket(ip, port);
 
-            if (chosenUI == 0) {
-                this.view = new CLI(socket);
-            } else {
-                //TODO this.view = new GUI(socket);
-            }
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
+        }
+
+        if (chosenUI == 0) {
+            this.view = new CLI();
+        } else {
+            //TODO this.view = new GUI();
         }
     }
 
