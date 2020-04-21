@@ -1,10 +1,7 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.Message;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.utils.messages.WelcomeMessage;
+import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.RemoteView;
 import it.polimi.ingsw.view.View;
@@ -22,8 +19,10 @@ public class Client{
     private RemoteView view;
     private ObjectInputStream inputStream;
     private ObjectOutputStream printStream;
-   // private PropertyChangeSupport socketListeners = new PropertyChangeSupport(this);
-
+    //private PropertyChangeSupport socketListeners = new PropertyChangeSupport(this);
+    //oppure trovare soluzione più definitiva per associare id e nome player
+    //è strettamente necessario avere il nickname?
+    String nickname;
 
     public Client(String ip, int port) {
         this.ip = ip;
@@ -49,13 +48,23 @@ public class Client{
                         while(online){
                             Object inputObject = inputStream.readObject();
                             if(inputObject instanceof WelcomeMessage){
-                                send(view.askNumPlayer((NicknameMessage) inputObject));
+                                view.welcomeMessage();
                             }else if(inputObject instanceof NicknameMessage){
-                                send(view.askNumPlayer((NicknameMessage) inputObject));
+                                nickname = view.askNickPlayer((NicknameMessage) inputObject).getNick();
+                                send(view.askNickPlayer((NicknameMessage) inputObject));
+                            }else if(inputObject instanceof ColorMessage){
+                                //meglio tenere anche info sul colore nel client?
+                                send(view.askColor((ColorMessage) inputObject, nickname).getColor());
+                            }else if(inputObject instanceof ActionMessage){
+                                //TODO va bene passare il nick in questo modo?
+                                view.askAction((ActionMessage) inputObject, nickname);
+                            }else if(inputObject instanceof GodMessage){
+                                //meglio tenere anche info sul colore nel client?
+                                send(view.askGod((GodMessage) inputObject, nickname));
                             }
 
                            // socketListeners.firePropertyChange("Sock",null , inputObject);
-                            // TODO collegarsi alla remoteView (CLI) del client
+                            // TODO collegarsi alla remoteView (CLI o GUI) del client
 
                         }
                     }catch (Exception e){

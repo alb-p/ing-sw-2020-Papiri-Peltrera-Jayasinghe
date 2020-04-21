@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.Action;
 
 public class ActionMessage implements Message {
 
-    private String message;
+    private String message; //MOVE OR BUILD
     private int id;
     private Action action;
 
@@ -29,5 +29,10 @@ public class ActionMessage implements Message {
     @Override
     public int getId() {
         return id;
+    }
+
+    @Override
+    public String toString() {
+        return message;
     }
 }

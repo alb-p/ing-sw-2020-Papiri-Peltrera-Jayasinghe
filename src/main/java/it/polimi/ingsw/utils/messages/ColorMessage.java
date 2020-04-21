@@ -9,19 +9,21 @@ import java.util.ArrayList;
 public class ColorMessage implements Message, Serializable {
 
     private String message;
+    private ArrayList<String> colors = new ArrayList<String>();
     private String color;
     private int id;
 
-    public ColorMessage(){
+
+    public ColorMessage() {
         this.message = "Inserisci il colore";
-        this.color=null;
+        this.color = null;
 
     }
 
-    public ColorMessage(int i,ArrayList<String> colors){
-        this.message = "Inserisci il colore "+color;
-        this.color=null;
-        id=i;
+    public ColorMessage(int i, ArrayList<String> colors) {
+        this.message = "Inserisci il colore ";
+        this.colors = colors;
+        id = i;
     }
 
 
@@ -33,13 +35,17 @@ public class ColorMessage implements Message, Serializable {
         return this.color;
     }
 
+    public ArrayList<String> getColors() {
+        return colors;
+    }
+
     public String getMessage() {
         return this.message;
     }
 
     @Override
     public void setId(int i) {
-        this.id=i;
+        this.id = i;
     }
 
     @Override
