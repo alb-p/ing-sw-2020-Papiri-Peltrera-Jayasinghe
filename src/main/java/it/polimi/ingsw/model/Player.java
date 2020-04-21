@@ -140,7 +140,12 @@ public class Player {
     }
 
 
+    public Object getTrees() {
 
+        return treeMap;
+    }
 
-
+    public Object getHashList() {
+        return treeMap.keySet();
+    }
 }

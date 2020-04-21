@@ -103,4 +103,11 @@ public class Model {
     }
 
 
+    public void verifyTree(int currPlayer) {
+        for(int i = 0 ; i<players.size(); i++){
+            if(currPlayer != i) {
+                players.get(i).getCard().specialRule(players.get(currPlayer).getTrees(),players.get(currPlayer).getHashList(),board);
+            }
+        }
+    }
 }

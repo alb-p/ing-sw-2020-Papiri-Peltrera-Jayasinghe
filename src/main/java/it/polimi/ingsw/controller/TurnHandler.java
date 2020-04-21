@@ -45,6 +45,7 @@ public class TurnHandler implements PropertyChangeListener {
         firstAction = true;
         //changePlayerPlaying()
         model.buildPlayerTree(totalTurnCounter%playersPerGame);
+        model.verifyTree(totalTurnCounter%playersPerGame);
     }
 
     public void setTotalTurnCounter(int tt){
