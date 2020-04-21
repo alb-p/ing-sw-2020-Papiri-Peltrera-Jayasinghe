@@ -44,9 +44,9 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                     if(c.getId()!=((Message) evt.getNewValue()).getId())
                         c.send(message);
                 }
-            }else if (evt.getPropertyName().equals("3cards")) {             //richiede colore ad un client che ha dato nick
+            }else if (evt.getPropertyName().equals("initialCards")) {             //richiede le carte divinità tra cui scegliere a un giocatore random
                 getConnection(message.getId()).send(message);
-            }else if (evt.getPropertyName().equals("sendGod")) {             //richiede colore ad un client che ha dato nick
+            }else if (evt.getPropertyName().equals("sendGod")) {             //richiede divnità al player
                 getConnection(message.getId()).send(message);
             } else if (evt.getPropertyName().equals("delGod")) {              //cancella colore perchè scelto da qualcuno e notifica gli altri dei nuovi colori
                 for(SocketClientConnection c: connections){
@@ -106,8 +106,8 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         virtualViewListeners.firePropertyChange("actionMessageResponse", null, message);
     }
 
-    public void threeGods(Select3GodsMessage message) {        //arriva scelta dei tre god da scc che viene inoltrato a GameHandler (controller)
-        virtualViewListeners.firePropertyChange("3godsResponse", null, message);
+    public void receiveInitialCards(InitialCardsMessage message) {        //arriva scelta dei tre god da scc che viene inoltrato a GameHandler (controller)
+        virtualViewListeners.firePropertyChange("initialCardsResponse", null, message);
     }
 
     public void receiveGod(GodMessage message) {        //arriva scelta god da scc che viene inoltrato a GameHandler (controller)

@@ -1,27 +1,27 @@
 package it.polimi.ingsw.utils.messages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-public class Select3GodsMessage {
+public class InitialCardsMessage {
 
-    private ArrayList<String> list;
-
-
+    private ArrayList<String> completeList;
     private ArrayList<String> selectedList;
     private String message;
     private int id;
 
 
-    public Select3GodsMessage(ArrayList<String> l, int i){
+    public InitialCardsMessage(ArrayList<String> l, int i, int dim){
         this.id=i;
-        this.list=l;
-        this.message="Select 3 God Cards "+ list;
+        this.completeList=l;
+        this.message="Select "+dim+" God Cards "+ completeList;
 
 
     }
 
-    public ArrayList<String> getList() {
-        return list;
+    public ArrayList<String> getCompleteList() {
+        return completeList;
     }
 
     public String getMessage() {
@@ -32,9 +32,6 @@ public class Select3GodsMessage {
         return id;
     }
 
-    public void setList(ArrayList<String> list) {
-        this.list = list;
-    }
 
     public void setSelectedList(ArrayList<String> selectedList) {
         this.selectedList = selectedList;

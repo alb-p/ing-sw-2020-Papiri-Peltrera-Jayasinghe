@@ -2,10 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.controller.Controller;
 import it.polimi.ingsw.network.SocketClientConnection;
-import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.GodMessage;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.utils.messages.Select3GodsMessage;
+import it.polimi.ingsw.utils.messages.*;
 
 
 import java.beans.PropertyChangeListener;
@@ -39,15 +36,15 @@ public class InitSetup {
             colors.add(c.getName());
         }
 
-        gods.add("Apollo");
-        gods.add("Artemis");
-        gods.add("Athena");
-        gods.add("Atlas");
-        gods.add("Demeter");
-        gods.add("Hephaestus");
-        gods.add("Minotaur");
-        gods.add("Pan");
-        gods.add("Prometheus");
+        gods.add("APOLLO");
+        gods.add("ARTEMIS");
+        gods.add("ATHENA");
+        gods.add("ATLAS");
+        gods.add("DEMETER");
+        gods.add("HEPHAESTUS");
+        gods.add("MINOTAUR");
+        gods.add("PAN");
+        gods.add("PREMETHEUS");
 
 
     }
@@ -56,34 +53,10 @@ public class InitSetup {
         initSetupListeners.addPropertyChangeListener(listener);
     }
 
-    public void askColor(int id){
-        ColorMessage message=new ColorMessage(id,this.colors);                                       //viene inviato un messaggio con i colori rimanenti a
-        initSetupListeners.firePropertyChange("sendColor", false, message);      //chi ha ha finito di mettere il nick o colore sbagliato
-
-    }
 
 
-    public ArrayList<String> getUsername() {
-        return username;
-    }
+/***NICKNAME***/
 
-    public ArrayList<String> getColors() {
-        return colors;
-    }
-
-    public ArrayList<String> getGods() {
-        return gods;
-    }
-
-    public ArrayList<String> getChosenGods(){
-        return chosenGods;
-    }
-
-    public void setChosenGods(ArrayList<String> chosenGods,int firstplayerID) {
-        this.chosenGods = chosenGods;
-        GodMessage message=new GodMessage(firstplayerID,chosenGods);
-        initSetupListeners.firePropertyChange("sendGod", null, message);
-    }
 
     public boolean isInUser(String name) {
 
@@ -93,6 +66,23 @@ public class InitSetup {
             }
         }
         return false;
+    }
+    public void setUsername(String user){
+        username.add(user);
+    }
+
+    public void WrongUsername(int id) {
+        NicknameMessage message=new NicknameMessage(id);                                            //rimanda messaggio se il giocatore ha impostato un nick non valido
+        initSetupListeners.firePropertyChange("sendNick", false, message);
+    }
+
+/**********************************************************************************************************************************************************************************************/
+/***COLORS***/
+
+    public void askColor(int id){
+        ColorMessage message=new ColorMessage(id,this.colors);                                       //viene inviato un messaggio con i colori rimanenti a
+        initSetupListeners.firePropertyChange("sendColor", false, message);      //chi ha ha finito di mettere il nick o colore sbagliato
+
     }
 
     public boolean isInColor(String color) {
@@ -104,11 +94,29 @@ public class InitSetup {
         }
         return false;
     }
+                                                                    //un giocatore x ha secondo un colore che deve essere ora cancellato dalla lista
+    public void delColor(ColorMessage mess){                        //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
+        colors.remove(mess.getColor());
+        ColorMessage message=new ColorMessage(mess.getId(),this.colors);
+        initSetupListeners.firePropertyChange("delColor", null, message);
+
+    }
+
+/**********************************************************************************************************************************************************************************************/
+/***GODS***/
+
+    public void setChosenGods(ArrayList<String> chosenGods,int firstplayerID) {                 //imposta le divinità scelte dal giocatore random
+        this.chosenGods = chosenGods;                                                           //e manda al primo player un messaggio di scelta divinità
+        GodMessage message=new GodMessage(firstplayerID,chosenGods);
+        initSetupListeners.firePropertyChange("sendGod", null, message);
+    }
+
+
 
     public boolean isInListGod(String god) {
 
         for (String s : gods) {
-            if (s.equals(god)) {
+            if (s.equals(god.toUpperCase())) {
                 return true;
             }
         }
@@ -125,32 +133,27 @@ public class InitSetup {
         return false;
     }
 
-    public void delGod(GodMessage mess){
-        gods.remove(mess.getGod());
-        GodMessage message=new GodMessage(mess.getId(),this.chosenGods);
-        initSetupListeners.firePropertyChange("delGod", null, message);
+    public void delGod(GodMessage mess,int numOfPlayers){               //cancella la divinità scelta e manda un messaggio di
+        int nextplayer;                                                 //richiesta divinità al prossimo player
+        chosenGods.remove(mess.getGod());                               //se tutti hanno scelto la divinità stampa "fine"
+        if(chosenGods.size()==0) System.out.println("fine");
+        else {
+            nextplayer=mess.getId()+1%numOfPlayers;
+            GodMessage message = new GodMessage(nextplayer, this.chosenGods);
+            initSetupListeners.firePropertyChange("sendGod", null, message);
+        }
 
     }
-                                                        //un giocatore x ha secondo un colore che deve essere ora cancellato dalla lista
-    public void delColor(ColorMessage mess){        //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
-        colors.remove(mess.getColor());
-        ColorMessage message=new ColorMessage(mess.getId(),this.colors);
-       initSetupListeners.firePropertyChange("delColor", null, message);
+
+
+    public void initialCards(int lastPlayerID,int numberOfPlayers) {                                //manda un messaggio al giocatore random per la scelta delle divinità
+        InitialCardsMessage message=new InitialCardsMessage(this.gods,lastPlayerID,numberOfPlayers);
+        initSetupListeners.firePropertyChange("initialCards", false, message);
 
     }
 
-    public void setUsername(String user){
-        username.add(user);
-    }
-
-    public void WrongUsername(int id) {
-        NicknameMessage message=new NicknameMessage(id);
-        initSetupListeners.firePropertyChange("sendNick", false, message);
-    }
-
-    public void choose3cards(int firstplayerID) {
-        Select3GodsMessage message=new Select3GodsMessage(this.gods,firstplayerID);
-        initSetupListeners.firePropertyChange("3cards", false, message);
-
+    public void askGod(int PlayerID) {                                                              //richiede un god perchè il giocatore ne ha selezionato uno non valido
+        GodMessage message=new GodMessage(PlayerID,chosenGods);
+        initSetupListeners.firePropertyChange("sendGod",false,message);
     }
 }

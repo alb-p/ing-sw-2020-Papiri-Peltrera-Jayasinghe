@@ -3,10 +3,7 @@ package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.InitSetup;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.GodMessage;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.utils.messages.Select3GodsMessage;
+import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,47 +27,58 @@ public class GameHandler implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("nickMessageResponse")) {              //arriva un nick da virtualview arrivata da scc
+        if (evt.getPropertyName().equals("nickMessageResponse")) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
-            String name = message.getNick();
-            if (!data.isInUser(name)) {                                         //se il nick è unico lo in InitSetup e crea
-                data.setUsername(name);                                         //una coda di preparazione per la creazione del player
+            String name = message.getNick();                                            //arriva un nick da virtualview arrivata da scc
+            if (!data.isInUser(name)) {                                                 //se il nick è unico lo in InitSetup e crea
+                data.setUsername(name);                                                 //una coda di preparazione per la creazione del player
                 playerCreationQueue(message);
                 data.askColor(message.getId());
             }else{
                 data.WrongUsername(message.getId());
             }
-        } else if (evt.getPropertyName().equals("colorMessageResponse")) {      //arriva un colore da virtualview arrivata da scc
+        } else if (evt.getPropertyName().equals("colorMessageResponse")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
-            String color = message.getColor();
-            if (data.isInColor(color)) {                                        //se il colore è valido lo cancella da InitSetup
-                data.delColor(message);                                         // e passa alla creazione del player
+            String color = message.getColor();                                          //arriva un colore da virtualview arrivata da scc
+            if (data.isInColor(color)) {                                                //se il colore è valido lo cancella da InitSetup
+                data.delColor(message);                                                 // e passa alla creazione del player
                 playerCreationQueue(message);
             }else{
                 data.askColor(message.getId());
             }
-        } else if (evt.getPropertyName().equals("3godsResponse")) {        //arriva un god da virtualview arrivata da scc
-            Select3GodsMessage message = (Select3GodsMessage) evt.getNewValue();
-            ArrayList<String> listGods = message.getSelectedList();
-            int check=0;
+        } else if (evt.getPropertyName().equals("initialCardsResponse")) {              //arriva una lista di god da virtualview arrivata da scc
+            InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();      //se i god sono validi e di quanttà corretta vengono salvati
+            ArrayList<String> listGods = message.getSelectedList();                     //e si passa alla richiesta del god al primo giocatore
+            int check=0;                                                                //altrimenti viene richiesta la lista
             for(String s:listGods){
                 if (!data.isInListGod(s)) check++;
             }
-            if (check==0) data.setChosenGods(listGods,message.getId());
-            else data.choose3cards(message.getId());
+            if (check==0&&listGods.size()==playersPerGame){
+                int firstPlayerID=message.getId()+1%playersPerGame;
+                turnHandler.setTotalTurnCounter(firstPlayerID);
+                data.setChosenGods(listGods,firstPlayerID);
+
+            }
+            else data.initialCards(message.getId(),playersPerGame);
 
 
-        }else if (evt.getPropertyName().equals("godMessageResponse")) {        //arriva un god da virtualview arrivata da scc
-            GodMessage message = (GodMessage) evt.getNewValue();
-            String god = message.getGod();
-            if (data.isInGod(god)) {                                        //se il colore è valido lo cancella da InitSetup
-                data.delGod(message);                                         // e passa alla creazione del player
-                playerCreationQueue(message);
+        }else if (evt.getPropertyName().equals("godMessageResponse")) {                 //arriva un god da virtualview arrivata da scc
+            GodMessage message = (GodMessage) evt.getNewValue();                        //se è valido lo asssegna al rispettivo player
+            String god = message.getGod();                                              //altrimenti lo richiede
+            if (data.isInGod(god)) {
+                data.delGod(message,playersPerGame);
+                try {
+                    model.setCard(model.getIndex(message.getId()),god);
+                } catch (CloneNotSupportedException e) {
+                    System.out.println("errore nell'inserimento della divinità");
+                }
             }else{
-                data.askColor(message.getId());
+                data.askGod(message.getId());
             }
         }
     }
+
+
 
     private void playerCreationQueue(Object value) {                                                                        //la mappa è del tipo
         if (value instanceof NicknameMessage) {                                                                             // 1 -> Mario
@@ -79,10 +87,10 @@ public class GameHandler implements PropertyChangeListener {
             ColorMessage message = (ColorMessage) value;                                                                    //quando arriva il colore si procede alla
             model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));              //creazione del player
 
-            if(model.getNumOfPlayers()==this.playersPerGame){
-                Random random=new Random();
-                int firstplayerID=random.nextInt(3);
-                data.choose3cards(firstplayerID);
+            if(model.getNumOfPlayers()==this.playersPerGame){                       //se tutti i player sono stati creati
+                Random random=new Random();                                         //un giocatore a caso sceglie le divinità
+                int lastPlayerID=random.nextInt(model.getNumOfPlayers());           //di partenza e sarà ultimo nel turno
+                data.initialCards(lastPlayerID,model.getNumOfPlayers());
 
             }
         }

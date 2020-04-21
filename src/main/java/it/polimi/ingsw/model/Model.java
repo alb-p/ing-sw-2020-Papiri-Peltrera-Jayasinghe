@@ -41,11 +41,21 @@ public class Model {
 
 
     public Player getPlayer(int id) {
-        for(Player p: players){
-            if(p.getId() == id) return p;
+        for (Player p : players) {
+            if (p.getId() == id) return p;
         }
         return null;
     }
+
+    public int getIndex(int id) {
+        for (int i = 0; i < players.size(); i++) {
+            if (players.get(i).getId() == id)
+                return i;
+        }
+        return -1;
+    }
+
+
 
     public int getNumOfPlayers() {
         return this.players.size();
