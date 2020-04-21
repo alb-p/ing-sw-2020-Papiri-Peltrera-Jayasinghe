@@ -18,7 +18,7 @@ public class ClientMain {
         }
 
         try {
-            new Client(ip, port).start();
+            new Client(ip, port, 0).start();
         }catch (Exception e){
             e.printStackTrace();
         }

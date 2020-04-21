@@ -14,9 +14,9 @@ public abstract class RemoteView extends View {
 
     public abstract void welcomeMessage();
 
-    public abstract ActionMessage askAction(ActionMessage message, String nickname);
+    public abstract ActionMessage askAction(ActionMessage message);
 
-    public abstract ColorMessage askColor (ColorMessage message, String nickname);
+    public abstract ColorMessage askColor (ColorMessage message);
 
-    public abstract GodMessage askGod(GodMessage inputObject, String nickname);
+    public abstract GodMessage askGod(GodMessage inputObject);
 }
