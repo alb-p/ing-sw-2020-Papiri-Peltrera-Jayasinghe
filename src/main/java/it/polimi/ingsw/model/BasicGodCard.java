@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 //TODO renderla classe astratta
 
+import com.sun.source.tree.BreakTree;
+
 public class BasicGodCard {
     private boolean flag;
 
@@ -105,6 +107,11 @@ public class BasicGodCard {
         }
         return tree;
 
+    }
+
+    public boolean winningCondition(Worker w) {
+
+        return false;
     }
 }
 

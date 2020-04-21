@@ -40,26 +40,37 @@ public class VirtualView implements Runnable, PropertyChangeListener {
             } else if (evt.getPropertyName().equals("sendColor")) {             //richiede colore ad un client che ha dato nick
                 getConnection(message.getId()).send(message);
             } else if (evt.getPropertyName().equals("delColor")) {              //cancella colore perchè scelto da qualcuno e notifica gli altri dei nuovi colori
-                for(SocketClientConnection c: connections){
-                    if(c.getId()!=((Message) evt.getNewValue()).getId())
+                for (SocketClientConnection c : connections) {
+                    if (c.getId() != ((Message) evt.getNewValue()).getId())
                         c.send(message);
                 }
-            }else if (evt.getPropertyName().equals("initialCards")) {             //richiede le carte divinità tra cui scegliere a un giocatore random
+            } else if (evt.getPropertyName().equals("initialCards")) {             //richiede le carte divinità tra cui scegliere a un giocatore random
                 getConnection(message.getId()).send(message);
-            }else if (evt.getPropertyName().equals("sendGod")) {             //richiede divnità al player
+            } else if (evt.getPropertyName().equals("sendGod")) {             //richiede divnità al player
                 getConnection(message.getId()).send(message);
             } else if (evt.getPropertyName().equals("delGod")) {              //cancella colore perchè scelto da qualcuno e notifica gli altri dei nuovi colori
-                for(SocketClientConnection c: connections){
-                    if(c.getId()!=((Message) evt.getNewValue()).getId())
+                for (SocketClientConnection c : connections) {
+                    if (c.getId() != ((Message) evt.getNewValue()).getId())
                         c.send(message);
                 }
-            }            else if (evt.getPropertyName().equals("sendAction")) {
-                getConnection(message.getId()).send(evt);
+            } else if (evt.getPropertyName().equals("sendAction")) {
+                getConnection(message.getId()).send(message);
+                for (SocketClientConnection c : connections) {
+                    if (c.getId() != ((Message) evt.getNewValue()).getId())
+                        c.send(new WaitingMessage(message.getMessage()));
+                    else c.send(message);
+                }
 
+                // manda che quellaltro stagiocando e te aspetti
+            } else if (evt.getPropertyName().equals("deltaUpdate")) {
+                for (SocketClientConnection c : connections) c.send(message);
+            }else if (evt.getPropertyName().equals("gameReady")){
+                for (SocketClientConnection c : connections) c.send(message);
+                notifyGameReady();
             }
         }
-
     }
+
 
     /************************************************************************************************/
 
@@ -112,6 +123,10 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
     public void receiveGod(GodMessage message) {        //arriva scelta god da scc che viene inoltrato a GameHandler (controller)
         virtualViewListeners.firePropertyChange("godMessageResponse", null, message);
+    }
+
+    public void notifyGameReady(){
+        virtualViewListeners.firePropertyChange("gameReady", null, true);
     }
 
     private SocketClientConnection getConnection(int i) { //restituisce il scc associato all'id (ad es. di un messaggio)

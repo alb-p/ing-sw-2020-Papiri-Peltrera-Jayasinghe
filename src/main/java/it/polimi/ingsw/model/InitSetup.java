@@ -122,7 +122,11 @@ public class InitSetup {
     public void delGod(GodMessage mess, int numOfPlayers) {               //cancella la divinità scelta e manda un messaggio di
         int nextplayer;                                                 //richiesta divinità al prossimo player
         chosenGods.remove(mess.getGod());                               //se tutti hanno scelto la divinità stampa "fine"
-        if (chosenGods.size() == 0) System.out.println("fine");
+        if (chosenGods.size() == 0) {
+            System.out.println("fine");
+            initSetupListeners.firePropertyChange("gameReady", null, new StartGameMessage());
+
+        }
         else {
             nextplayer = mess.getId() + 1 % numOfPlayers;
             GodMessage message = new GodMessage(nextplayer, this.chosenGods);

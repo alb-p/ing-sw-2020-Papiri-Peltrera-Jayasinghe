@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.gods.*;
+import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 
 import java.awt.*;
@@ -147,5 +148,21 @@ public class Player {
 
     public Object getHashList() {
         return treeMap.keySet();
+    }
+
+    public ActionsEnum getAvailableAction() {
+        boolean build = false;
+        boolean move = false;
+        for (TreeActionNode t : treeMap.get(actualWorker).getChildren()){
+            if(t.getData() instanceof Build){
+                build = true;
+            }else if (t.getData() instanceof Move){
+                move = true;
+            }
+        }
+        if(build && move)return ActionsEnum.BOTH;
+        else if (build) return ActionsEnum.BUILD;
+        else if (move) return ActionsEnum.MOVE;
+        else return null;
     }
 }

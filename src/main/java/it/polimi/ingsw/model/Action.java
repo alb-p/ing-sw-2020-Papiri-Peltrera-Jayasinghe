@@ -6,6 +6,7 @@ public abstract class Action {
 
     private Coordinate start;
     private Coordinate end;
+    private boolean option = false; //da usare come yesno
 
     public Action(Coordinate start, Coordinate end){
         this.start = start;
@@ -38,5 +39,13 @@ public abstract class Action {
     @Override
     public int hashCode() {
         return Objects.hash(start, end);
+    }
+
+    public boolean isOption() {
+        return option;
+    }
+
+    public void setOption(boolean option) {
+        this.option = option;
     }
 }

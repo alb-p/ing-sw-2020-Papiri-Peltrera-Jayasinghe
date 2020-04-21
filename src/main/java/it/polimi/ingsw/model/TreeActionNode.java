@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class TreeActionNode {
 
+
     private Action data;
     private TreeActionNode parent;
     private ArrayList<TreeActionNode> children;
@@ -39,5 +40,9 @@ public class TreeActionNode {
             if(t.data.equals(action)) return t;
         }
         return null;
+    }
+
+    public Action getData() {
+        return data;
     }
 }

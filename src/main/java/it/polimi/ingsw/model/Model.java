@@ -1,5 +1,8 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.messages.ActionMessage;
+import it.polimi.ingsw.utils.messages.WinnerMessage;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -68,14 +71,19 @@ public class Model {
         return false;
     }
 
-    public void turnHandler(int i, Action message) {
+    public void turnHandler(int idPlayerPlaying, Action message)  {
         oldBoard = new VirtualBoard(board);
         try {
-            players.get(i).turnHandler(this.board, message);
+            players.get(idPlayerPlaying).turnHandler(this.board, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
         notifyChanges();
+        if(players.get(idPlayerPlaying).hasDone()){
+
+        }else{
+
+        }
         modelListeners.firePropertyChange("turnHandler", null, true);
     }
 
@@ -100,6 +108,7 @@ public class Model {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        verifyTree(i);
     }
 
 
@@ -108,6 +117,19 @@ public class Model {
             if(currPlayer != i) {
                 players.get(i).getCard().specialRule(players.get(currPlayer).getTrees(),players.get(currPlayer).getHashList(),board);
             }
+        }
+    }
+
+    public void selectPlayerPlaying(int id) {
+
+        modelListeners.firePropertyChange("sendAction",
+                null, new ActionMessage(id, players.get(id).getAvailableAction() ,
+                        players.get(id).getNickName()));
+    }
+
+    public void checkWinner(int id) {
+        if(players.get(id).getCard().winningCondition(players.get(id).getActualWorker())){
+            modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, players.get(id).getNickName()));
         }
     }
 }

@@ -10,7 +10,6 @@ public class TurnHandler implements PropertyChangeListener {
     private Model model;
     private int playersPerGame;
     private int totalTurnCounter = 0;
-    private boolean firstAction = true;
 
     //int indice giocatore inziale
     public TurnHandler(Model model, int playersPerGame) {
@@ -23,29 +22,32 @@ public class TurnHandler implements PropertyChangeListener {
         if (evt.getPropertyName().equals("actionMessageResponse")) {
             ActionMessage message = (ActionMessage)evt.getNewValue();
             turnManager(message);
-        } else if (evt.getPropertyName().equals("endTurnMessageResponse")){
-            endTurnManager((ActionMessage)evt.getNewValue());
+        } else if (evt.getPropertyName().equals("gameReady")){
+            model.buildPlayerTree(totalTurnCounter%playersPerGame);
+            model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
         }
     }
 
     private void turnManager(ActionMessage message) {
-        //arriva azione, o inzio turno o n-azione
-        //model.getPlayer(totalTurnCounter%playersPerGame);
-        if(firstAction){
-            firstAction = model.getPlayer(totalTurnCounter%playersPerGame).
-                    selectWorker(message.getAction().getStart());
-        }
         model.turnHandler(totalTurnCounter%playersPerGame, message.getAction());
+        if(!model.getPlayer(totalTurnCounter%playersPerGame).hasDone()){
+            model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
+        }else{
+            endTurnManager();
+        }
+
+
     }
 
 
-    private void endTurnManager(ActionMessage message){
+    private void endTurnManager(){
         model.getPlayer(totalTurnCounter%playersPerGame).setNotDone();
+        model.checkWinner(totalTurnCounter%playersPerGame);
         totalTurnCounter++;
-        firstAction = true;
-        //changePlayerPlaying()
         model.buildPlayerTree(totalTurnCounter%playersPerGame);
-        model.verifyTree(totalTurnCounter%playersPerGame);
+        model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
+
+        //changePlayerPlaying()
     }
 
     public void setTotalTurnCounter(int tt){
