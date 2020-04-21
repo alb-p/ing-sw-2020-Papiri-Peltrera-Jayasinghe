@@ -80,7 +80,6 @@ public class Model {
     }
 
     private void notifyChanges() {
-
         VirtualSlot oldVSlot;
 
         for (int i = 0; i < board.board.length; i++) {

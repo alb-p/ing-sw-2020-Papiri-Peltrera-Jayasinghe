@@ -35,7 +35,7 @@ public class GameHandler implements PropertyChangeListener {
                 playerCreationQueue(message);
                 data.askColor(message.getId());
             }else{
-                data.WrongUsername(message.getId());
+                data.wrongUsername(message.getId());
             }
         } else if (evt.getPropertyName().equals("colorMessageResponse")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
@@ -79,7 +79,7 @@ public class GameHandler implements PropertyChangeListener {
     }
 
 
-
+//TODO possibile cambiare Object in Message?
     private void playerCreationQueue(Object value) {                                                                        //la mappa è del tipo
         if (value instanceof NicknameMessage) {                                                                             // 1 -> Mario
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());                         // 2 -> Luca

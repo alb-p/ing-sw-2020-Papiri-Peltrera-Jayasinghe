@@ -12,7 +12,7 @@ public class TurnHandler implements PropertyChangeListener {
     private int totalTurnCounter = 0;
     private boolean firstAction = true;
 
- //int indice giocatore inziale
+    //int indice giocatore inziale
     public TurnHandler(Model model, int playersPerGame) {
         this.model = model;
         this.playersPerGame = playersPerGame;
@@ -39,7 +39,7 @@ public class TurnHandler implements PropertyChangeListener {
     }
 
 
-    public void endTurnManager(ActionMessage message){
+    private void endTurnManager(ActionMessage message){
         model.getPlayer(totalTurnCounter%playersPerGame).setNotDone();
         totalTurnCounter++;
         firstAction = true;

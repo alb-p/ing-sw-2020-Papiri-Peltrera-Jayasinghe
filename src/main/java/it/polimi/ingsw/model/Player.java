@@ -85,7 +85,7 @@ public class Player {
 
         treeMap.put(this.getWorker(0),treeW0);
         treeMap.put(this.getWorker(1),treeW1);
-        //TODO list è necessaria???
+        //TODO queste list sono necessarie???
         list.add(treeW0);
         list.add(treeW1);
         return list;
@@ -94,9 +94,6 @@ public class Player {
 
 
     public void turnHandler(IslandBoard board, Action message) throws Exception {
-        //TODO controllo se worker esiste in quella posizone esiste è rimandata al client NON VERO
-
-        //
         TreeActionNode node = treeMap.get(actualWorker).search(message);
         if(node == null) {
             //mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico

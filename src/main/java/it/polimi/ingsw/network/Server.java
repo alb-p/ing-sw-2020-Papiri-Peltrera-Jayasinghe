@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -43,7 +41,7 @@ public class Server {
                  */
                 synchronized (room) {
                     if (room.isUninitializated()) {
-                        int numOfPlayers  = socketConnection.askNumofPlayers();
+                        int numOfPlayers  = socketConnection.askNumOfPlayers();
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
                         socketConnection.setId(0);

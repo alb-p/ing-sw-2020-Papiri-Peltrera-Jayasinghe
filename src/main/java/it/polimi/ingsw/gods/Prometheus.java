@@ -15,7 +15,7 @@ public class Prometheus extends BasicGodCard {
     // MOVE 0,0 IN 0,1 & BUILD IN 1,1
     //MOVE 0,0 IN 0,1 enter BUILD 0,1 IN 1,1 (2 lines)
     // BUILD 0,1 IN 0,2 & MOVE IN 1,1 & BUILD IN 1,2
-    //TODO what happens if you get wrong input? (general case) what happens if no-levelUp condition isn't respected?
+    //what happens if you get wrong input? (general case) what happens if no-levelUp condition isn't respected?
 
     @Override
     public boolean turnHandler(Player player, IslandBoard board, String string, boolean halfDone) throws Exception {

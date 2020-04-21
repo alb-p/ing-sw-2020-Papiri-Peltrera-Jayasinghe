@@ -3,7 +3,7 @@ package it.polimi.ingsw.model;
 public class VirtualBoard {
 
 
-    VirtualSlot[][] board = new VirtualSlot[5][5];
+    private VirtualSlot[][] board = new VirtualSlot[5][5];
 
     public VirtualBoard() {
         for (int i = 0; i < 5; i++) {

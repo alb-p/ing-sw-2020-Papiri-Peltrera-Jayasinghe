@@ -79,7 +79,7 @@ public class SocketClientConnection implements Runnable {
             }
         }
     */
-    public int askNumofPlayers() {
+    public int askNumOfPlayers() {
         int numOfPlayers = 0;
         try {
             //inSocket = new Scanner(socket.getInputStream());
