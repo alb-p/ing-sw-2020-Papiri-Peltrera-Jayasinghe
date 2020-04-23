@@ -30,7 +30,9 @@ public class SocketClientConnection implements Runnable {
             socket = newSocket;
             outSocket = new ObjectOutputStream(newSocket.getOutputStream());
             inSocket = new ObjectInputStream(newSocket.getInputStream());
+            System.out.println("CREATA CONNECTION");
         } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -77,22 +79,25 @@ public class SocketClientConnection implements Runnable {
         }
     */
     public int askNumOfPlayers() {
-        int numOfPlayers = 0;
+        int read = 0;
         try {
+            System.out.println("ASK NUM OF PLAYERS");
             //inSocket = new Scanner(socket.getInputStream());
             //outSocket = new ObjectOutputStream(socket.getOutputStream());
-            send("How many players for the game");
-            String read = (String) inSocket.readObject();
-            numOfPlayers = Integer.parseInt(read);
-            while (numOfPlayers != 2 || numOfPlayers != 3) {
-                send("Welcome!\nWhat is your name?");
-                read = (String) inSocket.readObject();
-                numOfPlayers = Integer.parseInt(read);
+            send(new SetupMessage());
+            read = ((SetupMessage) inSocket.readObject()).getField();
+            //numOfPlayers = Integer.parseInt(read);
+            while (!(read == 2 || read == 3)) {
+                System.out.println(read);
+                System.out.println("ASK NUM OF PLAYERS after error");
+
+                send(new SetupMessage());
+                read = ((SetupMessage) inSocket.readObject()).getField();
             }
         } catch (IOException | NoSuchElementException | ClassNotFoundException e) {
             System.err.println("Error!" + e.getMessage());
         }
-        return numOfPlayers;
+        return read;
     }
 
     public void notifyGamePlaying() {
@@ -167,11 +172,11 @@ public class SocketClientConnection implements Runnable {
                     if (inputObject instanceof NicknameMessage) {
                         view.receiveNick((NicknameMessage) message);
                     } else if (inputObject instanceof ColorMessage) {
-                        view.receiveColor((ColorMessage)message);
+                        view.receiveColor((ColorMessage) message);
                     } else if (inputObject instanceof ActionMessage) {
-                        view.receiveAction((ActionMessage)message);
-                    } else if (inputObject instanceof GodMessage){
-                        view.receiveGod((GodMessage)message);
+                        view.receiveAction((ActionMessage) message);
+                    } else if (inputObject instanceof GodMessage) {
+                        view.receiveGod((GodMessage) message);
                     }
                 } else {
                     socket.close();

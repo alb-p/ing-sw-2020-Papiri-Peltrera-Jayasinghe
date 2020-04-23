@@ -3,7 +3,9 @@ package it.polimi.ingsw.utils.messages;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.utils.ActionsEnum;
 
-public class ActionMessage implements Message {
+import java.io.Serializable;
+
+public class ActionMessage implements Message, Serializable {
 
     private String message;
     private String nickname;

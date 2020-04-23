@@ -11,10 +11,10 @@ import java.util.concurrent.Executors;
 
 public class Server {
 
-    private static final int PORT = 4567;
+    private static final int PORT = 4566;
     private ServerSocket serverSocket = new ServerSocket(PORT);
     private int numOfPlayers;
-    private Room room;
+    private Room room = new Room();
 
     private ExecutorService executor = Executors.newFixedThreadPool(128);
     private ArrayList<SocketClientConnection> waitingList = new ArrayList<SocketClientConnection>();
@@ -29,7 +29,6 @@ public class Server {
                 Socket newSocket = serverSocket.accept();
                 System.out.println("trewc");
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket);
-                executor.submit(socketConnection);
                 /*TODO CREAZIONE STANZA
                 inserico i giocatori nella waiting list
                 if waiting list. length è 1 allora a quello chiedo il numero di giocatori
@@ -40,19 +39,24 @@ public class Server {
 
                  */
                 synchronized (room) {
+                    System.out.println("sincronizzato su room");
                     if (room.isUninitialized()) {
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
+                        System.out.println("numero di gioc : "+numOfPlayers);
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
-                        socketConnection.setId(0);
+                        socketConnection.setId(room.currentPlayerId());
                     }else if(!room.isReady()){
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId());
+                        System.out.println("ROOM TO BE STARTED");
                         if(room.isReady())room.start();
                     }else{
                         socketConnection.notifyGamePlaying();
                         waitingList.add(socketConnection);
                     }
+                    executor.submit(socketConnection);
+
 
 
                 }

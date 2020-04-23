@@ -51,7 +51,9 @@ public class Client {
                 public void run() {
                     try {
                         while (online) {
+                            System.out.println("sono online ready to read");
                             Object inputObject = inputStream.readObject();
+                            System.out.println("ARRIVATO OGGETTO");
                             if (inputObject instanceof WelcomeMessage) {
                                 view.welcomeMessage();
                             } else if (inputObject instanceof NicknameMessage) {
@@ -59,19 +61,24 @@ public class Client {
 
                             } else if (inputObject instanceof ColorMessage) {
                                 //meglio tenere anche info sul colore nel client?
-                                send(view.askColor((ColorMessage) inputObject).getColor());
+                                send(view.askColor((ColorMessage) inputObject));
                             } else if (inputObject instanceof ActionMessage) {
                                 view.askAction((ActionMessage) inputObject);
                             } else if (inputObject instanceof GodMessage) {
                                 //meglio tenere anche info sul colore nel client?
                                 send(view.askGod((GodMessage) inputObject));
+                            } else if (inputObject instanceof SetupMessage) {
+                                //meglio tenere anche info sul colore nel client?
+                                send(view.askNumOfPlayers((SetupMessage) inputObject));
+
                             }
 
                             // TODO collegarsi alla remoteView (CLI o GUI) del client
 
                         }
                     } catch (Exception e) {
-                        online = false;
+                       // online = false;
+                        e.printStackTrace();
                     }
 
                 }

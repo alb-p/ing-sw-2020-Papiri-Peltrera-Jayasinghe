@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils.messages;
 
-public class WelcomeMessage implements Message {
+import java.io.Serializable;
+
+public class WelcomeMessage implements Message, Serializable {
 
     String message;
 

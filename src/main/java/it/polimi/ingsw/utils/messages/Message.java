@@ -2,7 +2,9 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
-public interface Message {
+import java.io.Serializable;
+
+public interface Message{
 
     String getMessage();
     void setId(int i);

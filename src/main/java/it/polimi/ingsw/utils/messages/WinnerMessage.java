@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils.messages;
 
-public class WinnerMessage implements Message {
+import java.io.Serializable;
+
+public class WinnerMessage implements Message, Serializable {
 
     private int id;
     private String message;

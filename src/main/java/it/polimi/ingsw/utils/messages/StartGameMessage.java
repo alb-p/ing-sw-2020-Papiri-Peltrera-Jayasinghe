@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils.messages;
 
-public class StartGameMessage implements Message {
+import java.io.Serializable;
+
+public class StartGameMessage implements Message, Serializable {
     @Override
     public String getMessage() {
         return "The game is ready to START!!";

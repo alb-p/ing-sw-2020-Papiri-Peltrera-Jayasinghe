@@ -13,23 +13,24 @@ public class Room {
     private int playersPerGame = 0;
 
 
-    public synchronized void addPlayer(SocketClientConnection connection) throws Exception {
-        if (this.playersPerGame < connections.size()) {
+    public  void addPlayer(SocketClientConnection connection) throws Exception {
+        if (this.playersPerGame > connections.size()) {
             this.connections.add(connection);
+            System.out.println("CONNECTION ADDED"+ connection.getId());
         } else {
             throw new Exception();
         }
     }
 
-    public synchronized boolean isReady() {
+    public  boolean isReady() {
         return this.connections.size() == this.playersPerGame;
     }
 
-    public synchronized void setNumOfPlayers(int playersPerGame) {
+    public  void setNumOfPlayers(int playersPerGame) {
         this.playersPerGame = playersPerGame;
     }
 
-    public synchronized boolean isUninitialized() {
+    public  boolean isUninitialized() {
         return this.connections.size() == this.playersPerGame && this.playersPerGame == 0;
     }
 
@@ -47,9 +48,11 @@ public class Room {
         view.addVirtualViewListener(gameHandler);
         model.addModelListener(view);
         initSetup.addInitSetupListener(view);
+        view.run();
     }
 
     public int currentPlayerId() {
+        System.out.println("CURRENT PLAYER ID = "+this.connections.size());
         return this.connections.size();
     }
 

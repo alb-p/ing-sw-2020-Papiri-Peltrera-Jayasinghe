@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils.messages;
 
-public class WaitingMessage implements Message {
+import java.io.Serializable;
+
+public class WaitingMessage implements Message, Serializable {
 
     private  String message;
 

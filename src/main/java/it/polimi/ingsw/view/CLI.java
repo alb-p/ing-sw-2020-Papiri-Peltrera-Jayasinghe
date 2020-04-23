@@ -1,10 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.IslandBoard;
-import it.polimi.ingsw.utils.messages.ActionMessage;
-import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.GodMessage;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.utils.messages.*;
 
 import java.io.*;
 import java.net.Socket;
@@ -29,7 +26,7 @@ public class CLI extends RemoteView implements Runnable {
 
     public NicknameMessage askNickPlayer(NicknameMessage message){
         printer.println(message.getMessage()+ "\n");
-        playerChoice = console.readLine();
+        playerChoice = scanner.nextLine();
         message.setNick(playerChoice);
         this.nickname = playerChoice;
         return message;
@@ -78,6 +75,13 @@ public class CLI extends RemoteView implements Runnable {
         return null;
     }
 
+    public SetupMessage askNumOfPlayers(SetupMessage message){
+        printer.println(message.getMessage());
+        startingBrackets();
+        int i = Integer.parseInt( scanner.nextLine());
+        message.setField(i);
+        return message;
+    }
 
 
     public void startingBrackets(){

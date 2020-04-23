@@ -39,7 +39,7 @@ public class GameHandler implements PropertyChangeListener {
             }
         } else if (evt.getPropertyName().equals("colorMessageResponse")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
-            String color = message.getColor();                                          //arriva un colore da virtualview arrivata da scc
+            String color = message.getColor().toUpperCase();                                          //arriva un colore da virtualview arrivata da scc
             if (data.isInColor(color)) {                                                //se il colore è valido lo cancella da InitSetup
                 data.delColor(message);                                                 // e passa alla creazione del player
                 playerCreationQueue(message);
@@ -85,6 +85,7 @@ public class GameHandler implements PropertyChangeListener {
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());                         // 2 -> Luca
         } else if (value instanceof ColorMessage) {                                                                         // 3 -> Andrea
             ColorMessage message = (ColorMessage) value;                                                                    //quando arriva il colore si procede alla
+            System.out.println("PRESO : "+ message.getColor());
             model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));              //creazione del player
 
             if(model.getNumOfPlayers()==this.playersPerGame){                       //se tutti i player sono stati creati

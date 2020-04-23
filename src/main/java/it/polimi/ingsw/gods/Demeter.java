@@ -5,9 +5,9 @@ import it.polimi.ingsw.model.*;
 import java.util.Scanner;
 
 public class Demeter extends BasicGodCard {
-
+/*
     @Override
-    public boolean turnHandler(Player player, IslandBoard board, String string, boolean halfDone) throws Exception {
+    public boolean turnHandler(Player player, IslandBoard board, Ac string, boolean halfDone) throws Exception {
         //Your Build: Your Worker may
         //build one additional time, but not
         //on the same space.

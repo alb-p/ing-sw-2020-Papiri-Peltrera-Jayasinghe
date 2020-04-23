@@ -2,9 +2,10 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class GodMessage implements Message{
+public class GodMessage implements Message, Serializable {
 
     String message;
     String god;

@@ -2,7 +2,9 @@ package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.network.SocketClientConnection;
 
-public class NicknameMessage implements Message {
+import java.io.Serializable;
+
+public class NicknameMessage implements Message , Serializable {
 
     private String message;
     private String nick;

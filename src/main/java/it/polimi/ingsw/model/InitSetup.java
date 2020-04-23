@@ -83,7 +83,10 @@ public class InitSetup {
 
     //un giocatore x ha secondo un colore che deve essere ora cancellato dalla lista
     public void delColor(ColorMessage mess) {                        //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
-        colors.remove(mess.getColor());
+        //colors.remove(mess.getColor());
+        for(String s : colors){
+            if(s.equals(mess.getColor()))colors.remove(s);
+        }
         ColorMessage message = new ColorMessage(mess.getId(), this.colors);
         initSetupListeners.firePropertyChange("delColor", null, message);
 
