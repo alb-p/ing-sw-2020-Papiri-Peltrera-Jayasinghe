@@ -45,10 +45,10 @@ public class Server {
                         System.out.println("numero di gioc : "+numOfPlayers);
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
-                        socketConnection.setId(room.currentPlayerId());
+                        socketConnection.setId(room.currentPlayerId()-1);
                     }else if(!room.isReady()){
                         room.addPlayer(socketConnection);
-                        socketConnection.setId(room.currentPlayerId());
+                        socketConnection.setId(room.currentPlayerId()-1);
                         System.out.println("ROOM TO BE STARTED");
                         if(room.isReady())room.start();
                     }else{
