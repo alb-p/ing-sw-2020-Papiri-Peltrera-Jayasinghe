@@ -44,7 +44,8 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
                         c.send(message);
                 }
-            } else if (evt.getPropertyName().equals("initialCards")) {             //richiede le carte divinità tra cui scegliere a un giocatore random
+            } else if (evt.getPropertyName().equals("initialCards")) {//richiede le carte divinità tra cui scegliere a un giocatore random
+                SocketClientConnection a=getConnection(message.getId());
                 getConnection(message.getId()).send(message);
             } else if (evt.getPropertyName().equals("sendGod")) {             //richiede divnità al player
                 getConnection(message.getId()).send(message);

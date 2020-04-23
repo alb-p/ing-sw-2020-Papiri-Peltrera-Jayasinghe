@@ -18,7 +18,11 @@ public abstract class RemoteView extends View {
 
     public abstract ColorMessage askColor (ColorMessage message);
 
+    public abstract InitialCardsMessage askGodList (InitialCardsMessage message);
+
     public abstract GodMessage askGod(GodMessage inputObject);
 
     public abstract Object askNumOfPlayers(SetupMessage inputObject);
+
+    public abstract void showColor(ColorSelectedMessage inputObject);
 }

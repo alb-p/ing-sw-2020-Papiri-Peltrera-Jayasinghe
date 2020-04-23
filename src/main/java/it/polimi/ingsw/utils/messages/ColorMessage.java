@@ -9,33 +9,27 @@ import java.util.ArrayList;
 public class ColorMessage implements Message, Serializable {
 
     private String message;
-    private ArrayList<String> colors = new ArrayList<String>();
-    private String color;
+    private ArrayList<Color> colors = new ArrayList<>();
+    private Color color;
     private int id;
 
 
-    public ColorMessage() {
-        this.message = "Inserisci il colore";
-        this.color = null;
 
-    }
-
-    public ColorMessage(int i, ArrayList<String> colors) {
+    public ColorMessage(int i, ArrayList<Color> colors) {
         this.message = "Inserisci il colore ";
-        this.colors = colors;
+        this.colors.addAll(colors);
         id = i;
     }
 
-
-    public void setColor(String color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
-    public String getColor() {
+    public Color getColor() {
         return this.color;
     }
 
-    public ArrayList<String> getColors() {
+    public ArrayList<Color> getColors() {
         return colors;
     }
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 public class InitSetup {
 
-    private ArrayList<String> colors;
+    private ArrayList<Color> colors;
     private ArrayList<String> username;
     private ArrayList<String> gods;
     private ArrayList<String> chosenGods;
@@ -23,8 +23,8 @@ public class InitSetup {
         chosenGods = new ArrayList<>();
 
 
-        for (Color c : Color.values().clone()) {
-            colors.add(c.getName());
+        for (Color c :Color.values()) {
+            colors.add(c);
         }
         gods.add("APOLLO");
         gods.add("ARTEMIS");
@@ -71,23 +71,18 @@ public class InitSetup {
 
     }
 
-    public boolean isInColor(String color) {
+    public boolean isInColor(Color color) {
 
-        for (String s : colors) {
-            if (s.equals(color)) {
-                return true;
-            }
-        }
-        return false;
+        return colors.contains(color);
     }
 
-    //un giocatore x ha secondo un colore che deve essere ora cancellato dalla lista
+                                                                     //un giocatore x ha scelto un colore che deve essere ora cancellato dalla lista
     public void delColor(ColorMessage mess) {                        //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
-        //colors.remove(mess.getColor());
-        for(String s : colors){
-            if(s.equals(mess.getColor()))colors.remove(s);
-        }
-        ColorMessage message = new ColorMessage(mess.getId(), this.colors);
+
+        for(int i=0;i<this.colors.size();i++)
+            if(this.colors.get(i)==mess.getColor())
+                this.colors.remove(i);
+        ColorSelectedMessage message = new ColorSelectedMessage(mess.getId(), mess.getColor());
         initSetupListeners.firePropertyChange("delColor", null, message);
 
     }

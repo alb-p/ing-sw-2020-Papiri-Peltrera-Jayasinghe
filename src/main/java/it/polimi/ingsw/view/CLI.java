@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.IslandBoard;
 import it.polimi.ingsw.utils.messages.*;
 
@@ -50,13 +51,28 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public ColorMessage askColor(ColorMessage message) {
         printer.println("Ciao "+ nickname +"! Quale colore vuoi scegliere tra quelli disponibili?");
-        for(String s: message.getColors()){
-            printer.printf(s+" ");
+        for(Color c: message.getColors()){
+            printer.printf(c.getName()+" ");
         }
         startingBrackets();
         playerChoice = scanner.nextLine();
-        message.setColor(playerChoice);
+        for(Color c: Color.values())
+            if(playerChoice.equalsIgnoreCase(c.getName()))
+                message.setColor(c);
         return message;
+    }
+
+    @Override
+    public InitialCardsMessage askGodList(InitialCardsMessage message) {
+        printer.println(message.getMessage());
+        for(String s: message.getCompleteList())
+            printer.println(s);
+        return message;
+    }
+
+    @Override
+    public void showColor(ColorSelectedMessage inputObject) {
+        printer.println(inputObject.getMessage());
     }
 
     @Override

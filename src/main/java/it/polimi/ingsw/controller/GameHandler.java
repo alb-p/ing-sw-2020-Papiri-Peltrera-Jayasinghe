@@ -1,5 +1,6 @@
 package it.polimi.ingsw.controller;
 
+import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.InitSetup;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.model.Player;
@@ -39,7 +40,7 @@ public class GameHandler implements PropertyChangeListener {
             }
         } else if (evt.getPropertyName().equals("colorMessageResponse")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
-            String color = message.getColor().toUpperCase();                                          //arriva un colore da virtualview arrivata da scc
+            Color color = message.getColor();                                          //arriva un colore da virtualview arrivata da scc
             if (data.isInColor(color)) {                                                //se il colore è valido lo cancella da InitSetup
                 data.delColor(message);                                                 // e passa alla creazione del player
                 playerCreationQueue(message);
@@ -86,11 +87,11 @@ public class GameHandler implements PropertyChangeListener {
         } else if (value instanceof ColorMessage) {                                                                         // 3 -> Andrea
             ColorMessage message = (ColorMessage) value;                                                                    //quando arriva il colore si procede alla
             System.out.println("PRESO : "+ message.getColor());
-            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));              //creazione del player
-
+            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor().getName()));              //creazione del player
             if(model.getNumOfPlayers()==this.playersPerGame){                       //se tutti i player sono stati creati
                 Random random=new Random();                                         //un giocatore a caso sceglie le divinità
                 int lastPlayerID=random.nextInt(model.getNumOfPlayers());           //di partenza e sarà ultimo nel turno
+                System.out.println("l'ultimo player è: "+lastPlayerID);
                 data.initialCards(lastPlayerID,model.getNumOfPlayers());
 
             }

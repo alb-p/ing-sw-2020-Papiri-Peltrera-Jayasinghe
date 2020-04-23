@@ -13,9 +13,10 @@ public class InitialCardsMessage implements Message, Serializable {
     private int id;
 
 
-    public InitialCardsMessage(ArrayList<String> l, int i, int dim){
+    public InitialCardsMessage(ArrayList<String> list, int i, int dim){
         this.id=i;
-        this.completeList=l;
+        this.completeList=new ArrayList<>();
+        this.completeList.addAll(list);
         this.message="Select "+dim+" God Cards "+ completeList;
 
 
