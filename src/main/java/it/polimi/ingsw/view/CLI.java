@@ -67,6 +67,12 @@ public class CLI extends RemoteView implements Runnable {
         printer.println(message.getMessage());
         for(String s: message.getCompleteList())
             printer.println(s);
+        String s;
+        for (int i= 0; i<message.getDim(); i++){
+            startingBrackets();
+            s= scanner.nextLine();
+            message.addToSelectedList(s.toUpperCase());
+        }
         return message;
     }
 
@@ -78,7 +84,10 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public GodMessage askGod(GodMessage inputObject) {
         //TODO da finire dopo commit di sandro
-        return null;
+        printer.println(inputObject.getMessage());
+        startingBrackets();
+        inputObject.setGod(scanner.nextLine().toUpperCase());
+        return inputObject;
     }
 
     @Override

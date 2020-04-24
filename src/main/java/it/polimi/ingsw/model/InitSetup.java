@@ -90,10 +90,23 @@ public class InitSetup {
 /**********************************************************************************************************************************************************************************************/
     /***GODS***/
 
-    public void setChosenGods(ArrayList<String> chosenGods, int firstplayerID) {                 //imposta le divinità scelte dal giocatore random
-        this.chosenGods = chosenGods;                                                           //e manda al primo player un messaggio di scelta divinità
+    public void setChosenGods(int firstplayerID) {                 //imposta le divinità scelte dal giocatore random
         GodMessage message = new GodMessage(firstplayerID, chosenGods);
         initSetupListeners.firePropertyChange("sendGod", null, message);
+    }
+
+    public void addChosenGod(String chosenGod){
+        this.chosenGods.add(chosenGod);
+        for(int i = 0; i<gods.size(); i++){
+            if(gods.get(i).equals(chosenGod)){
+                this.gods.remove(i);
+                return;
+            }
+        }
+    }
+
+    public int ChosenGodsSize(){
+        return this.chosenGods.size();
     }
 
 
@@ -134,8 +147,8 @@ public class InitSetup {
     }
 
 
-    public void initialCards(int lastPlayerID, int numberOfPlayers) {                                //manda un messaggio al giocatore random per la scelta delle divinità
-        InitialCardsMessage message = new InitialCardsMessage(this.gods, lastPlayerID, numberOfPlayers);
+    public void initialCards(int lastPlayerID, int numberOfGodsLeft) {                                //manda un messaggio al giocatore random per la scelta delle divinità
+        InitialCardsMessage message = new InitialCardsMessage(this.gods, lastPlayerID, numberOfGodsLeft);
         initSetupListeners.firePropertyChange("initialCards", false, message);
 
     }

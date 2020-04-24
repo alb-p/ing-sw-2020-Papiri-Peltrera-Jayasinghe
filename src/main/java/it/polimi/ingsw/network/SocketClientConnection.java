@@ -177,6 +177,9 @@ public class SocketClientConnection implements Runnable {
                         view.receiveAction((ActionMessage) message);
                     } else if (inputObject instanceof GodMessage) {
                         view.receiveGod((GodMessage) message);
+                    } else if (inputObject instanceof InitialCardsMessage) {
+                        view.receiveListGods((InitialCardsMessage) message);
+
                     }
                 } else {
                     socket.close();

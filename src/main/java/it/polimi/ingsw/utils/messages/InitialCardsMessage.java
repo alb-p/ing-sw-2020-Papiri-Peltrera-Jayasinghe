@@ -11,13 +11,17 @@ public class InitialCardsMessage implements Message, Serializable {
     private ArrayList<String> selectedList;
     private String message;
     private int id;
+    private int dim;
 
 
     public InitialCardsMessage(ArrayList<String> list, int i, int dim){
-        this.id=i;
-        this.completeList=new ArrayList<>();
+        this.id = i;
+        this.completeList = new ArrayList<>();
+        this.selectedList = new ArrayList<>();
+
         this.completeList.addAll(list);
         this.message="Select "+dim+" God Cards "+ completeList;
+        this.dim = dim;
 
 
     }
@@ -40,13 +44,13 @@ public class InitialCardsMessage implements Message, Serializable {
     }
 
 
-    public void setSelectedList(ArrayList<String> selectedList) {
-        this.selectedList = selectedList;
-    }
-
-
+    public void addToSelectedList(String selectedGod){this.selectedList.add(selectedGod.toUpperCase());}
     public ArrayList<String> getSelectedList() {
         return selectedList;
+    }
+
+    public  int getDim(){
+        return this.dim;
     }
 
 }
