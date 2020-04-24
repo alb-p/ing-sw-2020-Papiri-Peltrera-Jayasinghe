@@ -136,17 +136,15 @@ public class InitSetup {
         for (int i = 0; i < chosenGods.size(); i++) {
             if (chosenGods.get(i).equals(mess.getGod())) {
                 chosenGods.remove(i);
-                System.out.println("REMOVED "+ mess.getGod());
                 break;
             }
         }
         if (chosenGods.isEmpty()) {
-            System.out.println("fine");
+            System.out.println("fire gameReady");
             initSetupListeners.firePropertyChange("gameReady", null, new StartGameMessage());
 
         } else {
             nextplayer = (mess.getId() + 1) % numOfPlayers;
-            System.out.println("NEXTPLAYER "+nextplayer);
             GodMessage message = new GodMessage(nextplayer, this.chosenGods);
             initSetupListeners.firePropertyChange("sendGod", null, message);
         }
