@@ -23,7 +23,7 @@ public class InitSetup {
         chosenGods = new ArrayList<>();
 
 
-        for (Color c :Color.values()) {
+        for (Color c : Color.values()) {
             colors.add(c);
         }
         gods.add("APOLLO");
@@ -76,11 +76,11 @@ public class InitSetup {
         return colors.contains(color);
     }
 
-                                                                     //un giocatore x ha scelto un colore che deve essere ora cancellato dalla lista
+    //un giocatore x ha scelto un colore che deve essere ora cancellato dalla lista
     public void delColor(ColorMessage mess) {                        //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
 
-        for(int i=0;i<this.colors.size();i++)
-            if(this.colors.get(i)==mess.getColor())
+        for (int i = 0; i < this.colors.size(); i++)
+            if (this.colors.get(i) == mess.getColor())
                 this.colors.remove(i);
         ColorSelectedMessage message = new ColorSelectedMessage(mess.getId(), mess.getColor());
         initSetupListeners.firePropertyChange("delColor", null, message);
@@ -95,17 +95,17 @@ public class InitSetup {
         initSetupListeners.firePropertyChange("sendGod", null, message);
     }
 
-    public void addChosenGod(String chosenGod){
+    public void addChosenGod(String chosenGod) {
         this.chosenGods.add(chosenGod);
-        for(int i = 0; i<gods.size(); i++){
-            if(gods.get(i).equals(chosenGod)){
+        for (int i = 0; i < gods.size(); i++) {
+            if (gods.get(i).equals(chosenGod)) {
                 this.gods.remove(i);
                 return;
             }
         }
     }
 
-    public int ChosenGodsSize(){
+    public int ChosenGodsSize() {
         return this.chosenGods.size();
     }
 
@@ -132,14 +132,21 @@ public class InitSetup {
 
     public void delGod(GodMessage mess, int numOfPlayers) {               //cancella la divinità scelta e manda un messaggio di
         int nextplayer;                                                 //richiesta divinità al prossimo player
-        chosenGods.remove(mess.getGod());                               //se tutti hanno scelto la divinità stampa "fine"
-        if (chosenGods.size() == 0) {
+        //chosenGods.remove(mess.getGod());                               //se tutti hanno scelto la divinità stampa "fine"
+        for (int i = 0; i < chosenGods.size(); i++) {
+            if (chosenGods.get(i).equals(mess.getGod())) {
+                chosenGods.remove(i);
+                System.out.println("REMOVED "+ mess.getGod());
+                break;
+            }
+        }
+        if (chosenGods.isEmpty()) {
             System.out.println("fine");
             initSetupListeners.firePropertyChange("gameReady", null, new StartGameMessage());
 
-        }
-        else {
-            nextplayer = mess.getId() + 1 % numOfPlayers;
+        } else {
+            nextplayer = (mess.getId() + 1) % numOfPlayers;
+            System.out.println("NEXTPLAYER "+nextplayer);
             GodMessage message = new GodMessage(nextplayer, this.chosenGods);
             initSetupListeners.firePropertyChange("sendGod", null, message);
         }

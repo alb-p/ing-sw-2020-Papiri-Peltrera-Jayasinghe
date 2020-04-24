@@ -53,7 +53,8 @@ public class GameHandler implements PropertyChangeListener {
                                                                                         //altrimenti viene richiesta la lista
             for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s);
             if (data.ChosenGodsSize() == playersPerGame) {
-                int firstPlayerID = message.getId() + 1 % playersPerGame;
+                int firstPlayerID =( message.getId() + 1) % playersPerGame;
+                System.out.println("FIRSTPLAYERID "+firstPlayerID);
                 turnHandler.setTotalTurnCounter(firstPlayerID);
                 data.setChosenGods(firstPlayerID);
             } else {
