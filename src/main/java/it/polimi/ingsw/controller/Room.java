@@ -46,6 +46,7 @@ public class Room {
         gameHandler.setTurnhandler(turnHandler);
 
         view.addVirtualViewListener(gameHandler);
+        //TODO crearre una sola PropertyChangeSupport in model e poi passarla a chi ne ha bisogno
         model.addModelListener(view);
         initSetup.addInitSetupListener(view);
         view.run();

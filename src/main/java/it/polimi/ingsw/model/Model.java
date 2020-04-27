@@ -38,8 +38,6 @@ public class Model {
 
     public void setCard(int playerPosition, String card) throws CloneNotSupportedException {
         players.get(playerPosition).setCard(card.toUpperCase());
-        modelListeners.firePropertyChange("turnHandler", null, true);
-
     }
 
 
