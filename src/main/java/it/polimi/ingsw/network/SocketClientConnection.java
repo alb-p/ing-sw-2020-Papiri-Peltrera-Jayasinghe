@@ -178,8 +178,9 @@ public class SocketClientConnection implements Runnable {
                     } else if (inputObject instanceof GodMessage) {
                         view.receiveGod((GodMessage) message);
                     } else if (inputObject instanceof InitialCardsMessage) {
-                        view.receiveListGods((InitialCardsMessage) message);
-
+                        view.receiveInitialCards((InitialCardsMessage) message);
+                    }else if (inputObject instanceof FirstPlayerMessage) {
+                        view.receiveFirstPlayer((FirstPlayerMessage) message);
                     }
                 } else {
                     socket.close();

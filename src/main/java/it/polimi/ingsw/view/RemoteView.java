@@ -25,4 +25,6 @@ public abstract class RemoteView extends View {
     public abstract Object askNumOfPlayers(SetupMessage inputObject);
 
     public abstract void showColor(ColorSelectedMessage inputObject);
+
+    public abstract FirstPlayerMessage firstPlayer(FirstPlayerMessage message);
 }

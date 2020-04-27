@@ -22,6 +22,14 @@ public class FirstPlayerMessage implements Message, Serializable {
         this.chosenName=s;
     }
 
+    public String getChosenName(){
+        return this.chosenName;
+    }
+
+    public List<String> getNames() {
+        return this.names;
+    }
+
     @Override
     public String getMessage() {
         return this.message;

@@ -82,6 +82,19 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
+    public FirstPlayerMessage firstPlayer(FirstPlayerMessage message) {
+        printer.println(message.getMessage());
+        for(String s: message.getNames())
+            printer.println(s);
+        startingBrackets();
+        String name = scanner.nextLine();
+        for(String s: message.getNames())
+            if(s.equalsIgnoreCase(name))
+                message.setChosenName(name);
+        return message;
+    }
+
+    @Override
     public GodMessage askGod(GodMessage inputObject) {
         //TODO da finire dopo commit di sandro
         printer.println(inputObject.getMessage());

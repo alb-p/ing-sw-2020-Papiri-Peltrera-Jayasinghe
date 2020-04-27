@@ -64,7 +64,9 @@ public class Client {
                                 send(view.askColor((ColorMessage) inputObject));
                             } else if (inputObject instanceof ColorSelectedMessage) {
                                 view.showColor((ColorSelectedMessage) inputObject);
-                            } else if (inputObject instanceof ActionMessage) {
+                            } else if (inputObject instanceof FirstPlayerMessage) {
+                                view.firstPlayer((FirstPlayerMessage) inputObject);
+                            }else if (inputObject instanceof ActionMessage) {
                                 view.askAction((ActionMessage) inputObject);
                             } else if (inputObject instanceof InitialCardsMessage) {
                                 //meglio tenere anche info sul colore nel client?

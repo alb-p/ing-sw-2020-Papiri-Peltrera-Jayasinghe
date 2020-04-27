@@ -45,7 +45,6 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                         c.send(message);
                 }
             } else if (evt.getPropertyName().equals("initialCards")) {//richiede le carte divinità tra cui scegliere a un giocatore random
-                //SocketClientConnection a=getConnection(message.getId());
                 getConnection(message.getId()).send(message);
             } else if (evt.getPropertyName().equals("sendGod")) {             //richiede divnità al player
                 getConnection(message.getId()).send(message);
@@ -54,7 +53,9 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
                         c.send(message);
                 }
-            } else if (evt.getPropertyName().equals("sendAction")) {
+            }else if (evt.getPropertyName().equals("firstPlayer")) {
+                getConnection(message.getId()).send(message);
+            }else if (evt.getPropertyName().equals("sendAction")) {
                 getConnection(message.getId()).send(message);
                 for (SocketClientConnection c : connections) {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
@@ -137,7 +138,8 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         return null;
     }
 
-    public void receiveListGods(InitialCardsMessage message) {
-        virtualViewListeners.firePropertyChange("initialCardsResponse", null, message);
+    public void receiveFirstPlayer(FirstPlayerMessage message){
+        virtualViewListeners.firePropertyChange("firstPlayerResponse", null, message);
     }
+
 }

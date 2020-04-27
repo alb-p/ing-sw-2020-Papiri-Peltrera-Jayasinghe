@@ -53,10 +53,8 @@ public class GameHandler implements PropertyChangeListener {
                                                                                         //altrimenti viene richiesta la lista
             for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s);
             if (data.ChosenGodsSize() == playersPerGame) {
-                int firstPlayerID =( message.getId() + 1) % playersPerGame;
-                System.out.println("FIRSTPLAYERID "+firstPlayerID);
-                turnHandler.setTotalTurnCounter(firstPlayerID);
-                data.setChosenGods(firstPlayerID);
+                int nextID =( message.getId() + 1) % playersPerGame;
+                data.setChosenGods(nextID);
             } else {
                 data.initialCards(message.getId(), playersPerGame - data.ChosenGodsSize());
             }
@@ -74,6 +72,20 @@ public class GameHandler implements PropertyChangeListener {
                 }
             } else {
                 data.askGod(message.getId());
+            }
+        }else if (evt.getPropertyName().equals("firstPlayerResponse")) {
+            FirstPlayerMessage message = (FirstPlayerMessage) evt.getNewValue();
+            String name = message.getChosenName();
+            if(data.isInUser(name)){
+               for(int i=0;i<playersPerGame;i++){
+                   if(playersMap.get(i).equals(name)){
+                       System.out.println("FIRSTPLAYERID "+i);
+                       turnHandler.setTotalTurnCounter(i);
+                       break;
+                   }
+               }
+            }else{
+                data.askFirstPlayer(message.getId());
             }
         }
     }
