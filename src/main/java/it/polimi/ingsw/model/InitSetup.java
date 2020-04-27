@@ -34,7 +34,7 @@ public class InitSetup {
         gods.add("HEPHAESTUS");
         gods.add("MINOTAUR");
         gods.add("PAN");
-        gods.add("PREMETHEUS");
+        gods.add("PROMETHEUS");
     }
 
     public void addInitSetupListener(PropertyChangeListener listener) {
@@ -62,7 +62,7 @@ public class InitSetup {
         initSetupListeners.firePropertyChange("sendNick", false, message);
     }
 
-/**********************************************************************************************************************************************************************************************/
+/**********************************************************************************************************************/
     /***COLORS***/
 
     public void askColor(int id) {
@@ -87,7 +87,7 @@ public class InitSetup {
 
     }
 
-/**********************************************************************************************************************************************************************************************/
+/**********************************************************************************************************************/
     /***GODS***/
 
     public void setChosenGods(int firstplayerID) {                 //imposta le divinità scelte dal giocatore random
@@ -145,6 +145,7 @@ public class InitSetup {
 
         } else {
             nextplayer = (mess.getId() + 1) % numOfPlayers;
+            System.out.println("NEXTPLA "+nextplayer+ "MESSid "+mess.getId()+ "PLAYERSPERGAME: "+numOfPlayers);
             GodMessage message = new GodMessage(nextplayer, this.chosenGods);
             initSetupListeners.firePropertyChange("sendGod", null, message);
         }
@@ -162,4 +163,13 @@ public class InitSetup {
         GodMessage message = new GodMessage(PlayerID, chosenGods);
         initSetupListeners.firePropertyChange("sendGod", false, message);
     }
+
+
+/**********************************************************************************************************************/
+    /***WORKERS***/
+    public void initialWorkers(int lastPlayerID, int numOfPlayers) {
+        WorkerMessage message = new WorkerMessage(lastPlayerID);
+
+    }
+
 }

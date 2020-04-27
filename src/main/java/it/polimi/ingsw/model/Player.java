@@ -94,11 +94,11 @@ public class Player {
     }
 
 
-    public void turnHandler(IslandBoard board, Action message) throws Exception {
+    public boolean turnHandler(IslandBoard board, Action message) throws Exception {
         TreeActionNode node = treeMap.get(actualWorker).search(message);
         if(node == null) {
             //mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico
-            return;
+            return false;
         } else if(node.getChildren().isEmpty()){
             done = true;
             actualWorker = null;
@@ -112,6 +112,7 @@ public class Player {
             halfDone = false;
             actualWorker = null;
         }
+        return true;
     }
 
 
@@ -142,8 +143,11 @@ public class Player {
 
 
     public Object getTrees() {
-
         return treeMap;
+    }
+
+    public TreeActionNode getTree(Worker worker){
+        return(treeMap.get(worker));
     }
 
     public Object getHashList() {
