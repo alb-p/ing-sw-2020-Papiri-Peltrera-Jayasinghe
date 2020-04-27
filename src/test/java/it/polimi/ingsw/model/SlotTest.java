@@ -53,4 +53,5 @@ public class SlotTest {
         s.free();
         Assert.assertTrue(s.isFree());
     }
+
 }

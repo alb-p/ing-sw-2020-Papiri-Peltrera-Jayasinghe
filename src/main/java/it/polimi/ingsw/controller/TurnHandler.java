@@ -35,8 +35,6 @@ public class TurnHandler implements PropertyChangeListener {
         }else{
             endTurnManager();
         }
-
-
     }
 
 

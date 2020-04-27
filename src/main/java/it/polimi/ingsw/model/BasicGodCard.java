@@ -7,24 +7,19 @@ public class BasicGodCard {
     private boolean flag;
 
     public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
-        //necessario dare anche la board alla carta per poter segnare la propria mossa
         Slot workerSlot = board.infoSlot(w.getPosition());
         Slot destSlot = board.infoSlot(coord);
         if (w.getPosition().isAdjacent(coord) && (workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() >= -1 ||
-                workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() <= 1)) {
-
-            if (destSlot.isFree()) {
-                workerSlot.free();
-                destSlot.occupy(w);
-                w.setPosition(coord);
-            } else {
-                return false;
-            }
+                workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() <= 1) && destSlot.isFree()) {
+            workerSlot.free();
+            destSlot.occupy(w);
+            w.setPosition(coord);
+            return true;
         }
-        return true;
+        return false;
     }
 
-    public void build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
+    public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         if (w.getPosition().isAdjacent(coord) && board.infoSlot(coord).isFree()) {
             Slot slot = board.infoSlot(coord);
             //construction.build(slot);
@@ -34,8 +29,10 @@ public class BasicGodCard {
                 slot.construct(Construction.DOME);
             }
         } else {
-            throw new Exception("Invalid build");
+            return false;
+            //throw new Exception("Invalid build");
         }
+        return true;
     }
 
     public void specialRule(Object o, Object o2, IslandBoard board) {
@@ -50,11 +47,11 @@ public class BasicGodCard {
     }
 
 
-    public boolean turnHandler(Player player, IslandBoard board, Action action, boolean halfDone) throws Exception {
-        if(action instanceof Move) {
+    public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
+        if (action instanceof Move) {
             return (this.move(player.getActualWorker(), action.getEnd(), board));
-        }else if(action instanceof Build){
-            this.build(player.getActualWorker(), action.getEnd(), board);
+        } else if (action instanceof Build) {
+            return (this.build(player.getActualWorker(), action.getEnd(), board));
         }
         return false;
     }
@@ -67,11 +64,11 @@ public class BasicGodCard {
     }
 
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) throws Exception {
-        TreeActionNode tree= new TreeActionNode(null);
+        TreeActionNode tree = new TreeActionNode(null);
 
-        for(Coordinate c1: w.getPosition().getAdiacentCoords()){  //controllo intorno al worker per fare move
+        for (Coordinate c1 : w.getPosition().getAdiacentCoords()) {  //controllo intorno al worker per fare move
 
-            if(board.infoSlot(c1).isFree()&&(board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 || //stesso controllo che si fa anche nel move del basicGod
+            if (board.infoSlot(c1).isFree() && (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 || //stesso controllo che si fa anche nel move del basicGod
                     board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() <= 1)) {
 
                 TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c1));

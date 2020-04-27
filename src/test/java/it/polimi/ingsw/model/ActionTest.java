@@ -58,6 +58,9 @@ public class ActionTest {
         assertFalse(board.infoSlot(new Coordinate(0, 1)).isFree());
         assertTrue(board.infoSlot(new Coordinate(1,2)).isFree());
         //assertEquals(board.infoSlot(new Coordinate(1, 2)).getWorker(), player.getWorker(0));
+        //0,0 is occupied by player's worker2
+        assertTrue(card.turnHandler(player, board,
+                new Move(new Coordinate(0, 1), new Coordinate(0, 0)), false));
     }
 
     @Test
@@ -68,6 +71,10 @@ public class ActionTest {
                 new Move(new Coordinate(1,2), new Coordinate(0,1))));
         assertFalse(board.infoSlot(new Coordinate(0, 1)).isFree());
         assertTrue(board.infoSlot(new Coordinate(1,2)).isFree());
+        player.playerTreeSetup(board);
+        //0,0 is occupied by player's worker2
+        //assertFalse(player.turnHandler(board,
+        //        new Move(new Coordinate(0, 1), new Coordinate(0, 0))));
     }
 
 

@@ -121,7 +121,6 @@ public class Model {
     }
 
     public void selectPlayerPlaying(int id) {
-
         modelListeners.firePropertyChange("sendAction",
                 null, new ActionMessage(id, players.get(id).getAvailableAction() ,
                         players.get(id).getNickName()));

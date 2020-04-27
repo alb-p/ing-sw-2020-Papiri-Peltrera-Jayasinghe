@@ -23,11 +23,11 @@ public class WorkerTest {
         assertEquals(new Coordinate(3, 3).getCol(), worker.getOldPosition().getCol());
     }
 
-
     @Test
     public void getColorTest() {
         Worker worker = new Worker(0, 0, "WHITE");
 
         assertEquals(Color.WHITE, worker.getColor());
     }
+
 }

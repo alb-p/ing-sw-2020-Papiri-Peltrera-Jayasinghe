@@ -15,20 +15,24 @@ public class Player {
 
 
     private ArrayList<Worker> workers = new ArrayList<Worker>();
-    private HashMap<Worker,TreeActionNode> treeMap = new HashMap<Worker, TreeActionNode>();
+    private HashMap<Worker, TreeActionNode> treeMap = new HashMap<Worker, TreeActionNode>();
 
     private String nickName;
     private BasicGodCard card;
     private boolean done = false;
-    private boolean halfDone = false;
+    private boolean moveDone = false;
+    private boolean buildDone = false;
+
     private int id;
     private Worker actualWorker = null;
+
 
     public Player(String nickName, String color) {
         this.nickName = nickName;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
     }
+
     public Player(int id, String nickName, String color) {
         this.nickName = nickName;
         this.id = id;
@@ -52,7 +56,7 @@ public class Player {
         } else if (card.equals("PROMETHEUS")) {
             this.card = new Prometheus();
             return;
-        }else {
+        } else {
             this.card = godCard;
         }
     }
@@ -80,12 +84,12 @@ public class Player {
     }
 
     public ArrayList<TreeActionNode> playerTreeSetup(IslandBoard board) throws Exception {
-        TreeActionNode treeW0 = this.card.cardTreeSetup(this.getWorker(0),board);
-        TreeActionNode treeW1 = this.card.cardTreeSetup(this.getWorker(1),board);
-        ArrayList<TreeActionNode> list= new ArrayList<TreeActionNode>();
+        TreeActionNode treeW0 = this.card.cardTreeSetup(this.getWorker(0), board);
+        TreeActionNode treeW1 = this.card.cardTreeSetup(this.getWorker(1), board);
+        ArrayList<TreeActionNode> list = new ArrayList<TreeActionNode>();
 
-        treeMap.put(this.getWorker(0),treeW0);
-        treeMap.put(this.getWorker(1),treeW1);
+        treeMap.put(this.getWorker(0), treeW0);
+        treeMap.put(this.getWorker(1), treeW1);
         //TODO queste list sono necessarie???
         list.add(treeW0);
         list.add(treeW1);
@@ -95,22 +99,28 @@ public class Player {
 
 
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
-        TreeActionNode node = treeMap.get(actualWorker).search(message);
-        if(node == null) {
-            //mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico
+        boolean actionResult = false;
+        TreeActionNode attemptedActionNode = treeMap.get(actualWorker).search(message);
+        if (attemptedActionNode == null) {
+            //TODO mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico
             return false;
-        } else if(node.getChildren().isEmpty()){
-            done = true;
-            actualWorker = null;
-        } else{
-            treeMap.remove(actualWorker);
-            treeMap.put(actualWorker,node);
         }
-        this.done = this.card.turnHandler(this, board, message, this.halfDone);
-        if (!done) halfDone = true;
-        if (done){
-            halfDone = false;
-            actualWorker = null;
+        treeMap.remove(actualWorker);
+        treeMap.put(actualWorker, attemptedActionNode);
+        actionResult = this.card.turnHandler(this, board, message);
+        if(!actionResult){
+            //TODO sollevo eccezione? come gestire
+            return false;
+        }
+        if(message instanceof Move) moveDone = true;
+        else if(message instanceof Build) buildDone = true;
+
+        if (moveDone && buildDone) {
+            if(attemptedActionNode.isLeaf()) {
+                done = true;
+            }else{
+
+            }
         }
         return true;
     }
@@ -124,20 +134,20 @@ public class Player {
         return id;
     }
 
-    public void setNotDone(){
+    public void setNotDone() {
         this.done = false;
     }
 
-    public boolean selectWorker(Coordinate coord){
-        for(int i = 0; i<workers.size(); i++){
-            if(workers.get(i).getPosition().equals(coord)){
+    public boolean selectWorker(Coordinate coord) {
+        for (int i = 0; i < workers.size(); i++) {
+            if (workers.get(i).getPosition().equals(coord)) {
                 actualWorker = workers.get(i);
             }
         }
         return (actualWorker != null);
     }
 
-    public Worker getActualWorker(){
+    public Worker getActualWorker() {
         return this.actualWorker;
     }
 
@@ -146,8 +156,8 @@ public class Player {
         return treeMap;
     }
 
-    public TreeActionNode getTree(Worker worker){
-        return(treeMap.get(worker));
+    public TreeActionNode getTree(Worker worker) {
+        return (treeMap.get(worker));
     }
 
     public Object getHashList() {
@@ -157,14 +167,14 @@ public class Player {
     public ActionsEnum getAvailableAction() {
         boolean build = false;
         boolean move = false;
-        for (TreeActionNode t : treeMap.get(actualWorker).getChildren()){
-            if(t.getData() instanceof Build){
+        for (TreeActionNode t : treeMap.get(actualWorker).getChildren()) {
+            if (t.getData() instanceof Build) {
                 build = true;
-            }else if (t.getData() instanceof Move){
+            } else if (t.getData() instanceof Move) {
                 move = true;
             }
         }
-        if(build && move)return ActionsEnum.BOTH;
+        if (build && move) return ActionsEnum.BOTH;
         else if (build) return ActionsEnum.BUILD;
         else if (move) return ActionsEnum.MOVE;
         else return null;
