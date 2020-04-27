@@ -22,9 +22,9 @@ public class Model {
         players.add(p);
     }
 
-    public void addWorker(int playerPosition, Coordinate c, int workerPosition) throws Exception {
-        board.infoSlot(c).occupy(players.get(playerPosition).getWorker(workerPosition));
-        players.get(playerPosition).getWorker(workerPosition).setPosition(c);
+    public void addWorker(int playerIndex, Coordinate c, int workerIndex) throws Exception {
+        board.infoSlot(c).occupy(players.get(playerIndex).getWorker(workerIndex));
+        players.get(playerIndex).getWorker(workerIndex).setPosition(c);
         vSlot = new VirtualSlot(board.infoSlot(c), c);
         modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
 

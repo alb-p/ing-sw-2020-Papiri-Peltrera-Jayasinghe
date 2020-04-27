@@ -7,6 +7,6 @@ import java.io.Serializable;
 public interface Message{
 
     String getMessage();
-    void setId(int i);
+    void setId(int id);
     int getId();
 }

@@ -6,7 +6,7 @@ package it.polimi.ingsw.model;
 public class BasicGodCard {
     private boolean flag;
 
-    public void move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
+    public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         //necessario dare anche la board alla carta per poter segnare la propria mossa
         Slot workerSlot = board.infoSlot(w.getPosition());
         Slot destSlot = board.infoSlot(coord);
@@ -18,9 +18,10 @@ public class BasicGodCard {
                 destSlot.occupy(w);
                 w.setPosition(coord);
             } else {
-                throw new Exception("The selected slot is not free");
+                return false;
             }
         }
+        return true;
     }
 
     public void build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
@@ -50,25 +51,8 @@ public class BasicGodCard {
 
 
     public boolean turnHandler(Player player, IslandBoard board, Action action, boolean halfDone) throws Exception {
-        // MOVE 0,0 IN 3,2 & BUILD IN 2,1
-        /*String[] words = string.split(" ");
-        if (!halfDone && words[0].toUpperCase().equals("MOVE")) {
-
-            this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
-
-        }
-        if (!halfDone && words.length > 4) {
-            this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[7]), board);
-            return true;
-        }
-        if (halfDone && words[0].toUpperCase().equals("BUILD")) {
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
-            return true;
-
-        }
-        */
         if(action instanceof Move) {
-            this.move(player.getActualWorker(), action.getEnd(), board);
+            return (this.move(player.getActualWorker(), action.getEnd(), board));
         }else if(action instanceof Build){
             this.build(player.getActualWorker(), action.getEnd(), board);
         }
