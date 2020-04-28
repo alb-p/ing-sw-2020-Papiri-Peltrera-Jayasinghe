@@ -27,4 +27,6 @@ public abstract class RemoteView extends View {
     public abstract void showColor(ColorSelectedMessage inputObject);
 
     public abstract FirstPlayerMessage firstPlayer(FirstPlayerMessage message);
+
+    public abstract WorkerMessage setWorker(WorkerMessage message);
 }

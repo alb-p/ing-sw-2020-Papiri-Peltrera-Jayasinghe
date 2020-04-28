@@ -94,6 +94,9 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                 getConnection(message.getId()).send(message);
             }
 
+            else if (evt.getPropertyName().equals("setWorker")) {
+                getConnection(message.getId()).send(message);
+            }
 
             else if (evt.getPropertyName().equals("sendAction")) {
                 getConnection(message.getId()).send(message);
@@ -144,6 +147,10 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
     public void receiveFirstPlayer(FirstPlayerMessage message) {
         virtualViewListeners.firePropertyChange("firstPlayerResponse", null, message);
+    }
+
+    public void receiveSetWorker(WorkerMessage message) {
+        virtualViewListeners.firePropertyChange("setWorkerResponse", null, message);
     }
 
     //arriva action da scc che viene inoltrato a GameHandler (controller)

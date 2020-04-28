@@ -66,6 +66,8 @@ public class Client {
                                 view.showColor((ColorSelectedMessage) inputObject);
                             } else if (inputObject instanceof FirstPlayerMessage) {
                                 send(view.firstPlayer((FirstPlayerMessage) inputObject));
+                            }else if (inputObject instanceof WorkerMessage) {
+                                send(view.setWorker((WorkerMessage) inputObject));
                             }else if (inputObject instanceof ActionMessage) {
                                 view.askAction((ActionMessage) inputObject);
                             } else if (inputObject instanceof InitialCardsMessage) {

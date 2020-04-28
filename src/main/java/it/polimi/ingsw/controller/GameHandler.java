@@ -1,9 +1,6 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.InitSetup;
-import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.model.Player;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -105,6 +102,7 @@ public class GameHandler implements PropertyChangeListener {
                    if(playersMap.get(i).equals(name)){
                        System.out.println("FIRSTPLAYERID "+i);
                        turnHandler.setTotalTurnCounter(i);
+                       data.initialWorkers(i,0);
                        break;
                    }
                }
@@ -112,6 +110,27 @@ public class GameHandler implements PropertyChangeListener {
                 data.askFirstPlayer(message.getId());
             }
         }
+
+        else if (evt.getPropertyName().equals("setWorkerResponse")) {
+            WorkerMessage message = (WorkerMessage) evt.getNewValue();
+            Coordinate coordinate = message.getCoordinate();
+            int index=model.getIndex(message.getId());
+            try {
+                model.addWorker(index,coordinate,message.getWorkerNumber());
+                if(message.getWorkerNumber()==0)
+                    data.initialWorkers(message.getId(),message.getWorkerNumber()+1);
+                else {
+                    int nextID =( message.getId() + 1) % playersPerGame;
+                    data.initialWorkers(nextID, 0);
+                }
+            } catch (Exception e) {
+                data.initialWorkers(message.getId(),message.getWorkerNumber());
+            }
+        }
+
+
+
+
     }
 
 

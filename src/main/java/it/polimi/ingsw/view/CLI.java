@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.Coordinate;
 import it.polimi.ingsw.model.IslandBoard;
 import it.polimi.ingsw.utils.messages.*;
 
@@ -89,6 +90,19 @@ public class CLI extends RemoteView implements Runnable {
         for(String s: message.getNames())
             if(s.equalsIgnoreCase(name))
                 message.setChosenName(name);
+        return message;
+    }
+
+    @Override
+    public WorkerMessage setWorker(WorkerMessage message) {
+        printer.println(message.getMessage());
+        startingBrackets();
+        printer.print("row: ");
+        int row = Integer.parseInt( scanner.nextLine());
+        printer.print("col: ");
+        int col = Integer.parseInt( scanner.nextLine());
+        Coordinate c=new Coordinate(row,col);
+        message.setCoordinate(c);
         return message;
     }
 

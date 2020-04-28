@@ -23,6 +23,7 @@ public class Model {
     }
 
     public void addWorker(int playerIndex, Coordinate c, int workerIndex) throws Exception {
+
         board.infoSlot(c).occupy(players.get(playerIndex).getWorker(workerIndex));
         players.get(playerIndex).getWorker(workerIndex).setPosition(c);
         vSlot = new VirtualSlot(board.infoSlot(c), c);

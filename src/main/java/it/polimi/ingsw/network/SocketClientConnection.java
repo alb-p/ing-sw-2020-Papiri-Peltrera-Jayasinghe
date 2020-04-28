@@ -181,6 +181,8 @@ public class SocketClientConnection implements Runnable {
                         view.receiveInitialCards((InitialCardsMessage) message);
                     }else if (inputObject instanceof FirstPlayerMessage) {
                         view.receiveFirstPlayer((FirstPlayerMessage) message);
+                    }else if (inputObject instanceof WorkerMessage) {
+                        view.receiveSetWorker((WorkerMessage) message);
                     }
                 } else {
                     socket.close();

@@ -4,13 +4,16 @@ import it.polimi.ingsw.model.Coordinate;
 import it.polimi.ingsw.model.Worker;
 
 public class WorkerMessage implements Message {
-    String message = "Aspettate voialtri stolti"; //usato per la waiting
-    Worker worker;
-    int id;
+    int workerNumber;
+    String message;
     Coordinate coordinate;
+    int id;
 
-    public WorkerMessage(int lastPlayerID) {
-        this.id = lastPlayerID;
+
+    public WorkerMessage(int ID, int n) {
+        this.id = ID;
+        this.workerNumber=n;
+        this.message = "Posiziona il worker n."+workerNumber;
     }
 
     @Override
@@ -27,6 +30,11 @@ public class WorkerMessage implements Message {
     public int getId() {
         return this.id;
     }
+
+    public int getWorkerNumber(){
+        return this.workerNumber;
+    }
+
     public Coordinate getCoordinate() {
         return coordinate;
     }

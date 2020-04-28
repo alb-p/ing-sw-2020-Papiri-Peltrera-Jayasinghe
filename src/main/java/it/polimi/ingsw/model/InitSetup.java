@@ -177,8 +177,11 @@ public class InitSetup {
 
 /**********************************************************************************************************************/
     /***ALTRO***/
-    public void initialWorkers(int lastPlayerID, int numOfPlayers) {
-        WorkerMessage message = new WorkerMessage(lastPlayerID);
+    public void initialWorkers(int ID, int workerNumber) {
+
+        WorkerMessage message = new WorkerMessage(ID,workerNumber);
+        System.out.println(ID);
+        initSetupListeners.firePropertyChange("setWorker",null,message);
 
     }
 
