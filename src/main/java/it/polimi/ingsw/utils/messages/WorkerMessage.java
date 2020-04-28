@@ -3,7 +3,9 @@ package it.polimi.ingsw.utils.messages;
 import it.polimi.ingsw.model.Coordinate;
 import it.polimi.ingsw.model.Worker;
 
-public class WorkerMessage implements Message {
+import java.io.Serializable;
+
+public class WorkerMessage implements Message, Serializable {
     int workerNumber;
     String message;
     Coordinate coordinate;
