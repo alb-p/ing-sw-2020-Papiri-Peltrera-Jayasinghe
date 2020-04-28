@@ -22,8 +22,10 @@ public class TurnHandler implements PropertyChangeListener {
         if (evt.getPropertyName().equals("actionMessageResponse")) {
             ActionMessage message = (ActionMessage)evt.getNewValue();
             turnManager(message);
-        } else if (evt.getPropertyName().equals("gameReady")){
+        } else if (evt.getPropertyName().equals("gameReadyResponse")){
+            System.out.println("GAMEREADY TURNHANDLER");
             model.buildPlayerTree(totalTurnCounter%playersPerGame);
+            System.out.println("BUILDTREE DONE");
             model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
         }
     }

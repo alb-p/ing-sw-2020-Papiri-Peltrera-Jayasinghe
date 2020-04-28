@@ -47,7 +47,10 @@ public class ActionMessage implements Message, Serializable {
         this.actionAvailable = actionAvailable;
     }
 
+    public String getActionsAvailableName() {
+        return this.actionAvailable.getName();
+    }
     public ActionsEnum getActionsAvailable() {
-        return actionAvailable;
+        return this.actionAvailable;
     }
 }

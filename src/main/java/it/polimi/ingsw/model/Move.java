@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public class Move extends Action{
+import java.io.Serializable;
+
+public class Move extends Action implements Serializable {
 
     public Move(Coordinate start, Coordinate end){
         super(start, end);

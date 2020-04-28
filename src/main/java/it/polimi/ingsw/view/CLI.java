@@ -1,8 +1,7 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Coordinate;
-import it.polimi.ingsw.model.IslandBoard;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.io.*;
@@ -28,6 +27,7 @@ public class CLI extends RemoteView implements Runnable {
 
     public NicknameMessage askNickPlayer(NicknameMessage message){
         printer.println(message.getMessage()+ "\n");
+        startingBrackets();
         playerChoice = scanner.nextLine();
         message.setNick(playerChoice);
         this.nickname = playerChoice;
@@ -109,8 +109,13 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
+    public void gameIsReady(StartGameMessage inputObject) {
+        printer.println(inputObject.getMessage());
+    }
+
+
+    @Override
     public GodMessage askGod(GodMessage inputObject) {
-        //TODO da finire dopo commit di sandro
         printer.println(inputObject.getMessage());
         startingBrackets();
         inputObject.setGod(scanner.nextLine().toUpperCase());
@@ -119,12 +124,19 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     public ActionMessage askAction(ActionMessage message) {
-        printer.println(nickname+ " make ! " + message.getAction() + "x,y in z,w" );
+        printer.println(nickname+ " make " + message.getActionsAvailable() + "x,y in z,w" );
         startingBrackets();
+        Action action = null;
+        if(message.getActionsAvailable() == ActionsEnum.MOVE){
+            action = new Move(null, null);
+        }else if(message.getActionsAvailable() == ActionsEnum.BUILD){
+            action = new Build(null, null);
+        }else{
+            //aggiungere caso BOTH
+        }
         playerChoice = scanner.nextLine();
-
-
-        return null;
+        message.setAction(parseAction(playerChoice, action));
+        return message;
     }
 
     public SetupMessage askNumOfPlayers(SetupMessage message){
@@ -140,5 +152,16 @@ public class CLI extends RemoteView implements Runnable {
         printer.printf(">>>");
     }
 
+    public Action parseAction(String input, Action action){
+        String[] start;
+        String[] end;
+        String[] coords;
+        coords = input.split(" * ",2);
+        start = coords[0].split(",",2);
+        end = coords[1].split(",",2);
+        action.setStart(new Coordinate(Integer.parseInt(start[0]), Integer.parseInt(start[1])));
+        action.setEnd(new Coordinate(Integer.parseInt(end[0]), Integer.parseInt(end[1])));
+        return action;
+    }
 
 }

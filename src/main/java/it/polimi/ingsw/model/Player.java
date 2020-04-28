@@ -24,6 +24,7 @@ public class Player {
     private boolean buildDone = false;
 
     private int id;
+    private Color color;
     private Worker actualWorker = null;
 
 
@@ -31,6 +32,13 @@ public class Player {
         this.nickName = nickName;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
+    }
+
+    public Player(int id, String nickName, Color color) {
+        this.nickName = nickName;
+        this.id = id;
+        workers.add(new Worker(new Coordinate(0, 0), color));
+        workers.add(new Worker(new Coordinate(0, 0), color));
     }
 
     public Player(int id, String nickName, String color) {
@@ -165,6 +173,7 @@ public class Player {
     }
 
     public ActionsEnum getAvailableAction() {
+        System.out.println("GETAVIABLEACTION");
         boolean build = false;
         boolean move = false;
         for (TreeActionNode t : treeMap.get(actualWorker).getChildren()) {
@@ -174,9 +183,20 @@ public class Player {
                 move = true;
             }
         }
-        if (build && move) return ActionsEnum.BOTH;
-        else if (build) return ActionsEnum.BUILD;
-        else if (move) return ActionsEnum.MOVE;
+        if (build && move){
+            System.out.println("BOTH");
+            return ActionsEnum.BOTH;
+
+        }
+        else if(build){
+            System.out.println("BUILD");
+            return ActionsEnum.BUILD;
+
+        }
+        else if (move){
+            System.out.println("MOVE");
+            return ActionsEnum.MOVE;
+        }
         else return null;
     }
 }

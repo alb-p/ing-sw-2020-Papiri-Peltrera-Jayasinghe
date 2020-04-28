@@ -29,4 +29,6 @@ public abstract class RemoteView extends View {
     public abstract FirstPlayerMessage firstPlayer(FirstPlayerMessage message);
 
     public abstract WorkerMessage setWorker(WorkerMessage message);
+
+    public abstract void gameIsReady(StartGameMessage inputObject);
 }

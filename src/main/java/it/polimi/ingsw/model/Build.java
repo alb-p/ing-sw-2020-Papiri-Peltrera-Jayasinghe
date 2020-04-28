@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-public class Build extends Action {
+import java.io.Serializable;
+
+public class Build extends Action implements Serializable {
 
     public Build(Coordinate start, Coordinate end){
         super(start, end);

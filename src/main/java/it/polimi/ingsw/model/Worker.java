@@ -14,8 +14,6 @@ public class Worker{
         this.coord[1] =  new Coordinate(row, col);
         this.coord[2] =  new Coordinate(row, col);
         this.color = Enum.valueOf(Color.class, color.toUpperCase());
-
-
     }
 
     public Worker(Coordinate coordinate, String color){
@@ -24,6 +22,14 @@ public class Worker{
         this.coord[1] = coordinate;
         this.coord[2] = coordinate;
         this.color = Enum.valueOf(Color.class, color.toUpperCase());
+    }
+
+    public Worker(Coordinate coordinate, Color color){
+        this.coord=new Coordinate[3];
+        this.coord[0] = coordinate;
+        this.coord[1] = coordinate;
+        this.coord[2] = coordinate;
+        this.color = color;
     }
 
 

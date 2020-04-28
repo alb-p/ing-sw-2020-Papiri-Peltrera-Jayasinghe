@@ -5,7 +5,6 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -16,6 +15,7 @@ public class GameHandler implements PropertyChangeListener {
     private Model model;
     private TurnHandler turnHandler;
     private int playersPerGame;
+    private int firstPlayerChosenID = 0;
 
     public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
         data = initSetup;
@@ -100,9 +100,10 @@ public class GameHandler implements PropertyChangeListener {
                for(int i=0;i<playersPerGame;i++){
                    System.out.println(playersMap);
                    if(playersMap.get(i).equals(name)){
-                       System.out.println("FIRSTPLAYERID "+i);
+                       firstPlayerChosenID = i;
+                       System.out.println("FIRSTPLAYERID "+ firstPlayerChosenID);
                        turnHandler.setTotalTurnCounter(i);
-                       data.initialWorkers(i,0);
+                       data.initialWorkers(firstPlayerChosenID,0);
                        break;
                    }
                }
@@ -118,19 +119,19 @@ public class GameHandler implements PropertyChangeListener {
             try {
                 model.addWorker(index,coordinate,message.getWorkerNumber());
                 if(message.getWorkerNumber()==0)
-                    data.initialWorkers(message.getId(),message.getWorkerNumber()+1);
+                    data.initialWorkers(message.getId(),1);
                 else {
                     int nextID =( message.getId() + 1) % playersPerGame;
-                    data.initialWorkers(nextID, 0);
+                    if(nextID == firstPlayerChosenID){
+                        data.notifyGameReady();
+                    }else{
+                        data.initialWorkers(nextID, 0);
+                    }
                 }
             } catch (Exception e) {
-                data.initialWorkers(message.getId(),message.getWorkerNumber());
+                //data.initialWorkers(message.getId(),message.getWorkerNumber());
             }
         }
-
-
-
-
     }
 
 
@@ -145,7 +146,7 @@ public class GameHandler implements PropertyChangeListener {
         } else if (value instanceof ColorMessage) {
             ColorMessage message = (ColorMessage) value;
             System.out.println("PRESO : " + message.getColor());
-            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor().getName()));
+            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));
             if (model.getNumOfPlayers() == this.playersPerGame) {
                 Random random = new Random();
                 int presceltoID = random.nextInt(model.getNumOfPlayers());

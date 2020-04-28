@@ -69,6 +69,7 @@ public class Client {
                             }else if (inputObject instanceof WorkerMessage) {
                                 send(view.setWorker((WorkerMessage) inputObject));
                             }else if (inputObject instanceof ActionMessage) {
+                                System.out.println("ASKACTION ILARIOFILIPPINI");
                                 view.askAction((ActionMessage) inputObject);
                             } else if (inputObject instanceof InitialCardsMessage) {
                                 //meglio tenere anche info sul colore nel client?
@@ -79,7 +80,8 @@ public class Client {
                             } else if (inputObject instanceof SetupMessage) {
                                 //meglio tenere anche info sul colore nel client?
                                 send(view.askNumOfPlayers((SetupMessage) inputObject));
-
+                            }else if (inputObject instanceof StartGameMessage){
+                                view.gameIsReady((StartGameMessage)inputObject);
                             }
 
                             // TODO collegarsi alla remoteView (CLI o GUI) del client

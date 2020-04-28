@@ -99,6 +99,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
             }
 
             else if (evt.getPropertyName().equals("sendAction")) {
+                System.out.println("SENDACTION VIRTUALVIEW");
                 getConnection(message.getId()).send(message);
                 for (SocketClientConnection c : connections) {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
@@ -113,7 +114,9 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
 
             else if (evt.getPropertyName().equals("gameReady")) {
-                for (SocketClientConnection c : connections) c.send(message);
+                for (SocketClientConnection c : connections){
+                    c.send(message);
+                }
                 notifyGameReady();
             }
         }
@@ -159,16 +162,8 @@ public class VirtualView implements Runnable, PropertyChangeListener {
     }
 
 
-
-
-
-
-
-
-
-
     public void notifyGameReady() {
-        virtualViewListeners.firePropertyChange("gameReady", null, true);
+        virtualViewListeners.firePropertyChange("gameReadyResponse", null, true);
     }
 
     //restituisce il scc associato all'id (ad es. di un messaggio)
