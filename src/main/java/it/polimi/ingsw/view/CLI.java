@@ -99,10 +99,12 @@ public class CLI extends RemoteView implements Runnable {
         startingBrackets();
         printer.print("row: ");
         int row = Integer.parseInt( scanner.nextLine());
+        startingBrackets();
         printer.print("col: ");
         int col = Integer.parseInt( scanner.nextLine());
         Coordinate c=new Coordinate(row,col);
         message.setCoordinate(c);
+
         return message;
     }
 

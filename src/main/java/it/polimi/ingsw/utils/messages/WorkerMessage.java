@@ -6,10 +6,10 @@ import it.polimi.ingsw.model.Worker;
 import java.io.Serializable;
 
 public class WorkerMessage implements Message, Serializable {
-    int workerNumber;
-    String message;
-    Coordinate coordinate;
-    int id;
+    private int workerNumber;
+    private String message;
+    private Coordinate coordinate;
+    private int id;
 
 
     public WorkerMessage(int ID, int n) {

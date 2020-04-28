@@ -1,8 +1,9 @@
 package it.polimi.ingsw.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Coordinate{
+public class Coordinate implements Serializable {
     private int row;
     private int col;
 
