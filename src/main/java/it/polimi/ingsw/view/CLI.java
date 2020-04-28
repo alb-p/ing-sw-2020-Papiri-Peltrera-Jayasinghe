@@ -84,8 +84,6 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public FirstPlayerMessage firstPlayer(FirstPlayerMessage message) {
         printer.println(message.getMessage());
-        for(String s: message.getNames())
-            printer.println(s);
         startingBrackets();
         String name = scanner.nextLine();
         for(String s: message.getNames())

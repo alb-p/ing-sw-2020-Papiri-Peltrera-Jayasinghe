@@ -54,18 +54,18 @@ public class Client {
                             System.out.println("sono online ready to read");
                             Object inputObject = inputStream.readObject();
                             System.out.println("ARRIVATO OGGETTO");
+
                             if (inputObject instanceof WelcomeMessage) {
                                 view.welcomeMessage();
                             } else if (inputObject instanceof NicknameMessage) {
                                 send(view.askNickPlayer((NicknameMessage) inputObject));
-
                             } else if (inputObject instanceof ColorMessage) {
                                 //meglio tenere anche info sul colore nel client?
                                 send(view.askColor((ColorMessage) inputObject));
                             } else if (inputObject instanceof ColorSelectedMessage) {
                                 view.showColor((ColorSelectedMessage) inputObject);
                             } else if (inputObject instanceof FirstPlayerMessage) {
-                                view.firstPlayer((FirstPlayerMessage) inputObject);
+                                send(view.firstPlayer((FirstPlayerMessage) inputObject));
                             }else if (inputObject instanceof ActionMessage) {
                                 view.askAction((ActionMessage) inputObject);
                             } else if (inputObject instanceof InitialCardsMessage) {

@@ -15,7 +15,7 @@ import java.util.Random;
 public class GameHandler implements PropertyChangeListener {
 
     private InitSetup data;
-    private HashMap<Integer, String> playersMap = new HashMap<>();                        //associazione    numero -> nome
+    private HashMap<Integer, String> playersMap = new HashMap<>();      //associazione    ID -> nome
     private Model model;
     private TurnHandler turnHandler;
     private int playersPerGame;
@@ -28,29 +28,43 @@ public class GameHandler implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
+        //arriva un nick da virtualview. Se non è gia stato inserito
+        //da un altro player viene inserito in una lista in
+        //initSetup, creato un buffer di creazione del player e viene
+        //fatta la richiesta per il colore.
         if (evt.getPropertyName().equals("nickMessageResponse")) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
-            String name = message.getNick();                                            //arriva un nick da virtualview arrivata da scc
-            if (!data.isInUser(name)) {                                                 //se il nick è unico lo in InitSetup e crea
-                data.setUsername(name);                                                 //una coda di preparazione per la creazione del player
+            String name = message.getNick();
+            if (!data.isInUser(name)) {
+                data.setUsername(name);
                 playerCreationQueue(message);
                 data.askColor(message.getId());
             } else {
                 data.wrongUsername(message.getId());
             }
-        } else if (evt.getPropertyName().equals("colorMessageResponse")) {
+        }
+
+        //arriva un colore da virtualview. se non è gia stato inserito
+        //da un altro player viene inserito in una lista in initSetup
+        //e completa la creazione del player nel buffer
+        else if (evt.getPropertyName().equals("colorMessageResponse")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
-            Color color = message.getColor();                                          //arriva un colore da virtualview arrivata da scc
-            if (data.isInColor(color)) {                                                //se il colore è valido lo cancella da InitSetup
-                data.delColor(message);                                                 // e passa alla creazione del player
+            Color color = message.getColor();
+            if (data.isInColor(color)) {
+                data.delColor(message);
                 playerCreationQueue(message);
             } else {
                 data.askColor(message.getId());
             }
-        } else if (evt.getPropertyName().equals("initialCardsResponse")) {              //arriva una lista di god da virtualview arrivata da scc
-            InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();      //se i god sono validi e di quanttà corretta vengono salvati
-                                                                                        //e si passa alla richiesta del god al primo giocatore
-                                                                                        //altrimenti viene richiesta la lista
+        }
+
+        //arriva una lista di god da virtualview scelti dal prescelto
+        //i god validi vengono inseriti in una lista in initSetup.
+        //quelli non validi vengono richiesti. Se tutti sono stati validati
+        //viene fatto scegliere un God al giocatore successivo al prescelto
+        else if (evt.getPropertyName().equals("initialCardsResponse")) {
+            InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();
             for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s);
             if (data.ChosenGodsSize() == playersPerGame) {
                 int nextID =( message.getId() + 1) % playersPerGame;
@@ -58,11 +72,17 @@ public class GameHandler implements PropertyChangeListener {
             } else {
                 data.initialCards(message.getId(), playersPerGame - data.ChosenGodsSize());
             }
+        }
 
-
-        } else if (evt.getPropertyName().equals("godMessageResponse")) {                 //arriva un god da virtualview arrivata da scc
-            GodMessage message = (GodMessage) evt.getNewValue();                        //se è valido lo asssegna al rispettivo player
-            String god = message.getGod();                                              //altrimenti lo richiede
+        //arriva un God da virtualview. Se non è gia stato inserito da
+        //un altro player viene cancellato dalla lista dei god disponibili
+        //e assegna la divinità al player. dopo la cancellazione viene fatta
+        //la richiesta di scelta god al player successivo in initSetup. Se
+        //tutti i god sono stati scelti viene fatta la richiesta al prescelto
+        //per la scelta del primo player
+        else if (evt.getPropertyName().equals("godMessageResponse")) {
+            GodMessage message = (GodMessage) evt.getNewValue();
+            String god = message.getGod();
             if (data.isInGod(god)) {
                 data.delGod(message, playersPerGame);
                 try {
@@ -73,11 +93,15 @@ public class GameHandler implements PropertyChangeListener {
             } else {
                 data.askGod(message.getId());
             }
-        }else if (evt.getPropertyName().equals("firstPlayerResponse")) {
+        }
+
+        //se il firstplayer scelto esiste viene avvisato turnHandler
+        else if (evt.getPropertyName().equals("firstPlayerResponse")) {
             FirstPlayerMessage message = (FirstPlayerMessage) evt.getNewValue();
             String name = message.getChosenName();
             if(data.isInUser(name)){
                for(int i=0;i<playersPerGame;i++){
+                   System.out.println(playersMap);
                    if(playersMap.get(i).equals(name)){
                        System.out.println("FIRSTPLAYERID "+i);
                        turnHandler.setTotalTurnCounter(i);
@@ -91,19 +115,23 @@ public class GameHandler implements PropertyChangeListener {
     }
 
 
-    //TODO possibile cambiare Object in Message?
-    private void playerCreationQueue(Object value) {                                                                        //la mappa è del tipo
-        if (value instanceof NicknameMessage) {                                                                             // 1 -> Mario
-            playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());                         // 2 -> Luca
-        } else if (value instanceof ColorMessage) {                                                                         // 3 -> Andrea
-            ColorMessage message = (ColorMessage) value;                                                                    //quando arriva il colore si procede alla
+    //buffer di creazione del player. Una volta ricevuto il nick e il colore
+    //si procede alla creazione effettiva del player. Ad ogni inserimento del
+    //nick si crea un hashmap del tipo ID -> nome. Se tutti i player sono stati
+    //creati si procede alla scelta random del prescelto a cui verrà inviato un
+    //messaggio per decidere le divinità iniziali
+    private void playerCreationQueue(Object value) {
+        if (value instanceof NicknameMessage) {
+            playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());
+        } else if (value instanceof ColorMessage) {
+            ColorMessage message = (ColorMessage) value;
             System.out.println("PRESO : " + message.getColor());
-            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor().getName()));              //creazione del player
-            if (model.getNumOfPlayers() == this.playersPerGame) {                       //se tutti i player sono stati creati
-                Random random = new Random();                                         //un giocatore a caso sceglie le divinità
-                int lastPlayerID = random.nextInt(model.getNumOfPlayers());           //di partenza e sarà ultimo nel turno
-                System.out.println("l'ultimo player è: " + lastPlayerID);
-                data.initialCards(lastPlayerID, model.getNumOfPlayers());
+            model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor().getName()));
+            if (model.getNumOfPlayers() == this.playersPerGame) {
+                Random random = new Random();
+                int presceltoID = random.nextInt(model.getNumOfPlayers());
+                System.out.println("l'ultimo player è: " + presceltoID);
+                data.initialCards(presceltoID, model.getNumOfPlayers());
 
             }
         }

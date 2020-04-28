@@ -6,10 +6,12 @@ import java.io.Serializable;
 
 public class ColorSelectedMessage implements Message , Serializable {
      String message;
+     Color color;
      int id;
 
      public ColorSelectedMessage(int i, Color c){
          this.id=i;
+         this.color=c;
          this.message="Il colore "+c.getName()+" è stato scelto";
 
      }
