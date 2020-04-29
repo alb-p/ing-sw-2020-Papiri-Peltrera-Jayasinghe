@@ -19,17 +19,22 @@ public class Player {
 
     private String nickName;
     private BasicGodCard card;
-    private boolean done = false;
-    private boolean moveDone = false;
-    private boolean buildDone = false;
+    private boolean done;
+    private boolean moveDone;
+    private boolean buildDone;
+
 
     private int id;
     private Color color;
-    private Worker actualWorker = null;
+    private Worker actualWorker;
 
 
     public Player(String nickName, String color) {
         this.nickName = nickName;
+        this.actualWorker = null;
+        this.done = false;
+        this.moveDone = false;
+        this.buildDone = false;
         workers.add(new Worker(0, 0, color));
         workers.add(new Worker(0, 0, color));
     }
@@ -37,6 +42,10 @@ public class Player {
     public Player(int id, String nickName, Color color) {
         this.nickName = nickName;
         this.id = id;
+        this.actualWorker = null;
+        this.done = false;
+        this.moveDone = false;
+        this.buildDone = false;
         workers.add(new Worker(new Coordinate(0, 0), color));
         workers.add(new Worker(new Coordinate(0, 0), color));
     }
@@ -107,26 +116,35 @@ public class Player {
 
 
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
-        boolean actionResult = false;
+        boolean actionResult;
+        this.actualWorker = board.infoSlot(message.getStart()).getWorker();
+        System.out.println("ACTUALW IN PLAYER:: "+ actualWorker);
         TreeActionNode attemptedActionNode = treeMap.get(actualWorker).search(message);
-        if (attemptedActionNode == null) {
+        if (attemptedActionNode == null && !moveDone) {
             //TODO mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico
+            //System.out.println("TREE IN DA IF, START:: "+attemptedActionNode.getData().getStart() + " END:: "+attemptedActionNode.getData().getEnd());
+            actualWorker = null;
             return false;
         }
         treeMap.remove(actualWorker);
+        //System.out.println("TREE START:: "+attemptedActionNode.getData().getStart() + " END:: "+attemptedActionNode.getData().getEnd());
         treeMap.put(actualWorker, attemptedActionNode);
         actionResult = this.card.turnHandler(this, board, message);
-        if(!actionResult){
+        if (!actionResult) {
             //TODO sollevo eccezione? come gestire
             return false;
         }
-        if(message instanceof Move) moveDone = true;
-        else if(message instanceof Build) buildDone = true;
+        if (message instanceof Move){
+            moveDone = true;
+            //TODO selezione worker giusta sempre?
+
+        }
+        else if (message instanceof Build) buildDone = true;
 
         if (moveDone && buildDone) {
-            if(attemptedActionNode.isLeaf()) {
+            if (attemptedActionNode.isLeaf()) {
                 done = true;
-            }else{
+            } else {
 
             }
         }
@@ -173,30 +191,49 @@ public class Player {
     }
 
     public ActionsEnum getAvailableAction() {
-        System.out.println("GETAVIABLEACTION");
-        boolean build = false;
-        boolean move = false;
-        for (TreeActionNode t : treeMap.get(actualWorker).getChildren()) {
-            if (t.getData() instanceof Build) {
-                build = true;
-            } else if (t.getData() instanceof Move) {
-                move = true;
+        boolean build;
+        boolean move;
+        build = false;
+        move = false;
+        //viene attivato per il primo giocatore
+        if (actualWorker == null) {
+            for (TreeActionNode t : treeMap.get(this.getWorker(0)).getChildren()) {
+                if (t.getData() instanceof Build) {
+                    build = true;
+                } else if (t.getData() instanceof Move) {
+                    move = true;
+                }
+
+            }
+            for (TreeActionNode t : treeMap.get(this.getWorker(1)).getChildren()) {
+                if (t.getData() instanceof Build) {
+                    build = true;
+                } else if (t.getData() instanceof Move) {
+                    move = true;
+                }
+
+            }
+            System.out.println("FINITO ALBERI PER PRIMO TURNO GIOCATORE");
+        } else {
+            for (TreeActionNode t : treeMap.get(actualWorker).getChildren()) {
+                if (t.getData() instanceof Build) {
+                    build = true;
+                } else if (t.getData() instanceof Move) {
+                    move = true;
+                }
+
             }
         }
-        if (build && move){
+        if (build && move) {
             System.out.println("BOTH");
             return ActionsEnum.BOTH;
-
-        }
-        else if(build){
+        } else if (build) {
             System.out.println("BUILD");
             return ActionsEnum.BUILD;
-
-        }
-        else if (move){
+        } else if (move) {
             System.out.println("MOVE");
             return ActionsEnum.MOVE;
         }
-        else return null;
+        return null;
     }
 }

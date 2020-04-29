@@ -128,6 +128,7 @@ public class GameHandler implements PropertyChangeListener {
                         data.initialWorkers(nextID, 0);
                     }
                 }
+                model.notifyChanges();
             } catch (Exception e) {
                 //data.initialWorkers(message.getId(),message.getWorkerNumber());
             }

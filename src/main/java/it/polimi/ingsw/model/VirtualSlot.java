@@ -1,20 +1,24 @@
 package it.polimi.ingsw.model;
 
-public class VirtualSlot {
+import java.io.Serializable;
+
+public class VirtualSlot implements Serializable {
 
 
     private String content;
-    private Coordinate coord;
+    private Coordinate coordinate;
 
     public VirtualSlot(Slot s, Coordinate c) {
-
         this.content = s.toString();
-        this.coord = c;
+        this.coordinate = c;
+    }
+    public VirtualSlot(Coordinate coordinate) {
+        this.coordinate = coordinate;
+        this.content = "  ";
     }
 
-
     public VirtualSlot() {
-        this.coord = null;
+        this.coordinate = null;
         this.content = "  ";
     }
 
@@ -23,8 +27,8 @@ public class VirtualSlot {
         return this.content;
     }
 
-    public Coordinate getCoord() {
-        return this.coord;
+    public Coordinate getCoordinate() {
+        return this.coordinate;
     }
 
 

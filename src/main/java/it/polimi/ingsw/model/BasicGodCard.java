@@ -36,6 +36,8 @@ public class BasicGodCard {
     }
 
     public void specialRule(Object o, Object o2, IslandBoard board) {
+        System.out.println("SPECIALRULE");
+        return;
     }
 
     public boolean hasWon(Worker w, IslandBoard board) throws Exception {

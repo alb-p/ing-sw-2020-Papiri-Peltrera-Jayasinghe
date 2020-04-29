@@ -8,7 +8,7 @@ public class VirtualBoard {
     public VirtualBoard() {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                board[i][j] = new VirtualSlot();
+                board[i][j] = new VirtualSlot(new Coordinate(i,j));
             }
         }
     }
@@ -20,9 +20,7 @@ public class VirtualBoard {
                 board[i][j] = new VirtualSlot(realBoard.getSlot(i,j),new Coordinate(i,j));
             }
         }
-
     }
-
 
 
     public String toString (){
@@ -50,9 +48,8 @@ public class VirtualBoard {
 
     }
 
-    public void add(VirtualSlot vSlot) {
-
-        this.board[vSlot.getCoord().getRow()][vSlot.getCoord().getCol()]=vSlot;
-
+    public void setSlot(VirtualSlot vSlot) {
+        this.board[vSlot.getCoordinate().getRow()][vSlot.getCoordinate().getCol()]=vSlot;
     }
+
 }

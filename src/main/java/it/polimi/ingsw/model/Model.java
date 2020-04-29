@@ -86,7 +86,7 @@ public class Model {
         modelListeners.firePropertyChange("turnHandler", null, true);
     }
 
-    private void notifyChanges() {
+    public void notifyChanges() {
         VirtualSlot oldVSlot;
 
         for (int i = 0; i < board.board.length; i++) {
@@ -120,10 +120,27 @@ public class Model {
     }
 
     public void selectPlayerPlaying(int id) {
+        //notifyChanges();
+        ActionMessage actionMessage = new ActionMessage(id, players.get(id).getAvailableAction() ,
+                players.get(id).getNickName());
+        System.out.println("COSTRUITO ACTIONMESSAGE IN SELECT MODEL");
         modelListeners.firePropertyChange("sendAction",
-                null, new ActionMessage(id, players.get(id).getAvailableAction() ,
-                        players.get(id).getNickName()));
+                null, actionMessage);
     }
+
+    /*
+    private void sendBoardUpdate() {
+        for(int i = 0; i<5; i++){
+            for(int j = 0; j<5; j++){
+                if(!board.getSlot(i,j).equals(oldBoard.getSlot(i,j))){
+                    modelListeners.firePropertyChange("deltaUpdate", null, new VirtualSlot(board.getSlot(i,j), new Coordinate(i,j)));
+
+                }
+                virtualBoard.add(new VirtualSlot(board.getSlot(i,j), new Coordinate(i,j)));
+            }
+        }
+        modelListeners.firePropertyChange("deltaUpdate", null, );
+    }*/
 
     public void checkWinner(int id) {
         if(players.get(id).getCard().winningCondition(players.get(id).getActualWorker())){

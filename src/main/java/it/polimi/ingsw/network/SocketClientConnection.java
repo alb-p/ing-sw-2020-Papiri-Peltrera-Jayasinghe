@@ -78,13 +78,6 @@ public class SocketClientConnection implements Runnable {
         send("The Lobby is full!! Please Wait");
     }
 
-    public String askNick() throws IOException, ClassNotFoundException {
-        send("Write your nick:\n>>");
-        String read = (String) inSocket.readObject();
-        return read;
-
-    }
-
     public void setId(int i) {
 
         this.id = i;
@@ -113,7 +106,6 @@ public class SocketClientConnection implements Runnable {
                     } else if (inputObject instanceof ColorMessage) {
                         view.receiveColor((ColorMessage) message);
                     } else if (inputObject instanceof ActionMessage) {
-                        System.out.println("ASKACTION FILIP");
                         view.receiveAction((ActionMessage) message);
                     } else if (inputObject instanceof GodMessage) {
                         view.receiveGod((GodMessage) message);
