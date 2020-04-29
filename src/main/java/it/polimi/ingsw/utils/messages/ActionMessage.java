@@ -33,6 +33,10 @@ public class ActionMessage implements Message, Serializable {
         return message;
     }
 
+    public String getNickname() {
+        return nickname;
+    }
+
     @Override
     public void setId(int id) {
         this.id = id;

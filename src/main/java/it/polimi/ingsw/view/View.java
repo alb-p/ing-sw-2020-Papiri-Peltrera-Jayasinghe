@@ -121,7 +121,7 @@ public class View implements Runnable, PropertyChangeListener {
 
 
         }else if (evt.getPropertyName().equals("deltaUpdate")) {
-            vBoard.add((VirtualSlot)evt.getNewValue());
+            vBoard.setSlot((VirtualSlot)evt.getNewValue());
         }
 
 

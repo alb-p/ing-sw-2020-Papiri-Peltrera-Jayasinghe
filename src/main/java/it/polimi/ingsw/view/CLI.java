@@ -14,7 +14,7 @@ public class CLI extends RemoteView implements Runnable {
     private PrintStream printer;
     private Console console;
     private String playerChoice;
-    private IslandBoard board;
+    private VirtualBoard board;
     private String nickname;
 
 
@@ -22,6 +22,7 @@ public class CLI extends RemoteView implements Runnable {
     public CLI(){
         this.scanner = new Scanner(System.in);
         this.printer= System.out;
+        this.board = new VirtualBoard();
     }
 
 
@@ -95,6 +96,7 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     public WorkerMessage setWorker(WorkerMessage message) {
+        printBoard();
         printer.println(message.getMessage());
         startingBrackets();
         printer.print("row: ");
@@ -113,6 +115,18 @@ public class CLI extends RemoteView implements Runnable {
         printer.println(inputObject.getMessage());
     }
 
+    @Override
+    public void updateVBoard(VirtualSlotMessage inputObject) {
+        board.setSlot(inputObject.getVirtualSlot());
+    }
+
+    @Override
+    public void waitingMess(WaitingMessage inputObject) {
+        printBoard();
+        printer.println(inputObject.getMessage());
+    }
+
+
 
     @Override
     public GodMessage askGod(GodMessage inputObject) {
@@ -124,7 +138,8 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     public ActionMessage askAction(ActionMessage message) {
-        printer.println(nickname+ " make " + message.getActionsAvailable() + "x,y in z,w" );
+        printBoard();
+        printer.println(nickname+ " make " + message.getActionsAvailable() + " x,y in z,w" );
         startingBrackets();
         Action action = null;
         if(message.getActionsAvailable() == ActionsEnum.MOVE){
@@ -156,12 +171,16 @@ public class CLI extends RemoteView implements Runnable {
         String[] start;
         String[] end;
         String[] coords;
-        coords = input.split(" * ",2);
-        start = coords[0].split(",",2);
-        end = coords[1].split(",",2);
+        coords = input.split(" in ");
+        start = coords[0].split(",");
+        end = coords[1].split(",");
         action.setStart(new Coordinate(Integer.parseInt(start[0]), Integer.parseInt(start[1])));
         action.setEnd(new Coordinate(Integer.parseInt(end[0]), Integer.parseInt(end[1])));
         return action;
+    }
+
+    public void printBoard(){
+        printer.println(this.board);
     }
 
 }

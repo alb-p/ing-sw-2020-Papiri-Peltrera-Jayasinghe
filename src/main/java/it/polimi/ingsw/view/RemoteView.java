@@ -20,6 +20,8 @@ public abstract class RemoteView extends View {
 
     public abstract InitialCardsMessage askGodList (InitialCardsMessage message);
 
+    public abstract void waitingMess(WaitingMessage inputObject);
+
     public abstract GodMessage askGod(GodMessage inputObject);
 
     public abstract Object askNumOfPlayers(SetupMessage inputObject);
@@ -31,4 +33,6 @@ public abstract class RemoteView extends View {
     public abstract WorkerMessage setWorker(WorkerMessage message);
 
     public abstract void gameIsReady(StartGameMessage inputObject);
+
+    public abstract void updateVBoard(VirtualSlotMessage inputObject);
 }

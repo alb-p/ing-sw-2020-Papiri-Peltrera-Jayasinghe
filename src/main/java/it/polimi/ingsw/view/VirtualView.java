@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.utils.messages.*;
 import org.w3c.dom.ls.LSOutput;
@@ -23,7 +24,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
 
     //invia a tutti i client il messaggio di benvenuto e
-    //dopo 1314ms la richiesta di inserimento del nick
+    //dopo 13ms la richiesta di inserimento del nick
     public void run() {
         System.out.println("\n" +
                 "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -40,7 +41,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         for (SocketClientConnection c : connections) {
             c.send(new WelcomeMessage("X"));
             try {
-                sleep(1314);
+                sleep(13);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -100,10 +101,9 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
             else if (evt.getPropertyName().equals("sendAction")) {
                 System.out.println("SENDACTION VIRTUALVIEW");
-                getConnection(message.getId()).send(message);
                 for (SocketClientConnection c : connections) {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
-                        c.send(new WaitingMessage(message.getMessage()));
+                        c.send(new WaitingMessage(((ActionMessage) message).getNickname()));
                     else c.send(message);
                 }
 
@@ -118,6 +118,10 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                     c.send(message);
                 }
                 notifyGameReady();
+            }
+        }else if(evt.getPropertyName().equals("deltaUpdate")){
+            for(SocketClientConnection c: connections){
+                c.send(new VirtualSlotMessage((VirtualSlot) evt.getNewValue()));
             }
         }
     }

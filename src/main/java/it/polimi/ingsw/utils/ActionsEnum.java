@@ -1,6 +1,8 @@
 package it.polimi.ingsw.utils;
 
-public enum ActionsEnum {
+import java.io.Serializable;
+
+public enum ActionsEnum implements Serializable {
 
     MOVE("MOVE"), BUILD("BUILD"), BOTH("BOTH");
 
