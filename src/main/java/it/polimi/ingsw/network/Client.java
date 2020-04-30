@@ -1,6 +1,5 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.RemoteView;
@@ -59,7 +58,6 @@ public class Client {
                             } else if (inputObject instanceof NicknameMessage) {
                                 send(view.askNickPlayer((NicknameMessage) inputObject));
                             } else if (inputObject instanceof ColorMessage) {
-                                //meglio tenere anche info sul colore nel client?
                                 send(view.askColor((ColorMessage) inputObject));
                             } else if (inputObject instanceof ColorSelectedMessage) {
                                 view.showColor((ColorSelectedMessage) inputObject);
@@ -68,16 +66,12 @@ public class Client {
                             } else if (inputObject instanceof WorkerMessage) {
                                 send(view.setWorker((WorkerMessage) inputObject));
                             } else if (inputObject instanceof ActionMessage) {
-                                System.out.println("ASKACTION ILARIOFILIPPINI");
                                 send(view.askAction((ActionMessage) inputObject));
                             } else if (inputObject instanceof InitialCardsMessage) {
-                                //meglio tenere anche info sul colore nel client?
                                 send(view.askGodList((InitialCardsMessage) inputObject));
                             } else if (inputObject instanceof GodMessage) {
-                                //meglio tenere anche info sul colore nel client?
                                 send(view.askGod((GodMessage) inputObject));
                             } else if (inputObject instanceof SetupMessage) {
-                                //meglio tenere anche info sul colore nel client?
                                 send(view.askNumOfPlayers((SetupMessage) inputObject));
                             } else if (inputObject instanceof StartGameMessage) {
                                 view.gameIsReady((StartGameMessage) inputObject);

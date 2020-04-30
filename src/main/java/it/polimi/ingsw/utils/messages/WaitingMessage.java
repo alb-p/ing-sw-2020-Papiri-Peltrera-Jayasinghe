@@ -9,6 +9,9 @@ public class WaitingMessage implements Message, Serializable {
     public WaitingMessage(String playing){
         this.message = playing+" is playing... please wait your turn.";
     }
+    public WaitingMessage(){
+        this.message = "Other players are setting their workerz.";
+    }
 
     @Override
     public String getMessage() {

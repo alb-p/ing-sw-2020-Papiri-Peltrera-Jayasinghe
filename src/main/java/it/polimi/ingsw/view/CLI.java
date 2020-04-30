@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class CLI extends RemoteView implements Runnable {
@@ -18,16 +19,15 @@ public class CLI extends RemoteView implements Runnable {
     private String nickname;
 
 
-
-    public CLI(){
+    public CLI() {
         this.scanner = new Scanner(System.in);
-        this.printer= System.out;
+        this.printer = System.out;
         this.board = new VirtualBoard();
     }
 
 
-    public NicknameMessage askNickPlayer(NicknameMessage message){
-        printer.println(message.getMessage()+ "\n");
+    public NicknameMessage askNickPlayer(NicknameMessage message) {
+        printer.println(message.getMessage() + "\n");
         startingBrackets();
         playerChoice = scanner.nextLine();
         message.setNick(playerChoice);
@@ -52,35 +52,43 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     public ColorMessage askColor(ColorMessage message) {
-        printer.println("Ciao "+ nickname +"! Quale colore vuoi scegliere tra quelli disponibili?");
-        for(Color c: message.getColors()){
-            printer.printf(c.getName()+" ");
+        printer.println("Ciao " + nickname + "! Quale colore vuoi scegliere tra quelli disponibili?");
+        for (Color c : message.getColors()) {
+            printer.printf(c.getName() + " ");
         }
         startingBrackets();
         playerChoice = scanner.nextLine();
-        for(Color c: Color.values())
-            if(playerChoice.equalsIgnoreCase(c.getName()))
+        for (Color c : Color.values()) {
+            if (playerChoice.equalsIgnoreCase(c.getName()))
                 message.setColor(c);
+        }
+        printBreakers();
         return message;
     }
 
     @Override
     public InitialCardsMessage askGodList(InitialCardsMessage message) {
         printer.println(message.getMessage());
-        for(String s: message.getCompleteList())
-            printer.println(s);
+        for (int i=0; i<message.getCompleteList().size(); i++){
+            if(i%2 == 0){
+                printer.println();
+            }
+            printer.printf("%-15s", message.getCompleteList().get(i));
+        }
+        printer.println("\n");
         String s;
-        for (int i= 0; i<message.getDim(); i++){
+        for (int i = 0; i < message.getDim(); i++) {
             startingBrackets();
-            s= scanner.nextLine();
+            s = scanner.nextLine();
             message.addToSelectedList(s.toUpperCase());
         }
+        printBreakers();
         return message;
     }
 
     @Override
     public void showColor(ColorSelectedMessage inputObject) {
-        printer.println(inputObject.getMessage());
+        if (inputObject.getMessage() != null) printer.println(inputObject.getMessage());
     }
 
     @Override
@@ -88,9 +96,11 @@ public class CLI extends RemoteView implements Runnable {
         printer.println(message.getMessage());
         startingBrackets();
         String name = scanner.nextLine();
-        for(String s: message.getNames())
-            if(s.equalsIgnoreCase(name))
+        for (String s : message.getNames()) {
+            if (s.equalsIgnoreCase(name))
                 message.setChosenName(name);
+        }
+        printBreakers();
         return message;
     }
 
@@ -100,13 +110,16 @@ public class CLI extends RemoteView implements Runnable {
         printer.println(message.getMessage());
         startingBrackets();
         printer.print("row: ");
-        int row = Integer.parseInt( scanner.nextLine());
-        startingBrackets();
-        printer.print("col: ");
-        int col = Integer.parseInt( scanner.nextLine());
-        Coordinate c=new Coordinate(row,col);
-        message.setCoordinate(c);
 
+        String inputToParse;
+        inputToParse = "";
+        int row = Integer.parseInt(inputToParse.concat("0"+scanner.nextLine().replaceAll("[^0-5]", "9")));
+        startingBrackets();
+        inputToParse = "";
+        printer.print("col: ");
+        int col = Integer.parseInt(inputToParse.concat("0"+scanner.nextLine().replaceAll("[^0-5]", "9")));
+        Coordinate c = new Coordinate(row, col);
+        message.setCoordinate(c);
         return message;
     }
 
@@ -127,60 +140,79 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-
     @Override
     public GodMessage askGod(GodMessage inputObject) {
         printer.println(inputObject.getMessage());
         startingBrackets();
         inputObject.setGod(scanner.nextLine().toUpperCase());
+        printBreakers();
         return inputObject;
     }
 
     @Override
     public ActionMessage askAction(ActionMessage message) {
         printBoard();
-        printer.println(nickname+ " make " + message.getActionsAvailable() + " x,y in z,w" );
+        printer.println(nickname + " make " + message.getActionsAvailable() + " x,y in z,w");
         startingBrackets();
         Action action = null;
-        if(message.getActionsAvailable() == ActionsEnum.MOVE){
+        if (message.getActionsAvailable() == ActionsEnum.MOVE) {
             action = new Move(null, null);
-        }else if(message.getActionsAvailable() == ActionsEnum.BUILD){
+        } else if (message.getActionsAvailable() == ActionsEnum.BUILD) {
             action = new Build(null, null);
-        }else{
+        } else {
             //aggiungere caso BOTH
         }
         playerChoice = scanner.nextLine();
         message.setAction(parseAction(playerChoice, action));
+
         return message;
     }
 
-    public SetupMessage askNumOfPlayers(SetupMessage message){
+    public SetupMessage askNumOfPlayers(SetupMessage message) {
         printer.println(message.getMessage());
         startingBrackets();
-        int i = Integer.parseInt( scanner.nextLine());
+        int i = Integer.parseInt(scanner.nextLine());
         message.setField(i);
         return message;
     }
 
 
-    public void startingBrackets(){
+    public void startingBrackets() {
         printer.printf(">>>");
     }
 
-    public Action parseAction(String input, Action action){
+    public Action parseAction(String input, Action action) {
         String[] start;
         String[] end;
         String[] coords;
+        Integer[] coord;
+        String uno, due;
+        //0,0 in 0,1 -> 0,0in0,1 -> 0 0,0 1
+        uno = input.replace(" ", "");
+        due = uno.replaceAll("[^0-5]", "");
+        coords = due.split("");
+        if (coords.length != 4) {
+            action.setStart(null);
+            action.setEnd(null);
+        } else {
+            action.setStart(new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
+            action.setEnd(new Coordinate(Integer.parseInt(coords[2]), Integer.parseInt(coords[3])));
+        }
+        /*
         coords = input.split(" in ");
         start = coords[0].split(",");
         end = coords[1].split(",");
         action.setStart(new Coordinate(Integer.parseInt(start[0]), Integer.parseInt(start[1])));
-        action.setEnd(new Coordinate(Integer.parseInt(end[0]), Integer.parseInt(end[1])));
+        action.setEnd(new Coordinate(Integer.parseInt(end[0]), Integer.parseInt(end[1])));*/
         return action;
     }
 
-    public void printBoard(){
+    public void printBoard() {
         printer.println(this.board);
+        printBreakers();
     }
 
+    public void printBreakers() {
+        printer.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
+    }
 }

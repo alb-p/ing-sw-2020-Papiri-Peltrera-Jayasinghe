@@ -9,8 +9,8 @@ public class BasicGodCard {
     public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         Slot workerSlot = board.infoSlot(w.getPosition());
         Slot destSlot = board.infoSlot(coord);
-        if (w.getPosition().isAdjacent(coord) && (workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() >= -1 ||
-                workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() <= 1) && destSlot.isFree()) {
+        if (w.getPosition().isAdjacent(coord) &&
+                (workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() >= -1) && destSlot.isFree()) {
             workerSlot.free();
             destSlot.occupy(w);
             w.setPosition(coord);
@@ -40,7 +40,7 @@ public class BasicGodCard {
         return;
     }
 
-    public boolean hasWon(Worker w, IslandBoard board) throws Exception {
+    public boolean hasWon(Worker w, IslandBoard board) {
         if (board.infoSlot(w.getOldPosition()).getConstructionLevel() == 2 &&
                 board.infoSlot(w.getPosition()).getConstructionLevel() == 3) {
             return true;
@@ -65,13 +65,13 @@ public class BasicGodCard {
 
     }
 
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) throws Exception {
+    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board){
         TreeActionNode tree = new TreeActionNode(null);
 
         for (Coordinate c1 : w.getPosition().getAdiacentCoords()) {  //controllo intorno al worker per fare move
 
-            if (board.infoSlot(c1).isFree() && (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 || //stesso controllo che si fa anche nel move del basicGod
-                    board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() <= 1)) {
+            if (board.infoSlot(c1).isFree() &&
+                    (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
 
                 TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c1));
                 for (Coordinate c2 : c1.getAdiacentCoords()) {                          //controllo intorno ad ogni posizione per fare build con un worker falso

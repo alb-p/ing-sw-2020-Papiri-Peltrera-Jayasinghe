@@ -9,7 +9,6 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
 
-//import static jdk.internal.net.http.common.Utils.close;
 
 public class SocketClientConnection implements Runnable {
 
@@ -55,16 +54,10 @@ public class SocketClientConnection implements Runnable {
     public int askNumOfPlayers() {
         int read = 0;
         try {
-            System.out.println("ASK NUM OF PLAYERS");
-            //inSocket = new Scanner(socket.getInputStream());
             //outSocket = new ObjectOutputStream(socket.getOutputStream());
             send(new SetupMessage());
             read = ((SetupMessage) inSocket.readObject()).getField();
-            //numOfPlayers = Integer.parseInt(read);
             while (!(read == 2 || read == 3)) {
-                System.out.println(read);
-                System.out.println("ASK NUM OF PLAYERS after error");
-
                 send(new SetupMessage());
                 read = ((SetupMessage) inSocket.readObject()).getField();
             }

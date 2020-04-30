@@ -149,8 +149,6 @@ public class InitSetup {
         }
         if (chosenGods.isEmpty()) {
             askFirstPlayer(mess.getId());
-//            System.out.println("fire gameReady");
-//            initSetupListeners.firePropertyChange("gameReady", null, new StartGameMessage());
 
         } else {
             nextplayer = (mess.getId() + 1) % numOfPlayers;
@@ -179,9 +177,7 @@ public class InitSetup {
     /***ALTRO***/
     public void initialWorkers(int ID, int workerNumber) {
         WorkerMessage message = new WorkerMessage(ID,workerNumber);
-
         initSetupListeners.firePropertyChange("setWorker",null,message);
-
     }
 
     //manda una richiesta per la scelta del primo giocatore

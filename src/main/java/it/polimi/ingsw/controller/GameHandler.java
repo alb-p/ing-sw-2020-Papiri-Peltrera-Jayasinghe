@@ -116,22 +116,19 @@ public class GameHandler implements PropertyChangeListener {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
             Coordinate coordinate = message.getCoordinate();
             int index=model.getIndex(message.getId());
-            try {
-                model.addWorker(index,coordinate,message.getWorkerNumber());
-                if(message.getWorkerNumber()==0)
-                    data.initialWorkers(message.getId(),1);
-                else {
-                    int nextID =( message.getId() + 1) % playersPerGame;
-                    if(nextID == firstPlayerChosenID){
-                        data.notifyGameReady();
-                    }else{
-                        data.initialWorkers(nextID, 0);
+
+                if(model.addWorker(index,coordinate,message.getWorkerNumber())) {
+                    if (message.getWorkerNumber() == 0)
+                        data.initialWorkers(message.getId(), 1);
+                    else {
+                        int nextID = (message.getId() + 1) % playersPerGame;
+                        if (nextID == firstPlayerChosenID) {
+                            data.notifyGameReady();
+                        } else {
+                            data.initialWorkers(nextID, 0);
+                        }
                     }
-                }
-                model.notifyChanges();
-            } catch (Exception e) {
-                //data.initialWorkers(message.getId(),message.getWorkerNumber());
-            }
+                }else data.initialWorkers(message.getId(),message.getWorkerNumber());
         }
     }
 

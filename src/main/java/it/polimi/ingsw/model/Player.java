@@ -117,29 +117,33 @@ public class Player {
 
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
         boolean actionResult;
+        TreeActionNode attemptedActionNode;
+        attemptedActionNode = null;
         this.actualWorker = board.infoSlot(message.getStart()).getWorker();
-        System.out.println("ACTUALW IN PLAYER:: "+ actualWorker);
-        TreeActionNode attemptedActionNode = treeMap.get(actualWorker).search(message);
-        if (attemptedActionNode == null && !moveDone) {
+        System.out.println("ACTUALW IN PLAYER:: " + actualWorker + " THIS:COLOR:: "+ this.getWorker(0).getColor());
+        if(actualWorker != null && (actualWorker.getColor() == (this.getWorker(0).getColor()))) {
+            System.out.println("ACTUAL WORKER COLOR CHECK");
+            attemptedActionNode = treeMap.get(actualWorker).search(message);
+        }
+        if (attemptedActionNode == null) {
             //TODO mossa non valida, da comunicare verso il client all'interno di un eventuale pacchetto specifico
-            //System.out.println("TREE IN DA IF, START:: "+attemptedActionNode.getData().getStart() + " END:: "+attemptedActionNode.getData().getEnd());
-            actualWorker = null;
+            if (!moveDone && !buildDone) {
+                actualWorker = null;
+            }
             return false;
         }
         treeMap.remove(actualWorker);
-        //System.out.println("TREE START:: "+attemptedActionNode.getData().getStart() + " END:: "+attemptedActionNode.getData().getEnd());
         treeMap.put(actualWorker, attemptedActionNode);
         actionResult = this.card.turnHandler(this, board, message);
         if (!actionResult) {
             //TODO sollevo eccezione? come gestire
             return false;
         }
-        if (message instanceof Move){
+        if (message instanceof Move) {
             moveDone = true;
             //TODO selezione worker giusta sempre?
 
-        }
-        else if (message instanceof Build) buildDone = true;
+        } else if (message instanceof Build) buildDone = true;
 
         if (moveDone && buildDone) {
             if (attemptedActionNode.isLeaf()) {
@@ -162,6 +166,8 @@ public class Player {
 
     public void setNotDone() {
         this.done = false;
+        this.moveDone = false;
+        this.buildDone = false;
     }
 
     public boolean selectWorker(Coordinate coord) {

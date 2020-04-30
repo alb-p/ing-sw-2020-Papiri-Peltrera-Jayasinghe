@@ -1,15 +1,12 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.utils.messages.*;
-import org.w3c.dom.ls.LSOutput;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.IOException;
 import java.util.*;
 
 import static java.lang.Thread.sleep;
@@ -18,6 +15,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
     private ArrayList<SocketClientConnection> connections;
     private PropertyChangeSupport virtualViewListeners = new PropertyChangeSupport(this);
+
     public VirtualView(ArrayList<SocketClientConnection> connections) {         // crea arraylist dei scc
         this.connections = connections;
     }
@@ -53,7 +51,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
 
 /*********************************************************************************************************************************/
-/***MESSAGGI IN USCITA***/
+    /***MESSAGGI IN USCITA***/
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -93,13 +91,13 @@ public class VirtualView implements Runnable, PropertyChangeListener {
             //chi deve essere il primo giocatore
             else if (evt.getPropertyName().equals("firstPlayer")) {
                 getConnection(message.getId()).send(message);
-            }
-
-            else if (evt.getPropertyName().equals("setWorker")) {
-                getConnection(message.getId()).send(message);
-            }
-
-            else if (evt.getPropertyName().equals("sendAction")) {
+            } else if (evt.getPropertyName().equals("setWorker")) {
+                for (SocketClientConnection c : connections) {
+                    if (c.getId() != ((Message) evt.getNewValue()).getId())
+                        c.send(new WaitingMessage());
+                    else c.send(message);
+                }
+            } else if (evt.getPropertyName().equals("sendAction")) {
                 System.out.println("SENDACTION VIRTUALVIEW");
                 for (SocketClientConnection c : connections) {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
@@ -108,29 +106,22 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                 }
 
 
-            } else if (evt.getPropertyName().equals("deltaUpdate")) {
-                for (SocketClientConnection c : connections) c.send(message);
-            }
-
-
-            else if (evt.getPropertyName().equals("gameReady")) {
-                for (SocketClientConnection c : connections){
+            } else if (evt.getPropertyName().equals("gameReady")) {
+                for (SocketClientConnection c : connections) {
                     c.send(message);
                 }
                 notifyGameReady();
             }
-        }else if(evt.getPropertyName().equals("deltaUpdate")){
-            for(SocketClientConnection c: connections){
+        } else if (evt.getPropertyName().equals("deltaUpdate")) {
+            for (SocketClientConnection c : connections) {
                 c.send(new VirtualSlotMessage((VirtualSlot) evt.getNewValue()));
             }
         }
     }
 
 
-
-
 /*********************************************************************************************************************************/
-/***MESSAGGI IN ENTRATA***/
+    /***MESSAGGI IN ENTRATA***/
 
     //arriva nick da scc che viene inoltrato a GameHandler (controller)
     public void receiveNick(NicknameMessage message) {
@@ -160,7 +151,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         virtualViewListeners.firePropertyChange("setWorkerResponse", null, message);
     }
 
-    //arriva action da scc che viene inoltrato a GameHandler (controller)
+    //arriva action da scc che viene inoltrato a GameHandler (controller) (errato: arriva a TurnHandler)
     public void receiveAction(ActionMessage message) {
         virtualViewListeners.firePropertyChange("actionMessageResponse", null, message);
     }

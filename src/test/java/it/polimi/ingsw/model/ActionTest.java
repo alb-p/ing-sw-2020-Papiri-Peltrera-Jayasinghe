@@ -43,38 +43,33 @@ public class ActionTest {
         board.infoSlot(new Coordinate(0,2)).occupy(new Worker(new Coordinate(0,2), "BLUE"));
         board.infoSlot(new Coordinate(1,4)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(2,2)).occupy(player.getWorker(0));
-        player.getWorker(0).setPosition(new Coordinate(1,2));
+        player.getWorker(0).setPosition(new Coordinate(2,2));
 
     }
 
     @Test
     public void cardMoveTest() throws Exception {
         player.playerTreeSetup(board);
-        player.selectWorker(new Coordinate(1,2));
+        player.selectWorker(new Coordinate(2,2));
 
-        assertTrue(card.turnHandler(player, board, new Move(new Coordinate(1,2),
-                new Coordinate(0,1))));
+        assertTrue(card.turnHandler(player, board, new Move(new Coordinate(2,2),
+                new Coordinate(2,1))));
 
-        assertFalse(board.infoSlot(new Coordinate(0, 1)).isFree());
-        assertTrue(board.infoSlot(new Coordinate(1,2)).isFree());
-        //assertEquals(board.infoSlot(new Coordinate(1, 2)).getWorker(), player.getWorker(0));
-        //0,0 is occupied by player's worker2
+        assertFalse(board.infoSlot(new Coordinate(2, 1)).isFree());
+        assertTrue(board.infoSlot(new Coordinate(2,2)).isFree());
         assertTrue(card.turnHandler(player, board,
-                new Move(new Coordinate(0, 1), new Coordinate(0, 0))));
+                new Move(new Coordinate(2, 1), new Coordinate(2, 0))));
     }
 
     @Test
     public void playerMoveTest() throws Exception {
         player.playerTreeSetup(board);
-        player.selectWorker(new Coordinate(1,2));
+        player.selectWorker(new Coordinate(2,2));
         assertTrue(player.turnHandler(board,
-                new Move(new Coordinate(1,2), new Coordinate(0,1))));
-        assertFalse(board.infoSlot(new Coordinate(0, 1)).isFree());
-        assertTrue(board.infoSlot(new Coordinate(1,2)).isFree());
+                new Move(new Coordinate(2,2), new Coordinate(2,1))));
+        assertFalse(board.infoSlot(new Coordinate(2, 1)).isFree());
+        assertTrue(board.infoSlot(new Coordinate(2,2)).isFree());
         player.playerTreeSetup(board);
-        //0,0 is occupied by player's worker2
-        //assertFalse(player.turnHandler(board,
-        //        new Move(new Coordinate(0, 1), new Coordinate(0, 0))));
     }
 
 

@@ -12,7 +12,7 @@ public class Model {
 
     private ArrayList<Player> players = new ArrayList<Player>();
     private IslandBoard board = new IslandBoard();
-    private VirtualBoard oldBoard;
+    private VirtualBoard oldBoard = new VirtualBoard();
     private VirtualSlot vSlot;
 
     private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
@@ -22,13 +22,19 @@ public class Model {
         players.add(p);
     }
 
-    public void addWorker(int playerIndex, Coordinate c, int workerIndex) throws Exception {
-
-        board.infoSlot(c).occupy(players.get(playerIndex).getWorker(workerIndex));
-        players.get(playerIndex).getWorker(workerIndex).setPosition(c);
-        vSlot = new VirtualSlot(board.infoSlot(c), c);
-        modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
-
+    public boolean addWorker(int playerIndex, Coordinate c, int workerIndex) {
+        oldBoard = new VirtualBoard(board);
+        try {
+            if (c.isValid() && board.infoSlot(c).isFree()) {
+                board.infoSlot(c).occupy(players.get(playerIndex).getWorker(workerIndex));
+                players.get(playerIndex).getWorker(workerIndex).setPosition(c);
+            } else return false;
+            notifyChanges();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 
@@ -58,7 +64,6 @@ public class Model {
     }
 
 
-
     public int getNumOfPlayers() {
         return this.players.size();
     }
@@ -70,7 +75,7 @@ public class Model {
         return false;
     }
 
-    public void turnHandler(int idPlayerPlaying, Action message)  {
+    public void turnHandler(int idPlayerPlaying, Action message) {
         oldBoard = new VirtualBoard(board);
         try {
             players.get(idPlayerPlaying).turnHandler(this.board, message);
@@ -78,15 +83,16 @@ public class Model {
             e.printStackTrace();
         }
         notifyChanges();
-        if(players.get(idPlayerPlaying).hasDone()){
+        if (players.get(idPlayerPlaying).hasDone()) {
 
-        }else{
+        } else {
 
         }
         modelListeners.firePropertyChange("turnHandler", null, true);
     }
 
     public void notifyChanges() {
+
         VirtualSlot oldVSlot;
 
         for (int i = 0; i < board.board.length; i++) {
@@ -94,11 +100,14 @@ public class Model {
 
                 oldVSlot = oldBoard.getSlot(i, j);
                 vSlot = new VirtualSlot(board.getSlot(i, j), new Coordinate(i, j));
-
+                if(!oldVSlot.equals(vSlot)){
+                    System.out.println("CAMBIATO SLOT");
+                    modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
+                }
                 modelListeners.firePropertyChange("deltaUpdate", oldVSlot, vSlot);
-            }
-        }
 
+            }
+        }System.out.println("OLDBOARD:: "+oldBoard);
     }
 
     public void buildPlayerTree(int i) {
@@ -110,40 +119,25 @@ public class Model {
         verifyTree(i);
     }
 
-
     public void verifyTree(int currPlayer) {
-        for(int i = 0 ; i<players.size(); i++){
-            if(currPlayer != i) {
-                players.get(i).getCard().specialRule(players.get(currPlayer).getTrees(),players.get(currPlayer).getHashList(),board);
+        for (int i = 0; i < players.size(); i++) {
+            if (currPlayer != i) {
+                players.get(i).getCard().specialRule(players.get(currPlayer).getTrees(), players.get(currPlayer).getHashList(), board);
             }
         }
     }
 
     public void selectPlayerPlaying(int id) {
-        //notifyChanges();
-        ActionMessage actionMessage = new ActionMessage(id, players.get(id).getAvailableAction() ,
+        ActionMessage actionMessage = new ActionMessage(id, players.get(id).getAvailableAction(),
                 players.get(id).getNickName());
         System.out.println("COSTRUITO ACTIONMESSAGE IN SELECT MODEL");
         modelListeners.firePropertyChange("sendAction",
                 null, actionMessage);
     }
 
-    /*
-    private void sendBoardUpdate() {
-        for(int i = 0; i<5; i++){
-            for(int j = 0; j<5; j++){
-                if(!board.getSlot(i,j).equals(oldBoard.getSlot(i,j))){
-                    modelListeners.firePropertyChange("deltaUpdate", null, new VirtualSlot(board.getSlot(i,j), new Coordinate(i,j)));
-
-                }
-                virtualBoard.add(new VirtualSlot(board.getSlot(i,j), new Coordinate(i,j)));
-            }
-        }
-        modelListeners.firePropertyChange("deltaUpdate", null, );
-    }*/
 
     public void checkWinner(int id) {
-        if(players.get(id).getCard().winningCondition(players.get(id).getActualWorker())){
+        if (players.get(id).getCard().winningCondition(players.get(id).getActualWorker())) {
             modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, players.get(id).getNickName()));
         }
     }

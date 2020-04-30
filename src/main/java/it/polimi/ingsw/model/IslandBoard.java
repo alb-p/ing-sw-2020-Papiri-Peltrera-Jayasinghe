@@ -12,13 +12,14 @@ public class IslandBoard implements Cloneable{
         }
     }
 
-    public Slot infoSlot(Coordinate coord) throws Exception {
+    public Slot infoSlot(Coordinate coord) {
         if(coord.getCol()>=0 && coord.getCol()<5 &&
                 coord.getRow()>=0 && coord.getRow()<5){
             return board[coord.getRow()][coord.getCol()];
         }
         else{
-            throw new Exception("Invalid Row or Column value");
+            //TODO checking valid Coordinate, add logger if necessary
+            return null;
         }
     }
 

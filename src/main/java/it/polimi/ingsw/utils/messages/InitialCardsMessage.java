@@ -20,7 +20,7 @@ public class InitialCardsMessage implements Message, Serializable {
         this.selectedList = new ArrayList<>();
 
         this.completeList.addAll(list);
-        this.message="Select "+dim+" God Cards "+ completeList;
+        this.message="Select "+dim+" God Cards ";
         this.dim = dim;
 
 
