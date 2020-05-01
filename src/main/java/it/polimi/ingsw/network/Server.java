@@ -53,7 +53,13 @@ public class Server {
                         if(room.isReady())room.start();
                     }else{
                         socketConnection.notifyGamePlaying();
-                        waitingList.add(socketConnection);
+                        //waitingList.add(socketConnection);
+                        room= new Room();
+                        int numOfPlayers  = socketConnection.askNumOfPlayers();
+                        System.out.println("numero di gioc : "+numOfPlayers);
+                        room.setNumOfPlayers(numOfPlayers);
+                        room.addPlayer(socketConnection);
+                        socketConnection.setId(room.currentPlayerId()-1);
                     }
                     executor.submit(socketConnection);
 
