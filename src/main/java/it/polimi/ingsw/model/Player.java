@@ -61,21 +61,28 @@ public class Player {
 
         BasicGodCard godCard = new BasicGodCard();
 
-        if (card.equals("ATLAS")) {
+        if (card.equals("APOLLO")) {
             //  this.card = new Atlas();
-            return;
         } else if (card.equals("ARTEMIS")) {
             //  this.card = new Artemis();
-            return;
+        }  else if (card.equals("ATHENA")) {
+            //  this.card = new Athena();
+        }  else if (card.equals("ATLAS")) {
+            //  this.card = new Atlas();
         } else if (card.equals("DEMETER")) {
-            this.card = new Demeter();
-            return;
+            //  this.card = new Demeter();
+        } else if (card.equals("HEPHAESTUS")) {
+            //  this.card = new Hephaestus();
+        } else if (card.equals("MINOTAUR")) {
+            //  this.card = new Minotaur();
+        } else if (card.equals("PAN")) {
+            //  this.card = new Pan();
         } else if (card.equals("PROMETHEUS")) {
-            this.card = new Prometheus();
-            return;
-        } else {
-            this.card = godCard;
+            //this.card = new Prometheus();
         }
+        //TODO when gods are done remove this statement
+            this.card = new BasicGodCard();
+
     }
 
     public BasicGodCard getCard() {

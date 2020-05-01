@@ -20,34 +20,37 @@ public class TurnHandler implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equals("actionMessageResponse")) {
-            ActionMessage message = (ActionMessage)evt.getNewValue();
+            ActionMessage message = (ActionMessage) evt.getNewValue();
             turnManager(message);
-        } else if (evt.getPropertyName().equals("gameReadyResponse")){
-            model.buildPlayerTree(totalTurnCounter%playersPerGame);
+        } else if (evt.getPropertyName().equals("gameReadyResponse")) {
+            model.buildPlayerTree(totalTurnCounter % playersPerGame);
             System.out.println("BUILDTREE DONE");
-            model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
+            model.selectPlayerPlaying(totalTurnCounter % playersPerGame);
         }
     }
 
     private void turnManager(ActionMessage message) {
-        model.turnHandler(totalTurnCounter%playersPerGame, message.getAction());
-        if(!model.getPlayer(totalTurnCounter%playersPerGame).hasDone()){
-            model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
-        }else{
+        model.turnHandler(totalTurnCounter % playersPerGame, message.getAction());
+        if (!model.getPlayer(totalTurnCounter % playersPerGame).hasDone()) {
+            model.selectPlayerPlaying(totalTurnCounter % playersPerGame);
+        } else {
             endTurnManager();
         }
     }
 
 
-    private void endTurnManager(){
-        model.getPlayer(totalTurnCounter%playersPerGame).setNotDone();
-        model.checkWinner(totalTurnCounter%playersPerGame);
-        totalTurnCounter++;
-        model.buildPlayerTree(totalTurnCounter%playersPerGame);
-        model.selectPlayerPlaying(totalTurnCounter%playersPerGame);
+    private void endTurnManager() {
+        model.getPlayer(totalTurnCounter % playersPerGame).setNotDone();
+        if (model.checkWinner(totalTurnCounter % playersPerGame)) {
+            //game ended
+        } else {
+            totalTurnCounter++;
+            model.buildPlayerTree(totalTurnCounter % playersPerGame);
+            model.selectPlayerPlaying(totalTurnCounter % playersPerGame);
+        }
     }
 
-    public void setTotalTurnCounter(int tt){
+    public void setTotalTurnCounter(int tt) {
         this.totalTurnCounter = tt;
     }
 }

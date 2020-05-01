@@ -35,4 +35,6 @@ public abstract class RemoteView extends View {
     public abstract void gameIsReady(StartGameMessage inputObject);
 
     public abstract void updateVBoard(VirtualSlotMessage inputObject);
+
+    public abstract void winnerMess(WinnerMessage inputObject);
 }

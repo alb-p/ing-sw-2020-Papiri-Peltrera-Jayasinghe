@@ -112,6 +112,11 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                 }
                 notifyGameReady();
             }
+            else if (evt.getPropertyName().equals("winnerDetected")) {
+                for (SocketClientConnection c : connections) {
+                    c.send(message);
+                }
+            }
         } else if (evt.getPropertyName().equals("deltaUpdate")) {
             for (SocketClientConnection c : connections) {
                 c.send(new VirtualSlotMessage((VirtualSlot) evt.getNewValue()));

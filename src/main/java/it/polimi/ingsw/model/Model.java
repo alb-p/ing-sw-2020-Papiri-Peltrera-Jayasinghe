@@ -136,9 +136,11 @@ public class Model {
     }
 
 
-    public void checkWinner(int id) {
-        if (players.get(id).getCard().winningCondition(players.get(id).getActualWorker())) {
+    public boolean checkWinner(int id) {
+        if (players.get(id).getCard().winningCondition(players.get(id).getActualWorker(),board,oldBoard)) {
             modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, players.get(id).getNickName()));
+            return true;
         }
+        return false;
     }
 }

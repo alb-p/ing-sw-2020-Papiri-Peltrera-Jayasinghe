@@ -77,6 +77,8 @@ public class Client {
                                 view.gameIsReady((StartGameMessage) inputObject);
                             } else if (inputObject instanceof WaitingMessage) {
                                 view.waitingMess((WaitingMessage) inputObject);
+                            } else if (inputObject instanceof WinnerMessage) {
+                                view.winnerMess((WinnerMessage) inputObject);
                             }else if (inputObject instanceof VirtualSlotMessage) {
                                 view.updateVBoard((VirtualSlotMessage) inputObject);
 

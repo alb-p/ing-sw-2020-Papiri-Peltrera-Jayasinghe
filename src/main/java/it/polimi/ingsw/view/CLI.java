@@ -69,8 +69,8 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public InitialCardsMessage askGodList(InitialCardsMessage message) {
         printer.println(message.getMessage());
-        for (int i=0; i<message.getCompleteList().size(); i++){
-            if(i%2 == 0){
+        for (int i = 0; i < message.getCompleteList().size(); i++) {
+            if (i % 2 == 0) {
                 printer.println();
             }
             printer.printf("%-15s", message.getCompleteList().get(i));
@@ -113,11 +113,11 @@ public class CLI extends RemoteView implements Runnable {
 
         String inputToParse;
         inputToParse = "";
-        int row = Integer.parseInt(inputToParse.concat("0"+scanner.nextLine().replaceAll("[^0-5]", "9")));
+        int row = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
         startingBrackets();
         inputToParse = "";
         printer.print("col: ");
-        int col = Integer.parseInt(inputToParse.concat("0"+scanner.nextLine().replaceAll("[^0-5]", "9")));
+        int col = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
         Coordinate c = new Coordinate(row, col);
         message.setCoordinate(c);
         return message;
@@ -131,6 +131,18 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public void updateVBoard(VirtualSlotMessage inputObject) {
         board.setSlot(inputObject.getVirtualSlot());
+    }
+
+    @Override
+    public void winnerMess(WinnerMessage inputObject) {
+        printBreakers();
+        printBreakers();
+        printer.println("\n\n");
+        printer.println(inputObject.getMessage());
+        printer.println("\n\n");
+        printBreakers();
+        printBreakers();
+
     }
 
     @Override
