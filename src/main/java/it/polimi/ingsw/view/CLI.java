@@ -5,15 +5,12 @@ import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.io.*;
-import java.net.Socket;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class CLI extends RemoteView implements Runnable {
 
-    private Scanner scanner;
-    private PrintStream printer;
-    private Console console;
+    private final Scanner scanner;
+    private final PrintStream printer;
     private String playerChoice;
     private VirtualBoard board;
     private String nickname;
@@ -54,7 +51,7 @@ public class CLI extends RemoteView implements Runnable {
     public ColorMessage askColor(ColorMessage message) {
         printer.println("Ciao " + nickname + "! Quale colore vuoi scegliere tra quelli disponibili?");
         for (Color c : message.getColors()) {
-            printer.printf(c.getName() + " ");
+            printer.print(c.getName() + " ");
         }
         startingBrackets();
         playerChoice = scanner.nextLine();
@@ -190,19 +187,17 @@ public class CLI extends RemoteView implements Runnable {
 
 
     public void startingBrackets() {
-        printer.printf(">>>");
+        printer.print(">>>");
     }
 
     public Action parseAction(String input, Action action) {
-        String[] start;
-        String[] end;
         String[] coords;
-        Integer[] coord;
-        String uno, due;
+        String noSpaces;
+        String noWrongChars;
         //0,0 in 0,1 -> 0,0in0,1 -> 0 0,0 1
-        uno = input.replace(" ", "");
-        due = uno.replaceAll("[^0-5]", "");
-        coords = due.split("");
+        noSpaces = input.replace(" ", "");
+        noWrongChars = noSpaces.replaceAll("[^0-5]", "");
+        coords = noWrongChars.split("");
         if (coords.length != 4) {
             action.setStart(null);
             action.setEnd(null);
@@ -210,12 +205,6 @@ public class CLI extends RemoteView implements Runnable {
             action.setStart(new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
             action.setEnd(new Coordinate(Integer.parseInt(coords[2]), Integer.parseInt(coords[3])));
         }
-        /*
-        coords = input.split(" in ");
-        start = coords[0].split(",");
-        end = coords[1].split(",");
-        action.setStart(new Coordinate(Integer.parseInt(start[0]), Integer.parseInt(start[1])));
-        action.setEnd(new Coordinate(Integer.parseInt(end[0]), Integer.parseInt(end[1])));*/
         return action;
     }
 
