@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.messages.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.Collections;
 
 
 public class InitSetup {
@@ -23,9 +24,8 @@ public class InitSetup {
         chosenGods = new ArrayList<>();
 
 
-        for (Color c : Color.values()) {
-            colors.add(c);
-        }
+        Collections.addAll(colors, Color.values());
+
         gods.add("APOLLO");
         gods.add("ARTEMIS");
         gods.add("ATHENA");
@@ -61,6 +61,7 @@ public class InitSetup {
     //rimanda messaggio se il giocatore ha impostato un nick non valido
     public void wrongUsername(int id) {
         NicknameMessage message = new NicknameMessage(id);
+        message.setMessage("Il nickname scelto è già in uso, prova ancora");
         initSetupListeners.firePropertyChange("sendNick", false, message);
     }
 

@@ -14,7 +14,6 @@ public class VirtualBoard {
     }
 
     public VirtualBoard(IslandBoard realBoard){
-        System.out.println("SONO IL COSTRUTTORE VIRTUAL BOARD");
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 board[i][j] = new VirtualSlot(realBoard.getSlot(i,j),new Coordinate(i,j));

@@ -43,4 +43,8 @@ public class NicknameMessage implements Message , Serializable {
     public int getId() {
         return this.id;
     }
+
+    public void setMessage(String message){
+        this.message = message;
+    }
 }

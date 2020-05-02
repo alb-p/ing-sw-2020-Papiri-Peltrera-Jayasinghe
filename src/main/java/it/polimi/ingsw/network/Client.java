@@ -79,6 +79,7 @@ public class Client {
                                 view.waitingMess((WaitingMessage) inputObject);
                             } else if (inputObject instanceof WinnerMessage) {
                                 view.winnerMess((WinnerMessage) inputObject);
+                                online = false;
                             }else if (inputObject instanceof VirtualSlotMessage) {
                                 view.updateVBoard((VirtualSlotMessage) inputObject);
 
@@ -87,12 +88,15 @@ public class Client {
                             // TODO collegarsi alla remoteView (CLI o GUI) del client
 
                         }
+                        closeConnection();
                     } catch (Exception e) {
                         // online = false;
                         e.printStackTrace();
                     }
 
                 }
+
+
             }).start();
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -111,7 +115,14 @@ public class Client {
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
+    }
 
+    private void closeConnection() {
+        try{
+            socket.close();
+        }catch (IOException e){
+            logger.log(Level.SEVERE, e.getMessage());
+        }
     }
 
 

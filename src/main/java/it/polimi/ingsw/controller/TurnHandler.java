@@ -40,10 +40,10 @@ public class TurnHandler implements PropertyChangeListener {
 
 
     private void endTurnManager() {
-        model.getPlayer(totalTurnCounter % playersPerGame).setNotDone();
         if (model.checkWinner(totalTurnCounter % playersPerGame)) {
             //game ended
         } else {
+            model.getPlayer(totalTurnCounter % playersPerGame).setNotDone();
             totalTurnCounter++;
             model.buildPlayerTree(totalTurnCounter % playersPerGame);
             model.selectPlayerPlaying(totalTurnCounter % playersPerGame);

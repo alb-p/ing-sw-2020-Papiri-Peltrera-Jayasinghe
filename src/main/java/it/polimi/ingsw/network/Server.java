@@ -13,11 +13,9 @@ public class Server {
 
     private static final int PORT = 4566;
     private ServerSocket serverSocket = new ServerSocket(PORT);
-    private int numOfPlayers;
     private Room room = new Room();
 
     private ExecutorService executor = Executors.newFixedThreadPool(128);
-    private ArrayList<SocketClientConnection> waitingList = new ArrayList<SocketClientConnection>();
 
     public Server() throws IOException {
     }
@@ -29,7 +27,7 @@ public class Server {
                 Socket newSocket = serverSocket.accept();
                 System.out.println("trewc");
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket);
-                /*TODO CREAZIONE STANZA
+                /*
                 inserico i giocatori nella waiting list
                 if waiting list. length è 1 allora a quello chiedo il numero di giocatori
                 creo una stanza con quel parametro e aggiungo alla stanza i primi

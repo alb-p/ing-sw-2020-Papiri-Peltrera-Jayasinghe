@@ -109,10 +109,9 @@ public class SocketClientConnection implements Runnable {
                     }else if (inputObject instanceof WorkerMessage) {
                         view.receiveSetWorker((WorkerMessage) message);
                     }
-                } else {
-                    socket.close();
                 }
             }
+            socket.close();
         } catch (Exception e) {
             e.printStackTrace();
         }

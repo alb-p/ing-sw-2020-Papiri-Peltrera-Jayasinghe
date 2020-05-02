@@ -83,7 +83,7 @@ public class GameHandler implements PropertyChangeListener {
             if (data.isInGod(god)) {
                 data.delGod(message, playersPerGame);
                 try {
-                    model.setCard(model.getIndex(message.getId()), god);
+                    model.setCard(message.getId(), god);
                 } catch (CloneNotSupportedException e) {
                     System.out.println("errore nell'inserimento della divinità");
                 }
@@ -114,9 +114,10 @@ public class GameHandler implements PropertyChangeListener {
 
         else if (evt.getPropertyName().equals("setWorkerResponse")) {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
+            System.out.println("ID PLAYER DA SETWORKER:: " + message.getId());
             Coordinate coordinate = message.getCoordinate();
-            int index=model.getIndex(message.getId());
-
+            //int index=model.getIndex(message.getId());
+            int index = message.getId();
                 if(model.addWorker(index,coordinate,message.getWorkerNumber())) {
                     if (message.getWorkerNumber() == 0)
                         data.initialWorkers(message.getId(), 1);

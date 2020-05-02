@@ -1,14 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.gods.*;
 import it.polimi.ingsw.utils.ActionsEnum;
-import it.polimi.ingsw.utils.messages.ActionMessage;
-
-import java.awt.*;
-import java.io.ObjectInputStream;
 import java.util.HashMap;
-import java.util.Map;
-import java.util.Scanner;
 import java.util.ArrayList;
 
 public class Player {
@@ -65,9 +58,9 @@ public class Player {
             //  this.card = new Atlas();
         } else if (card.equals("ARTEMIS")) {
             //  this.card = new Artemis();
-        }  else if (card.equals("ATHENA")) {
+        } else if (card.equals("ATHENA")) {
             //  this.card = new Athena();
-        }  else if (card.equals("ATLAS")) {
+        } else if (card.equals("ATLAS")) {
             //  this.card = new Atlas();
         } else if (card.equals("DEMETER")) {
             //  this.card = new Demeter();
@@ -81,7 +74,7 @@ public class Player {
             //this.card = new Prometheus();
         }
         //TODO when gods are done remove this statement
-            this.card = new BasicGodCard();
+        this.card = new BasicGodCard();
 
     }
 
@@ -124,12 +117,20 @@ public class Player {
 
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
         boolean actionResult;
+        Worker attemptedWorker;
         TreeActionNode attemptedActionNode;
         attemptedActionNode = null;
-        this.actualWorker = board.infoSlot(message.getStart()).getWorker();
-        System.out.println("ACTUALW IN PLAYER:: " + actualWorker + " THIS:COLOR:: "+ this.getWorker(0).getColor());
-        if(actualWorker != null && (actualWorker.getColor() == (this.getWorker(0).getColor()))) {
-            System.out.println("ACTUAL WORKER COLOR CHECK");
+        attemptedWorker = board.infoSlot(message.getStart()).getWorker();
+
+        System.out.println("ACTUALW IN PLAYER:: " + actualWorker + " THIS:COLOR:: " + this.getWorker(0).getColor());
+        if (attemptedWorker != null && (attemptedWorker.getColor() == (this.getWorker(0).getColor()))) {
+            if (actualWorker == null) {
+                this.actualWorker = attemptedWorker;
+                System.out.println("ACTUAL WORKER COLOR CHECK");
+
+            } else if (!actualWorker.equals(attemptedWorker)) {
+                return false;
+            }
             attemptedActionNode = treeMap.get(actualWorker).search(message);
         }
         if (attemptedActionNode == null) {
@@ -175,6 +176,7 @@ public class Player {
         this.done = false;
         this.moveDone = false;
         this.buildDone = false;
+        actualWorker = null;
     }
 
     public boolean selectWorker(Coordinate coord) {
