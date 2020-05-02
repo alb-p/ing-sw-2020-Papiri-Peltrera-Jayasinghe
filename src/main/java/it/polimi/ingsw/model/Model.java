@@ -26,8 +26,8 @@ public class Model {
         oldBoard = new VirtualBoard(board);
         try {
             if (c.isValid() && board.infoSlot(c).isFree()) {
-                board.infoSlot(c).occupy(players.get(playerIndex).getWorker(workerIndex));
-                players.get(playerIndex).getWorker(workerIndex).setPosition(c);
+                board.infoSlot(c).occupy(this.getPlayer(playerIndex).getWorker(workerIndex));
+                this.getPlayer(playerIndex).getWorker(workerIndex).setPosition(c);
             } else return false;
             notifyChanges();
             return true;
@@ -44,7 +44,7 @@ public class Model {
 
 
     public void setCard(int playerPosition, String card) throws CloneNotSupportedException {
-        players.get(playerPosition).setCard(card.toUpperCase());
+        this.getPlayer(playerPosition).setCard(card.toUpperCase());
     }
 
 
@@ -78,12 +78,12 @@ public class Model {
     public void turnHandler(int idPlayerPlaying, Action message) {
         oldBoard = new VirtualBoard(board);
         try {
-            players.get(idPlayerPlaying).turnHandler(this.board, message);
+            this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
         } catch (Exception e) {
             e.printStackTrace();
         }
         notifyChanges();
-        if (players.get(idPlayerPlaying).hasDone()) {
+        if (this.getPlayer(idPlayerPlaying).hasDone()) {
 
         } else {
 
@@ -112,7 +112,7 @@ public class Model {
 
     public void buildPlayerTree(int i) {
         try {
-            players.get(i).playerTreeSetup(board);
+            this.getPlayer(i).playerTreeSetup(board);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -122,14 +122,14 @@ public class Model {
     public void verifyTree(int currPlayer) {
         for (int i = 0; i < players.size(); i++) {
             if (currPlayer != i) {
-                players.get(i).getCard().specialRule(players.get(currPlayer).getTrees(), players.get(currPlayer).getHashList(), board);
+                this.getPlayer(i).getCard().specialRule(this.getPlayer(currPlayer).getTrees(), this.getPlayer(currPlayer).getHashList(), board);
             }
         }
     }
 
     public void selectPlayerPlaying(int id) {
-        ActionMessage actionMessage = new ActionMessage(id, players.get(id).getAvailableAction(),
-                players.get(id).getNickName());
+        ActionMessage actionMessage = new ActionMessage(id, this.getPlayer(id).getAvailableAction(),
+                this.getPlayer(id).getNickName());
         System.out.println("COSTRUITO ACTIONMESSAGE IN SELECT MODEL");
         modelListeners.firePropertyChange("sendAction",
                 null, actionMessage);
@@ -137,8 +137,8 @@ public class Model {
 
 
     public boolean checkWinner(int id) {
-        if (players.get(id).getCard().winningCondition(players.get(id).getActualWorker(),board,oldBoard)) {
-            modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, players.get(id).getNickName()));
+        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(),board,oldBoard)) {
+            modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, this.getPlayer(id).getNickName()));
             return true;
         }
         return false;
