@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.ANSIColor;
+
 import java.io.IOException;
 
 public class Slot {
@@ -17,20 +19,6 @@ public class Slot {
         return free;
     }
 
-/*
-    public void construct() throws Exception {
-        if(this.isFree()){
-            if(this.getConstructionLevel()<3){
-                buildings[this.getConstructionLevel()+1]=Construction.FLOOR;
-            }else{
-                buildings[3]=Construction.DOME;
-                this.free=false;
-            }
-        }else{
-            throw new IOException("Illegal build!!");
-        }
-    }
-*/
     public void construct(Construction c) throws Exception {
         for(int i = 0 ; i< buildings.length; i++){
             if(buildings[i] == null && this.isFree() && !(c.equals(Construction.DOME))){
@@ -85,7 +73,7 @@ public class Slot {
         else{
             floor= String.valueOf(getConstructionLevel());
         }
-        return (color+floor);
+        return (color+floor+ANSIColor.RESET);
     }
 
     public Worker getWorker() {

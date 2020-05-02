@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.*;
 
@@ -35,8 +36,8 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public void welcomeMessage() {
         printer.println("\n" +
-                "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
-                "░░░░░╔╦═╦╗░░░░░░░░░░░░░╔╗░░░░░░░░░░░░\n" +
+                ANSIColor.WHITE+"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
+                ANSIColor.BLUE+"░░░░░╔╦═╦╗░░░░░░░░░░░░░╔╗░░░░░░░░░░░░\n" +
                 "░░░░░║║║║╠═╦╗╔═╦═╦══╦═╗║╚╦═╗░░░░░░░░░\n" +
                 "░░░░░║║║║║╩╣╚╣═╣╬║║║║╩╣║╔╣╬║░░░░░░░░░\n" +
                 "░░░░░╚═╩═╩═╩═╩═╩═╩╩╩╩═╝╚═╩═╝░░░░░░░░░\n" +
@@ -44,7 +45,7 @@ public class CLI extends RemoteView implements Runnable {
                 "░░░░░║══╬═╗╔═╦╣╚╦═╦╦╬╬═╦╬╣░░░░░░░░░░░\n" +
                 "░░░░░╠══║╬╚╣║║║╔╣╬║╔╣║║║║║░░░░░░░░░░░\n" +
                 "░░░░░╚══╩══╩╩═╩═╩═╩╝╚╩╩═╩╝░░░░░░░░░░░\n" +
-                "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
+                ANSIColor.WHITE+"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
     }
 
     @Override
