@@ -26,11 +26,6 @@ public class Coordinate implements Serializable {
     }
 
 
-    public void setCoord(int row, int col) {
-        this.row = row;
-        this.col = col;
-    }
-
     public boolean isAdjacent(Coordinate that) {
         return (this.getCol() == that.getCol() || this.getCol() == that.getCol() + 1 || this.getCol() == that.getCol() - 1)
                 && (this.getRow() == that.getRow() || this.getRow() == that.getRow() + 1 || this.getRow() == that.getRow() - 1)
@@ -51,14 +46,17 @@ public class Coordinate implements Serializable {
     }
 
 
-    public ArrayList<Coordinate> getAdiacentCoords() {        //it returns a list of adiacent coordinates
+    public ArrayList<Coordinate> getAdjacentCoords() {        //it returns a list of adjacent coordinates
         ArrayList<Coordinate> list = new ArrayList<>();
         for (int i = -1; i < 2; i++) {
             for (int j = -1; j < 2; j++) {
                 if (this.getCol() + i < 5 && this.getCol() + i >= 0
                         && this.getRow() + j < 5 && this.getRow() + j >= 0
-                        && (i != 0 || j != 0))
+                        && (i != 0 || j != 0)){
                     list.add(new Coordinate(this.getRow() + j, this.getCol() + i));
+                    //System.out.println("ADJ COORD: "+new Coordinate(this.getRow() + j, this.getCol() + i));
+
+                }
             }
         }
 
@@ -67,7 +65,7 @@ public class Coordinate implements Serializable {
 
 
     public boolean isValid() {
-        if (((this.getRow() < 0 || this.getRow() > 5) || (this.getCol() < 0 || this.getCol() > 5))) {
+        if (((this.getRow() < 0 || this.getRow() > 4) || (this.getCol() < 0 || this.getCol() > 4))) {
             return false;
         }
         return true;

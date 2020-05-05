@@ -72,5 +72,16 @@ public class ActionTest {
         player.playerTreeSetup(board);
     }
 
+    @Test
+    public void startEndTest(){
+        Action action = new Move(new Coordinate(0,0), new Coordinate(2,1));
+        action.setStart(new Coordinate(2,2));
+        action.setEnd(new Coordinate(5,4));
+        assertTrue(action.getStart().equals(new Coordinate(2,2)));
+        assertTrue(action.getEnd().equals(new Coordinate(5,4)));
+        Action action1 = new Move(new Coordinate(2,2), new Coordinate(5,4));
+        assertTrue(action.equals(action1));
+    }
+
 
 }
