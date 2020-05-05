@@ -51,10 +51,10 @@ public class Slot {
        return false;
     }
 
-    public void occupy(Worker w) throws Exception {
+    public void occupy(Worker w){
         if(this.isFree()){this.worker=w;}
         else{
-            throw new Exception("The selected cell is not free");
+            return;
         }
         this.free = false;
     }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.WinnerMessage;
 
@@ -128,11 +129,17 @@ public class Model {
     }
 
     public void selectPlayerPlaying(int id) {
-        ActionMessage actionMessage = new ActionMessage(id, this.getPlayer(id).getAvailableAction(),
-                this.getPlayer(id).getNickName());
-        System.out.println("COSTRUITO ACTIONMESSAGE IN SELECT MODEL");
-        modelListeners.firePropertyChange("sendAction",
-                null, actionMessage);
+        ActionMessage message = this.getPlayer(id).getAvailableAction();
+
+        System.out.println("COSTRUITO ACTIONMESSAGE IN SELECT MODEL"+message.getActionsAvailable());
+
+        if(message.getActionsAvailable().equals(ActionsEnum.BUILD)){
+            modelListeners.firePropertyChange("sendAction",
+                    null, message);
+        }else {
+            modelListeners.firePropertyChange("sendChoice",
+                    null, message);
+        }
     }
 
 

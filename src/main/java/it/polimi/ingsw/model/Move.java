@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class Move extends Action implements Serializable {
 
     public Move(Coordinate start, Coordinate end){
-        super(start, end);
+        super("move",start, end);
     }
 
     @Override
@@ -13,6 +13,11 @@ public class Move extends Action implements Serializable {
         if(!(that instanceof Move)) return false;
         return(this.getStart().equals(((Move) that).getStart()) &&
                 this.getEnd().equals(((Move) that).getEnd()));
+    }
+
+    @Override
+    public Action clone() {
+        return new Move(null,null);
     }
 }
 

@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.ActionsEnum;
+import it.polimi.ingsw.utils.messages.ActionMessage;
+
 import java.util.HashMap;
 import java.util.ArrayList;
 
@@ -205,50 +207,45 @@ public class Player {
         return treeMap.keySet();
     }
 
-    public ActionsEnum getAvailableAction() {
-        boolean build;
-        boolean move;
-        build = false;
-        move = false;
-        //viene attivato per il primo giocatore
-        if (actualWorker == null) {
-            for (TreeActionNode t : treeMap.get(this.getWorker(0)).getChildren()) {
-                if (t.getData() instanceof Build) {
-                    build = true;
-                } else if (t.getData() instanceof Move) {
-                    move = true;
-                }
+    public ActionMessage getAvailableAction() {
+        ArrayList<Action> actionList = new ArrayList<>();
+        ActionMessage message = new ActionMessage(this.id,this.nickName);
 
-            }
-            for (TreeActionNode t : treeMap.get(this.getWorker(1)).getChildren()) {
-                if (t.getData() instanceof Build) {
-                    build = true;
-                } else if (t.getData() instanceof Move) {
-                    move = true;
-                }
-
-            }
-            System.out.println("FINITO ALBERI PER PRIMO TURNO GIOCATORE");
+        if (actualWorker != null) {
+            actionList.addAll(treeMap.get(this.actualWorker).getChildrenActions());
         } else {
-            for (TreeActionNode t : treeMap.get(actualWorker).getChildren()) {
-                if (t.getData() instanceof Build) {
-                    build = true;
-                } else if (t.getData() instanceof Move) {
-                    move = true;
+            for (Worker w : workers) {
+                ArrayList<Action> actions = new ArrayList<>();
+                actions.addAll(treeMap.get(w).getChildrenActions());
+                for (Action a: actions){
+                    boolean isIn;
+                    isIn = false;
+                    for (Action d : actionList){
+                        if(d.getActionName().equalsIgnoreCase(a.getActionName()))isIn=true;
+                    }
+                    if(!isIn)actionList.add(a);
                 }
-
             }
         }
-        if (build && move) {
-            System.out.println("BOTH");
-            return ActionsEnum.BOTH;
-        } else if (build) {
-            System.out.println("BUILD");
-            return ActionsEnum.BUILD;
-        } else if (move) {
-            System.out.println("MOVE");
-            return ActionsEnum.MOVE;
+        for(Action a : actionList){
+            System.out.println("ACTIONLIST :: " + a.getActionName());
         }
-        return null;
+        if(actionList.size() == 0) {
+            System.out.println("NO AVAILABLE ACTIONS");
+            return null;
+        }else if(actionList.size() == 1){
+            message.setAction(actionList.get(0).clone());
+            message.setActionsAvailable(ActionsEnum.BUILD);
+            System.out.println("COSTRUITO ACTIONMESSAGE ::"+message.getActionsAvailable());
+
+            return message;
+
+        }else {
+            for(Action a : actionList)message.getChoices().add(a.getActionName());
+            message.setActionsAvailable(ActionsEnum.BOTH);
+        }
+
+        return message;
+
     }
 }

@@ -6,12 +6,14 @@ import java.util.Objects;
 public abstract class Action implements Serializable {
 
     private Coordinate start;
+    private String actionName;
     private Coordinate end;
     private boolean option = false; //da usare come yesno
 
-    public Action(Coordinate start, Coordinate end){
+    public Action(String actionName, Coordinate start, Coordinate end){
         this.start = start;
         this.end = end;
+        this.actionName = actionName;
     }
 
     public void setStart(Coordinate start) {
@@ -20,7 +22,7 @@ public abstract class Action implements Serializable {
     public void setEnd(Coordinate end){
         this.end = end;
     }
-
+    public String getActionName(){return this.actionName;}
     public Coordinate getStart(){
         return this.start;
     }
@@ -49,4 +51,6 @@ public abstract class Action implements Serializable {
     public void setOption(boolean option) {
         this.option = option;
     }
+
+    public abstract Action clone();
 }

@@ -162,18 +162,11 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public ActionMessage askAction(ActionMessage message) {
         printBoard();
-        printer.println(nickname + " make " + message.getActionsAvailable() + " x,y in z,w");
+        printer.println(nickname + " make " + message.getAction().getActionName() + " x,y in z,w");
         startingBrackets();
-        Action action = null;
-        if (message.getActionsAvailable() == ActionsEnum.MOVE) {
-            action = new Move(null, null);
-        } else if (message.getActionsAvailable() == ActionsEnum.BUILD) {
-            action = new Build(null, null);
-        } else {
-            //aggiungere caso BOTH
-        }
+
         playerChoice = scanner.nextLine();
-        message.setAction(parseAction(playerChoice, action));
+        message.setAction(parseAction(playerChoice, message.getAction()));
 
         return message;
     }

@@ -3,6 +3,8 @@ package it.polimi.ingsw.model;
 //TODO renderla classe astratta
 
 
+import java.io.Serializable;
+
 public class BasicGodCard {
     private boolean flag;
 
