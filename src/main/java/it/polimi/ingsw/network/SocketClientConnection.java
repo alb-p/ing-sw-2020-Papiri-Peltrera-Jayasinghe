@@ -100,6 +100,8 @@ public class SocketClientConnection implements Runnable {
                         view.receiveColor((ColorMessage) message);
                     } else if (inputObject instanceof ActionMessage) {
                         view.receiveAction((ActionMessage) message);
+                    } else if (inputObject instanceof ChoiceMessage) {
+                        view.receiveChoice((ChoiceMessage) message);
                     } else if (inputObject instanceof GodMessage) {
                         view.receiveGod((GodMessage) message);
                     } else if (inputObject instanceof InitialCardsMessage) {

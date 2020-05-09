@@ -2,6 +2,7 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.utils.messages.ActionMessage;
+import it.polimi.ingsw.utils.messages.ChoiceMessage;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,8 +25,11 @@ public class TurnHandler implements PropertyChangeListener {
             turnManager(message);
         } else if (evt.getPropertyName().equals("gameReadyResponse")) {
             model.buildPlayerTree(totalTurnCounter % playersPerGame);
-            System.out.println("BUILDTREE DONE");
             model.selectPlayerPlaying(totalTurnCounter % playersPerGame);
+        } else if(evt.getPropertyName().equals("choiceResponse")){
+            if(!model.selectChoice((ChoiceMessage)evt.getNewValue())){
+                endTurnManager();
+            }
         }
     }
 

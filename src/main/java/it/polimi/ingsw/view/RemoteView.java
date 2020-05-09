@@ -37,4 +37,6 @@ public abstract class RemoteView extends View {
     public abstract void updateVBoard(VirtualSlotMessage inputObject);
 
     public abstract void winnerMess(WinnerMessage inputObject);
+
+    public abstract ChoiceMessage askChoice(ChoiceMessage inputObject);
 }

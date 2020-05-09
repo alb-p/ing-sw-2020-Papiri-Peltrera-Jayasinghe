@@ -67,7 +67,9 @@ public class Client {
                                 send(view.setWorker((WorkerMessage) inputObject));
                             } else if (inputObject instanceof ActionMessage) {
                                 send(view.askAction((ActionMessage) inputObject));
-                            } else if (inputObject instanceof InitialCardsMessage) {
+                            }else if (inputObject instanceof ChoiceMessage) {
+                                send(view.askChoice((ChoiceMessage)inputObject));
+                            }else if (inputObject instanceof InitialCardsMessage) {
                                 send(view.askGodList((InitialCardsMessage) inputObject));
                             } else if (inputObject instanceof GodMessage) {
                                 send(view.askGod((GodMessage) inputObject));

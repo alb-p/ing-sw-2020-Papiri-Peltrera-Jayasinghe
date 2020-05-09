@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.gods.Demeter;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 
@@ -65,7 +66,8 @@ public class Player {
         } else if (card.equals("ATLAS")) {
             //  this.card = new Atlas();
         } else if (card.equals("DEMETER")) {
-            //  this.card = new Demeter();
+            this.card = new Demeter();
+            return;
         } else if (card.equals("HEPHAESTUS")) {
             //  this.card = new Hephaestus();
         } else if (card.equals("MINOTAUR")) {
@@ -159,6 +161,7 @@ public class Player {
             if (attemptedActionNode.isLeaf()) {
                 done = true;
             } else {
+                //for Demeter
 
             }
         }
@@ -234,6 +237,12 @@ public class Player {
             System.out.println("NO AVAILABLE ACTIONS");
             return null;
         }else if(actionList.size() == 1){
+            if(moveDone && buildDone){
+                message.setActionsAvailable(ActionsEnum.BOTH);
+                message.getChoices().add(actionList.get(0).getActionName());
+                message.getChoices().add("ENDTURN");
+                return message;
+            }
             message.setAction(actionList.get(0).clone());
             message.setActionsAvailable(ActionsEnum.BUILD);
             System.out.println("COSTRUITO ACTIONMESSAGE ::"+message.getActionsAvailable());
@@ -247,5 +256,33 @@ public class Player {
 
         return message;
 
+    }
+
+    public ActionMessage modifierTree(String message) {
+        ActionMessage actionMessage = new ActionMessage(id, nickName);
+        ArrayList<TreeActionNode> deleteNode = new ArrayList<>();
+
+        if(actualWorker != null) {
+            for (TreeActionNode t : treeMap.get(actualWorker).getChildren()){
+                if(!t.getData().getActionName().equals(message)){
+                    deleteNode.add(t);
+                }
+            }
+            treeMap.get(actualWorker).getChildren().removeAll(deleteNode);
+            /*
+            for(TreeActionNode t : deleteNode){
+                treeMap.get(actualWorker).getChildren().remove(t);
+            }*/
+            if(treeMap.get(actualWorker).isLeaf()){
+                done = true;
+                return null;
+            }
+            else{
+                actionMessage.setAction(treeMap.get(actualWorker).getChildren().get(0).getData().clone());
+                actionMessage.setActionsAvailable(ActionsEnum.BUILD);
+            }
+        }
+
+        return actionMessage;
     }
 }

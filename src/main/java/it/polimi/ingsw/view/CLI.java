@@ -36,8 +36,8 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public void welcomeMessage() {
         printer.println("\n" +
-                ANSIColor.WHITE+"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
-                ANSIColor.BLUE+"░░░░░╔╦═╦╗░░░░░░░░░░░░░╔╗░░░░░░░░░░░░\n" +
+                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
+                ANSIColor.BLUE + "░░░░░╔╦═╦╗░░░░░░░░░░░░░╔╗░░░░░░░░░░░░\n" +
                 "░░░░░║║║║╠═╦╗╔═╦═╦══╦═╗║╚╦═╗░░░░░░░░░\n" +
                 "░░░░░║║║║║╩╣╚╣═╣╬║║║║╩╣║╔╣╬║░░░░░░░░░\n" +
                 "░░░░░╚═╩═╩═╩═╩═╩═╩╩╩╩═╝╚═╩═╝░░░░░░░░░\n" +
@@ -45,7 +45,7 @@ public class CLI extends RemoteView implements Runnable {
                 "░░░░░║══╬═╗╔═╦╣╚╦═╦╦╬╬═╦╬╣░░░░░░░░░░░\n" +
                 "░░░░░╠══║╬╚╣║║║╔╣╬║╔╣║║║║║░░░░░░░░░░░\n" +
                 "░░░░░╚══╩══╩╩═╩═╩═╩╝╚╩╩═╩╝░░░░░░░░░░░\n" +
-                ANSIColor.WHITE+"░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
+                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
     }
 
     @Override
@@ -141,6 +141,31 @@ public class CLI extends RemoteView implements Runnable {
         printBreakers();
         printBreakers();
 
+    }
+
+    @Override
+    public ChoiceMessage askChoice(ChoiceMessage message) {
+        String input;
+        String onlyNumbers;
+        int parsed = 0;
+        printBoard();
+        printer.println("Hey "+nickname+"! Possibile actions: ");
+        do {
+            for (int i = 0; i < message.getChoices().size(); i++) {
+                printer.println(i + ":: " + message.getChoices().get(i) + ", ");
+            }
+            startingBrackets();
+            input = scanner.nextLine();
+            onlyNumbers = input.replaceAll("[^0-5]", "");
+            if (!onlyNumbers.equals("")) {
+                parsed = Integer.parseInt(onlyNumbers);
+            }
+            printer.println("CHOOSEN:: "+ onlyNumbers+ "PARSED:: "+ parsed);
+        } while (!(parsed < message.getChoices().size() && parsed >= 0));
+        message.setMessage(message.getChoices().get(parsed));
+        printBreakers();
+        printer.println();
+        return message;
     }
 
     @Override

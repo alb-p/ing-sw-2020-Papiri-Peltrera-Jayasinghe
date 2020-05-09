@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
+import it.polimi.ingsw.utils.messages.ChoiceMessage;
 import it.polimi.ingsw.utils.messages.WinnerMessage;
 
 import java.beans.PropertyChangeListener;
@@ -93,9 +94,7 @@ public class Model {
     }
 
     public void notifyChanges() {
-
         VirtualSlot oldVSlot;
-
         for (int i = 0; i < board.board.length; i++) {
             for (int j = 0; j < board.board.length; j++) {
 
@@ -138,10 +137,20 @@ public class Model {
                     null, message);
         }else {
             modelListeners.firePropertyChange("sendChoice",
-                    null, message);
+                    null, new ChoiceMessage(message));
         }
     }
 
+    //It modifies the action tree and returns true when player continues his turn, false when he want to end the turn
+    public boolean selectChoice(ChoiceMessage message){
+        ActionMessage actionMessage = this.getPlayer(message.getId()).modifierTree(message.getMessage());
+        if( actionMessage != null){
+            modelListeners.firePropertyChange("sendAction",
+                    null, actionMessage);
+            return true;
+        }
+        return false;
+    }
 
     public boolean checkWinner(int id) {
         if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(),board,oldBoard)) {

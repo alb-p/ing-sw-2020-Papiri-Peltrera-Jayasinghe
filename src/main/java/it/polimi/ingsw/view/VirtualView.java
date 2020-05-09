@@ -104,9 +104,13 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                         c.send(new WaitingMessage(((ActionMessage) message).getNickname()));
                     else c.send(message);
                 }
-
-
-            } else if (evt.getPropertyName().equals("gameReady")) {
+            }else if (evt.getPropertyName().equals("sendChoice")) {
+                for (SocketClientConnection c : connections) {
+                    if (c.getId() != ((Message) evt.getNewValue()).getId())
+                        c.send(new WaitingMessage(((ChoiceMessage) message).getNickname()));
+                    else c.send(message);
+                }
+            }else if (evt.getPropertyName().equals("gameReady")) {
                 for (SocketClientConnection c : connections) {
                     c.send(message);
                 }
@@ -179,5 +183,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         virtualViewListeners.addPropertyChangeListener(listener);
     }
 
-
+    public void receiveChoice(ChoiceMessage message) {
+        virtualViewListeners.firePropertyChange("choiceResponse", null, message);
+    }
 }
