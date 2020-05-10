@@ -1,6 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.gods.Demeter;
+import it.polimi.ingsw.gods.*;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 
@@ -64,14 +64,17 @@ public class Player {
         } else if (card.equals("ATHENA")) {
             //  this.card = new Athena();
         } else if (card.equals("ATLAS")) {
-            //  this.card = new Atlas();
+            this.card = new Atlas();
+            return;
         } else if (card.equals("DEMETER")) {
             this.card = new Demeter();
             return;
         } else if (card.equals("HEPHAESTUS")) {
-            //  this.card = new Hephaestus();
+            this.card = new Hephaestus();
+            return;
         } else if (card.equals("MINOTAUR")) {
-            //  this.card = new Minotaur();
+            this.card = new Minotaur();
+            return;
         } else if (card.equals("PAN")) {
             //  this.card = new Pan();
         } else if (card.equals("PROMETHEUS")) {
