@@ -73,7 +73,7 @@ public class Player {
             this.card = new Hephaestus();
             return;
         } else if (card.equals("MINOTAUR")) {
-            this.card = new Minotaur();
+            //this.card = new Minotaur();
             return;
         } else if (card.equals("PAN")) {
             //  this.card = new Pan();
@@ -295,21 +295,12 @@ public class Player {
                 }
                 treeMap.get(w).getChildren().removeAll(deleteNode);
             }
-            //TODO verificare che non entriamo mai in questo if
-            if(treeMap.get(actualWorker).isLeaf()){
-                done = true;
-                System.out.println("NON DOVRESTI ESSERE QUI! IF MODIFIER TREE");
-                return null;
+            worker = workers.get(0);
+            if(treeMap.get(worker).isLeaf()) {
+                worker = workers.get(1);
             }
-            else{
-                worker = workers.get(0);
-                if(treeMap.get(worker).isLeaf()) {
-                    worker = workers.get(1);
-                }
-                actionMessage.setAction(treeMap.get(worker).getChildren().get(0).getData().clone());
-                actionMessage.setActionsAvailable(ActionsEnum.BUILD);
-
-            }
+            actionMessage.setAction(treeMap.get(worker).getChildren().get(0).getData().clone());
+            actionMessage.setActionsAvailable(ActionsEnum.BUILD);
 
         }
 
