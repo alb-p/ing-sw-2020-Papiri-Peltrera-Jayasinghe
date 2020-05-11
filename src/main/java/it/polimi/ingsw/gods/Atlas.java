@@ -33,7 +33,7 @@ public class Atlas extends BasicGodCard {
         ArrayList<TreeActionNode> toAdd = new ArrayList<>();
         for (TreeActionNode m : root.getChildren()) {
             for (TreeActionNode b : m.getChildren()) {
-                if (board.infoSlot(b.getData().getEnd()).getConstructionLevel() < 3) {
+                if (board.infoSlot(b.getData().getEnd()).getConstructionLevel() <= 3) {
                     toAdd.add(new TreeActionNode(new BuildDome(b.getData().getStart(), b.getData().getEnd())));
                 }
             }
