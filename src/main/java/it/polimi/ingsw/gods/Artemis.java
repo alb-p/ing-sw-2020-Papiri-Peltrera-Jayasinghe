@@ -17,7 +17,7 @@ public class Artemis extends BasicGodCard {
             for (Coordinate c1 : firstMoveCoord.getAdjacentCoords()) {
 
                 if (board.infoSlot(c1).isFree() &&
-                        (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
+                        (board.infoSlot(firstMoveCoord).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
 
                     TreeActionNode moveNode = new TreeActionNode(new Move(firstMoveCoord, c1));
                     for (Coordinate c2 : c1.getAdjacentCoords()) {

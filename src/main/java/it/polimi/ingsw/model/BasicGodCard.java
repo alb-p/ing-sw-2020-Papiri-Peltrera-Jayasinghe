@@ -4,6 +4,8 @@ package it.polimi.ingsw.model;
 
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Set;
 
 public class BasicGodCard {
     private boolean flag;
@@ -37,7 +39,7 @@ public class BasicGodCard {
         return true;
     }
 
-    public void specialRule(Object o, Object o2, IslandBoard board) {
+    public void specialRule(HashMap<Worker, TreeActionNode> trees, Set<Worker> hashList, IslandBoard board) {
         System.out.println("SPECIALRULE");
         return;
     }

@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.messages.ActionMessage;
 
 import java.util.HashMap;
 import java.util.ArrayList;
+import java.util.Set;
 
 public class Player {
 
@@ -60,7 +61,8 @@ public class Player {
         if (card.equals("APOLLO")) {
             //  this.card = new Atlas();
         } else if (card.equals("ARTEMIS")) {
-            //  this.card = new Artemis();
+              this.card = new Artemis();
+              return;
         } else if (card.equals("ATHENA")) {
             //  this.card = new Athena();
         } else if (card.equals("ATLAS")) {
@@ -201,7 +203,7 @@ public class Player {
     }
 
 
-    public Object getTrees() {
+    public HashMap<Worker, TreeActionNode> getTrees() {
         return treeMap;
     }
 
@@ -209,7 +211,7 @@ public class Player {
         return (treeMap.get(worker));
     }
 
-    public Object getHashList() {
+    public Set<Worker> getHashList() {
         return treeMap.keySet();
     }
 
