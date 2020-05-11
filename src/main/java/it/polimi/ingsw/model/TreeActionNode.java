@@ -72,4 +72,12 @@ public class TreeActionNode {
         }
         return false;
     }
+
+    public TreeActionNode getChild(int i) {
+        return this.children.get(i);
+    }
+
+    public void removeChild(int i) {
+        this.children.remove(i);
+    }
 }
