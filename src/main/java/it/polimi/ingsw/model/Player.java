@@ -59,32 +59,25 @@ public class Player {
         BasicGodCard godCard = new BasicGodCard();
 
         if (card.equals("APOLLO")) {
-            //  this.card = new Atlas();
+            this.card = new Atlas();
         } else if (card.equals("ARTEMIS")) {
-              this.card = new Artemis();
-              return;
+            this.card = new Artemis();
         } else if (card.equals("ATHENA")) {
-            //  this.card = new Athena();
+            this.card = new Athena();
         } else if (card.equals("ATLAS")) {
             this.card = new Atlas();
-            return;
         } else if (card.equals("DEMETER")) {
             this.card = new Demeter();
-            return;
         } else if (card.equals("HEPHAESTUS")) {
             this.card = new Hephaestus();
-            return;
         } else if (card.equals("MINOTAUR")) {
-            //this.card = new Minotaur();
-            //return;
+            this.card = new Minotaur();
         } else if (card.equals("PAN")) {
-            //  this.card = new Pan();
+            this.card = new Pan();
         } else if (card.equals("PROMETHEUS")) {
             this.card = new Prometheus();
-            return;
         }
-        //TODO when gods are done remove this statement
-        this.card = new BasicGodCard();
+
 
     }
 
@@ -179,6 +172,10 @@ public class Player {
         return this.done;
     }
 
+    public void setNotBuildDone() {
+        buildDone = false;
+    }
+
     public int getId() {
         return id;
     }
@@ -218,7 +215,7 @@ public class Player {
 
     public ActionMessage getAvailableAction() {
         ArrayList<Action> actionList = new ArrayList<>();
-        ActionMessage message = new ActionMessage(this.id,this.nickName);
+        ActionMessage message = new ActionMessage(this.id, this.nickName);
 
         if (actualWorker != null) {
             actionList.addAll(treeMap.get(this.actualWorker).getChildrenActions());
@@ -226,24 +223,24 @@ public class Player {
             for (Worker w : workers) {
                 ArrayList<Action> actions = new ArrayList<>();
                 actions.addAll(treeMap.get(w).getChildrenActions());
-                for (Action a: actions){
+                for (Action a : actions) {
                     boolean isIn;
                     isIn = false;
-                    for (Action d : actionList){
-                        if(d.getActionName().equalsIgnoreCase(a.getActionName()))isIn=true;
+                    for (Action d : actionList) {
+                        if (d.getActionName().equalsIgnoreCase(a.getActionName())) isIn = true;
                     }
-                    if(!isIn)actionList.add(a);
+                    if (!isIn) actionList.add(a);
                 }
             }
         }
-        for(Action a : actionList){
+        for (Action a : actionList) {
             System.out.println("ACTIONLIST :: " + a.getActionName());
         }
-        if(actionList.size() == 0) {
+        if (actionList.size() == 0) {
             System.out.println("NO AVAILABLE ACTIONS");
             return null;
-        }else if(actionList.size() == 1){
-            if(moveDone && buildDone){
+        } else if (actionList.size() == 1) {
+            if (moveDone && buildDone) {
                 message.setActionsAvailable(ActionsEnum.BOTH);
                 message.getChoices().add(actionList.get(0).getActionName());
                 message.getChoices().add("ENDTURN");
@@ -251,12 +248,12 @@ public class Player {
             }
             message.setAction(actionList.get(0).clone());
             message.setActionsAvailable(ActionsEnum.BUILD);
-            System.out.println("COSTRUITO ACTIONMESSAGE ::"+message.getActionsAvailable());
+            System.out.println("COSTRUITO ACTIONMESSAGE ::" + message.getActionsAvailable());
 
             return message;
 
-        }else {
-            for(Action a : actionList)message.getChoices().add(a.getActionName());
+        } else {
+            for (Action a : actionList) message.getChoices().add(a.getActionName());
             message.setActionsAvailable(ActionsEnum.BOTH);
         }
 
@@ -269,10 +266,10 @@ public class Player {
         ActionMessage actionMessage = new ActionMessage(id, nickName);
         ArrayList<TreeActionNode> deleteNode = new ArrayList<>();
 
-        if(actualWorker != null) {
+        if (actualWorker != null) {
             worker = actualWorker;
-            for (TreeActionNode t : treeMap.get(actualWorker).getChildren()){
-                if(!t.getData().getActionName().equals(message)){
+            for (TreeActionNode t : treeMap.get(actualWorker).getChildren()) {
+                if (!t.getData().getActionName().equals(message)) {
                     deleteNode.add(t);
                 }
             }
@@ -281,25 +278,24 @@ public class Player {
             for(TreeActionNode t : deleteNode){
                 treeMap.get(actualWorker).getChildren().remove(t);
             }*/
-            if(treeMap.get(actualWorker).isLeaf()){
+            if (treeMap.get(actualWorker).isLeaf()) {
                 done = true;
                 return null;
-            }
-            else{
+            } else {
                 actionMessage.setAction(treeMap.get(actualWorker).getChildren().get(0).getData().clone());
                 actionMessage.setActionsAvailable(ActionsEnum.BUILD);
             }
-        }else{
-            for (Worker w : workers){
-                for (TreeActionNode t : treeMap.get(w).getChildren()){
-                    if(!t.getData().getActionName().equals(message)){
+        } else {
+            for (Worker w : workers) {
+                for (TreeActionNode t : treeMap.get(w).getChildren()) {
+                    if (!t.getData().getActionName().equals(message)) {
                         deleteNode.add(t);
                     }
                 }
                 treeMap.get(w).getChildren().removeAll(deleteNode);
             }
             worker = workers.get(0);
-            if(treeMap.get(worker).isLeaf()) {
+            if (treeMap.get(worker).isLeaf()) {
                 worker = workers.get(1);
             }
             actionMessage.setAction(treeMap.get(worker).getChildren().get(0).getData().clone());
