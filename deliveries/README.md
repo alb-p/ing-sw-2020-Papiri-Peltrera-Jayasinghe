@@ -3,3 +3,4 @@
 author: Alberto Papiri, Gioele Peltrera, Shamal Sandro Jayasinghe
 
 First match on 05.02.2020 from CLI. alberto won
+Second match with all gods on 05.12.2020 from CLI. alberto won

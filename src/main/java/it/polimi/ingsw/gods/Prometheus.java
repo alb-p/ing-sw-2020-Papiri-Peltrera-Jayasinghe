@@ -72,16 +72,13 @@ public class Prometheus extends BasicGodCard {
                                 if (board.infoSlot(c3).isFree() && !c3.equals(w.getPosition()) && !c3.equals(c1)) {
                                     TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
                                     moveNode.addChild(secondBuildNode);
-                                    System.out.println("AGGIUNGO SECONDBUILD IN MOVENODE, CASO NORMALE");
                                 } else if (c3.equals(w.getPosition())) {
                                     TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
                                     moveNode.addChild(secondBuildNode);
-                                    System.out.println("AGGIUNGO SECONDBUILD IN MOVENODE, w.getPosition()");
                                 } else if (c3.equals(c1)) {
                                     if (board.infoSlot(c3).getConstructionLevel() < 3) {
                                         TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
                                         moveNode.addChild(secondBuildNode);
-                                        System.out.println("AGGIUNGO SECONDBUILD IN MOVENODE, SULLA FIRST BUILD");
                                     }
                                 }
                             }
