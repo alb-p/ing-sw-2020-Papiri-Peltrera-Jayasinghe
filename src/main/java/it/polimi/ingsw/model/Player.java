@@ -75,7 +75,7 @@ public class Player {
             this.card = new Hephaestus();
             return;
         } else if (card.equals("MINOTAUR")) {
-            //this.card = new Minotaur();
+            this.card = new Minotaur();
             return;
         } else if (card.equals("PAN")) {
             //  this.card = new Pan();
@@ -239,6 +239,7 @@ public class Player {
             System.out.println("ACTIONLIST :: " + a.getActionName());
         }
         if(actionList.size() == 0) {
+            System.out.println("\n\nMove DONE ::"+moveDone +"\n\nBUILDDONE ::"+buildDone);
             System.out.println("NO AVAILABLE ACTIONS");
             return null;
         }else if(actionList.size() == 1){

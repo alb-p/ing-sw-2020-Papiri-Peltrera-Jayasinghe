@@ -20,8 +20,11 @@ public class Atlas extends BasicGodCard {
 
     private boolean buildDome(Player player, IslandBoard board, Action action) throws Exception {
         System.out.println("BUILDING DOME ::");
-        board.infoSlot(action.getEnd()).construct(Construction.DOME);
-        return (board.infoSlot(action.getEnd()).hasADome());
+        if(board.infoSlot(action.getEnd()).isFree()){
+            board.infoSlot(action.getEnd()).construct(Construction.DOME);
+            return true;
+        }
+        return false;
     }
 
     @Override

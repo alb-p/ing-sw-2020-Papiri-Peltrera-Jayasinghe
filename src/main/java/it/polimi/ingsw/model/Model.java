@@ -129,9 +129,6 @@ public class Model {
 
     public void selectPlayerPlaying(int id) {
         ActionMessage message = this.getPlayer(id).getAvailableAction();
-
-        System.out.println("COSTRUITO ACTIONMESSAGE IN SELECT MODEL"+message.getActionsAvailable());
-
         if(message.getActionsAvailable().equals(ActionsEnum.BUILD)){
             modelListeners.firePropertyChange("sendAction",
                     null, message);
