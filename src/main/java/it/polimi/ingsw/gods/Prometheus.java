@@ -2,46 +2,101 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.Scanner;
 
 public class Prometheus extends BasicGodCard {
-    String name = "Promethus";
-    boolean effect = false;
-    Coordinate savedCoord;
 
     //Your Turn: If your Worker does
     //not move up, it may build both
     //before and after moving
-    // MOVE 0,0 IN 0,1 & BUILD IN 1,1
-    //MOVE 0,0 IN 0,1 enter BUILD 0,1 IN 1,1 (2 lines)
+    // MOVE 0,0 IN 0,1 & BUILD IN 1,1 ok
     // BUILD 0,1 IN 0,2 & MOVE IN 1,1 & BUILD IN 1,2
-    //what happens if you get wrong input? (general case) what happens if no-levelUp condition isn't respected?
 /*
     @Override
-    public boolean turnHandler(Player player, IslandBoard board, String string, boolean halfDone) throws Exception {
-        String[] words = string.split(" ");
-        if (!halfDone && words[0].toUpperCase().equals("MOVE")) {
+    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
+        TreeActionNode root = super.cardTreeSetup(w, board);
+        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {     //first build
+            if (board.infoSlot(c1).isFree()) {
+                TreeActionNode firstBuildNode = new TreeActionNode(new FirstBuild(w.getPosition(), c1));
+                for (Coordinate c2 : w.getPosition().getAdjacentCoords()) {     //move
+                    if (board.infoSlot(c2).isFree() && board.infoSlot(w.getPosition()).getConstructionLevel() <=
+                            board.infoSlot(c2).getConstructionLevel()  && (!c2.equals(c1) && board.infoSlot(w.getPosition()).getConstructionLevel() >
+                            board.infoSlot(c1).getConstructionLevel() + 1) ) {
+                        if (!(c2.equals(c1) && board.infoSlot(w.getPosition()).getConstructionLevel() <=
+                                board.infoSlot(c1).getConstructionLevel() + 1) ) {
 
-            this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
-            if (words.length > 4) {
-                this.build(player.getWorker(stringToCoord(words[3])), stringToCoord(words[7]), board);
-                return true;
+
+                        TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
+                        for (Coordinate c3 : c2.getAdjacentCoords()) {
+                            if (board.infoSlot(c3).isFree()) {
+                                TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
+                                moveNode.addChild(secondBuildNode);
+                            }
+                        }
+                        firstBuildNode.addChild(moveNode);
+                    }
+                }
+                root.addChild(firstBuildNode);
             }
         }
-        if (halfDone && words[0].toUpperCase().equals("BUILD")) {
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
-            return true;
+        return root;
+    }*/
 
+
+    @Override
+    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
+        TreeActionNode moveNode;
+        moveNode = null;
+        TreeActionNode root = super.cardTreeSetup(w, board);
+        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {     //first build
+            if (board.infoSlot(c1).isFree()) {
+                TreeActionNode firstBuildNode = new TreeActionNode(new FirstBuild(w.getPosition(), c1));
+                for (Coordinate c2 : w.getPosition().getAdjacentCoords()) {     //move
+                    if (board.infoSlot(c2).isFree()) {
+                        if (c2.equals(c1)) {
+                            if (board.infoSlot(w.getPosition()).getConstructionLevel() >=
+                                   board.infoSlot(c1).getConstructionLevel()+1) {
+                                System.out.println("COORD, C1:: "+c1+" C2:: "+c2);
+                                System.out.println("SONO NELL'IF.WPOS:: "+board.infoSlot(w.getPosition()).getConstructionLevel()+
+                                        "SLOT:: "+ board.infoSlot(c1).getConstructionLevel());
+                                moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
+                            }
+                        } else {
+                            System.out.println();
+                            if (board.infoSlot(w.getPosition()).getConstructionLevel() >=
+                                    board.infoSlot(c2).getConstructionLevel()) {
+                                moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
+                            }
+                        }
+                        for (Coordinate c3 : c2.getAdjacentCoords()) {
+                            if (board.infoSlot(c3).isFree() && moveNode != null) {
+                                TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
+                                moveNode.addChild(secondBuildNode);
+                            }
+                        }
+                        if(moveNode != null && !moveNode.getChildren().isEmpty()) {
+                            firstBuildNode.addChild(moveNode);
+                        }
+                    }
+                }
+                if(!firstBuildNode.getChildren().isEmpty() &&
+                        !firstBuildNode.getChildren().get(0).getChildren().isEmpty()){
+                    root.addChild(firstBuildNode);
+                }
+
+            }
+            moveNode = null;
         }
-        //build-move-build I'm even considering the player moves in the newly built slot
-        if (!halfDone && words[0].toUpperCase().equals("BUILD") &&
-                board.infoSlot(stringToCoord(words[1])).getConstructionLevel() >=
-                        board.infoSlot(stringToCoord(words[7])).getConstructionLevel()) {
-            this.build(player.getWorker(stringToCoord(words[1])), stringToCoord(words[3]), board);
-            this.move(player.getWorker(stringToCoord(words[1])), stringToCoord(words[7]), board);
-            this.build(player.getWorker(stringToCoord(words[7])), stringToCoord(words[11]), board);
+        return root;
+    }
+
+    @Override
+    public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
+        if (action instanceof Move) {
+            return (this.move(player.getActualWorker(), action.getEnd(), board));
+        } else if (action instanceof Build || action instanceof FirstBuild) {
+            return (this.build(player.getActualWorker(), action.getEnd(), board));
         }
         return false;
     }
-*/
+
 }

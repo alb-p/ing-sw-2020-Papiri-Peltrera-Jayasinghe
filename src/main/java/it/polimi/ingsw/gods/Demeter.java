@@ -15,7 +15,7 @@ public class Demeter extends BasicGodCard {
         TreeActionNode root = super.cardTreeSetup(w, board);
         for (TreeActionNode first : root.getChildren()) {
             for (TreeActionNode second : first.getChildren()) {
-                for (Coordinate c : second.getData().getStart().getAdiacentCoords()) {
+                for (Coordinate c : second.getData().getStart().getAdjacentCoords()) {
                     if ((board.infoSlot(c).isFree() || c.equals(first.getData().getStart()))
                             && (!second.getData().getEnd().equals(c))) {                                          //stesso controllo che si fa anche nel build del basicGod
                         TreeActionNode buildNode = new TreeActionNode(new Build(second.getData().getStart(), c));

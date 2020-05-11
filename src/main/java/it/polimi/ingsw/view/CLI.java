@@ -152,7 +152,7 @@ public class CLI extends RemoteView implements Runnable {
         printer.println("Hey "+nickname+"! Possibile actions: ");
         do {
             for (int i = 0; i < message.getChoices().size(); i++) {
-                printer.println(i + ":: " + message.getChoices().get(i) + ", ");
+                printer.println(i + ":: " + message.getChoices().get(i));
             }
             startingBrackets();
             input = scanner.nextLine();
