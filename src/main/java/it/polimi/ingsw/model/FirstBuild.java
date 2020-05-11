@@ -2,12 +2,17 @@ package it.polimi.ingsw.model;
 
 import java.io.Serializable;
 
-public class FirstBuild extends Action implements Serializable {
+public class FirstBuild extends Build implements Serializable {
 
     public FirstBuild(Coordinate start, Coordinate end) {
-        super("First build", start, end);
+        super( start, end);
     }
 
+
+    @Override
+    public String getActionName() {
+        return "First build";
+    }
 
     @Override
     public boolean equals(Object o) {
