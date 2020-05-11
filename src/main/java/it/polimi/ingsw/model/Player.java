@@ -76,11 +76,12 @@ public class Player {
             return;
         } else if (card.equals("MINOTAUR")) {
             //this.card = new Minotaur();
-            return;
+            //return;
         } else if (card.equals("PAN")) {
             //  this.card = new Pan();
         } else if (card.equals("PROMETHEUS")) {
-            //this.card = new Prometheus();
+            this.card = new Prometheus();
+            return;
         }
         //TODO when gods are done remove this statement
         this.card = new BasicGodCard();
