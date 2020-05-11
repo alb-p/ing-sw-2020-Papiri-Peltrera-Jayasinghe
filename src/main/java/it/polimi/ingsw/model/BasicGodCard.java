@@ -69,14 +69,13 @@ public class BasicGodCard {
 
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board){
         TreeActionNode tree = new TreeActionNode(null);
-
-        for (Coordinate c1 : w.getPosition().getAdiacentCoords()) {  //controllo intorno al worker per fare move
+        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {  //controllo intorno al worker per fare move
 
             if (board.infoSlot(c1).isFree() &&
                     (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
 
                 TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c1));
-                for (Coordinate c2 : c1.getAdiacentCoords()) {                          //controllo intorno ad ogni posizione per fare build con un worker falso
+                for (Coordinate c2 : c1.getAdjacentCoords()) {                          //controllo intorno ad ogni posizione per fare build con un worker falso
                     if (board.infoSlot(c2).isFree()) {                                          //stesso controllo che si fa anche nel build del basicGod
                         TreeActionNode buildNode = new TreeActionNode(new Build(c1, c2));
                         moveNode.addChild(buildNode);
