@@ -160,7 +160,6 @@ public class CLI extends RemoteView implements Runnable {
             if (!onlyNumbers.equals("")) {
                 parsed = Integer.parseInt(onlyNumbers);
             }
-            printer.println("CHOOSEN:: "+ onlyNumbers+ "PARSED:: "+ parsed);
         } while (!(parsed < message.getChoices().size() && parsed >= 0));
         message.setMessage(message.getChoices().get(parsed));
         printBreakers();

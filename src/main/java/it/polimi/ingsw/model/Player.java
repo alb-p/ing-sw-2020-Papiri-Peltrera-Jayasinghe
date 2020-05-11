@@ -73,7 +73,7 @@ public class Player {
             this.card = new Hephaestus();
             return;
         } else if (card.equals("MINOTAUR")) {
-            this.card = new Minotaur();
+            //this.card = new Minotaur();
             return;
         } else if (card.equals("PAN")) {
             //  this.card = new Pan();
@@ -262,10 +262,12 @@ public class Player {
     }
 
     public ActionMessage modifierTree(String message) {
+        Worker worker;
         ActionMessage actionMessage = new ActionMessage(id, nickName);
         ArrayList<TreeActionNode> deleteNode = new ArrayList<>();
 
         if(actualWorker != null) {
+            worker = actualWorker;
             for (TreeActionNode t : treeMap.get(actualWorker).getChildren()){
                 if(!t.getData().getActionName().equals(message)){
                     deleteNode.add(t);
@@ -284,6 +286,22 @@ public class Player {
                 actionMessage.setAction(treeMap.get(actualWorker).getChildren().get(0).getData().clone());
                 actionMessage.setActionsAvailable(ActionsEnum.BUILD);
             }
+        }else{
+            for (Worker w : workers){
+                for (TreeActionNode t : treeMap.get(w).getChildren()){
+                    if(!t.getData().getActionName().equals(message)){
+                        deleteNode.add(t);
+                    }
+                }
+                treeMap.get(w).getChildren().removeAll(deleteNode);
+            }
+            worker = workers.get(0);
+            if(treeMap.get(worker).isLeaf()) {
+                worker = workers.get(1);
+            }
+            actionMessage.setAction(treeMap.get(worker).getChildren().get(0).getData().clone());
+            actionMessage.setActionsAvailable(ActionsEnum.BUILD);
+
         }
 
         return actionMessage;
