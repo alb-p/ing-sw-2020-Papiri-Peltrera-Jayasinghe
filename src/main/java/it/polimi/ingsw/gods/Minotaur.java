@@ -6,6 +6,13 @@ import java.util.ArrayList;
 
 public class Minotaur extends BasicGodCard {
 
+    //Your Move:
+    //Your Worker may move into
+    //an opponent Worker's space,
+    //if their worker can be forced
+    //one space backwards to an
+    //unoccupied space at any level.
+
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action.getActionName().equalsIgnoreCase("move")) {

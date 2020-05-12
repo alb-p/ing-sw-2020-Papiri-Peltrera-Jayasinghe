@@ -4,6 +4,14 @@ import it.polimi.ingsw.model.*;
 
 public class Hephaestus extends BasicGodCard {
 
+
+    //Your Build:
+    //Your Worker may build
+    //one additional block
+    //(not dome) on top of
+    //your first block.
+
+
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root =  super.cardTreeSetup(w, board);
