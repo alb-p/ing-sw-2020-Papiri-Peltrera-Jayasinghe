@@ -2,9 +2,6 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.HashMap;
-import java.util.Set;
-
 public class Apollo extends BasicGodCard {
 
     //Your Move: Your Worker may
@@ -50,15 +47,12 @@ public class Apollo extends BasicGodCard {
         if(board.infoSlot(end).workerOnSlot() && board.infoSlot(end).getWorker().getColor() != w.getColor() &&
                 (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(end).getConstructionLevel() >= -1)){
             oppWorker = board.infoSlot(end).getWorker();
-            System.out.println("OPPWORKER:: "+board.infoSlot(end).getWorker());
             oppWorker.setPosition(start);
             board.infoSlot(start).free();
             board.infoSlot(start).occupy(oppWorker);
-            System.out.println("OPP POS:: "+oppWorker.getPosition()+" " +oppWorker );
             w.setPosition(end);
             board.infoSlot(end).free();
             board.infoSlot(end).occupy(w);
-            System.out.println("ACTWOR POS:: "+w.getPosition()+" " +w );
             return true;
         }
         return false;
