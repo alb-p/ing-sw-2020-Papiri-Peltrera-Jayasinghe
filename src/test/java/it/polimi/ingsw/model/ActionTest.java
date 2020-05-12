@@ -15,26 +15,12 @@ public class ActionTest {
     BasicGodCard card;
 
     @Before
-    public void init() {
+    public void setupBoardTest() throws Exception {
+
         player = new Player(0, "NICK", "WHITE");
         board = new IslandBoard();
         card = new BasicGodCard();
-        player.setCard("STDGOD");
-
-        try {
-            setupBoardTest();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-    @BeforeEach
-    public void restartBoard(){
-
-    }
-
-    @BeforeEach
-    public void setupBoardTest() throws Exception {
+        player.setCard("ATLAS");
         board.infoSlot(new Coordinate(4,0)).construct(Construction.DOME);
         board.infoSlot(new Coordinate(1,1)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1,1)).construct(Construction.DOME);
@@ -44,6 +30,8 @@ public class ActionTest {
         board.infoSlot(new Coordinate(1,4)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(2,2)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(2,2));
+        board.infoSlot(new Coordinate(4,4)).occupy(player.getWorker(1));
+        player.getWorker(1).setPosition(new Coordinate(4,4));
 
     }
 

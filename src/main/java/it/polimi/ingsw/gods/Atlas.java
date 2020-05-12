@@ -7,6 +7,12 @@ import java.util.ArrayList;
 
 public class Atlas extends BasicGodCard {
 
+
+    //Your Build:
+    //Your Worker may build
+    //a dome at any level.
+
+
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
 
