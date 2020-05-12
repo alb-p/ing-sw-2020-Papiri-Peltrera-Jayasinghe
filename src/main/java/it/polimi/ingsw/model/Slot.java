@@ -59,6 +59,11 @@ public class Slot {
         this.free = false;
     }
 
+    public boolean workerOnSlot(){
+        if(worker == null) return false;
+        return true;
+    }
+
     public void free(){
         this.worker = null;
         this.free= true;
