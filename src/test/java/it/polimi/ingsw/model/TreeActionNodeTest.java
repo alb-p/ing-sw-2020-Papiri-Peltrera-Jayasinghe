@@ -1,40 +1,33 @@
 package it.polimi.ingsw.model;
 
 import org.junit.Before;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
+
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class TreeActionNodeTest {
+public class TreeActionNodeTest {
 
     TreeActionNode node;
 
-    TreeActionNode nodemove;
-    TreeActionNode nodebuild;
+    TreeActionNode nodeMove;
+    TreeActionNode nodeBuild;
 
 
     @Before
-    public void init(){
-
-        node=new TreeActionNode(null);
-
-        nodemove=new TreeActionNode(new Move(new Coordinate(0,0),new Coordinate(1,1)));
-        nodebuild=new TreeActionNode(new Build(new Coordinate(1,1),new Coordinate(0,0)));
-
+    public void init() {
+        node = new TreeActionNode(null);
+        nodeMove = new TreeActionNode(new Move(new Coordinate(0, 0), new Coordinate(1, 1)));
+        nodeBuild = new TreeActionNode(new Build(new Coordinate(1, 1), new Coordinate(0, 0)));
     }
 
     @Test
-    void addChild() {
-
-       assertTrue(node.isLeaf());
-
-        node.addChild(nodemove);
-        node.addChild(nodebuild);
-
+    public void addChildTest() {
+        assertTrue(node.isLeaf());
+        node.addChild(nodeMove);
+        node.addChild(nodeBuild);
         assertFalse(node.isLeaf());
         assertTrue(node.getChildren().get(0) != null);
         assertTrue(node.getChild(0).getData().getActionName().equals("move"));
@@ -44,40 +37,29 @@ class TreeActionNodeTest {
     }
 
     @Test
-    void getChildren() {
-
-
-        node.addChild(nodemove);
-        node.addChild(nodebuild);
-
-        ArrayList<TreeActionNode> list=node.getChildren();
-        assertTrue(list.size()==2);
+    public void getChildrenTest() {
+        node.addChild(nodeMove);
+        node.addChild(nodeBuild);
+        ArrayList<TreeActionNode> list = node.getChildren();
+        assertTrue(list.size() == 2);
         assertTrue(list.get(0).getData().getActionName().equals("move"));
         assertTrue(list.get(1).getData().getActionName().equals("build"));
+    }
+
+    @Test
+    public void getParentTest() {
+        nodeMove.addChild(nodeBuild);
+        node.addChild(nodeMove);
+        assertTrue(nodeBuild.getParent() != null);
+        assertTrue(nodeBuild.getParent().getData() instanceof Move);
 
     }
 
     @Test
-    void getParent() {
-
-        nodemove.addChild(nodebuild);
-        node.addChild(nodemove);
-
-        assertTrue(nodebuild.getParent()!=null);
-        assertTrue(nodebuild.getParent().getData() instanceof Move);
-
-    }
-
-    @Test
-    void isLeaf() {
-
-        assertTrue(nodemove.isLeaf());
-        nodemove.addChild(nodebuild);
-        assertFalse(nodemove.isLeaf());
-
-
-
-
+    public void isLeafTest() {
+        assertTrue(nodeMove.isLeaf());
+        nodeMove.addChild(nodeBuild);
+        assertFalse(nodeMove.isLeaf());
     }
 
 
