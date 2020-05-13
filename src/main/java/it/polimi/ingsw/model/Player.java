@@ -305,4 +305,16 @@ public class Player {
 
         return actionMessage;
     }
+
+    //returns true if both trees don't have other available actions.
+    public boolean treesAreLeaf() {
+        int locked = 0;
+        for (TreeActionNode t: treeMap.values()){
+            if(t.isLeaf())locked++;
+            System.out.println("LEAFS:: "+t.getChildren().size());
+        }
+        System.out.println("TREES ARE LEAF:: locked: "+ locked);
+        if (locked==2)return true;
+        return false;
+    }
 }

@@ -3,6 +3,7 @@ package it.polimi.ingsw.model;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.ChoiceMessage;
+import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.WinnerMessage;
 
 import java.beans.PropertyChangeListener;
@@ -84,23 +85,26 @@ public class Model {
 
                 oldVSlot = oldBoard.getSlot(i, j);
                 vSlot = new VirtualSlot(board.getSlot(i, j), new Coordinate(i, j));
-                if(!oldVSlot.equals(vSlot)){
+                if (!oldVSlot.equals(vSlot)) {
                     System.out.println("CAMBIATO SLOT");
                     modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
                 }
                 modelListeners.firePropertyChange("deltaUpdate", oldVSlot, vSlot);
 
             }
-        }System.out.println("OLDBOARD:: "+oldBoard);
+        }
+        System.out.println("OLDBOARD:: " + oldBoard);
     }
 
-    public void buildPlayerTree(int i) {
+    public boolean buildPlayerTree(int i) {
         try {
             this.getPlayer(i).playerTreeSetup(board);
+            verifyTree(i);
+
         } catch (Exception e) {
             e.printStackTrace();
         }
-        verifyTree(i);
+        return getPlayer(i).treesAreLeaf();
     }
 
     //It invokes specialRule on oppent gods'
@@ -114,19 +118,19 @@ public class Model {
 
     public void selectPlayerPlaying(int id) {
         ActionMessage message = this.getPlayer(id).getAvailableAction();
-        if(message.getActionsAvailable().equals(ActionsEnum.BUILD)){
+        if (message.getActionsAvailable().equals(ActionsEnum.BUILD)) {
             modelListeners.firePropertyChange("sendAction",
                     null, message);
-        }else {
+        } else {
             modelListeners.firePropertyChange("sendChoice",
                     null, new ChoiceMessage(message));
         }
     }
 
     //It modifies the action tree and returns true when player continues his turn, false when he want to end the turn
-    public boolean selectChoice(ChoiceMessage message){
+    public boolean selectChoice(ChoiceMessage message) {
         ActionMessage actionMessage = this.getPlayer(message.getId()).modifierTree(message.getMessage());
-        if( actionMessage != null){
+        if (actionMessage != null) {
             modelListeners.firePropertyChange("sendAction",
                     null, actionMessage);
             return true;
@@ -135,10 +139,34 @@ public class Model {
     }
 
     public boolean checkWinner(int id) {
-        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(),board,oldBoard)) {
+        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
             modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, this.getPlayer(id).getNickName()));
             return true;
         }
         return false;
+    }
+
+    public void removePlayer(int id) {
+        for (int i = 0; i < 2; i++) {
+            board.infoSlot(getPlayer(id).getWorker(i).getPosition()).free();
+            getPlayer(id).getWorker(i).setPosition(new Coordinate(-1, -1));
+        }
+        Player toRemove = getPlayer(id);
+        players.remove(toRemove);
+        notifyChanges();
+    }
+
+    public void endGameForNoAvailableMoves(int id) {
+        int winnerID = -1;
+        for (Player player : players) {
+            if (player.getId() != id) winnerID = player.getId();
+        }
+        modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
+
+    }
+
+    public void notifyPlayerHasLost(int id) {
+        modelListeners.firePropertyChange("playerLostDetected", null, new GenericMessage(id, this.getPlayer(id).getNickName()," has no more available actions!"));
+
     }
 }

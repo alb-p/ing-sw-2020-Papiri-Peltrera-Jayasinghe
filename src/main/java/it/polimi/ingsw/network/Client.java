@@ -67,9 +67,9 @@ public class Client {
                                 send(view.setWorker((WorkerMessage) inputObject));
                             } else if (inputObject instanceof ActionMessage) {
                                 send(view.askAction((ActionMessage) inputObject));
-                            }else if (inputObject instanceof ChoiceMessage) {
-                                send(view.askChoice((ChoiceMessage)inputObject));
-                            }else if (inputObject instanceof InitialCardsMessage) {
+                            } else if (inputObject instanceof ChoiceMessage) {
+                                send(view.askChoice((ChoiceMessage) inputObject));
+                            } else if (inputObject instanceof InitialCardsMessage) {
                                 send(view.askGodList((InitialCardsMessage) inputObject));
                             } else if (inputObject instanceof GodMessage) {
                                 send(view.askGod((GodMessage) inputObject));
@@ -79,10 +79,12 @@ public class Client {
                                 view.gameIsReady((StartGameMessage) inputObject);
                             } else if (inputObject instanceof WaitingMessage) {
                                 view.waitingMess((WaitingMessage) inputObject);
+                            }  else if (inputObject instanceof GenericMessage) {
+                                view.genericMess((GenericMessage) inputObject);
                             } else if (inputObject instanceof WinnerMessage) {
                                 view.winnerMess((WinnerMessage) inputObject);
                                 online = false;
-                            }else if (inputObject instanceof VirtualSlotMessage) {
+                            } else if (inputObject instanceof VirtualSlotMessage) {
                                 view.updateVBoard((VirtualSlotMessage) inputObject);
 
                             }
@@ -120,9 +122,9 @@ public class Client {
     }
 
     private void closeConnection() {
-        try{
+        try {
             socket.close();
-        }catch (IOException e){
+        } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
     }

@@ -104,19 +104,22 @@ public class VirtualView implements Runnable, PropertyChangeListener {
                         c.send(new WaitingMessage(((ActionMessage) message).getNickname()));
                     else c.send(message);
                 }
-            }else if (evt.getPropertyName().equals("sendChoice")) {
+            } else if (evt.getPropertyName().equals("sendChoice")) {
                 for (SocketClientConnection c : connections) {
                     if (c.getId() != ((Message) evt.getNewValue()).getId())
                         c.send(new WaitingMessage(((ChoiceMessage) message).getNickname()));
                     else c.send(message);
                 }
-            }else if (evt.getPropertyName().equals("gameReady")) {
+            } else if (evt.getPropertyName().equals("gameReady")) {
                 for (SocketClientConnection c : connections) {
                     c.send(message);
                 }
                 notifyGameReady();
-            }
-            else if (evt.getPropertyName().equals("winnerDetected")) {
+            } else if (evt.getPropertyName().equals("winnerDetected")) {
+                for (SocketClientConnection c : connections) {
+                    c.send(message);
+                }
+            } else if (evt.getPropertyName().equals("playerLostDetected")) {
                 for (SocketClientConnection c : connections) {
                     c.send(message);
                 }

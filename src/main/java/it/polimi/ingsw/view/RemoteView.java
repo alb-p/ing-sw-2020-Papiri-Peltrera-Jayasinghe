@@ -39,4 +39,6 @@ public abstract class RemoteView extends View {
     public abstract void winnerMess(WinnerMessage inputObject);
 
     public abstract ChoiceMessage askChoice(ChoiceMessage inputObject);
+
+    public abstract void genericMess(GenericMessage inputObject);
 }

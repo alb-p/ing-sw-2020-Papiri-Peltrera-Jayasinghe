@@ -13,6 +13,12 @@ public class GenericMessage implements Message , Serializable {
     }
 
 
+    public GenericMessage(int i,String nickname, String message){
+        this.message=nickname+message;
+        this.id=i;
+    }
+
+
     public int getId(){
         return this.id;
     }

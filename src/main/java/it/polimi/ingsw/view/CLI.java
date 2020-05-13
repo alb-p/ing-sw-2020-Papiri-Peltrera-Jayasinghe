@@ -177,6 +177,15 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
+    public void genericMess(GenericMessage inputObject) {
+        printBreakers();
+        printBreakers();
+        printer.println("\n\n"+ANSIColor.BOLD+ANSIColor.RED+inputObject.getMessage()+ANSIColor.RESET+"\n\n");
+        printBreakers();
+        printBreakers();
+    }
+
+    @Override
     public void waitingMess(WaitingMessage inputObject) {
         printBoard();
         printer.println(inputObject.getMessage());
