@@ -50,7 +50,7 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     public ColorMessage askColor(ColorMessage message) {
-        printer.println("Ciao " + nickname + "! Quale colore vuoi scegliere tra quelli disponibili?");
+        printer.println("Hey " + nickname + "! Which colour you want to choose among those available?");
         for (Color c : message.getColors()) {
             printer.print(c.getName() + " ");
         }
@@ -111,7 +111,6 @@ public class CLI extends RemoteView implements Runnable {
         col = 9;
         printer.println(message.getMessage());
         startingBrackets();
-        printer.print("row: ");
 
         String inputToParse;
         do {
@@ -122,10 +121,9 @@ public class CLI extends RemoteView implements Runnable {
         }while(row>5);
 
         startingBrackets();
-        printer.print("col: ");
         do {
             startingBrackets();
-            printer.print("row: ");
+            printer.print("col: ");
             inputToParse = "";
             col = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
         }while(col>5);
