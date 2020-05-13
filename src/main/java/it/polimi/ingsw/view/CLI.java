@@ -105,17 +105,30 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     public WorkerMessage setWorker(WorkerMessage message) {
         printBoard();
+        int row;
+        row = 9;
+        int col;
+        col = 9;
         printer.println(message.getMessage());
         startingBrackets();
         printer.print("row: ");
 
         String inputToParse;
-        inputToParse = "";
-        int row = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
+        do {
+            startingBrackets();
+            printer.print("row: ");
+            inputToParse = "";
+            row = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
+        }while(row>5);
+
         startingBrackets();
-        inputToParse = "";
         printer.print("col: ");
-        int col = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
+        do {
+            startingBrackets();
+            printer.print("row: ");
+            inputToParse = "";
+            col = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
+        }while(col>5);
         Coordinate c = new Coordinate(row, col);
         message.setCoordinate(c);
         return message;

@@ -59,7 +59,7 @@ public class Player {
         BasicGodCard godCard = new BasicGodCard();
 
         if (card.equals("APOLLO")) {
-            this.card = new Atlas();
+            this.card = new Apollo();
         } else if (card.equals("ARTEMIS")) {
             this.card = new Artemis();
         } else if (card.equals("ATHENA")) {

@@ -12,36 +12,6 @@ public class Prometheus extends BasicGodCard {
     //before and after moving
     // MOVE 0,0 IN 0,1 & BUILD IN 1,1 ok
     // BUILD 0,1 IN 0,2 & MOVE IN 1,1 & BUILD IN 1,2
-/*
-    @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-        TreeActionNode root = super.cardTreeSetup(w, board);
-        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {     //first build
-            if (board.infoSlot(c1).isFree()) {
-                TreeActionNode firstBuildNode = new TreeActionNode(new FirstBuild(w.getPosition(), c1));
-                for (Coordinate c2 : w.getPosition().getAdjacentCoords()) {     //move
-                    if (board.infoSlot(c2).isFree() && board.infoSlot(w.getPosition()).getConstructionLevel() <=
-                            board.infoSlot(c2).getConstructionLevel()  && (!c2.equals(c1) && board.infoSlot(w.getPosition()).getConstructionLevel() >
-                            board.infoSlot(c1).getConstructionLevel() + 1) ) {
-                        if (!(c2.equals(c1) && board.infoSlot(w.getPosition()).getConstructionLevel() <=
-                                board.infoSlot(c1).getConstructionLevel() + 1) ) {
-
-
-                        TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
-                        for (Coordinate c3 : c2.getAdjacentCoords()) {
-                            if (board.infoSlot(c3).isFree()) {
-                                TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
-                                moveNode.addChild(secondBuildNode);
-                            }
-                        }
-                        firstBuildNode.addChild(moveNode);
-                    }
-                }
-                root.addChild(firstBuildNode);
-            }
-        }
-        return root;
-    }*/
 
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
