@@ -103,6 +103,7 @@ public class Model {
         verifyTree(i);
     }
 
+    //It invokes specialRule on oppent gods'
     public void verifyTree(int currPlayer) {
         for (int i = 0; i < players.size(); i++) {
             if (currPlayer != i) {
