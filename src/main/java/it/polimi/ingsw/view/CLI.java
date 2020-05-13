@@ -110,7 +110,6 @@ public class CLI extends RemoteView implements Runnable {
         int col;
         col = 9;
         printer.println(message.getMessage());
-        startingBrackets();
 
         String inputToParse;
         do {
@@ -120,7 +119,6 @@ public class CLI extends RemoteView implements Runnable {
             row = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
         }while(row>5);
 
-        startingBrackets();
         do {
             startingBrackets();
             printer.print("col: ");
