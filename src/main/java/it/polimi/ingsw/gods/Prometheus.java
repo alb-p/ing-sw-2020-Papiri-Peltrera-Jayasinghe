@@ -70,68 +70,6 @@ public class Prometheus extends BasicGodCard {
 
     }
 
-    /*
-        @Override
-        public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-            ArrayList<TreeActionNode> promList = new ArrayList<>();
-            Coordinate start = w.getPosition();
-            Coordinate firstBuilding;
-            Coordinate destination;
-            Coordinate secondBuilding;
-            TreeActionNode root = super.cardTreeSetup(w, board);
-
-            for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {     //first build
-                if (board.infoSlot(c1).isFree()) {
-                    System.out.println("SONO IN PROM");
-                    TreeActionNode firstBuildNode = new TreeActionNode(new FirstBuild(w.getPosition(), c1));
-                    firstBuilding = c1;
-                    for (Coordinate c2 : w.getPosition().getAdjacentCoords()) {
-                        TreeActionNode moveNode;
-                        if (!(c2.equals(firstBuilding) && board.infoSlot(w.getPosition()).getConstructionLevel() >=
-                                board.infoSlot(firstBuilding).getConstructionLevel() + 1) || (!(board.infoSlot(c2).isFree() && board.infoSlot(w.getPosition()).getConstructionLevel() >=
-                                board.infoSlot(c2).getConstructionLevel()))) {
-                            break;
-                        }
-                        moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
-                        destination = c2;
-                        for (Coordinate c3 : destination.getAdjacentCoords()) {
-                            //speciali: start e firstbuilding
-                            if (board.infoSlot(c3).isFree() && !c3.equals(start) && !c3.equals(firstBuilding)) {
-                                TreeActionNode secondBuildNode = new TreeActionNode(new Build(destination, c3));
-                                moveNode.addChild(secondBuildNode);
-                                System.out.println("AGGIUNGO SECONDBUILD IN MOVENODE, CASO NORMALE");
-                                secondBuilding = c3;
-                            } else if (c3.equals(start)) {
-                                TreeActionNode secondBuildNode = new TreeActionNode(new Build(destination, c3));
-                                moveNode.addChild(secondBuildNode);
-                                System.out.println("AGGIUNGO SECONDBUILD IN MOVENODE, START");
-                                secondBuilding = c3;
-                            } else if (c3.equals(firstBuilding)) {
-                                if (board.infoSlot(c3).getConstructionLevel() < 3) {
-                                    TreeActionNode secondBuildNode = new TreeActionNode(new Build(destination, c3));
-                                    moveNode.addChild(secondBuildNode);
-                                    System.out.println("AGGIUNGO SECONDBUILD IN MOVENODE, SULLA FIRST BUILD");
-                                    secondBuilding = c3;
-                                }
-                            }
-                        }
-                        //verificare che il for c3 abbia prodotoo almeno un figlio per moveNode
-                        if (!moveNode.isLeaf()) {
-                            System.out.println("AGGIUNGO MOVENODE IN FIRSTBUILDNODE");
-                            firstBuildNode.addChild(moveNode);
-                        }
-                    }
-                    if (!firstBuildNode.isLeaf()) {
-                        System.out.println("AGGIUNGO FIRSTBUILD IN PROMLIST");
-                        promList.add(firstBuildNode);
-                    }
-
-                }
-            }
-            root.getChildren().addAll(promList);
-            return root;
-        }
-    */
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action instanceof Move) {
