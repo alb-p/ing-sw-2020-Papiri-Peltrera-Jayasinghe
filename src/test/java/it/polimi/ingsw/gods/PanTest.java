@@ -19,10 +19,15 @@ public class PanTest {
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.FLOOR);
 
+        board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
+        board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
+        board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
+
+
     }
 
     @Test
-    public void winningConditionTest() throws Exception {
+    public void winningConditionWithPowerTest() throws Exception {
         Player player = new Player(0, "Pippo", Color.GRAY);
         player.setCard("PAN");
         player.selectWorker(new Coordinate(2, 0));
@@ -34,7 +39,27 @@ public class PanTest {
 
 
         player.selectWorker(new Coordinate(2, 0));
+
         assertTrue(card.turnHandler(player,board,new Move(new Coordinate(2,0),new Coordinate(2,1))));
+
+        assertTrue(card.winningCondition(player.getWorker(0),board,virtualBoard));
+    }
+
+    @Test
+    public void winningConditionNormalTest() throws Exception {
+        Player player = new Player(0, "Pippo", Color.GRAY);
+        player.setCard("PAN");
+        player.selectWorker(new Coordinate(2, 0));
+        board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
+        player.getWorker(0).setPosition(new Coordinate(2, 0));
+
+
+        VirtualBoard virtualBoard=new VirtualBoard(board);
+
+
+        player.selectWorker(new Coordinate(2, 0));
+
+        assertTrue(card.turnHandler(player,board,new Move(new Coordinate(2,0),new Coordinate(1,0))));
 
         assertTrue(card.winningCondition(player.getWorker(0),board,virtualBoard));
     }

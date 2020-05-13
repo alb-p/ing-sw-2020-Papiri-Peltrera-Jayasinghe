@@ -7,6 +7,8 @@ import it.polimi.ingsw.model.Worker;
 
 public class Pan extends BasicGodCard {
 
+    //VINCO SE SCENDO DI DUE LIVELLI
+
     @Override
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
         if (virtualBoard.getSlot(w.getOldPosition().getRow(),w.getOldPosition().getCol()).getHeight() == 2 &&
