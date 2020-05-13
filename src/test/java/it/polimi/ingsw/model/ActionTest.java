@@ -3,9 +3,7 @@ package it.polimi.ingsw.model;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 
-import javax.naming.InsufficientResourcesException;
 
 import static org.junit.Assert.*;
 
