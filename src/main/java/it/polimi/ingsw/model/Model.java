@@ -57,24 +57,8 @@ public class Model {
         return null;
     }
 
-    public int getIndex(int id) {
-        for (int i = 0; i < players.size(); i++) {
-            if (players.get(i).getId() == id)
-                return i;
-        }
-        return -1;
-    }
-
-
     public int getNumOfPlayers() {
         return this.players.size();
-    }
-
-    public boolean nameDuplicate(String name) {
-        for (Player p : players) {
-            if (p.getNickName().equals(name)) return true;
-        }
-        return false;
     }
 
     public void turnHandler(int idPlayerPlaying, Action message) {

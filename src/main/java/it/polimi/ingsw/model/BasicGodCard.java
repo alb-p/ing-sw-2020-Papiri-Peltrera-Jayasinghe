@@ -26,7 +26,6 @@ public class BasicGodCard {
     public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         if (w.getPosition().isAdjacent(coord) && board.infoSlot(coord).isFree()) {
             Slot slot = board.infoSlot(coord);
-            //construction.build(slot);
             if (board.infoSlot(coord).getConstructionLevel() < 3) {
                 slot.construct(Construction.FLOOR);
             } else {
@@ -34,7 +33,6 @@ public class BasicGodCard {
             }
         } else {
             return false;
-            //throw new Exception("Invalid build");
         }
         return true;
     }
