@@ -16,8 +16,8 @@ public class Minotaur extends BasicGodCard {
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action.getActionName().equalsIgnoreCase("move")) {
-            if(!this.modMove(player.getActualWorker(), action.getEnd(), board)){
-                return this.move(player.getActualWorker(), action.getEnd(), board);
+            if(!this.move(player.getActualWorker(), action.getEnd(), board)){
+                return this.modMove(player.getActualWorker(), action.getEnd(), board);
             }
             return true;
         } else if (action.getActionName().equalsIgnoreCase("build")) {

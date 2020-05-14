@@ -99,6 +99,9 @@ public class Model {
     public boolean buildPlayerTree(int i) {
         try {
             this.getPlayer(i).playerTreeSetup(board);
+            if (getPlayer(i).treesAreLeaf()) {
+                return true;
+            }
             verifyTree(i);
 
         } catch (Exception e) {
@@ -109,9 +112,10 @@ public class Model {
 
     //It invokes specialRule on oppent gods'
     public void verifyTree(int currPlayer) {
-        for (int i = 0; i < players.size(); i++) {
-            if (currPlayer != i) {
-                this.getPlayer(i).getCard().specialRule(this.getPlayer(currPlayer).getTrees(), this.getPlayer(currPlayer).getHashList(), board);
+        for (Player p : players) {
+            if (p.getId() != currPlayer) {
+                p.getCard().specialRule(this.getPlayer(currPlayer).getTrees(), this.getPlayer(currPlayer).getHashList(), board);
+
             }
         }
     }
@@ -166,7 +170,7 @@ public class Model {
     }
 
     public void notifyPlayerHasLost(int id) {
-        modelListeners.firePropertyChange("playerLostDetected", null, new GenericMessage(id, this.getPlayer(id).getNickName()," has no more available actions!"));
+        modelListeners.firePropertyChange("playerLostDetected", null, new GenericMessage(id, this.getPlayer(id).getNickName(), " has no more available actions!"));
 
     }
 }

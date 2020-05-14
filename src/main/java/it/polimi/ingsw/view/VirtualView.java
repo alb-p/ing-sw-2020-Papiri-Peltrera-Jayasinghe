@@ -189,4 +189,5 @@ public class VirtualView implements Runnable, PropertyChangeListener {
     public void receiveChoice(ChoiceMessage message) {
         virtualViewListeners.firePropertyChange("choiceResponse", null, message);
     }
+
 }

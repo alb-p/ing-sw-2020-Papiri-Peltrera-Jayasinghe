@@ -3,6 +3,7 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -42,11 +43,13 @@ public class SocketClientConnection implements Runnable {
 
     public synchronized void send(Object message) {
         try {
+            if(socket.isClosed())return;
             outSocket.reset();
             outSocket.writeObject(message);
             outSocket.flush();
-        } catch (IOException e) {
-            System.err.println(e.getMessage());
+
+        }catch (IOException e){
+            e.printStackTrace();
         }
 
     }
@@ -88,7 +91,7 @@ public class SocketClientConnection implements Runnable {
     @Override
     public void run() {
         try {
-            while (isActive()) {
+            while (!socket.isClosed()) {
                 Object inputObject = inSocket.readObject();
 
                 if (inputObject instanceof Message) {
@@ -113,9 +116,14 @@ public class SocketClientConnection implements Runnable {
                     }
                 }
             }
-            socket.close();
+
         } catch (Exception e) {
-            e.printStackTrace();
+
+            try {
+                socket.close();
+            } catch (IOException ioException) {
+                ioException.printStackTrace();
+            }
         }
     }
 }
