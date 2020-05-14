@@ -7,6 +7,8 @@ import java.util.Set;
 
 public class Athena extends BasicGodCard {
 
+    //SE SALGO DI LIVELLO GLI AVVERSARI NON POSSONO FARLO DURANTE QUESTO TURNO
+
     private boolean specialRuleActivated=false;
 
 

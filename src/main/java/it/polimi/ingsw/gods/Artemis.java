@@ -4,7 +4,7 @@ import it.polimi.ingsw.model.*;
 
 public class Artemis extends BasicGodCard {
 
-
+    //POSSO FARE DUE MOVE
 
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
