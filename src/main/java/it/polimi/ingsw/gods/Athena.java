@@ -31,7 +31,10 @@ public class Athena extends BasicGodCard {
                     int start = board.infoSlot(node.getChild(i).getData().getStart()).getConstructionLevel();
                     int end = board.infoSlot(node.getChild(i).getData().getEnd()).getConstructionLevel();
 
-                    if (end - start > 0) node.removeChild(i);
+                    if (end - start > 0) {
+                        node.removeChild(i);
+                        i--;
+                    }
                     else elaboration(node.getChild(i), board,i);
                 } else elaboration(node.getChild(i), board,i);
 

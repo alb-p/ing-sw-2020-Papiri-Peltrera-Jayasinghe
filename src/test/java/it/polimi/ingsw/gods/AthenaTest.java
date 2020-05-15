@@ -64,7 +64,7 @@ public class AthenaTest {
         card.specialRule(map,keys,board);
 
 
-        // assertTrue(root.getChildren().size()==0);  NON VA!
+        assertTrue(root.getChildren().size()==0);
 
 
 
