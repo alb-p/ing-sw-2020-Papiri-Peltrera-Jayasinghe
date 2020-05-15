@@ -1,31 +1,30 @@
 package it.polimi.ingsw.model;
 
-import java.util.ArrayList;
 
-public class Worker{
+public class Worker {
 
     private Color color;
     private Coordinate[] coord;
 
 
-    public Worker(int row, int col, String color){
-        this.coord=new Coordinate[3];
-        this.coord[0] =  new Coordinate(row, col);
-        this.coord[1] =  new Coordinate(row, col);
-        this.coord[2] =  new Coordinate(row, col);
+    public Worker(int row, int col, String color) {
+        this.coord = new Coordinate[3];
+        this.coord[0] = new Coordinate(row, col);
+        this.coord[1] = new Coordinate(row, col);
+        this.coord[2] = new Coordinate(row, col);
         this.color = Enum.valueOf(Color.class, color.toUpperCase());
     }
 
-    public Worker(Coordinate coordinate, String color){
-        this.coord=new Coordinate[3];
+    public Worker(Coordinate coordinate, String color) {
+        this.coord = new Coordinate[3];
         this.coord[0] = coordinate;
         this.coord[1] = coordinate;
         this.coord[2] = coordinate;
         this.color = Enum.valueOf(Color.class, color.toUpperCase());
     }
 
-    public Worker(Coordinate coordinate, Color color){
-        this.coord=new Coordinate[3];
+    public Worker(Coordinate coordinate, Color color) {
+        this.coord = new Coordinate[3];
         this.coord[0] = coordinate;
         this.coord[1] = coordinate;
         this.coord[2] = coordinate;
@@ -33,44 +32,22 @@ public class Worker{
     }
 
 
-    public Coordinate getPosition(){
+    public Coordinate getPosition() {
         return this.coord[0];
     }
 
-    public Coordinate getOldPosition(){
-
+    public Coordinate getOldPosition() {
         return this.coord[1];
     }
 
-    public void setPosition(Coordinate coord){
-
-            this.coord[2]=this.coord[1];
-            this.coord[1]=this.coord[0];
-            this.coord[0] = coord;
-
-
+    public void setPosition(Coordinate coordinate) {
+        this.coord[2] = this.coord[1];
+        this.coord[1] = this.coord[0];
+        this.coord[0] = coordinate;
     }
 
-
-
-    public String toString(){
+    public String toString() {
         return this.color.toString();
-    }
-
-    //TODO is it necessary?
-    public Worker getColleague(IslandBoard board) throws Exception {
-        Coordinate coord;
-        Slot slot;
-        for(int i=0;i<board.board.length;i++){
-            for(int j=0;j<board.board.length;j++){
-                coord=new Coordinate(i,j);
-                slot=board.infoSlot(coord);
-                if(slot.getWorker()!=null&&slot.getWorker().color==this.color&&coord!=this.getPosition())
-                    return slot.getWorker();
-            }
-
-        }
-        return null;
     }
 
     public Color getColor() {

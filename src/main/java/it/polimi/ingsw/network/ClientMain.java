@@ -8,7 +8,7 @@ public class ClientMain {
     public static void main(String[] args){
 
         //String ip = "gc20.ddns.net"; // per giocare online
-        String ip = "127.0.0.1";
+        String ip = "gc20.ddns.net";
         int port = 4566;
 
         if(args.length!=0){

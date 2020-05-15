@@ -187,6 +187,7 @@ public class Player {
         actualWorker = null;
     }
 
+    //It set actual worker
     public boolean selectWorker(Coordinate coord) {
         for (int i = 0; i < workers.size(); i++) {
             if (workers.get(i).getPosition().equals(coord)) {
