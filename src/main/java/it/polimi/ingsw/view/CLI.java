@@ -6,6 +6,7 @@ import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.io.*;
+import java.util.Random;
 import java.util.Scanner;
 
 public class CLI extends RemoteView implements Runnable {
@@ -17,10 +18,33 @@ public class CLI extends RemoteView implements Runnable {
     private String nickname;
 
 
+
+    private String filename;                                            //DA TOGLIERE IN FUTURO
+    private void setOnFile(String playerChoice) {                       //
+        try {                                                           //
+            FileWriter fw = new FileWriter(filename, true);      //
+            BufferedWriter bw = new BufferedWriter(fw);                 //
+            bw.write(playerChoice);                                     //
+            bw.newLine();                                               //
+            bw.close();                                                 //
+        } catch (IOException e) {                                       //
+            e.printStackTrace();                                        //
+        }                                                               //
+    }                                                                   //
+
     public CLI() {
         this.scanner = new Scanner(System.in);
         this.printer = System.out;
         this.board = new VirtualBoard();
+
+        Random random = new Random();                                //DA TOGLIERE IN FUTURO
+        filename="partita"+random.nextInt(999)+".txt";        //
+        File myObj = new File(filename);                            //
+        try {                                                       //
+            myObj.createNewFile();                                  //
+        } catch (IOException e) {                                   //
+            e.printStackTrace();                                    //
+        }
     }
 
 
@@ -28,10 +52,13 @@ public class CLI extends RemoteView implements Runnable {
         printer.println(message.getMessage() + "\n");
         startingBrackets();
         playerChoice = scanner.nextLine();
+        setOnFile(playerChoice);////////////////////////////DA TOGLIERE IN FUTURO
         message.setNick(playerChoice);
         this.nickname = playerChoice;
         return message;
     }
+
+
 
     @Override
     public void welcomeMessage() {
@@ -56,6 +83,7 @@ public class CLI extends RemoteView implements Runnable {
         }
         startingBrackets();
         playerChoice = scanner.nextLine();
+        setOnFile(playerChoice);/////////////////////DA TOGLIERE IN FUTURO
         for (Color c : Color.values()) {
             if (playerChoice.equalsIgnoreCase(c.getName()))
                 message.setColor(c);
@@ -78,6 +106,7 @@ public class CLI extends RemoteView implements Runnable {
         for (int i = 0; i < message.getDim(); i++) {
             startingBrackets();
             s = scanner.nextLine();
+            setOnFile(s);///////////////////////////////////DA TOGLIERE IN FUTURO
             message.addToSelectedList(s.toUpperCase());
         }
         printBreakers();
@@ -94,6 +123,7 @@ public class CLI extends RemoteView implements Runnable {
         printer.println(message.getMessage());
         startingBrackets();
         String name = scanner.nextLine();
+        setOnFile(playerChoice);////////////////////////////////DA TOGLIERE IN FUTURO
         for (String s : message.getNames()) {
             if (s.equalsIgnoreCase(name))
                 message.setChosenName(name);
@@ -125,6 +155,9 @@ public class CLI extends RemoteView implements Runnable {
             inputToParse = "";
             col = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
         }while(col>5);
+
+        setOnFile(String.valueOf(row));////////////////////////////DA TOGLIERE IN FUTURO
+        setOnFile(String.valueOf(col));///////////////////////////
         Coordinate c = new Coordinate(row, col);
         message.setCoordinate(c);
         return message;
@@ -165,6 +198,7 @@ public class CLI extends RemoteView implements Runnable {
             }
             startingBrackets();
             input = scanner.nextLine();
+            setOnFile(input);//////////////////////////DA TOGLIERE IN FUTURO
             onlyNumbers = input.replaceAll("[^0-5]", "");
             if (!onlyNumbers.equals("")) {
                 parsed = Integer.parseInt(onlyNumbers);
@@ -196,7 +230,9 @@ public class CLI extends RemoteView implements Runnable {
     public GodMessage askGod(GodMessage inputObject) {
         printer.println(inputObject.getMessage());
         startingBrackets();
-        inputObject.setGod(scanner.nextLine().toUpperCase());
+        String input=scanner.nextLine().toUpperCase();
+        setOnFile(input);////////////////////////////////DA TOGLIERE IN FUTURO
+        inputObject.setGod(input);
         printBreakers();
         return inputObject;
     }
@@ -208,6 +244,7 @@ public class CLI extends RemoteView implements Runnable {
         startingBrackets();
 
         playerChoice = scanner.nextLine();
+        setOnFile(playerChoice);//////////////////////////////////DA TOGLIERE IN FUTURO
         message.setAction(parseAction(playerChoice, message.getAction()));
 
         return message;
@@ -216,7 +253,9 @@ public class CLI extends RemoteView implements Runnable {
     public SetupMessage askNumOfPlayers(SetupMessage message) {
         printer.println(message.getMessage());
         startingBrackets();
-        int i = Integer.parseInt(scanner.nextLine());
+        String input=scanner.nextLine();
+        setOnFile(input);///////////////////////////////DA TOGLIERE IN FUTURO
+        int i = Integer.parseInt(input);
         message.setField(i);
         return message;
     }
