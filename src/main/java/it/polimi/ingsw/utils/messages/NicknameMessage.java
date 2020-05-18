@@ -11,13 +11,13 @@ public class NicknameMessage implements Message , Serializable {
     private int id;
 
     public NicknameMessage() {
-        this.message = "Inserisci il nickname";
+        this.message = "Choose a nickname:";
         this.nick = null;
 
     }
 
     public NicknameMessage(int i) {
-        this.message = "Inserisci il nickname";
+        this.message = "Choose a nickname:";
         this.nick = null;
         id = i;
     }

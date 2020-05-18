@@ -26,9 +26,6 @@ public class Prometheus extends BasicGodCard {
                         if (c2.equals(c1)) {
                             if (board.infoSlot(w.getPosition()).getConstructionLevel() >=
                                     board.infoSlot(c1).getConstructionLevel() + 1) {
-                                System.out.println("COORD, C1:: " + c1 + " C2:: " + c2);
-                                System.out.println("SONO NELL'IF.WPOS:: " + board.infoSlot(w.getPosition()).getConstructionLevel() +
-                                        "SLOT:: " + board.infoSlot(c1).getConstructionLevel());
                                 moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
                             }
                         } else {

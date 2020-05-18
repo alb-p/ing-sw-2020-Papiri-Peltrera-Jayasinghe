@@ -56,10 +56,10 @@ public class GameHandler implements PropertyChangeListener {
             }
         }
 
-        //arriva una lista di god da virtualview scelti dal prescelto
+        //arriva una lista di god da virtualview scelti dal godly
         //i god validi vengono inseriti in una lista in initSetup.
         //quelli non validi vengono richiesti. Se tutti sono stati validati
-        //viene fatto scegliere un God al giocatore successivo al prescelto
+        //viene fatto scegliere un God al giocatore successivo al godly
         else if (evt.getPropertyName().equals("initialCardsResponse")) {
             InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();
             for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s);
@@ -75,7 +75,7 @@ public class GameHandler implements PropertyChangeListener {
         //un altro player viene cancellato dalla lista dei god disponibili
         //e assegna la divinità al player. dopo la cancellazione viene fatta
         //la richiesta di scelta god al player successivo in initSetup. Se
-        //tutti i god sono stati scelti viene fatta la richiesta al prescelto
+        //tutti i god sono stati scelti viene fatta la richiesta al godly
         //per la scelta del primo player
         else if (evt.getPropertyName().equals("godMessageResponse")) {
             GodMessage message = (GodMessage) evt.getNewValue();
@@ -137,20 +137,20 @@ public class GameHandler implements PropertyChangeListener {
     //buffer di creazione del player. Una volta ricevuto il nick e il colore
     //si procede alla creazione effettiva del player. Ad ogni inserimento del
     //nick si crea un hashmap del tipo ID -> nome. Se tutti i player sono stati
-    //creati si procede alla scelta random del prescelto a cui verrà inviato un
+    //creati si procede alla scelta random del godly a cui verrà inviato un
     //messaggio per decidere le divinità iniziali
     private void playerCreationQueue(Object value) {
         if (value instanceof NicknameMessage) {
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());
         } else if (value instanceof ColorMessage) {
             ColorMessage message = (ColorMessage) value;
-            System.out.println("PRESO : " + message.getColor());
+            System.out.println("GET : " + message.getColor());
             model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));
             if (model.getNumOfPlayers() == this.playersPerGame) {
                 Random random = new Random();
-                int presceltoID = random.nextInt(model.getNumOfPlayers());
-                System.out.println("l'ultimo player è: " + presceltoID);
-                data.initialCards(presceltoID, model.getNumOfPlayers());
+                int godlyID = random.nextInt(model.getNumOfPlayers());
+                System.out.println("Last player is: " + godlyID);
+                data.initialCards(godlyID, model.getNumOfPlayers());
 
             }
         }

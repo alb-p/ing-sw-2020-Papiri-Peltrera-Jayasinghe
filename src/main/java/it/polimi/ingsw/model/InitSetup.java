@@ -61,7 +61,7 @@ public class InitSetup {
     //rimanda messaggio se il giocatore ha impostato un nick non valido
     public void wrongUsername(int id) {
         NicknameMessage message = new NicknameMessage(id);
-        message.setMessage("Il nickname scelto è già in uso, prova ancora");
+        message.setMessage("Nickname is already being used, please try again: ");
         initSetupListeners.firePropertyChange("sendNick", false, message);
     }
 
@@ -121,7 +121,7 @@ public class InitSetup {
     public boolean isInListGod(String god) {
 
         for (String s : gods) {
-            if (s.equals(god.toUpperCase())) {
+            if (s.equalsIgnoreCase(god)) {
                 return true;
             }
         }
@@ -141,7 +141,7 @@ public class InitSetup {
     //cancella la divinità scelta e manda un messaggio di richiesta divinità al prossimo player
     //se tutte le divinità sono state scelte viene fatta la richiesta del first player al prescelto
     public void delGod(GodMessage mess, int numOfPlayers) {
-        int nextplayer;
+        int nextPlayer;
         for (int i = 0; i < chosenGods.size(); i++) {
             if (chosenGods.get(i).equals(mess.getGod())) {
                 chosenGods.remove(i);
@@ -152,9 +152,9 @@ public class InitSetup {
             askFirstPlayer(mess.getId());
 
         } else {
-            nextplayer = (mess.getId() + 1) % numOfPlayers;
-            System.out.println("NEXTPLA "+nextplayer+ "MESSid "+mess.getId()+ "PLAYERSPERGAME: "+numOfPlayers);
-            GodMessage message = new GodMessage(nextplayer, this.chosenGods);
+            nextPlayer = (mess.getId() + 1) % numOfPlayers;
+            System.out.println("NEXTPLA "+nextPlayer+ "MESSid "+mess.getId()+ "PLAYERSPERGAME: "+numOfPlayers);
+            GodMessage message = new GodMessage(nextPlayer, this.chosenGods);
             initSetupListeners.firePropertyChange("sendGod", null, message);
         }
 
