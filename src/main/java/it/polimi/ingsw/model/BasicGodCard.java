@@ -41,14 +41,6 @@ public class BasicGodCard {
         return;
     }
 
-    public boolean hasWon(Worker w, IslandBoard board) {
-        if (board.infoSlot(w.getOldPosition()).getConstructionLevel() == 2 &&
-                board.infoSlot(w.getPosition()).getConstructionLevel() == 3) {
-            return true;
-        }
-        return false;
-    }
-
 
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action instanceof Move) {
@@ -59,12 +51,6 @@ public class BasicGodCard {
         return false;
     }
 
-    public Coordinate stringToCoord(String string) {
-        String[] coords = string.split(",");
-        return new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
-
-
-    }
 
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board){
         TreeActionNode tree = new TreeActionNode(null);

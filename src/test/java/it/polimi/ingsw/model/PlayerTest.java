@@ -40,4 +40,5 @@ public class PlayerTest {
         assertFalse(player.selectWorker(new Coordinate(4,4)));
 
     }
+
 }
