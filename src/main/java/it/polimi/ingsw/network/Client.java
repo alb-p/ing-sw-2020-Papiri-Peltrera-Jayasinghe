@@ -9,11 +9,14 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Client {
+import static java.lang.Thread.sleep;
+
+public class Client{
 
     private Socket socket;
 
-    boolean online = false;
+    boolean online;
+    boolean pingOn;
     private RemoteView view;
     private ObjectInputStream inputStream;
     private ObjectOutputStream printStream;
@@ -23,7 +26,8 @@ public class Client {
     String nickname;
 
     public Client(String ip, int port, int chosenUI) {
-
+        pingOn = false;
+        online = false;
         try {
             this.socket = new Socket(ip, port);
 
@@ -45,7 +49,8 @@ public class Client {
             inputStream = new ObjectInputStream(socket.getInputStream());
             printStream = new ObjectOutputStream(socket.getOutputStream());
 
-            // OPEN READER
+            System.out.println("MAIN THREAD");
+
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -55,6 +60,7 @@ public class Client {
 
                             if (inputObject instanceof WelcomeMessage) {
                                 view.welcomeMessage();
+                                if(!pingOn)pingHandler();
                             } else if (inputObject instanceof NicknameMessage) {
                                 send(view.askNickPlayer((NicknameMessage) inputObject));
                             } else if (inputObject instanceof ColorMessage) {
@@ -74,6 +80,7 @@ public class Client {
                             } else if (inputObject instanceof GodMessage) {
                                 send(view.askGod((GodMessage) inputObject));
                             } else if (inputObject instanceof SetupMessage) {
+                                if(!pingOn)pingHandler();
                                 send(view.askNumOfPlayers((SetupMessage) inputObject));
                             } else if (inputObject instanceof StartGameMessage) {
                                 view.gameIsReady((StartGameMessage) inputObject);
@@ -95,6 +102,11 @@ public class Client {
                         closeConnection();
                     } catch (Exception e) {
                         // online = false;
+                        try {
+                            socket.close();
+                        } catch (IOException ioException) {
+                            ioException.printStackTrace();
+                        }
                         e.printStackTrace();
                     }
 
@@ -129,5 +141,25 @@ public class Client {
         }
     }
 
+
+
+    public void pingHandler() {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                pingOn= true;
+                while (!socket.isClosed()){
+                    try{
+                        sleep(5000);
+                        printStream.writeObject(new PingMessage());
+
+                    }catch (InterruptedException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            }).start();
+        }
 
 }

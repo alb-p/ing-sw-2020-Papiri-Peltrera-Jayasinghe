@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.messages.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.*;
 
 import static java.lang.Thread.sleep;
@@ -128,6 +129,14 @@ public class VirtualView implements Runnable, PropertyChangeListener {
             for (SocketClientConnection c : connections) {
                 c.send(new VirtualSlotMessage((VirtualSlot) evt.getNewValue()));
             }
+        } else if (evt.getPropertyName().equals("resetSetup")) {
+            for (SocketClientConnection c : connections) {
+                try {
+                    c.resetConnection();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -190,4 +199,8 @@ public class VirtualView implements Runnable, PropertyChangeListener {
         virtualViewListeners.firePropertyChange("choiceResponse", null, message);
     }
 
+    public void receivePingError(PingMessage message) {
+        virtualViewListeners.firePropertyChange("pingErrorResponse", null, message);
+
+    }
 }

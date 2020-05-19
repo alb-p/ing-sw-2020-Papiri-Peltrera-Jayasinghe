@@ -191,4 +191,11 @@ public class InitSetup {
     public void notifyGameReady() {
         initSetupListeners.firePropertyChange("gameReady", null, new StartGameMessage());
     }
+
+    public void resetGame(int id) {
+        Message message = new GenericMessage(id, "Game stopped caused by network issue");
+
+        initSetupListeners.firePropertyChange("resetSetup", null, message);
+
+    }
 }

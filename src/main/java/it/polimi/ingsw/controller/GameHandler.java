@@ -16,11 +16,13 @@ public class GameHandler implements PropertyChangeListener {
     private TurnHandler turnHandler;
     private int playersPerGame;
     private int firstPlayerChosenID = 0;
+    private boolean gameStarted;
 
     public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
         data = initSetup;
         model = m;
         this.playersPerGame = playersPerGame;
+        gameStarted = false;
     }
 
     @Override
@@ -125,11 +127,20 @@ public class GameHandler implements PropertyChangeListener {
                         int nextID = (message.getId() + 1) % playersPerGame;
                         if (nextID == firstPlayerChosenID) {
                             data.notifyGameReady();
+                            gameStarted = true;
                         } else {
                             data.initialWorkers(nextID, 0);
                         }
                     }
                 }else data.initialWorkers(message.getId(),message.getWorkerNumber());
+        }
+
+        else if (evt.getPropertyName().equals("pingErrorResponse")){
+            if(gameStarted|| playersPerGame==2) {
+                turnHandler.playerHasLost(((Message)evt.getNewValue()).getId());
+            }else {
+                data.resetGame(((Message)evt.getNewValue()).getId());
+            }
         }
     }
 
