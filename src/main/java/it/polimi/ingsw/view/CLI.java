@@ -5,6 +5,7 @@ import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.*;
 
+import java.beans.PropertyChangeEvent;
 import java.io.*;
 import java.util.Random;
 import java.util.Scanner;
@@ -18,8 +19,8 @@ public class CLI extends RemoteView implements Runnable {
     private String nickname;
 
 
-
     private String filename;                                            //DA TOGLIERE IN FUTURO
+
     private void setOnFile(String playerChoice) {                       //
         try {                                                           //
             FileWriter fw = new FileWriter(filename, true);      //
@@ -38,7 +39,7 @@ public class CLI extends RemoteView implements Runnable {
         this.board = new VirtualBoard();
 
         Random random = new Random();                                //DA TOGLIERE IN FUTURO
-        filename="partita"+random.nextInt(999)+".txt";        //
+        filename = "partita" + random.nextInt(999) + ".txt";        //
         File myObj = new File(filename);                            //
         try {                                                       //
             myObj.createNewFile();                                  //
@@ -57,7 +58,6 @@ public class CLI extends RemoteView implements Runnable {
         this.nickname = playerChoice;
         return message;
     }
-
 
 
     @Override
@@ -147,14 +147,14 @@ public class CLI extends RemoteView implements Runnable {
             printer.print("row: ");
             inputToParse = "";
             row = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
-        }while(row>5);
+        } while (row > 5);
 
         do {
             startingBrackets();
             printer.print("col: ");
             inputToParse = "";
             col = Integer.parseInt(inputToParse.concat("0" + scanner.nextLine().replaceAll("[^0-5]", "9")));
-        }while(col>5);
+        } while (col > 5);
 
         setOnFile(String.valueOf(row));////////////////////////////DA TOGLIERE IN FUTURO
         setOnFile(String.valueOf(col));///////////////////////////
@@ -191,7 +191,7 @@ public class CLI extends RemoteView implements Runnable {
         String onlyNumbers;
         int parsed = 0;
         printBoard();
-        printer.println("Hey "+nickname+"! Possibile actions: ");
+        printer.println("Hey " + nickname + "! Possibile actions: ");
         do {
             for (int i = 0; i < message.getChoices().size(); i++) {
                 printer.println(i + ":: " + message.getChoices().get(i));
@@ -214,10 +214,12 @@ public class CLI extends RemoteView implements Runnable {
     public void genericMess(GenericMessage inputObject) {
         printBreakers();
         printBreakers();
-        printer.println("\n\n"+ANSIColor.BOLD+ANSIColor.RED+inputObject.getMessage()+ANSIColor.RESET+"\n\n");
+        printer.println("\n\n" + ANSIColor.BOLD + ANSIColor.RED + inputObject.getMessage() + ANSIColor.RESET + "\n\n");
         printBreakers();
         printBreakers();
     }
+
+
 
     @Override
     public void waitingMess(WaitingMessage inputObject) {
@@ -230,7 +232,7 @@ public class CLI extends RemoteView implements Runnable {
     public GodMessage askGod(GodMessage inputObject) {
         printer.println(inputObject.getMessage());
         startingBrackets();
-        String input=scanner.nextLine().toUpperCase();
+        String input = scanner.nextLine().toUpperCase();
         setOnFile(input);////////////////////////////////DA TOGLIERE IN FUTURO
         inputObject.setGod(input);
         printBreakers();
@@ -253,7 +255,7 @@ public class CLI extends RemoteView implements Runnable {
     public SetupMessage askNumOfPlayers(SetupMessage message) {
         printer.println(message.getMessage());
         startingBrackets();
-        String input=scanner.nextLine();
+        String input = scanner.nextLine();
         setOnFile(input);///////////////////////////////DA TOGLIERE IN FUTURO
         int i = Integer.parseInt(input);
         message.setField(i);

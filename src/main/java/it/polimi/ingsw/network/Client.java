@@ -4,6 +4,7 @@ import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.RemoteView;
 
+import java.beans.PropertyChangeEvent;
 import java.io.*;
 import java.net.Socket;
 import java.util.logging.Level;
@@ -44,7 +45,7 @@ public class Client {
             this.online = true;
             inputStream = new ObjectInputStream(socket.getInputStream());
             printStream = new ObjectOutputStream(socket.getOutputStream());
-
+/*
             // OPEN READER
             new Thread(new Runnable() {
                 @Override
@@ -97,37 +98,58 @@ public class Client {
                         // online = false;
                         e.printStackTrace();
                     }
-
                 }
+            }).start();
+*/
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        while (true) {
+                            Object inputObject = inputStream.readObject();
 
+                            if (inputObject instanceof PropertyChangeEvent){
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        view.notifyEvent((PropertyChangeEvent)inputObject);
+                                    }
+                                }).start();
+                            }
 
+                        }
+                    } catch (IOException | ClassNotFoundException e) {
+                        logger.log(Level.SEVERE, e.getMessage());
+
+                    }
+                }
             }).start();
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
-        }
 
-        // TODO writer che andrà a mandare gli oggetti al controller del server
-        // writer che sarà chiamato dalla update dopo la chiamatea della cli
 
-    }
+            // TODO writer che andrà a mandare gli oggetti al controller del server
+            // writer che sarà chiamato dalla update dopo la chiamatea della cli
 
-    private synchronized void send(Object message) {
-        try {
-            printStream.reset();
-            printStream.writeObject(message);
-            printStream.flush();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage());
         }
     }
-
-    private void closeConnection() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+        private synchronized void send (Object message){
+            try {
+                printStream.reset();
+                printStream.writeObject(message);
+                printStream.flush();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
         }
-    }
+
+        private void closeConnection () {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
+        }
 
 
 }

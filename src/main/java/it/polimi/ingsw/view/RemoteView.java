@@ -1,14 +1,16 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.*;
 
+import java.beans.PropertyChangeEvent;
 import java.io.Console;
 
 public abstract class RemoteView extends View {
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
-
+    private ModelView modelView;
 
     public abstract NicknameMessage askNickPlayer(NicknameMessage message);
 
@@ -16,9 +18,9 @@ public abstract class RemoteView extends View {
 
     public abstract ActionMessage askAction(ActionMessage message);
 
-    public abstract ColorMessage askColor (ColorMessage message);
+    public abstract ColorMessage askColor(ColorMessage message);
 
-    public abstract InitialCardsMessage askGodList (InitialCardsMessage message);
+    public abstract InitialCardsMessage askGodList(InitialCardsMessage message);
 
     public abstract void waitingMess(WaitingMessage inputObject);
 
@@ -41,4 +43,26 @@ public abstract class RemoteView extends View {
     public abstract ChoiceMessage askChoice(ChoiceMessage inputObject);
 
     public abstract void genericMess(GenericMessage inputObject);
+
+    public void notifyEvent(PropertyChangeEvent evt) {
+
+        String propertyName = evt.getPropertyName();
+        if (propertyName.equalsIgnoreCase("colorsAvailable")) {
+
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+            this.modelView.getBoard().setSlot((VirtualSlot) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+
+        }
+    }
 }
