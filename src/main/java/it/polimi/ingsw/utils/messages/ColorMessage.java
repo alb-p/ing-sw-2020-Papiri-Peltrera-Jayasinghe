@@ -16,7 +16,7 @@ public class ColorMessage implements Message, Serializable {
 
 
     public ColorMessage(int i, ArrayList<Color> colors) {
-        this.message = "Inserisci il colore ";
+        this.message = "Choose your color: ";
         this.colors.addAll(colors);
         id = i;
     }

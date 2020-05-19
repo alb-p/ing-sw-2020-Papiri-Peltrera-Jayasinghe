@@ -46,8 +46,8 @@ public class Model {
     }
 
 
-    public void setCard(int playerPosition, String card) throws CloneNotSupportedException {
-        this.getPlayer(playerPosition).setCard(card.toUpperCase());
+    public void setCard(int playerID, String card) {
+        this.getPlayer(playerID).setCard(card.toUpperCase());
     }
 
 
@@ -110,7 +110,7 @@ public class Model {
         return getPlayer(i).treesAreLeaf();
     }
 
-    //It invokes specialRule on oppent gods'
+    //It invokes specialRule on opponent gods'
     public void verifyTree(int currPlayer) {
         for (Player p : players) {
             if (p.getId() != currPlayer) {

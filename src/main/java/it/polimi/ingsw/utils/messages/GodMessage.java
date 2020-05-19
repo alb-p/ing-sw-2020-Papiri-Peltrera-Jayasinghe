@@ -12,12 +12,12 @@ public class GodMessage implements Message, Serializable {
     int id;
 
     public GodMessage(){
-        this.message = "Inserisci divinità";
+        this.message = "Choose your god:";
         this.god=null;
     }
 
     public GodMessage(int i, ArrayList<String> gods){
-        this.message = "Inserisci divinità "+gods;
+        this.message = "Choose your god: "+gods;
         this.god=null;
         this.id=i;
     }

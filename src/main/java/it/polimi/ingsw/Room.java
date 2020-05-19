@@ -1,5 +1,7 @@
-package it.polimi.ingsw.controller;
+package it.polimi.ingsw;
 
+import it.polimi.ingsw.controller.GameHandler;
+import it.polimi.ingsw.controller.TurnHandler;
 import it.polimi.ingsw.model.InitSetup;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.network.SocketClientConnection;
@@ -43,7 +45,7 @@ public class Room {
         InitSetup initSetup =new InitSetup();
         GameHandler gameHandler=new GameHandler(initSetup,model, playersPerGame);
         TurnHandler turnHandler = new TurnHandler(model, playersPerGame);
-        gameHandler.setTurnhandler(turnHandler);
+        gameHandler.setTurnHandler(turnHandler);
 
         view.addVirtualViewListener(gameHandler);
         view.addVirtualViewListener(turnHandler);

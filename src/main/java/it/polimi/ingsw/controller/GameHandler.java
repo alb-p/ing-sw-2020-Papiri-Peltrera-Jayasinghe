@@ -49,8 +49,8 @@ public class GameHandler implements PropertyChangeListener {
             ColorMessage message = (ColorMessage) evt.getNewValue();
             Color color = message.getColor();
             if (data.isInColor(color)) {
-                data.delColor(message);
                 playerCreationQueue(message);
+                data.delColor(message);
             } else {
                 data.askColor(message.getId());
             }
@@ -63,11 +63,11 @@ public class GameHandler implements PropertyChangeListener {
         else if (evt.getPropertyName().equals("initialCardsResponse")) {
             InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();
             for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s);
-            if (data.ChosenGodsSize() == playersPerGame) {
+            if (data.chosenGodsSize() == playersPerGame) {
                 int nextID =( message.getId() + 1) % playersPerGame;
                 data.setChosenGods(nextID);
             } else {
-                data.initialCards(message.getId(), playersPerGame - data.ChosenGodsSize());
+                data.initialCards(message.getId(), playersPerGame - data.chosenGodsSize());
             }
         }
 
@@ -82,11 +82,7 @@ public class GameHandler implements PropertyChangeListener {
             String god = message.getGod();
             if (data.isInGod(god)) {
                 data.delGod(message, playersPerGame);
-                try {
-                    model.setCard(message.getId(), god);
-                } catch (CloneNotSupportedException e) {
-                    System.out.println("errore nell'inserimento della divinità");
-                }
+                model.setCard(message.getId(), god);
             } else {
                 data.askGod(message.getId());
             }
@@ -116,7 +112,6 @@ public class GameHandler implements PropertyChangeListener {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
             System.out.println("ID PLAYER DA SETWORKER:: " + message.getId());
             Coordinate coordinate = message.getCoordinate();
-            //int index=model.getIndex(message.getId());
             int index = message.getId();
                 if(model.addWorker(index,coordinate,message.getWorkerNumber())) {
                     if (message.getWorkerNumber() == 0)
@@ -158,7 +153,7 @@ public class GameHandler implements PropertyChangeListener {
     }
 
 
-    public void setTurnhandler(TurnHandler turnHandler) {
+    public void setTurnHandler(TurnHandler turnHandler) {
         this.turnHandler = turnHandler;
     }
 }

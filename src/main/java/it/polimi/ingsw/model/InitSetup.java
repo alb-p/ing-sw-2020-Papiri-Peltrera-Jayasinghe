@@ -113,7 +113,7 @@ public class InitSetup {
         }
     }
 
-    public int ChosenGodsSize() {
+    public int chosenGodsSize() {
         return this.chosenGods.size();
     }
 
