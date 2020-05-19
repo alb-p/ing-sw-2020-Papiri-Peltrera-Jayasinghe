@@ -76,5 +76,20 @@ public class BasicGodCardTest {
         assertTrue(card.build(player.getWorker(0),new Coordinate(3,1),board));
     }
 
+    @Test
+    public void turnHandlerTest() throws Exception {
+        Player player = new Player(0,"Pluto", Color.WHITE);
+
+        board.infoSlot(new Coordinate(2,1)).occupy(player.getWorker(0));
+        player.getWorker(0).setPosition(new Coordinate(2,1));
+        player.selectWorker(new Coordinate(2,1));
+
+        assertFalse(card.turnHandler(player, board, new Build(new Coordinate(2,1), new Coordinate(2,0))));
+        assertTrue(card.turnHandler(player,board, new Build(new Coordinate(2,1), new Coordinate(3,0))));
+        assertTrue(card.turnHandler(player,board, new Build(new Coordinate(2,1), new Coordinate(3,0))));
+        assertFalse(card.turnHandler(player,board, new Build(new Coordinate(2,1), new Coordinate(3,0))));
+        assertFalse(card.turnHandler(player, board, new FirstBuild(new Coordinate(2,1), new Coordinate(3,0))));
+    }
+
 
 }
