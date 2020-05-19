@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.VirtualView;
 
@@ -24,11 +26,14 @@ public class SocketClientConnection implements Runnable {
     private int id;
     private Server server;
 
-    private boolean active = true;
-    private boolean pinged = true;
-    private boolean pingHandled = false;
+    private boolean active;
+    private boolean pinged;
+    private boolean pingHandled;
 
     public SocketClientConnection(Socket newSocket) {
+        active = true;
+        pinged = true;
+        pingHandled = false;
         try {
             socket = newSocket;
             outSocket = new ObjectOutputStream(newSocket.getOutputStream());
@@ -44,19 +49,24 @@ public class SocketClientConnection implements Runnable {
     }
 
     private void pingHandler() {
+        System.out.println("PING HANDLER");
+        pingHandled=true;
         new Thread(new Runnable() {
             @Override
             public void run() {
                 int risk = 0;
-                while (!socket.isClosed()) {
+                while (true) {
                     if (pinged) {
                         pinged = false;
                         risk = 0;
+                        System.out.println("\t\t"+id +": risk resetted");
                     } else {
                         risk++;
-                        if (risk >= 2) {
+                        System.out.println(ANSIColor.RESET +id+"  ::ID"+ risk+" :: RISK");
+                        if (risk >= 3) {
                             //closeClient
                             try {
+                                System.out.println("CLOSING SOCKET");
                                 socket.close();
                                 if(view!=null)view.receivePingError(new PingMessage(id));
                             } catch (IOException e) {
@@ -65,7 +75,9 @@ public class SocketClientConnection implements Runnable {
                         }
                     }
                     try {
-                        sleep(7500);
+                        System.out.print("OR");
+                        Thread.currentThread().sleep(10000);
+                        System.out.println(" ORA");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
@@ -75,14 +87,13 @@ public class SocketClientConnection implements Runnable {
     }
 
 
-    public void send(Object message) {
+    public synchronized void send(Object message) {
         try {
-            synchronized (outSocket) {
                 if (socket.isClosed()) return;
                 outSocket.reset();
                 outSocket.writeObject(message);
                 outSocket.flush();
-            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -91,6 +102,7 @@ public class SocketClientConnection implements Runnable {
 
     public int askNumOfPlayers() {
         if (!pingHandled) pingHandler();
+        pingHandled = true;
         int read = 0;
         try {
             //outSocket = new ObjectOutputStream(socket.getOutputStream());
@@ -146,9 +158,11 @@ public class SocketClientConnection implements Runnable {
     @Override
     public void run() {
         try {
+            if(!pingHandled)pingHandler();
+            pingHandled=true;
+
             while (!socket.isClosed()) {
                 Object inputObject = inSocket.readObject();
-                pingHandler();
 
                 if (inputObject instanceof Message) {
                     Message message = (Message) inputObject;
@@ -182,6 +196,7 @@ public class SocketClientConnection implements Runnable {
 
             try {
                 socket.close();
+                view.receivePingError(new PingMessage(id));
             } catch (IOException ioException) {
                 ioException.printStackTrace();
             }

@@ -200,6 +200,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
     }
 
     public void receivePingError(PingMessage message) {
+        System.out.println("PING ERROR IN VIEW");
         virtualViewListeners.firePropertyChange("pingErrorResponse", null, message);
 
     }

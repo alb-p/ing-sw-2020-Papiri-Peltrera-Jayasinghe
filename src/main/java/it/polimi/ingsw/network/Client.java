@@ -81,6 +81,7 @@ public class Client{
                                 send(view.askGod((GodMessage) inputObject));
                             } else if (inputObject instanceof SetupMessage) {
                                 if(!pingOn)pingHandler();
+                                pingOn = true;
                                 send(view.askNumOfPlayers((SetupMessage) inputObject));
                             } else if (inputObject instanceof StartGameMessage) {
                                 view.gameIsReady((StartGameMessage) inputObject);
@@ -123,11 +124,13 @@ public class Client{
 
     }
 
-    private synchronized void send(Object message) {
+    private void send(Object message) {
         try {
-            printStream.reset();
-            printStream.writeObject(message);
-            printStream.flush();
+            synchronized (printStream) {
+                printStream.reset();
+                printStream.writeObject(message);
+                printStream.flush();
+            }
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
@@ -151,12 +154,12 @@ public class Client{
                 pingOn= true;
                 while (!socket.isClosed()){
                     try{
-                        sleep(5000);
-                        printStream.writeObject(new PingMessage());
+                        sleep(1000);
 
-                    }catch (InterruptedException | IOException e) {
-                        e.printStackTrace();
-                    }
+                        send(new PingMessage());
+
+                    }catch (InterruptedException e) {
+                        System.out.println("INTERRUPTEDEXCEPTION");                    }
                 }
             }
             }).start();
