@@ -60,7 +60,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-    @Override
+    
     public void welcomeMessage() {
         printer.println("\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -75,7 +75,7 @@ public class CLI extends RemoteView implements Runnable {
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
     }
 
-    @Override
+    
     public ColorMessage askColor(ColorMessage message) {
         printer.println("Hey " + nickname + "! Which colour you want to choose among those available?");
         for (Color c : message.getColors()) {
@@ -92,7 +92,7 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    @Override
+    
     public InitialCardsMessage askGodList(InitialCardsMessage message) {
         printer.println(message.getMessage());
         for (int i = 0; i < message.getCompleteList().size(); i++) {
@@ -113,12 +113,12 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    @Override
+    
     public void showColor(ColorSelectedMessage inputObject) {
         if (inputObject.getMessage() != null) printer.println(inputObject.getMessage());
     }
 
-    @Override
+    
     public FirstPlayerMessage firstPlayer(FirstPlayerMessage message) {
         printer.println(message.getMessage());
         startingBrackets();
@@ -132,7 +132,7 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    @Override
+    
     public WorkerMessage setWorker(WorkerMessage message) {
         printBoard();
         int row;
@@ -163,17 +163,17 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    @Override
+    
     public void gameIsReady(StartGameMessage inputObject) {
         printer.println(inputObject.getMessage());
     }
 
-    @Override
+    
     public void updateVBoard(VirtualSlotMessage inputObject) {
         board.setSlot(inputObject.getVirtualSlot());
     }
 
-    @Override
+    
     public void winnerMess(WinnerMessage inputObject) {
         printBreakers();
         printBreakers();
@@ -185,7 +185,7 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
-    @Override
+    
     public ChoiceMessage askChoice(ChoiceMessage message) {
         String input;
         String onlyNumbers;
@@ -210,7 +210,7 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    @Override
+    
     public void genericMess(GenericMessage inputObject) {
         printBreakers();
         printBreakers();
@@ -221,14 +221,14 @@ public class CLI extends RemoteView implements Runnable {
 
 
 
-    @Override
+    
     public void waitingMess(WaitingMessage inputObject) {
         printBoard();
         printer.println(inputObject.getMessage());
     }
 
 
-    @Override
+    
     public GodMessage askGod(GodMessage inputObject) {
         printer.println(inputObject.getMessage());
         startingBrackets();
@@ -239,7 +239,7 @@ public class CLI extends RemoteView implements Runnable {
         return inputObject;
     }
 
-    @Override
+    
     public ActionMessage askAction(ActionMessage message) {
         printBoard();
         printer.println(nickname + " make " + message.getAction().getActionName() + " x,y in z,w");

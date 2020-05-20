@@ -106,13 +106,13 @@ public class Client {
                 public void run() {
                     try {
                         while (true) {
-                            Object inputObject = inputStream.readObject();
+                            final Object inputObject = inputStream.readObject();
 
-                            if (inputObject instanceof PropertyChangeEvent){
+                            if (inputObject instanceof PropertyChangeEvent) {
                                 new Thread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        view.notifyEvent((PropertyChangeEvent)inputObject);
+                                        view.notifyEvent((PropertyChangeEvent) inputObject);
                                     }
                                 }).start();
                             }
@@ -133,23 +133,36 @@ public class Client {
 
         }
     }
-        private synchronized void send (Object message){
-            try {
-                printStream.reset();
-                printStream.writeObject(message);
-                printStream.flush();
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, e.getMessage());
-            }
-        }
 
-        private void closeConnection () {
-            try {
-                socket.close();
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, e.getMessage());
-            }
+    private synchronized void send(Object message) {
+        try {
+            printStream.reset();
+            printStream.writeObject(message);
+            printStream.flush();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
         }
+    }
+
+    public void sendEvent(PropertyChangeEvent evt) {
+        try {
+            synchronized (printStream) {
+                printStream.reset();
+                printStream.writeObject(evt);
+                printStream.flush();
+            }
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+    }
+
+    private void closeConnection() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage());
+        }
+    }
 
 
 }

@@ -15,48 +15,47 @@ public class Room {
     private int playersPerGame = 0;
 
 
-    public  void addPlayer(SocketClientConnection connection) throws Exception {
+    public void addPlayer(SocketClientConnection connection) throws Exception {
         if (this.playersPerGame > connections.size()) {
             this.connections.add(connection);
-            System.out.println("CONNECTION ADDED"+ connection.getId());
+            System.out.println("CONNECTION ADDED" + connection.getId());
         } else {
             throw new Exception();
         }
     }
 
-    public  boolean isReady() {
+    public boolean isReady() {
         return this.connections.size() == this.playersPerGame;
     }
 
-    public  void setNumOfPlayers(int playersPerGame) {
+    public void setNumOfPlayers(int playersPerGame) {
         this.playersPerGame = playersPerGame;
     }
 
-    public  boolean isUninitialized() {
+    public boolean isUninitialized() {
         return this.connections.size() == this.playersPerGame && this.playersPerGame == 0;
     }
 
 
     public void start() {
         Model model = new Model();
-        VirtualView view = new VirtualView(connections);
-        for(SocketClientConnection c: connections) c.setView(view);
 
-        InitSetup initSetup =new InitSetup();
-        GameHandler gameHandler=new GameHandler(initSetup,model, playersPerGame);
+        InitSetup initSetup = new InitSetup();
+        GameHandler gameHandler = new GameHandler(initSetup, model, playersPerGame);
         TurnHandler turnHandler = new TurnHandler(model, playersPerGame);
         gameHandler.setTurnHandler(turnHandler);
+        for (SocketClientConnection c : connections) {
+            c.addSccListener(gameHandler);
+            c.addSccListener(turnHandler);
+            model.addModelListener(c);
+            initSetup.addInitSetupListener(c);
+            c.run();
+        }
 
-        view.addVirtualViewListener(gameHandler);
-        view.addVirtualViewListener(turnHandler);
-        //TODO crearre una sola PropertyChangeSupport in model e poi passarla a chi ne ha bisogno
-        model.addModelListener(view);
-        initSetup.addInitSetupListener(view);
-        view.run();
     }
 
     public int currentPlayerId() {
-        System.out.println("CURRENT PLAYER ID = "+this.connections.size());
+        System.out.println("CURRENT PLAYER ID = " + this.connections.size());
         return this.connections.size();
     }
 

@@ -3,6 +3,9 @@ package it.polimi.ingsw.network;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.VirtualView;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,11 +14,13 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 
 
-public class SocketClientConnection implements Runnable {
+public class SocketClientConnection implements Runnable, PropertyChangeListener {
 
     private Socket socket;
     private ObjectOutputStream outSocket;
     private ObjectInputStream inSocket;
+    private PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
+
 
     private VirtualView view;
 
@@ -43,12 +48,12 @@ public class SocketClientConnection implements Runnable {
 
     public synchronized void send(Object message) {
         try {
-            if(socket.isClosed())return;
+            if (socket.isClosed()) return;
             outSocket.reset();
             outSocket.writeObject(message);
             outSocket.flush();
 
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -91,32 +96,14 @@ public class SocketClientConnection implements Runnable {
     @Override
     public void run() {
         try {
-            while (!socket.isClosed()) {
+
+            while (true) {
                 Object inputObject = inSocket.readObject();
 
-                if (inputObject instanceof Message) {
-                    Message message = (Message) inputObject;
-                    message.setId(this.id);
-                    if (inputObject instanceof NicknameMessage) {
-                        view.receiveNick((NicknameMessage) message);
-                    } else if (inputObject instanceof ColorMessage) {
-                        view.receiveColor((ColorMessage) message);
-                    } else if (inputObject instanceof ActionMessage) {
-                        view.receiveAction((ActionMessage) message);
-                    } else if (inputObject instanceof ChoiceMessage) {
-                        view.receiveChoice((ChoiceMessage) message);
-                    } else if (inputObject instanceof GodMessage) {
-                        view.receiveGod((GodMessage) message);
-                    } else if (inputObject instanceof InitialCardsMessage) {
-                        view.receiveInitialCards((InitialCardsMessage) message);
-                    }else if (inputObject instanceof FirstPlayerMessage) {
-                        view.receiveFirstPlayer((FirstPlayerMessage) message);
-                    }else if (inputObject instanceof WorkerMessage) {
-                        view.receiveSetWorker((WorkerMessage) message);
-                    }
+                if (inputObject instanceof PropertyChangeEvent) {
+                    sccListeners.firePropertyChange((PropertyChangeEvent) inputObject);
                 }
             }
-
         } catch (Exception e) {
 
             try {
@@ -125,5 +112,28 @@ public class SocketClientConnection implements Runnable {
                 ioException.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        sendEvent(evt);
+    }
+
+    public void sendEvent(PropertyChangeEvent evt) {
+        try {
+            synchronized (outSocket) {
+                if (socket.isClosed()) return;
+                outSocket.reset();
+                outSocket.writeObject(evt);
+                outSocket.flush();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void addSccListener(PropertyChangeListener listener) {
+        sccListeners.addPropertyChangeListener(listener);
     }
 }

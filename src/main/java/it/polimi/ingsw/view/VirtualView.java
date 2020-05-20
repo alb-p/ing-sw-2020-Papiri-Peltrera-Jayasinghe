@@ -161,6 +161,7 @@ public class VirtualView implements Runnable, PropertyChangeListener {
 
     public void receiveSetWorker(WorkerMessage message) {
         virtualViewListeners.firePropertyChange("setWorkerResponse", null, message);
+
     }
 
     //arriva action da scc che viene inoltrato a GameHandler (controller) (errato: arriva a TurnHandler)
