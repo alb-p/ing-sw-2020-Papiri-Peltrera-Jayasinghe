@@ -14,11 +14,13 @@ import java.util.Scanner;
 public class CLI extends RemoteView implements Runnable {
 
     private final Scanner scanner;
-    private Client connection;
     private final PrintStream printer;
     private String playerChoice;
     private VirtualBoard board;
+    private Client connection;
     private String nickname;
+    private Boolean nickValidate = false;
+    private ModelView modelView;
 
 
     private String filename;                                            //DA TOGLIERE IN FUTURO
@@ -37,9 +39,13 @@ public class CLI extends RemoteView implements Runnable {
 
     public CLI(Client connection) {
         super(connection);
+        System.out.println(this.connection);
+        this.connection = connection;
+        System.out.println(this.connection);
         this.scanner = new Scanner(System.in);
         this.printer = System.out;
         this.board = new VirtualBoard();
+        this.modelView = new ModelView();
 
         Random random = new Random();                                //DA TOGLIERE IN FUTURO
         filename = "partita" + random.nextInt(999) + ".txt";        //
@@ -50,7 +56,6 @@ public class CLI extends RemoteView implements Runnable {
             e.printStackTrace();                                    //
         }
     }
-
 
     public NicknameMessage askNickPlayer(NicknameMessage message) {
         printer.println(message.getMessage() + "\n");
@@ -63,7 +68,6 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-    
     public void welcomeMessage() {
         printer.println("\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -78,7 +82,7 @@ public class CLI extends RemoteView implements Runnable {
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
     }
 
-    
+
     public ColorMessage askColor(ColorMessage message) {
         printer.println("Hey " + nickname + "! Which colour you want to choose among those available?");
         for (Color c : message.getColors()) {
@@ -95,7 +99,7 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    
+
     public InitialCardsMessage askGodList(InitialCardsMessage message) {
         printer.println(message.getMessage());
         for (int i = 0; i < message.getCompleteList().size(); i++) {
@@ -116,12 +120,12 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    
+
     public void showColor(ColorSelectedMessage inputObject) {
         if (inputObject.getMessage() != null) printer.println(inputObject.getMessage());
     }
 
-    
+
     public FirstPlayerMessage firstPlayer(FirstPlayerMessage message) {
         printer.println(message.getMessage());
         startingBrackets();
@@ -135,7 +139,7 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    
+
     public WorkerMessage setWorker(WorkerMessage message) {
         printBoard();
         int row;
@@ -166,17 +170,17 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    
+
     public void gameIsReady(StartGameMessage inputObject) {
         printer.println(inputObject.getMessage());
     }
 
-    
+
     public void updateVBoard(VirtualSlotMessage inputObject) {
         board.setSlot(inputObject.getVirtualSlot());
     }
 
-    
+
     public void winnerMess(WinnerMessage inputObject) {
         printBreakers();
         printBreakers();
@@ -188,7 +192,7 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
-    
+
     public ChoiceMessage askChoice(ChoiceMessage message) {
         String input;
         String onlyNumbers;
@@ -213,7 +217,7 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    
+
     public void genericMess(GenericMessage inputObject) {
         printBreakers();
         printBreakers();
@@ -223,15 +227,12 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-
-    
     public void waitingMess(WaitingMessage inputObject) {
         printBoard();
         printer.println(inputObject.getMessage());
     }
 
 
-    
     public GodMessage askGod(GodMessage inputObject) {
         printer.println(inputObject.getMessage());
         startingBrackets();
@@ -242,7 +243,7 @@ public class CLI extends RemoteView implements Runnable {
         return inputObject;
     }
 
-    
+
     public ActionMessage askAction(ActionMessage message) {
         printBoard();
         printer.println(nickname + " make " + message.getAction().getActionName() + " x,y in z,w");
@@ -304,7 +305,7 @@ public class CLI extends RemoteView implements Runnable {
             startingBrackets();
             input = scanner.nextLine();
             val = input.replaceAll("[^2-3]", "");
-            if(!val.equals(""))i=Integer.parseInt(val);
+            if (!val.equals("")) i = Integer.parseInt(val);
         } while (!(i == 2 || i == 3));
         setOnFile(input);///////////////////////////////DA TOGLIERE IN FUTURO
         SetupMessage message;
@@ -317,8 +318,36 @@ public class CLI extends RemoteView implements Runnable {
     public void run() {
         welcomeMessage();
 
-        while (true){
-            NicknameMessage message =askNickPlayer(new NicknameMessage());
-            connection.sendEvent(new PropertyChangeEvent(this, "notifyNick", null, message));
-        } }
+        while (!nickValidate) {
+            synchronized (nickValidate) {
+                NicknameMessage message = askNickPlayer(new NicknameMessage());
+                if(message == null) System.out.println("CAZZOOOOOOOOOOO NULL");
+                if(getConnection() == null) System.out.println("CAZZOOOOOnnectionOOOOOO NULL");
+                getConnection().sendEvent(new PropertyChangeEvent(getPlayerId(), "notifyNickname", false, message));
+                try {
+                    nickValidate.wait();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        System.out.println("FUORI VICLO OTTIMO ANDATO NICK");    }
+
+
+    @Override
+    protected void nicknameReceived(NicknameMessage newValue) {
+        synchronized (nickValidate) {
+            if (newValue.getId() == this.getPlayerId()) {
+                nickValidate = true;
+                System.out.println("NICK VALIDATED IF -------");
+            } else {
+                this.modelView.getPlayer(newValue.getId()).setNickname(newValue.getNick());
+            }
+
+            nickValidate.notify();
+        }
+    }
+
+
 }

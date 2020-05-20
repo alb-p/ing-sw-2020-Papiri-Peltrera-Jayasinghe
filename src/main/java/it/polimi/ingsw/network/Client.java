@@ -4,6 +4,7 @@ import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.RemoteView;
 
+import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.io.*;
 import java.net.Socket;
@@ -34,6 +35,7 @@ public class Client {
 
         if (chosenUI == 0) {
             this.view = new CLI(this);
+            System.out.println("COSTRUITA CLI +"+this);
         } else {
             //TODO this.view = new GUI();
         }
@@ -41,6 +43,8 @@ public class Client {
 
 
     public void start() {
+        System.out.println("CLIENT SOUT"+ this);
+
         try {
             this.online = true;
             inputStream = new ObjectInputStream(socket.getInputStream());
@@ -155,6 +159,8 @@ public class Client {
 
     public void sendEvent(PropertyChangeEvent evt) {
         try {
+            if(evt.getNewValue() instanceof Message)
+                ((Message) evt.getNewValue()).setId(view.getPlayerId());
             synchronized (printStream) {
                 printStream.reset();
                 printStream.writeObject(evt);

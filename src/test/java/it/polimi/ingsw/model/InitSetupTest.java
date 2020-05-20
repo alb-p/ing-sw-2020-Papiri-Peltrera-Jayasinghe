@@ -30,7 +30,6 @@ public class InitSetupTest {
         gods.add("PAN");
         gods.add("PROMETHEUS");
     }
-
     @Test
     public void usernameTest(){
         assertFalse(initSetup.isInUser("Pippo"));

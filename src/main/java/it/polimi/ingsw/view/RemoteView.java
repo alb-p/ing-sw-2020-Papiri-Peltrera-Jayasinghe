@@ -1,23 +1,24 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
-import java.io.Console;
 
 public abstract class RemoteView extends View {
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
     private ModelView modelView;
     private Client connection;
+    private int id;
 
-    public RemoteView(Client connection){
+    public RemoteView(Client connection) {
         this.connection = connection;
+        System.out.println("CONNECI^TIO REMODTE"+this.connection);
     }
-
+    public RemoteView(){}
+    public Client getConnection(){return connection;}
     public void notifyEvent(PropertyChangeEvent evt) {
 
         String propertyName = evt.getPropertyName();
@@ -29,6 +30,9 @@ public abstract class RemoteView extends View {
 
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
 
+        } else if (propertyName.equalsIgnoreCase("nicknameConfirme")) {
+            System.out.println(this.id+"<-- remote ID");
+            this.nicknameReceived((NicknameMessage)evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("currPlayerUpdate")) {
 
         } else if (propertyName.equalsIgnoreCase("freeWorkerPositions")) {
@@ -40,11 +44,22 @@ public abstract class RemoteView extends View {
         }
     }
 
+    protected abstract void nicknameReceived(NicknameMessage newValue);
+
+    protected void setPlayerId(int source) {
+        this.id = source;
+    }
+
+    public int getPlayerId() {
+        return id;
+    }
+
     protected abstract void startMainThread();
 
-    public void askNumOfPlayers(){
+    public void askNumOfPlayers() {
         SetupMessage message = chooseNumberOfPlayers();
-        System.out.println(message.getMessage()+ "  "+ message.getField());
+        message.setId(getPlayerId());
+        System.out.println(message.getMessage() + "  " + message.getField());
         connection.send(message);
     }
 

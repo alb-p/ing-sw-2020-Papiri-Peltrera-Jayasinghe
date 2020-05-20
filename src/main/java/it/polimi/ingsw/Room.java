@@ -55,6 +55,7 @@ public class Room {
             model.addModelListener(c);
             initSetup.addInitSetupListener(c);
             executor.submit(c);
+            System.out.println(c);
         }
 
     }

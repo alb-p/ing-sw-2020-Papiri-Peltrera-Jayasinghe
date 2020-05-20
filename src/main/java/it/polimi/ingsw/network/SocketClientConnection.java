@@ -96,16 +96,17 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     @Override
     public void run() {
         try {
-            sendEvent(new PropertyChangeEvent(this,"gameReady", null,true));
+            sendEvent(new PropertyChangeEvent(this, "gameReady", null, true));
             while (true) {
                 Object inputObject = inSocket.readObject();
 
-                if (inputObject instanceof PropertyChangeEvent) {
-                    PropertyChangeEvent event = (PropertyChangeEvent) inputObject;
-                    event = new PropertyChangeEvent(id, event.getPropertyName(), event.getOldValue(),event.getNewValue());
-                    sccListeners.firePropertyChange(event);
+                if (inputObject instanceof PropertyChangeEvent &&
+                        ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message
+                        && ((Message) ((PropertyChangeEvent) inputObject).getNewValue()).getId() == id) {
+                    sccListeners.firePropertyChange((PropertyChangeEvent) inputObject);
                 }
             }
+
         } catch (Exception e) {
 
             try {

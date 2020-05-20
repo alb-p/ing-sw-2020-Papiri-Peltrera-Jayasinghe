@@ -1,6 +1,7 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -30,15 +31,12 @@ public class GameHandler implements PropertyChangeListener {
         //da un altro player viene inserito in una lista in
         //initSetup, creato un buffer di creazione del player e viene
         //fatta la richiesta per il colore.
-        if (evt.getPropertyName().equals("nickMessageResponse")) {
+        if (evt.getPropertyName().equals("notifyNickname")) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
             String name = message.getNick();
             if (!data.isInUser(name)) {
-                data.setUsername(name);
+                data.setUsername(message);
                 playerCreationQueue(message);
-                data.askColor(message.getId());
-            } else {
-                data.wrongUsername(message.getId());
             }
         }
 

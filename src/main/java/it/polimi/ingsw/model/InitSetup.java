@@ -54,8 +54,9 @@ public class InitSetup {
         return false;
     }
 
-    public void setUsername(String user) {
-        username.add(user);
+    public void setUsername(NicknameMessage message) {
+        username.add(message.getNick());
+        initSetupListeners.firePropertyChange("nicknameConfirme", null, message);
     }
 
     //rimanda messaggio se il giocatore ha impostato un nick non valido
