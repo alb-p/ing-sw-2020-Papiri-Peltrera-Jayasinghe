@@ -33,7 +33,7 @@ public class Client {
         }
 
         if (chosenUI == 0) {
-            this.view = new CLI();
+            this.view = new CLI(this);
         } else {
             //TODO this.view = new GUI();
         }
@@ -115,6 +115,13 @@ public class Client {
                                         view.notifyEvent((PropertyChangeEvent) inputObject);
                                     }
                                 }).start();
+                            } else if(inputObject instanceof SetupMessage){
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        view.askNumOfPlayers();
+                                    }
+                                }).start();
                             }
 
                         }
@@ -134,13 +141,15 @@ public class Client {
         }
     }
 
-    private synchronized void send(Object message) {
-        try {
-            printStream.reset();
-            printStream.writeObject(message);
-            printStream.flush();
-        } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+    public void send(Object message) {
+        synchronized (printStream) {
+            try {
+                printStream.reset();
+                printStream.writeObject(message);
+                printStream.flush();
+            } catch (IOException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
         }
     }
 

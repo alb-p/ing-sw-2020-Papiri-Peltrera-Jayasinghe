@@ -8,12 +8,17 @@ import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
 
 public class Room {
 
+    private final ExecutorService executor;
     private ArrayList<SocketClientConnection> connections = new ArrayList<>();
     private int playersPerGame = 0;
 
+    public Room(ExecutorService executor){
+        this.executor = executor;
+    }
 
     public void addPlayer(SocketClientConnection connection) throws Exception {
         if (this.playersPerGame > connections.size()) {
@@ -49,7 +54,7 @@ public class Room {
             c.addSccListener(turnHandler);
             model.addModelListener(c);
             initSetup.addInitSetupListener(c);
-            c.run();
+            executor.submit(c);
         }
 
     }

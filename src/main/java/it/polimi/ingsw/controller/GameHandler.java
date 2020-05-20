@@ -125,6 +125,7 @@ public class GameHandler implements PropertyChangeListener {
                         }
                     }
                 }else data.initialWorkers(message.getId(),message.getWorkerNumber());
+        } else if (evt.getPropertyName().equalsIgnoreCase("notifyNick")){
         }
     }
 

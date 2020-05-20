@@ -12,9 +12,9 @@ public class Server {
 
     private static final int PORT = 4566;
     private ServerSocket serverSocket = new ServerSocket(PORT);
-    private Room room = new Room();
-
     private ExecutorService executor = Executors.newFixedThreadPool(128);
+    private Room room = new Room(executor);
+
 
     public Server() throws IOException {
     }
@@ -43,6 +43,7 @@ public class Server {
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId()-1);
+                        //in attesa di n-1 gioc
                     }else if(!room.isReady()){
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId()-1);
@@ -51,14 +52,14 @@ public class Server {
                     }else{
                         socketConnection.notifyGamePlaying();
                         //waitingList.add(socketConnection);
-                        room= new Room();
+                        room= new Room(executor);
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
                         System.out.println("numero di gioc : "+numOfPlayers);
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId()-1);
                     }
-                    executor.submit(socketConnection);
+                    //executor.submit(socketConnection);
 
 
 

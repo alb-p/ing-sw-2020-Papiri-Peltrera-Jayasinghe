@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.*;
@@ -13,6 +14,7 @@ import java.util.Scanner;
 public class CLI extends RemoteView implements Runnable {
 
     private final Scanner scanner;
+    private Client connection;
     private final PrintStream printer;
     private String playerChoice;
     private VirtualBoard board;
@@ -33,7 +35,8 @@ public class CLI extends RemoteView implements Runnable {
         }                                                               //
     }                                                                   //
 
-    public CLI() {
+    public CLI(Client connection) {
+        super(connection);
         this.scanner = new Scanner(System.in);
         this.printer = System.out;
         this.board = new VirtualBoard();
@@ -252,16 +255,6 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
-    public SetupMessage askNumOfPlayers(SetupMessage message) {
-        printer.println(message.getMessage());
-        startingBrackets();
-        String input = scanner.nextLine();
-        setOnFile(input);///////////////////////////////DA TOGLIERE IN FUTURO
-        int i = Integer.parseInt(input);
-        message.setField(i);
-        return message;
-    }
-
 
     public void startingBrackets() {
         printer.print(">>>");
@@ -293,4 +286,39 @@ public class CLI extends RemoteView implements Runnable {
     public void printBreakers() {
         printer.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
     }
+
+    @Override
+    protected void startMainThread() {
+        System.out.println("START CLI");
+        this.run();
+    }
+
+    @Override
+    protected SetupMessage chooseNumberOfPlayers() {
+        printer.println("How Many Players for the game? 2/3");
+        String input;
+        String val;
+        int i;
+        i = 0;
+        do {
+            startingBrackets();
+            input = scanner.nextLine();
+            val = input.replaceAll("[^2-3]", "");
+            if(!val.equals(""))i=Integer.parseInt(val);
+        } while (!(i == 2 || i == 3));
+        setOnFile(input);///////////////////////////////DA TOGLIERE IN FUTURO
+        SetupMessage message;
+        message = new SetupMessage();
+        message.setField(i);
+        return message;
+    }
+
+    @Override
+    public void run() {
+        welcomeMessage();
+
+        while (true){
+            NicknameMessage message =askNickPlayer(new NicknameMessage());
+            connection.sendEvent(new PropertyChangeEvent(this, "notifyNick", null, message));
+        } }
 }
