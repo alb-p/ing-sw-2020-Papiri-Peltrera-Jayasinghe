@@ -80,7 +80,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     }
 
     public void setId(int i) {
-
         this.id = i;
     }
 

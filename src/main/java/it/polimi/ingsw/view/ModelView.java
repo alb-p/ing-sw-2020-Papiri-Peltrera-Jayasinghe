@@ -14,12 +14,50 @@ public class ModelView {
     private ArrayList<PlayerView> players = new ArrayList<>();
     private ArrayList<String[]> gods = new ArrayList<>();
     private int actualPlayerId;
+    private int godlyId;
     private int deletedPlayerId = -1;
 
     public ModelView(){
         Collections.addAll(colors, Color.values());
+        gods.add(new String[]{"APOLLO", "Your Move: Your Worker may\n" +
+                "move into an opponent Worker’s\n" +
+                "space by forcing their Worker to\n" +
+                "the space yours just vacated."});
+        gods.add(new String[]{"ARTEMIS", "Your Move: Your Worker may\n" +
+                "move one additional time, but not\n" +
+                "back to its initial space. "});
+        gods.add(new String[]{"ATHENA", "Opponent’s Turn: If one of your\n" +
+                "Workers moved up on your last\n" +
+                "turn, opponent Workers cannot\n" +
+                "move up this turn."});
+        gods.add(new String[]{"ATLAS", "Your Build: Your Worker may\n" +
+                "build a dome at any level. "});
+        gods.add(new String[]{"DEMETER", "Your Build: Your Worker may\n" +
+                "build one additional time, but not\n" +
+                "on the same space."});
+        gods.add(new String[]{"HEPHAESTUS", "Your Build: Your Worker may\n" +
+                "build one additional block (not\n" +
+                "dome) on top of your first block"});
+        gods.add(new String[]{"MINOTAUR", "Your Move: Your Worker may\n" +
+                "move into an opponent Worker’s\n" +
+                "space, if their Worker can be\n" +
+                "forced one space straight backwards to an\n" +
+                "unoccupied space at any level."});
+        gods.add(new String[]{"PAN", "Win Condition: You also win if\n" +
+                "your Worker moves down two or\n" +
+                "more levels"});
+        gods.add(new String[]{"PROMETHEUS", "Your Turn: If your Worker does\n" +
+                "not move up, it may build both\n" +
+                "before and after moving"});
     }
 
+    public ArrayList<String[]> getGods() {
+        return gods;
+    }
+
+    public void setGods(ArrayList<String[]> gods) {
+        this.gods = gods;
+    }
     public VirtualBoard getBoard(){return board;}
 
     public PlayerView getPlayer(int id){
@@ -77,6 +115,16 @@ public class ModelView {
 
     public void setDeletedPlayerId(int deletedPlayerId) {
         this.deletedPlayerId = deletedPlayerId;
+    }
+
+    public void setGodlyId(int godlyId) {
+        this.godlyId = godlyId;
+        actualPlayerId = godlyId;
+        setNextPlayerId();
+    }
+
+    public int getGodlyId(){
+        return godlyId;
     }
 
     public class PlayerView{

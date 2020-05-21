@@ -25,7 +25,7 @@ public class CLI extends RemoteView implements Runnable {
     private Boolean colorValidate = false;
     private boolean godlySelected = false;
     private ModelView modelView;
-    final static Object monitor = new Object();
+    private final Object monitor;
 
 
     private String filename;                                            //DA TOGLIERE IN FUTURO
@@ -44,14 +44,13 @@ public class CLI extends RemoteView implements Runnable {
 
     public CLI(Client connection) {
         super(connection);
-        System.out.println(this.connection);
         this.connection = connection;
+        this.monitor = getMonitor();
         System.out.println(this.connection);
         this.scanner = new Scanner(System.in);
         this.printer = System.out;
         this.board = new VirtualBoard();
-        this.modelView = new ModelView();
-
+        this.modelView = getModelView();
         Random random = new Random();                                //DA TOGLIERE IN FUTURO
         filename = "partita" + random.nextInt(999) + ".txt";        //
         File myObj = new File(filename);                            //
@@ -83,7 +82,6 @@ public class CLI extends RemoteView implements Runnable {
             if (!newValue.getColor().equals(color)) {
 
                 if (!colorValidate && nickValidate) {
-                    printer.println("\n" + modelView.getPlayer(newValue.getId()).getNickname() + " chooses " + newValue.getColor());
                     printAvailableColors();
                 }
                 return;
@@ -113,7 +111,7 @@ public class CLI extends RemoteView implements Runnable {
     public ColorMessage askColor() {
         ColorMessage message = new ColorMessage(getPlayerId());
         do {
-            printer.println("Hey " + nickname + "! Which colour you want to choose among those available?");
+
             printAvailableColors();
             playerChoice = scanner.nextLine();
             System.out.println(playerChoice);
@@ -129,34 +127,65 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     public void printAvailableColors() {
+        printBreakers();
+        printer.println("\n");
+        printer.println("\nHey " + nickname + "! Which colour you want to choose? Available: ");
         for (Color c : modelView.getColors()) {
             printer.print(c.getName() + "\t");
         }
+        printer.println();
         for (ModelView.PlayerView p : modelView.getPlayers()) {
             if (p.getColor() != null)
-                printer.println("\n" + p.getNickname() + " chose " + p.getColor() + ANSIColor.RESET);
+                printer.println("" + p.getNickname() + " chose " + p.getColor().getName());
         }
+        printer.println();
         startingBrackets();
     }
 
-    public InitialCardsMessage askGodList(InitialCardsMessage message) {
-        printer.println(message.getMessage());
-        for (int i = 0; i < message.getCompleteList().size(); i++) {
+    public InitialCardsMessage askGodList() {
+
+        String s;
+        String isNumber;
+        InitialCardsMessage message = new InitialCardsMessage();
+
+        //info 3
+        do {
+            printGodsList(message);
+            startingBrackets();
+            s = scanner.nextLine();
+            isNumber = s.replaceAll("[^0-9]", "");
+            if(!isNumber.equals("")){
+                int indexGod = Integer.parseInt(isNumber);
+                if(indexGod<modelView.getGods().size()) {
+                    if (s.contains("info") || s.contains("man")) {
+                        printer.println(modelView.getGods().get(indexGod)[0]);
+                        printer.println(modelView.getGods().get(indexGod)[1]);
+                        printBreakers();
+                    } else{
+                        message.addToSelectedList(modelView.getGods().get(indexGod)[0]);
+                        modelView.getGods().remove(indexGod);
+                    }
+                }
+            }
+        } while (message.getSelectedList().size() != modelView.getPlayers().size());
+
+
+        message.addToSelectedList(s.toUpperCase());
+
+        printBreakers();
+        return message;
+    }
+
+    public void printGodsList(InitialCardsMessage message) {
+        printer.println("Select " + (modelView.getPlayers().size()-message.getSelectedList().size()) + " gods from the list below: \ninfo or man + #god");
+        for (int i = 0; i < modelView.getGods().size(); i++) {
             if (i % 2 == 0) {
                 printer.println();
             }
-            printer.printf("%-15s", message.getCompleteList().get(i));
+            printer.printf("%d- %-15s",i, modelView.getGods().get(i)[0]);
         }
         printer.println("\n");
-        String s;
-        for (int i = 0; i < message.getDim(); i++) {
-            startingBrackets();
-            s = scanner.nextLine();
-            setOnFile(s);///////////////////////////////////DA TOGLIERE IN FUTURO
-            message.addToSelectedList(s.toUpperCase());
-        }
-        printBreakers();
-        return message;
+
     }
 
 
@@ -365,7 +394,7 @@ public class CLI extends RemoteView implements Runnable {
             ColorMessage message = askColor();
             waitingValidation(new PropertyChangeEvent(this, "notifyColor", false, message));
         }
-        while(!godlySelected){
+        while (!godlySelected) {
             try {
                 synchronized (monitor) {
                     monitor.wait();
@@ -373,6 +402,15 @@ public class CLI extends RemoteView implements Runnable {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+        //stampa info riepilogative
+        if (modelView.getGodlyId() == getPlayerId()) {
+            getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, askGodList()));
+        } else{
+            printer.println(modelView.getPlayer(modelView.getGodlyId()).getNickname() + "is choosing Gods");
+        }
+        while(modelView.getActualPlayerId() != getPlayerId()){
+
         }
 
     }
@@ -384,7 +422,7 @@ public class CLI extends RemoteView implements Runnable {
             try {
                 monitor.wait();
             } catch (InterruptedException | IllegalMonitorStateException e) {
-                System.out.println("ILLEGAL MONITOr++");
+                System.out.println("ILLEGAL MONITOR");
                 e.printStackTrace();
             }
         }
@@ -396,8 +434,8 @@ public class CLI extends RemoteView implements Runnable {
         synchronized (monitor) {
             modelView.addPlayer(newValue.getId(), newValue.getNick());
             if (!newValue.getNick().equals(nickname)) {
-                printer.println("\n" + newValue.getNick() + " joined the game!");
-                if (!nickValidate) startingBrackets();
+                //printer.println("\n" + newValue.getNick() + " joined the game!");
+                //if (!nickValidate) startingBrackets();
                 return;
             }
             if (newValue.getId() == this.getPlayerId()) {
@@ -405,6 +443,11 @@ public class CLI extends RemoteView implements Runnable {
             }
             monitor.notify();
         }
+    }
+
+    @Override
+    protected void godlyReceived() {
+        godlySelected = true;
     }
 
 

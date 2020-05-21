@@ -7,27 +7,14 @@ import java.util.List;
 
 public class InitialCardsMessage implements Message, Serializable {
 
-    private ArrayList<String> completeList;
     private ArrayList<String> selectedList;
     private String message;
     private int id;
-    private int dim;
 
 
-    public InitialCardsMessage(ArrayList<String> list, int id, int dim) {
-        this.id = id;
-        this.completeList = new ArrayList<>();
+    public InitialCardsMessage() {
         this.selectedList = new ArrayList<>();
 
-        this.completeList.addAll(list);
-        this.message = "Select " + dim + " God Cards ";
-        this.dim = dim;
-
-
-    }
-
-    public ArrayList<String> getCompleteList() {
-        return completeList;
     }
 
     public String getMessage() {
@@ -52,8 +39,5 @@ public class InitialCardsMessage implements Message, Serializable {
         return selectedList;
     }
 
-    public int getDim() {
-        return this.dim;
-    }
 
 }

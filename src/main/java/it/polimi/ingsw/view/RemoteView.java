@@ -9,16 +9,27 @@ import java.beans.PropertyChangeEvent;
 public abstract class RemoteView extends View {
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
-    private ModelView modelView;
+    private ModelView modelView = new ModelView();
     private Client connection;
     private int id;
 
+    public static Object getMonitor() {
+        return monitor;
+    }
+
+    final static Object monitor = new Object();
+
     public RemoteView(Client connection) {
         this.connection = connection;
-        System.out.println("CONNECI^TIO REMODTE"+this.connection);
     }
     public RemoteView(){}
-    public Client getConnection(){return connection;}
+
+    public Client getConnection() {return connection;}
+
+    public ModelView getModelView() {
+        return modelView;
+    }
+
     public void notifyEvent(PropertyChangeEvent evt) {
 
         String propertyName = evt.getPropertyName();
@@ -35,7 +46,7 @@ public abstract class RemoteView extends View {
         } else if (propertyName.equalsIgnoreCase("currPlayerUpdate")) {
 
         }else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
-            this.setGodly();
+            this.setGodly(((GodlyMessage)evt.getNewValue()).getId());
         } else if (propertyName.equalsIgnoreCase("freeWorkerPositions")) {
 
         } else if (propertyName.equalsIgnoreCase("godConfirm")) {
@@ -46,11 +57,19 @@ public abstract class RemoteView extends View {
         }
     }
 
-    protected abstract void setGodly();
+    protected void setGodly(int godlyId){
+        synchronized (monitor){
+            this.modelView.setGodlyId(godlyId);
+            godlyReceived();
+            monitor.notifyAll();
+        }
+    }
 
     protected abstract void colorReceived(ColorMessage newValue);
 
     protected abstract void nicknameReceived(NicknameMessage newValue);
+
+    protected abstract void godlyReceived();
 
     protected void setPlayerId(int id) {
         this.id = id;
