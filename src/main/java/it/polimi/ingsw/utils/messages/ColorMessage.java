@@ -9,17 +9,15 @@ import java.util.ArrayList;
 public class ColorMessage implements Message, Serializable {
 
     private String message;
-    private ArrayList<Color> colors = new ArrayList<>();
     private Color color;
     private int id;
 
 
-
-    public ColorMessage(int i, ArrayList<Color> colors) {
-        this.message = "Choose your color: ";
-        this.colors.addAll(colors);
-        id = i;
+    public ColorMessage(int id){
+        this.id = id;
     }
+
+
 
     public void setColor(Color color) {
         this.color = color;
@@ -27,10 +25,6 @@ public class ColorMessage implements Message, Serializable {
 
     public Color getColor() {
         return this.color;
-    }
-
-    public ArrayList<Color> getColors() {
-        return colors;
     }
 
     public String getMessage() {
