@@ -33,9 +33,9 @@ public class InitSetupTest {
     @Test
     public void usernameTest(){
         assertFalse(initSetup.isInUser("Pippo"));
-        initSetup.setUsername("Pippo");
+        initSetup.setNicknames("Pippo");
         assertTrue(initSetup.isInUser("Pippo"));
-        initSetup.setUsername("Pluto");
+        initSetup.setNicknames("Pluto");
         assertTrue(initSetup.isInUser("Pluto"));
     }
 

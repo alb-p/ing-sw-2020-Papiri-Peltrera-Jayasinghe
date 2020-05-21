@@ -36,6 +36,7 @@ public class CLI extends RemoteView implements Runnable {
         this.modelView = getModelView();
     }
 
+
     public void welcomeMessage() {
         printer.println("\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -118,14 +119,14 @@ public class CLI extends RemoteView implements Runnable {
                         printBreakers();
                     } else {
                         message.addToSelectedList(modelView.getGods().get(indexGod)[0]);
+                        modelView.getChosenGods().add(modelView.getGods().get(indexGod));
                         modelView.getGods().remove(indexGod);
                     }
                 }
             }
         } while (message.getSelectedList().size() != modelView.getPlayers().size());
-
-
-        message.addToSelectedList(s.toUpperCase());
+        modelView.getGods().addAll(modelView.getChosenGods());
+        modelView.getChosenGods().clear();
 
         printBreakers();
         return message;
@@ -251,13 +252,28 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-    public GodMessage askGod(GodMessage inputObject) {
-        printer.println(inputObject.getMessage());
-        startingBrackets();
-        String input = scanner.nextLine().toUpperCase();
-        inputObject.setGod(input);
+    public GodMessage askGod() {
+        GodMessage message = new GodMessage();
+        message.setId(getPlayerId());
+        boolean found = false;
         printBreakers();
-        return inputObject;
+        do {
+            printer.println("\nSelect God among the chosen gods:\n");
+            for(String[] g : modelView.getChosenGods()){
+                printer.printf(" %-15s",g[0]);
+            }
+            printer.println();
+            startingBrackets();
+            String input = scanner.nextLine().toUpperCase();
+            for (String[] g : modelView.getChosenGods()) {
+                if (g[0].equalsIgnoreCase(input)) {
+                    message.setGod(input);
+                    found = true;
+                    modelView.getPlayer(getPlayerId()).setGod(g);
+                }
+            }
+        } while (!found);
+        return message;
     }
 
 
@@ -343,16 +359,26 @@ public class CLI extends RemoteView implements Runnable {
             //stampa info riepilogative
             if (modelView.getGodlyId() == getPlayerId()) {
                 getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, askGodList()));
-            } else {
-                printer.println(modelView.getPlayer(modelView.getGodlyId()).getNickname() + "is choosing Gods");
             }
-            while (modelView.getActualPlayerId() != getPlayerId()) {
+                synchronized (this) {
+                    wait();
+                }
 
-            }
+            godChoice();
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
+    }
+
+    private synchronized void godChoice() throws InterruptedException {
+        while (modelView.getActualPlayerId() != getPlayerId()) {
+            wait();
+            modelView.setNextPlayerId();
+        }
+        GodMessage message = askGod();
+        connection.sendEvent(new PropertyChangeEvent(this, "notifyGod",null,message));
     }
 
     private synchronized void startingGame() throws InterruptedException {
@@ -418,8 +444,25 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected void godlyReceived() {
+        if (getPlayerId() != modelView.getGodlyId()) {
+            printer.println("\n" + modelView.getPlayer(modelView.getGodlyId()).getNickname() + " is choosing Gods\n");
+            printBreakers();
+        }
         godlySelected = true;
     }
 
 
+    @Override
+    protected synchronized void chosenGods(InitialCardsMessage message) {
+        modelView.addChosenGods(message.getSelectedList());
+        if (modelView.getChosenGods().size() == modelView.getPlayers().size()) {
+            //STAMPARE TUTTE LE CARTE SCELTE
+            printer.println("\tCHOSEN GODS:");
+            for (String[] g : modelView.getChosenGods()) {
+                printer.println("\n" + g[0] + "\n" + g[1]);
+            }
+            this.notify();
+
+        }
+    }
 }

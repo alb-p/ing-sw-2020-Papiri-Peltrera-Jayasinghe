@@ -12,14 +12,14 @@ import java.util.Collections;
 public class InitSetup {
 
     private ArrayList<Color> colors;
-    private ArrayList<String> username;
+    private ArrayList<String> nicknames;
     private ArrayList<String> gods;
     private ArrayList<String> chosenGods;
     private PropertyChangeSupport initSetupListeners = new PropertyChangeSupport(this);
 
     public InitSetup() {
         colors = new ArrayList<>();
-        username = new ArrayList<>();
+        nicknames = new ArrayList<>();
         gods = new ArrayList<>();
         chosenGods = new ArrayList<>();
 
@@ -46,7 +46,7 @@ public class InitSetup {
 
     public boolean isInUser(String name) {
 
-        for (String s : username) {
+        for (String s : nicknames) {
             if (s.equals(name)) {
                 return true;
             }
@@ -54,8 +54,8 @@ public class InitSetup {
         return false;
     }
 
-    public void setUsername(NicknameMessage message) {
-        username.add(message.getNick());
+    public void setNicknames(NicknameMessage message) {
+        nicknames.add(message.getNick());
         System.out.println("SONO NICKNAMECONF DA SERVER");
         initSetupListeners.firePropertyChange("nicknameConfirm", null, message);
     }
@@ -97,7 +97,9 @@ public class InitSetup {
         for (int i = 0; i < gods.size(); i++) {
             if (gods.get(i).equals(chosenGod)) {
                 this.gods.remove(i);
-                return;
+                if(chosenGods.size()==nicknames.size()){
+                    initSetupListeners.firePropertyChange("god1ofNConfirmed",false,mess);
+                }else return;
             }
         }
         initSetupListeners.firePropertyChange("god1ofNConfirmed",false,mess);

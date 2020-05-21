@@ -4,7 +4,9 @@ import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.VirtualBoard;
 
+import javax.management.AttributeList;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 
 public class ModelView {
@@ -13,6 +15,7 @@ public class ModelView {
     private ArrayList<Color> colors = new ArrayList<>();
     private ArrayList<PlayerView> players = new ArrayList<>();
     private ArrayList<String[]> gods = new ArrayList<>();
+    private ArrayList<String[]> chosenGods = new ArrayList<>();
     private int actualPlayerId;
     private int godlyId;
     private int deletedPlayerId = -1;
@@ -125,6 +128,20 @@ public class ModelView {
 
     public int getGodlyId(){
         return godlyId;
+    }
+
+    public ArrayList<String[]> getChosenGods() {
+        return chosenGods;
+    }
+
+    public void addChosenGods(ArrayList<String> chosenGods) {
+        for (String s : chosenGods){
+            for(String[] g : gods){
+                if(s.equalsIgnoreCase(g[0])){
+                    this.chosenGods.add(g);
+                }
+            }
+        }
     }
 
     public class PlayerView{

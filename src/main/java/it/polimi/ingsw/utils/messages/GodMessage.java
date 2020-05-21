@@ -17,6 +17,10 @@ public class GodMessage implements Message, Serializable {
         this.id=i;
     }
 
+    public GodMessage() {
+
+    }
+
 
     public void setGod(String god) {
         this.god = god;

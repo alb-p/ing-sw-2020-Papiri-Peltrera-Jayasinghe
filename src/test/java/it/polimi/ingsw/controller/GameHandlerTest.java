@@ -85,8 +85,8 @@ public class GameHandlerTest {
                 "godMessageResponse", null, godMessage));
         assertTrue(model.getPlayer(0).getCard() instanceof Pan);
         nickname = new ArrayList<>();
-        initSetup.setUsername("Pippo");
-        initSetup.setUsername("Pluto");
+        initSetup.setNicknames("Pippo");
+        initSetup.setNicknames("Pluto");
         nickname.add("Pippo");
         nickname.add("Pluto");
         firstPlayerMessage = new FirstPlayerMessage(0, nickname);
@@ -106,8 +106,8 @@ public class GameHandlerTest {
         Player player = new Player(0, "Pippo", Color.WHITE);
         model.addPlayer(player);
         nickname = new ArrayList<>();
-        initSetup.setUsername("Pippo");
-        initSetup.setUsername("Pluto");
+        initSetup.setNicknames("Pippo");
+        initSetup.setNicknames("Pluto");
         nickname.add("Pippo");
         nickname.add("Pluto");
 

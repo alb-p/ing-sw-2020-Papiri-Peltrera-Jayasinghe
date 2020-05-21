@@ -1,7 +1,6 @@
 package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.network.SocketClientConnection;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -35,7 +34,7 @@ public class GameHandler implements PropertyChangeListener {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
             String name = message.getNick();
             if (!data.isInUser(name)) {
-                data.setUsername(message);
+                data.setNicknames(message);
                 playerCreationQueue(message);
             }
 

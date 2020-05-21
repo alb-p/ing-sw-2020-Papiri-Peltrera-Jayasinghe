@@ -37,8 +37,8 @@ public abstract class RemoteView {
             this.colorReceived((ColorMessage)evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
             this.modelView.getBoard().setSlot((VirtualSlot) evt.getNewValue());
-        } else if (propertyName.equalsIgnoreCase("godsAvailable")) {
-
+        } else if (propertyName.equalsIgnoreCase("god1ofNConfirmed")) {
+            chosenGods((InitialCardsMessage)evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
 
         } else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
@@ -50,12 +50,14 @@ public abstract class RemoteView {
         } else if (propertyName.equalsIgnoreCase("freeWorkerPositions")) {
 
         } else if (propertyName.equalsIgnoreCase("godConfirm")) {
-
+//TODO cathcarlo in thread del client e svegliare il prossimo actualplayer incrementandolo (toglierlo dal while 377CLI)
         } else if (propertyName.equalsIgnoreCase("gameReady")) {
             setPlayerId((int) evt.getNewValue());
             gameReady();
         }
     }
+
+    protected abstract void chosenGods(InitialCardsMessage newValue);
 
     protected synchronized void setGodly(int godlyId){
             this.modelView.setGodlyId(godlyId);
