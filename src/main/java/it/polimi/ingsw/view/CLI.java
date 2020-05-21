@@ -23,6 +23,7 @@ public class CLI extends RemoteView implements Runnable {
     private Color color;
     private Boolean nickValidate = false;
     private Boolean colorValidate = false;
+    private boolean godlySelected = false;
     private ModelView modelView;
     final static Object monitor = new Object();
 
@@ -60,6 +61,7 @@ public class CLI extends RemoteView implements Runnable {
             e.printStackTrace();                                    //
         }
     }
+
     public void welcomeMessage() {
         printer.println("\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -80,8 +82,8 @@ public class CLI extends RemoteView implements Runnable {
             modelView.setColor(newValue.getId(), newValue.getColor());
             if (!newValue.getColor().equals(color)) {
 
-                if (!colorValidate && nickValidate){
-                    printer.println("\n" +modelView.getPlayer(newValue.getId()).getNickname()+ " chooses " +newValue.getColor());
+                if (!colorValidate && nickValidate) {
+                    printer.println("\n" + modelView.getPlayer(newValue.getId()).getNickname() + " chooses " + newValue.getColor());
                     printAvailableColors();
                 }
                 return;
@@ -121,17 +123,18 @@ public class CLI extends RemoteView implements Runnable {
                     message.setColor(c);
             }
             printBreakers();
-        }while(!modelView.isInColor(message.getColor()));
+        } while (!modelView.isInColor(message.getColor()));
         this.color = message.getColor();
         return message;
     }
 
-    public void printAvailableColors(){
+    public void printAvailableColors() {
         for (Color c : modelView.getColors()) {
             printer.print(c.getName() + "\t");
         }
-        for(ModelView.PlayerView p: modelView.getPlayers()){
-            if(p.getColor() != null) printer.println("\n"+p.getNickname() + " chose " + p.getColor()+ANSIColor.RESET);
+        for (ModelView.PlayerView p : modelView.getPlayers()) {
+            if (p.getColor() != null)
+                printer.println("\n" + p.getNickname() + " chose " + p.getColor() + ANSIColor.RESET);
         }
         startingBrackets();
     }
@@ -358,15 +361,24 @@ public class CLI extends RemoteView implements Runnable {
             NicknameMessage message = askNickPlayer();
             waitingValidation(new PropertyChangeEvent(this, "notifyNickname", false, message));
         }
-        while(!colorValidate){
+        while (!colorValidate) {
             ColorMessage message = askColor();
             waitingValidation(new PropertyChangeEvent(this, "notifyColor", false, message));
+        }
+        while(!godlySelected){
+            try {
+                synchronized (monitor) {
+                    monitor.wait();
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-
         }
 
+    }
 
-    public void waitingValidation (PropertyChangeEvent evt) {
+
+    public void waitingValidation(PropertyChangeEvent evt) {
         synchronized (monitor) {
             getConnection().sendEvent(evt);
             try {

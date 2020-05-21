@@ -34,6 +34,8 @@ public abstract class RemoteView extends View {
             this.nicknameReceived((NicknameMessage)evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("currPlayerUpdate")) {
 
+        }else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
+            this.setGodly();
         } else if (propertyName.equalsIgnoreCase("freeWorkerPositions")) {
 
         } else if (propertyName.equalsIgnoreCase("godConfirm")) {
@@ -43,6 +45,8 @@ public abstract class RemoteView extends View {
             startMainThread();
         }
     }
+
+    protected abstract void setGodly();
 
     protected abstract void colorReceived(ColorMessage newValue);
 

@@ -13,7 +13,8 @@ public class ModelView {
     private ArrayList<Color> colors = new ArrayList<>();
     private ArrayList<PlayerView> players = new ArrayList<>();
     private ArrayList<String[]> gods = new ArrayList<>();
-
+    private int actualPlayerId;
+    private int deletedPlayerId = -1;
 
     public ModelView(){
         Collections.addAll(colors, Color.values());
@@ -57,6 +58,25 @@ public class ModelView {
 
     public ArrayList<PlayerView> getPlayers() {
         return players;
+    }
+
+    public int getActualPlayerId() {
+        return actualPlayerId;
+    }
+
+    public void setActualPlayerId(int actualPlayerId) {
+        this.actualPlayerId = actualPlayerId;
+    }
+
+    public void setNextPlayerId(){
+        actualPlayerId = (actualPlayerId + 1) % players.size();
+        if(actualPlayerId == deletedPlayerId){
+            actualPlayerId = (actualPlayerId + 1) % players.size();
+        }
+    }
+
+    public void setDeletedPlayerId(int deletedPlayerId) {
+        this.deletedPlayerId = deletedPlayerId;
     }
 
     public class PlayerView{

@@ -7,8 +7,8 @@ public class GodlyMessage implements Message, Serializable {
     private String message;
     private int id;
 
-    public GodlyMessage(int i){
-        this.id=i;
+    public GodlyMessage(int id){
+        this.id=id;
     }
 
     @Override
@@ -18,7 +18,7 @@ public class GodlyMessage implements Message, Serializable {
 
     @Override
     public void setId(int id) {
-
+        this.id = id;
     }
 
     @Override
