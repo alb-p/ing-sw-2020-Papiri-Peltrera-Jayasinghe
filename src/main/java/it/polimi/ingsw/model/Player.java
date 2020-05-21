@@ -310,12 +310,32 @@ public class Player {
     //returns true if both trees don't have other available actions.
     public boolean treesAreLeaf() {
         int locked = 0;
-        for (TreeActionNode t: treeMap.values()){
-            if(t.isLeaf())locked++;
-            System.out.println("LEAFS:: "+t.getChildren().size());
+        for (TreeActionNode t : treeMap.values()) {
+            if (t.isLeaf()) locked++;
+            System.out.println("LEAFS:: " + t.getChildren().size());
         }
-        System.out.println("TREES ARE LEAF:: locked: "+ locked);
-        if (locked==2)return true;
+        System.out.println("TREES ARE LEAF:: locked: " + locked);
+        if (locked == 2) return true;
         return false;
+    }
+
+    public ArrayList<ArrayList> getFirstActions() {
+        ArrayList<ArrayList> actions = new ArrayList<>();
+        ArrayList<Action> result1 = new ArrayList<>();
+        ArrayList<Action> result2 = new ArrayList<>();
+        TreeActionNode root;
+
+        root = treeMap.get(workers.get(0));
+        for (TreeActionNode t : root.getChildren())
+            result1.add(t.getData());
+        actions.add(result1);
+
+        root = treeMap.get(workers.get(1));
+        for (TreeActionNode t : root.getChildren())
+            result2.add(t.getData());
+        actions.add(result2);
+
+        return actions;
+
     }
 }
