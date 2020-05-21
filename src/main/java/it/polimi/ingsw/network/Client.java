@@ -35,7 +35,7 @@ public class Client {
 
         if (chosenUI == 0) {
             this.view = new CLI(this);
-            System.out.println("COSTRUITA CLI +"+this);
+            new Thread((Runnable) this.view).start();
         } else {
             //TODO this.view = new GUI();
         }
@@ -43,7 +43,7 @@ public class Client {
 
 
     public void start() {
-        System.out.println("CLIENT SOUT"+ this);
+        System.out.println("CLIENT SOUT" + this);
 
         try {
             this.online = true;
@@ -112,20 +112,10 @@ public class Client {
                         while (true) {
                             final Object inputObject = inputStream.readObject();
 
-                            if (inputObject instanceof PropertyChangeEvent) {
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        view.notifyEvent((PropertyChangeEvent) inputObject);
-                                    }
-                                }).start();
-                            } else if(inputObject instanceof SetupMessage){
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        view.askNumOfPlayers();
-                                    }
-                                }).start();
+                            if (inputObject instanceof PropertyChangeEvent) {;
+                                view.notifyEvent((PropertyChangeEvent) inputObject);
+                            } else if (inputObject instanceof SetupMessage) {
+                                view.askNumOfPlayers();
                             }
 
                         }
@@ -137,11 +127,6 @@ public class Client {
             }).start();
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
-
-
-            // TODO writer che andrà a mandare gli oggetti al controller del server
-            // writer che sarà chiamato dalla update dopo la chiamatea della cli
-
         }
     }
 
@@ -159,7 +144,7 @@ public class Client {
 
     public void sendEvent(PropertyChangeEvent evt) {
         try {
-            if(evt.getNewValue() instanceof Message)
+            if (evt.getNewValue() instanceof Message)
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());
             synchronized (printStream) {
                 printStream.reset();

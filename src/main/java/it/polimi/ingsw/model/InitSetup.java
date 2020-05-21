@@ -56,6 +56,7 @@ public class InitSetup {
 
     public void setUsername(NicknameMessage message) {
         username.add(message.getNick());
+        System.out.println("SONO NICKNAMECONF DA SERVER");
         initSetupListeners.firePropertyChange("nicknameConfirm", null, message);
     }
 

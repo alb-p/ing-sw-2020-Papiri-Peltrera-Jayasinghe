@@ -6,7 +6,7 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 
-public abstract class RemoteView extends View {
+public abstract class RemoteView {
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
     private ModelView modelView = new ModelView();
@@ -53,16 +53,14 @@ public abstract class RemoteView extends View {
 
         } else if (propertyName.equalsIgnoreCase("gameReady")) {
             setPlayerId((int) evt.getNewValue());
-            startMainThread();
+            gameReady();
         }
     }
 
-    protected void setGodly(int godlyId){
-        synchronized (monitor){
+    protected synchronized void setGodly(int godlyId){
             this.modelView.setGodlyId(godlyId);
             godlyReceived();
-            monitor.notifyAll();
-        }
+            notifyAll();
     }
 
     protected abstract void colorReceived(ColorMessage newValue);
@@ -79,12 +77,11 @@ public abstract class RemoteView extends View {
         return id;
     }
 
-    protected abstract void startMainThread();
+    protected abstract void gameReady();
 
     public void askNumOfPlayers() {
         SetupMessage message = chooseNumberOfPlayers();
         message.setId(getPlayerId());
-        System.out.println(message.getMessage() + "  " + message.getField());
         connection.send(message);
     }
 
