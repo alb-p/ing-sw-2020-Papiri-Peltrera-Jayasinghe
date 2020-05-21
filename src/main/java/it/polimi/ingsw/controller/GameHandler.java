@@ -17,7 +17,9 @@ public class GameHandler implements PropertyChangeListener {
     private TurnHandler turnHandler;
     private int playersPerGame;
     private int firstPlayerChosenID = -1;
-    private int currentPlayerID=-1;
+    private int currentPlayerID = -1;
+    private boolean atLeastOneGod = false;
+    private boolean workerPlaced = false;
 
     public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
         data = initSetup;
@@ -36,10 +38,8 @@ public class GameHandler implements PropertyChangeListener {
                 data.setUsername(message);
                 playerCreationQueue(message);
             }
-        }
 
-
-        else if (evt.getPropertyName().equals("notifyColor")) {
+        } else if (evt.getPropertyName().equals("notifyColor")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
             Color color = message.getColor();
             if (data.isInColor(color)) {
@@ -47,75 +47,64 @@ public class GameHandler implements PropertyChangeListener {
                 playerCreationQueue(message);
 
             }
-        }
 
-
-        else if (evt.getPropertyName().equals("notify1ofNGod")) {
+        } else if (evt.getPropertyName().equals("notify1ofNGod")) {
             InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();
-            if(message.getId()==currentPlayerID){
-                for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s,message);
+            if (message.getId() == currentPlayerID) {
+                for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s, message);
                 if (data.chosenGodsSize() == playersPerGame) currentPlayerID = (currentPlayerID + 1) % playersPerGame;
             }
-        }
 
-
-        else if (evt.getPropertyName().equals("notifyGod") && data.chosenGodsSize() == playersPerGame) {
+        } else if (evt.getPropertyName().equals("notifyGod") && data.chosenGodsSize() == playersPerGame) {
             GodMessage message = (GodMessage) evt.getNewValue();
             String god = message.getGod();
-            if (message.getId()==currentPlayerID&&data.isInGod(god)) {
+            if (message.getId() == currentPlayerID && data.isInGod(god)) {
                 model.setCard(message.getId(), god);
                 data.delGod(message);
                 currentPlayerID = (currentPlayerID + 1) % playersPerGame;
+                atLeastOneGod = true;
 
             }
-        }
 
-        else if (evt.getPropertyName().equals("notifyFirstPlayer") && data.chosenGodsSize() == playersPerGame) {
+        } else if (evt.getPropertyName().equals("notifyFirstPlayer") && atLeastOneGod && data.chosenGodsSize() == 0) {
             FirstPlayerMessage message = (FirstPlayerMessage) evt.getNewValue();
             String name = message.getChosenName();
-            if(message.getId()==currentPlayerID&&data.isInUser(name)){
-                for(int i=0;i<playersPerGame;i++){
+            if (message.getId() == currentPlayerID && data.isInUser(name)) {
+                for (int i = 0; i < playersPerGame; i++) {
                     System.out.println(playersMap);
-                    if(playersMap.get(i).equals(name)){
+                    if (playersMap.get(i).equals(name)) {
                         firstPlayerChosenID = i;
-                        System.out.println("FIRSTPLAYERID "+ firstPlayerChosenID);
+                        currentPlayerID = firstPlayerChosenID;
+                        System.out.println("FIRSTPLAYERID " + firstPlayerChosenID);
                         turnHandler.setTotalTurnCounter(i);
-                        data.initialWorkers(firstPlayerChosenID,0);
+                        data.FirstPlayer(message);
                         break;
                     }
                 }
             }
-        }
 
-
-
-        else if (evt.getPropertyName().equals("setWorkerResponse")) {
+        } else if (evt.getPropertyName().equals("notifyWorker") && firstPlayerChosenID != -1) {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
             System.out.println("ID PLAYER DA SETWORKER:: " + message.getId());
             Coordinate coordinate = message.getCoordinate();
-            int index = message.getId();
-                if(model.addWorker(index,coordinate,message.getWorkerNumber())) {
-                    if (message.getWorkerNumber() == 0)
-                        data.initialWorkers(message.getId(), 1);
-                    else {
-                        int nextID = (message.getId() + 1) % playersPerGame;
-                        if (nextID == firstPlayerChosenID) {
-                            data.notifyGameReady();
-                        } else {
-                            data.initialWorkers(nextID, 0);
-                        }
-                    }
-                }else data.initialWorkers(message.getId(),message.getWorkerNumber());
-        } else if (evt.getPropertyName().equalsIgnoreCase("notifyNick")){
+            if (currentPlayerID == message.getId()) {
+                if (!workerPlaced && model.addWorker(currentPlayerID, coordinate, message.getWorkerNumber())) {
+                    workerPlaced = true;
+                    data.workerPlaced(message);
+                } else if (workerPlaced && model.addWorker(currentPlayerID, coordinate, message.getWorkerNumber())) {
+                    workerPlaced = false;
+                    currentPlayerID++;
+                    data.workerPlaced(message);
+                    if (currentPlayerID == firstPlayerChosenID) data.notifyGameReady();
+                }
+
+
+            }
         }
     }
 
 
-    //buffer di creazione del player. Una volta ricevuto il nick e il colore
-    //si procede alla creazione effettiva del player. Ad ogni inserimento del
-    //nick si crea un hashmap del tipo ID -> nome. Se tutti i player sono stati
-    //creati si procede alla scelta random del godly a cui verrà inviato un
-    //messaggio per decidere le divinità iniziali
+
     private void playerCreationQueue(Object value) {
         if (value instanceof NicknameMessage) {
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());

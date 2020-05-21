@@ -69,8 +69,7 @@ public class InitSetup {
         return colors.contains(color);
     }
 
-    //un giocatore x ha scelto un colore che deve essere ora cancellato dalla lista
-    //dei colori disponibili. Il messaggio viene inviato a tutti tranne a giocatore x
+
     public void delColor(ColorMessage mess) {
 
         for (int i = 0; i < this.colors.size(); i++)
@@ -92,7 +91,6 @@ public class InitSetup {
     }
 
 
-    //imposta le divinità scelte dal giocatore radom
     public void addChosenGod(String chosenGod,InitialCardsMessage mess) {
         this.chosenGods.add(chosenGod);
         for (int i = 0; i < gods.size(); i++) {
@@ -130,8 +128,7 @@ public class InitSetup {
         return false;
     }
 
-    //cancella la divinità scelta e manda un messaggio di richiesta divinità al prossimo player
-    //se tutte le divinità sono state scelte viene fatta la richiesta del first player al prescelto
+
     public void delGod(GodMessage mess) {
 
         for (int i = 0; i < chosenGods.size(); i++) {
@@ -146,15 +143,13 @@ public class InitSetup {
 
 /**********************************************************************************************************************/
     /***ALTRO***/
-    public void initialWorkers(int ID, int workerNumber) {
-        WorkerMessage message = new WorkerMessage(ID, workerNumber);
-        initSetupListeners.firePropertyChange("setWorker", null, message);
+    public void workerPlaced(WorkerMessage mess) {
+        initSetupListeners.firePropertyChange("workerConfirm", null, mess);
     }
 
-    //manda una richiesta per la scelta del primo giocatore
-    public void askFirstPlayer(int id) {
-        FirstPlayerMessage message = new FirstPlayerMessage(id, this.username);
-        initSetupListeners.firePropertyChange("firstPlayer", null, message);
+
+    public void FirstPlayer(FirstPlayerMessage mess) {
+        initSetupListeners.firePropertyChange("firstPlayerConfirmed", null, mess);
     }
 
 
