@@ -55,13 +55,13 @@ public class Room {
             model.addModelListener(c);
             initSetup.addInitSetupListener(c);
             executor.submit(c);
-            System.out.println(c);
+            System.out.println("Connection da room" + c);
         }
 
     }
 
     public int currentPlayerId() {
-        System.out.println("CURRENT PLAYER ID = " + this.connections.size());
+        System.out.println("CURRENT num of connections = " + this.connections.size());
         return this.connections.size();
     }
 

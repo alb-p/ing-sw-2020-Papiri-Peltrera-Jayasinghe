@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view;
 
+import com.sun.security.jgss.GSSUtil;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.network.Client;
 import it.polimi.ingsw.utils.ANSIColor;
@@ -19,8 +20,11 @@ public class CLI extends RemoteView implements Runnable {
     private VirtualBoard board;
     private Client connection;
     private String nickname;
+    private Color color;
     private Boolean nickValidate = false;
+    private Boolean colorValidate = false;
     private ModelView modelView;
+    final static Object monitor = new Object();
 
 
     private String filename;                                            //DA TOGLIERE IN FUTURO
@@ -56,18 +60,6 @@ public class CLI extends RemoteView implements Runnable {
             e.printStackTrace();                                    //
         }
     }
-
-    public NicknameMessage askNickPlayer(NicknameMessage message) {
-        printer.println(message.getMessage() + "\n");
-        startingBrackets();
-        playerChoice = scanner.nextLine();
-        setOnFile(playerChoice);////////////////////////////DA TOGLIERE IN FUTURO
-        message.setNick(playerChoice);
-        this.nickname = playerChoice;
-        return message;
-    }
-
-
     public void welcomeMessage() {
         printer.println("\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -82,23 +74,67 @@ public class CLI extends RemoteView implements Runnable {
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
     }
 
+    @Override
+    protected void colorReceived(ColorMessage newValue) {
+        synchronized (monitor) {
+            modelView.setColor(newValue.getId(), newValue.getColor());
+            if (!newValue.getColor().equals(color)) {
 
-    public ColorMessage askColor(ColorMessage message) {
-        printer.println("Hey " + nickname + "! Which colour you want to choose among those available?");
-        for (Color c : message.getColors()) {
-            printer.print(c.getName() + " ");
+                if (!colorValidate && nickValidate){
+                    printer.println("\n" +modelView.getPlayer(newValue.getId()).getNickname()+ " chooses " +newValue.getColor());
+                    printAvailableColors();
+                }
+                return;
+            }
+            if (newValue.getId() == this.getPlayerId()) {
+                colorValidate = true;
+            }
+            monitor.notify();
         }
-        startingBrackets();
-        playerChoice = scanner.nextLine();
-        setOnFile(playerChoice);/////////////////////DA TOGLIERE IN FUTURO
-        for (Color c : Color.values()) {
-            if (playerChoice.equalsIgnoreCase(c.getName()))
-                message.setColor(c);
-        }
-        printBreakers();
+
+    }
+
+    public NicknameMessage askNickPlayer() {
+        NicknameMessage message = new NicknameMessage();
+        do {
+            printer.println(message.getMessage() + "\n");
+            startingBrackets();
+            playerChoice = scanner.nextLine();
+            setOnFile(playerChoice);////////////////////////////DA TOGLIERE IN FUTURO
+            message.setNick(playerChoice);
+            this.nickname = playerChoice;
+        } while (!modelView.checkNickname(nickname));
         return message;
     }
 
+
+    public ColorMessage askColor() {
+        ColorMessage message = new ColorMessage(getPlayerId());
+        do {
+            printer.println("Hey " + nickname + "! Which colour you want to choose among those available?");
+            printAvailableColors();
+            playerChoice = scanner.nextLine();
+            System.out.println(playerChoice);
+            setOnFile(playerChoice);/////////////////////DA TOGLIERE IN FUTURO
+            for (Color c : modelView.getColors()) {
+                if (playerChoice.equalsIgnoreCase(c.getName()))
+                    message.setColor(c);
+            }
+            printBreakers();
+        }while(!modelView.isInColor(message.getColor()));
+        this.color = message.getColor();
+        return message;
+    }
+
+    public void printAvailableColors(){
+        for (Color c : modelView.getColors()) {
+            printer.print(c.getName() + "\t");
+        }
+        for(ModelView.PlayerView p: modelView.getPlayers()){
+            if(p.getColor() != null) printer.println("\n"+p.getNickname() + " chose " + p.getColor()+ANSIColor.RESET);
+        }
+        startingBrackets();
+    }
 
     public InitialCardsMessage askGodList(InitialCardsMessage message) {
         printer.println(message.getMessage());
@@ -319,33 +355,43 @@ public class CLI extends RemoteView implements Runnable {
         welcomeMessage();
 
         while (!nickValidate) {
-            synchronized (nickValidate) {
-                NicknameMessage message = askNickPlayer(new NicknameMessage());
-                if(message == null) System.out.println("CAZZOOOOOOOOOOO NULL");
-                if(getConnection() == null) System.out.println("CAZZOOOOOnnectionOOOOOO NULL");
-                getConnection().sendEvent(new PropertyChangeEvent(getPlayerId(), "notifyNickname", false, message));
-                try {
-                    nickValidate.wait();
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
+            NicknameMessage message = askNickPlayer();
+            waitingValidation(new PropertyChangeEvent(this, "notifyNickname", false, message));
+        }
+        while(!colorValidate){
+            ColorMessage message = askColor();
+            waitingValidation(new PropertyChangeEvent(this, "notifyColor", false, message));
+            }
 
+        }
+
+
+    public void waitingValidation (PropertyChangeEvent evt) {
+        synchronized (monitor) {
+            getConnection().sendEvent(evt);
+            try {
+                monitor.wait();
+            } catch (InterruptedException | IllegalMonitorStateException e) {
+                System.out.println("ILLEGAL MONITOr++");
+                e.printStackTrace();
             }
         }
-        System.out.println("FUORI VICLO OTTIMO ANDATO NICK");    }
+    }
 
 
     @Override
     protected void nicknameReceived(NicknameMessage newValue) {
-        synchronized (nickValidate) {
+        synchronized (monitor) {
+            modelView.addPlayer(newValue.getId(), newValue.getNick());
+            if (!newValue.getNick().equals(nickname)) {
+                printer.println("\n" + newValue.getNick() + " joined the game!");
+                if (!nickValidate) startingBrackets();
+                return;
+            }
             if (newValue.getId() == this.getPlayerId()) {
                 nickValidate = true;
-                System.out.println("NICK VALIDATED IF -------");
-            } else {
-                this.modelView.getPlayer(newValue.getId()).setNickname(newValue.getNick());
             }
-
-            nickValidate.notify();
+            monitor.notify();
         }
     }
 

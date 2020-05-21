@@ -23,15 +23,14 @@ public abstract class RemoteView extends View {
 
         String propertyName = evt.getPropertyName();
         if (propertyName.equalsIgnoreCase("colorConfirm")) {
-
+            this.colorReceived((ColorMessage)evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
             this.modelView.getBoard().setSlot((VirtualSlot) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("godsAvailable")) {
 
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
 
-        } else if (propertyName.equalsIgnoreCase("nicknameConfirme")) {
-            System.out.println(this.id+"<-- remote ID");
+        } else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
             this.nicknameReceived((NicknameMessage)evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("currPlayerUpdate")) {
 
@@ -40,14 +39,17 @@ public abstract class RemoteView extends View {
         } else if (propertyName.equalsIgnoreCase("godConfirm")) {
 
         } else if (propertyName.equalsIgnoreCase("gameReady")) {
+            setPlayerId((int) evt.getNewValue());
             startMainThread();
         }
     }
 
+    protected abstract void colorReceived(ColorMessage newValue);
+
     protected abstract void nicknameReceived(NicknameMessage newValue);
 
-    protected void setPlayerId(int source) {
-        this.id = source;
+    protected void setPlayerId(int id) {
+        this.id = id;
     }
 
     public int getPlayerId() {
