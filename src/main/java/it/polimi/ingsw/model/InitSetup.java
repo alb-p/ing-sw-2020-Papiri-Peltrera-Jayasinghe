@@ -56,26 +56,13 @@ public class InitSetup {
 
     public void setUsername(NicknameMessage message) {
         username.add(message.getNick());
-        initSetupListeners.firePropertyChange("nicknameConfirme", null, message);
+        initSetupListeners.firePropertyChange("nicknameConfirm", null, message);
     }
 
-    //rimanda messaggio se il giocatore ha impostato un nick non valido
-    public void wrongUsername(int id) {
-        NicknameMessage message = new NicknameMessage(id);
-        message.setMessage("Nickname is already being used, please try again: ");
-        initSetupListeners.firePropertyChange("sendNick", false, message);
-    }
 
 /**********************************************************************************************************************/
     /***COLORS***/
 
-    //viene inviato un messaggio con i colori rimanenti a
-    //chi ha ha finito di mettere il nick o colore sbagliato
-    public void askColor(int id) {
-        ColorMessage message = new ColorMessage(id, this.colors);
-        initSetupListeners.firePropertyChange("sendColor", false, message);
-
-    }
 
     public boolean isInColor(Color color) {
 
@@ -89,22 +76,24 @@ public class InitSetup {
         for (int i = 0; i < this.colors.size(); i++)
             if (this.colors.get(i) == mess.getColor())
                 this.colors.remove(i);
-        ColorSelectedMessage message = new ColorSelectedMessage(mess.getId(), mess.getColor());
-        initSetupListeners.firePropertyChange("delColor", null, message);
+
+        initSetupListeners.firePropertyChange("colorConfirm", null, mess);
 
     }
 
 /**********************************************************************************************************************/
     /***GODS***/
 
-    //imposta le divinità scelta
-    public void setChosenGods(int ID) {
-        GodMessage message = new GodMessage(ID, chosenGods);
-        initSetupListeners.firePropertyChange("sendGod", null, message);
+    //avvisa chi è il godly
+    public void notifyGodly(int godlyID) {
+        GodlyMessage message = new GodlyMessage(godlyID);
+        initSetupListeners.firePropertyChange("godlySelected", false, message);
+
     }
 
+
     //imposta le divinità scelte dal giocatore radom
-    public void addChosenGod(String chosenGod) {
+    public void addChosenGod(String chosenGod,InitialCardsMessage mess) {
         this.chosenGods.add(chosenGod);
         for (int i = 0; i < gods.size(); i++) {
             if (gods.get(i).equals(chosenGod)) {
@@ -112,6 +101,8 @@ public class InitSetup {
                 return;
             }
         }
+        initSetupListeners.firePropertyChange("god1ofNConfirmed",false,mess);
+
     }
 
     public int chosenGodsSize() {
@@ -141,51 +132,29 @@ public class InitSetup {
 
     //cancella la divinità scelta e manda un messaggio di richiesta divinità al prossimo player
     //se tutte le divinità sono state scelte viene fatta la richiesta del first player al prescelto
-    public void delGod(GodMessage mess, int numOfPlayers) {
-        int nextPlayer;
+    public void delGod(GodMessage mess) {
+
         for (int i = 0; i < chosenGods.size(); i++) {
             if (chosenGods.get(i).equals(mess.getGod())) {
                 chosenGods.remove(i);
                 break;
             }
         }
-        if (chosenGods.isEmpty()) {
-            askFirstPlayer(mess.getId());
-
-        } else {
-            nextPlayer = (mess.getId() + 1) % numOfPlayers;
-            System.out.println("NEXTPLA "+nextPlayer+ "MESSid "+mess.getId()+ "PLAYERSPERGAME: "+numOfPlayers);
-            GodMessage message = new GodMessage(nextPlayer, this.chosenGods);
-            initSetupListeners.firePropertyChange("sendGod", null, message);
-        }
-
-    }
-
-    //manda un messaggio al giocatore random per la scelta delle divinità
-    public void initialCards(int lastPlayerID, int numberOfGodsLeft) {
-        InitialCardsMessage message = new InitialCardsMessage(this.gods, lastPlayerID, numberOfGodsLeft);
-        initSetupListeners.firePropertyChange("initialCards", false, message);
-
-    }
-
-    //richiede un god perchè il giocatore ne ha selezionato uno non valido
-    public void askGod(int PlayerID) {
-        GodMessage message = new GodMessage(PlayerID, chosenGods);
-        initSetupListeners.firePropertyChange("sendGod", false, message);
+        initSetupListeners.firePropertyChange("GodConfirm", null, mess);
     }
 
 
 /**********************************************************************************************************************/
     /***ALTRO***/
     public void initialWorkers(int ID, int workerNumber) {
-        WorkerMessage message = new WorkerMessage(ID,workerNumber);
-        initSetupListeners.firePropertyChange("setWorker",null,message);
+        WorkerMessage message = new WorkerMessage(ID, workerNumber);
+        initSetupListeners.firePropertyChange("setWorker", null, message);
     }
 
     //manda una richiesta per la scelta del primo giocatore
     public void askFirstPlayer(int id) {
-        FirstPlayerMessage message=new FirstPlayerMessage(id,this.username);
-        initSetupListeners.firePropertyChange("firstPlayer",null,message);
+        FirstPlayerMessage message = new FirstPlayerMessage(id, this.username);
+        initSetupListeners.firePropertyChange("firstPlayer", null, message);
     }
 
 

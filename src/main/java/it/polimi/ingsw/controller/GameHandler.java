@@ -16,7 +16,8 @@ public class GameHandler implements PropertyChangeListener {
     private Model model;
     private TurnHandler turnHandler;
     private int playersPerGame;
-    private int firstPlayerChosenID = 0;
+    private int firstPlayerChosenID = -1;
+    private int currentPlayerID=-1;
 
     public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
         data = initSetup;
@@ -27,10 +28,7 @@ public class GameHandler implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
-        //arriva un nick da virtualview. Se non è gia stato inserito
-        //da un altro player viene inserito in una lista in
-        //initSetup, creato un buffer di creazione del player e viene
-        //fatta la richiesta per il colore.
+
         if (evt.getPropertyName().equals("notifyNickname")) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
             String name = message.getNick();
@@ -40,71 +38,56 @@ public class GameHandler implements PropertyChangeListener {
             }
         }
 
-        //arriva un colore da virtualview. se non è gia stato inserito
-        //da un altro player viene inserito in una lista in initSetup
-        //e completa la creazione del player nel buffer
-        else if (evt.getPropertyName().equals("colorMessageResponse")) {
+
+        else if (evt.getPropertyName().equals("notifyColor")) {
             ColorMessage message = (ColorMessage) evt.getNewValue();
             Color color = message.getColor();
             if (data.isInColor(color)) {
-                playerCreationQueue(message);
                 data.delColor(message);
-            } else {
-                data.askColor(message.getId());
+                playerCreationQueue(message);
+
             }
         }
 
-        //arriva una lista di god da virtualview scelti dal godly
-        //i god validi vengono inseriti in una lista in initSetup.
-        //quelli non validi vengono richiesti. Se tutti sono stati validati
-        //viene fatto scegliere un God al giocatore successivo al godly
-        else if (evt.getPropertyName().equals("initialCardsResponse")) {
+
+        else if (evt.getPropertyName().equals("notify1ofNGod")) {
             InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();
-            for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s);
-            if (data.chosenGodsSize() == playersPerGame) {
-                int nextID =( message.getId() + 1) % playersPerGame;
-                data.setChosenGods(nextID);
-            } else {
-                data.initialCards(message.getId(), playersPerGame - data.chosenGodsSize());
+            if(message.getId()==currentPlayerID){
+                for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s,message);
+                if (data.chosenGodsSize() == playersPerGame) currentPlayerID = (currentPlayerID + 1) % playersPerGame;
             }
         }
 
-        //arriva un God da virtualview. Se non è gia stato inserito da
-        //un altro player viene cancellato dalla lista dei god disponibili
-        //e assegna la divinità al player. dopo la cancellazione viene fatta
-        //la richiesta di scelta god al player successivo in initSetup. Se
-        //tutti i god sono stati scelti viene fatta la richiesta al godly
-        //per la scelta del primo player
-        else if (evt.getPropertyName().equals("godMessageResponse")) {
+
+        else if (evt.getPropertyName().equals("notifyGod") && data.chosenGodsSize() == playersPerGame) {
             GodMessage message = (GodMessage) evt.getNewValue();
             String god = message.getGod();
-            if (data.isInGod(god)) {
-                data.delGod(message, playersPerGame);
+            if (message.getId()==currentPlayerID&&data.isInGod(god)) {
                 model.setCard(message.getId(), god);
-            } else {
-                data.askGod(message.getId());
+                data.delGod(message);
+                currentPlayerID = (currentPlayerID + 1) % playersPerGame;
+
             }
         }
 
-        //se il firstplayer scelto esiste viene avvisato turnHandler
-        else if (evt.getPropertyName().equals("firstPlayerResponse")) {
+        else if (evt.getPropertyName().equals("notifyFirstPlayer") && data.chosenGodsSize() == playersPerGame) {
             FirstPlayerMessage message = (FirstPlayerMessage) evt.getNewValue();
             String name = message.getChosenName();
-            if(data.isInUser(name)){
-               for(int i=0;i<playersPerGame;i++){
-                   System.out.println(playersMap);
-                   if(playersMap.get(i).equals(name)){
-                       firstPlayerChosenID = i;
-                       System.out.println("FIRSTPLAYERID "+ firstPlayerChosenID);
-                       turnHandler.setTotalTurnCounter(i);
-                       data.initialWorkers(firstPlayerChosenID,0);
-                       break;
-                   }
-               }
-            }else{
-                data.askFirstPlayer(message.getId());
+            if(message.getId()==currentPlayerID&&data.isInUser(name)){
+                for(int i=0;i<playersPerGame;i++){
+                    System.out.println(playersMap);
+                    if(playersMap.get(i).equals(name)){
+                        firstPlayerChosenID = i;
+                        System.out.println("FIRSTPLAYERID "+ firstPlayerChosenID);
+                        turnHandler.setTotalTurnCounter(i);
+                        data.initialWorkers(firstPlayerChosenID,0);
+                        break;
+                    }
+                }
             }
         }
+
+
 
         else if (evt.getPropertyName().equals("setWorkerResponse")) {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
@@ -142,10 +125,9 @@ public class GameHandler implements PropertyChangeListener {
             model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));
             if (model.getNumOfPlayers() == this.playersPerGame) {
                 Random random = new Random();
-                int godlyID = random.nextInt(model.getNumOfPlayers());
-                System.out.println("Last player is: " + godlyID);
-                data.initialCards(godlyID, model.getNumOfPlayers());
-
+                currentPlayerID = random.nextInt(model.getNumOfPlayers());
+                System.out.println("Last player is: " + currentPlayerID);
+                data.notifyGodly(currentPlayerID);
             }
         }
 

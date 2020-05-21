@@ -11,14 +11,9 @@ public class GodMessage implements Message, Serializable {
     String god;
     int id;
 
-    public GodMessage(){
-        this.message = "Choose your god:";
-        this.god=null;
-    }
-
-    public GodMessage(int i, ArrayList<String> gods){
-        this.message = "Choose your god: "+gods;
-        this.god=null;
+    public GodMessage(int i,String god){
+        this.message = "god selected from id "+i+": "+god;
+        this.god=god;
         this.id=i;
     }
 
