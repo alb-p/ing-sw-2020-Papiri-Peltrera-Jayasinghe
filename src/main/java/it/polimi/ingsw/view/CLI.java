@@ -257,22 +257,27 @@ public class CLI extends RemoteView implements Runnable {
         message.setId(getPlayerId());
         boolean found = false;
         printBreakers();
-        do {
-            printer.println("\nSelect God among the chosen gods:\n");
-            for(String[] g : modelView.getChosenGods()){
-                printer.printf(" %-15s",g[0]);
-            }
-            printer.println();
-            startingBrackets();
-            String input = scanner.nextLine().toUpperCase();
-            for (String[] g : modelView.getChosenGods()) {
-                if (g[0].equalsIgnoreCase(input)) {
-                    message.setGod(input);
-                    found = true;
-                    modelView.getPlayer(getPlayerId()).setGod(g);
+        if (modelView.getChosenGods().size() == 1) {
+            message.setGod(modelView.getChosenGods().get(0)[0]);
+            modelView.getPlayer(getPlayerId()).setGod(modelView.getChosenGods().get(0));
+        } else {
+            do {
+                printer.println("\nSelect God among the chosen gods:\n");
+                for (String[] g : modelView.getChosenGods()) {
+                    printer.printf(" %-15s", g[0]);
                 }
-            }
-        } while (!found);
+                printer.println();
+                startingBrackets();
+                String input = scanner.nextLine().toUpperCase();
+                for (String[] g : modelView.getChosenGods()) {
+                    if (g[0].equalsIgnoreCase(input)) {
+                        message.setGod(input);
+                        found = true;
+                        modelView.getPlayer(getPlayerId()).setGod(g);
+                    }
+                }
+            } while (!found);
+        }
         return message;
     }
 
@@ -360,25 +365,32 @@ public class CLI extends RemoteView implements Runnable {
             if (modelView.getGodlyId() == getPlayerId()) {
                 getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, askGodList()));
             }
-                synchronized (this) {
-                    wait();
-                }
+            synchronized (this) {
+                wait();
+            }
 
             godChoice();
-
+            allGodSelected();
+            System.out.println("AOOO SO USCITO DAR GABBIO");
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
     }
 
+    private synchronized void allGodSelected() throws InterruptedException {
+        while (!modelView.getChosenGods().isEmpty()) {
+            wait();
+        }
+    }
+
     private synchronized void godChoice() throws InterruptedException {
         while (modelView.getActualPlayerId() != getPlayerId()) {
             wait();
-            modelView.setNextPlayerId();
         }
+        System.out.println(modelView.getChosenGods().size());
         GodMessage message = askGod();
-        connection.sendEvent(new PropertyChangeEvent(this, "notifyGod",null,message));
+        connection.sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
     }
 
     private synchronized void startingGame() throws InterruptedException {
@@ -456,13 +468,23 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void chosenGods(InitialCardsMessage message) {
         modelView.addChosenGods(message.getSelectedList());
         if (modelView.getChosenGods().size() == modelView.getPlayers().size()) {
-            //STAMPARE TUTTE LE CARTE SCELTE
             printer.println("\tCHOSEN GODS:");
             for (String[] g : modelView.getChosenGods()) {
                 printer.println("\n" + g[0] + "\n" + g[1]);
             }
             this.notify();
-
         }
+    }
+
+    @Override
+    protected synchronized void assignedGod(GodMessage message) {
+        modelView.setGod(message.getId(), message.getGod());
+        modelView.setNextPlayerId();
+        if (modelView.getChosenGods().isEmpty()) {
+            for (ModelView.PlayerView p : modelView.getPlayers()) {
+                printer.println(p.getNickname() + " chose " + p.getGod()[0]);
+            }
+        }
+        this.notify();
     }
 }

@@ -22,9 +22,13 @@ public abstract class RemoteView {
     public RemoteView(Client connection) {
         this.connection = connection;
     }
-    public RemoteView(){}
 
-    public Client getConnection() {return connection;}
+    public RemoteView() {
+    }
+
+    public Client getConnection() {
+        return connection;
+    }
 
     public ModelView getModelView() {
         return modelView;
@@ -34,35 +38,38 @@ public abstract class RemoteView {
 
         String propertyName = evt.getPropertyName();
         if (propertyName.equalsIgnoreCase("colorConfirm")) {
-            this.colorReceived((ColorMessage)evt.getNewValue());
+            this.colorReceived((ColorMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
             this.modelView.getBoard().setSlot((VirtualSlot) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("god1ofNConfirmed")) {
-            chosenGods((InitialCardsMessage)evt.getNewValue());
+            chosenGods((InitialCardsMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
 
         } else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
-            this.nicknameReceived((NicknameMessage)evt.getNewValue());
+            this.nicknameReceived((NicknameMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("currPlayerUpdate")) {
 
-        }else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
-            this.setGodly(((GodlyMessage)evt.getNewValue()).getId());
+        } else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
+            this.setGodly(((GodlyMessage) evt.getNewValue()).getId());
         } else if (propertyName.equalsIgnoreCase("freeWorkerPositions")) {
 
         } else if (propertyName.equalsIgnoreCase("godConfirm")) {
-//TODO cathcarlo in thread del client e svegliare il prossimo actualplayer incrementandolo (toglierlo dal while 377CLI)
+            assignedGod((GodMessage) evt.getNewValue());
+
         } else if (propertyName.equalsIgnoreCase("gameReady")) {
             setPlayerId((int) evt.getNewValue());
             gameReady();
         }
     }
 
+    protected abstract void assignedGod(GodMessage message);
+
     protected abstract void chosenGods(InitialCardsMessage newValue);
 
-    protected synchronized void setGodly(int godlyId){
-            this.modelView.setGodlyId(godlyId);
-            godlyReceived();
-            notifyAll();
+    protected synchronized void setGodly(int godlyId) {
+        this.modelView.setGodlyId(godlyId);
+        godlyReceived();
+        notifyAll();
     }
 
     protected abstract void colorReceived(ColorMessage newValue);

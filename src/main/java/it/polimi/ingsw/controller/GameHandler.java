@@ -44,7 +44,6 @@ public class GameHandler implements PropertyChangeListener {
             if (data.isInColor(color)) {
                 data.delColor(message);
                 playerCreationQueue(message);
-
             }
 
         } else if (evt.getPropertyName().equals("notify1ofNGod")) {
@@ -54,7 +53,7 @@ public class GameHandler implements PropertyChangeListener {
                 if (data.chosenGodsSize() == playersPerGame) currentPlayerID = (currentPlayerID + 1) % playersPerGame;
             }
 
-        } else if (evt.getPropertyName().equals("notifyGod") && data.chosenGodsSize() == playersPerGame) {
+        } else if (evt.getPropertyName().equals("notifyGod")) {
             GodMessage message = (GodMessage) evt.getNewValue();
             String god = message.getGod();
             if (message.getId() == currentPlayerID && data.isInGod(god)) {
@@ -62,7 +61,6 @@ public class GameHandler implements PropertyChangeListener {
                 data.delGod(message);
                 currentPlayerID = (currentPlayerID + 1) % playersPerGame;
                 atLeastOneGod = true;
-
             }
 
         } else if (evt.getPropertyName().equals("notifyFirstPlayer") && atLeastOneGod && data.chosenGodsSize() == 0) {
@@ -101,7 +99,6 @@ public class GameHandler implements PropertyChangeListener {
             }
         }
     }
-
 
 
     private void playerCreationQueue(Object value) {

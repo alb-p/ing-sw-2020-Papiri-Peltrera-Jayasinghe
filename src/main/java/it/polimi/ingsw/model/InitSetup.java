@@ -56,7 +56,6 @@ public class InitSetup {
 
     public void setNicknames(NicknameMessage message) {
         nicknames.add(message.getNick());
-        System.out.println("SONO NICKNAMECONF DA SERVER");
         initSetupListeners.firePropertyChange("nicknameConfirm", null, message);
     }
 
@@ -92,17 +91,23 @@ public class InitSetup {
     }
 
 
-    public void addChosenGod(String chosenGod,InitialCardsMessage mess) {
+    public void addChosenGod(String chosenGod, InitialCardsMessage mess) {
         this.chosenGods.add(chosenGod);
+        System.out.println("GODS SIZE:: " + gods.size() + "HO AGGIUNTO:: " + chosenGod);
         for (int i = 0; i < gods.size(); i++) {
             if (gods.get(i).equals(chosenGod)) {
                 this.gods.remove(i);
-                if(chosenGods.size()==nicknames.size()){
+                if (chosenGods.size() == nicknames.size()) {
+                    break;
+                }
+                return;
+                /*if(chosenGods.size()==nicknames.size()){
                     initSetupListeners.firePropertyChange("god1ofNConfirmed",false,mess);
-                }else return;
+                }else return;*/
             }
         }
-        initSetupListeners.firePropertyChange("god1ofNConfirmed",false,mess);
+        System.out.println("\nMESS e FIRE:: " + mess.getSelectedList());
+        initSetupListeners.firePropertyChange("god1ofNConfirmed", false, mess);
 
     }
 
@@ -133,14 +138,14 @@ public class InitSetup {
 
 
     public void delGod(GodMessage mess) {
-
         for (int i = 0; i < chosenGods.size(); i++) {
             if (chosenGods.get(i).equals(mess.getGod())) {
                 chosenGods.remove(i);
                 break;
             }
         }
-        initSetupListeners.firePropertyChange("GodConfirm", null, mess);
+        System.out.println("GOD CONFIRM SERVER");
+        initSetupListeners.firePropertyChange("godConfirm", null, mess);
     }
 
 

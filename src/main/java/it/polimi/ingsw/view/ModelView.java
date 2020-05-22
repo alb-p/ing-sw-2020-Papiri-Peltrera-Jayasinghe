@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.VirtualBoard;
+import it.polimi.ingsw.utils.messages.GodMessage;
 
 import javax.management.AttributeList;
 import java.util.ArrayList;
@@ -20,7 +21,7 @@ public class ModelView {
     private int godlyId;
     private int deletedPlayerId = -1;
 
-    public ModelView(){
+    public ModelView() {
         Collections.addAll(colors, Color.values());
         gods.add(new String[]{"APOLLO", "Your Move: Your Worker may\n" +
                 "move into an opponent Worker’s\n" +
@@ -61,22 +62,25 @@ public class ModelView {
     public void setGods(ArrayList<String[]> gods) {
         this.gods = gods;
     }
-    public VirtualBoard getBoard(){return board;}
 
-    public PlayerView getPlayer(int id){
-        for(PlayerView p : players){
-            if(p.getId() == id)return p;
+    public VirtualBoard getBoard() {
+        return board;
+    }
+
+    public PlayerView getPlayer(int id) {
+        for (PlayerView p : players) {
+            if (p.getId() == id) return p;
         }
         return null;
     }
 
     public void addPlayer(int id, String nick) {
-        players.add( new PlayerView(id, nick));
+        players.add(new PlayerView(id, nick));
     }
 
     public boolean checkNickname(String nickname) {
-        for(PlayerView p : players){
-            if(p.getNickname().equals(nickname)) return false;
+        for (PlayerView p : players) {
+            if (p.getNickname().equals(nickname)) return false;
         }
         return true;
     }
@@ -87,8 +91,8 @@ public class ModelView {
     }
 
     public boolean isInColor(Color color) {
-        for(Color c: colors){
-            if(c.equals(color)) return true;
+        for (Color c : colors) {
+            if (c.equals(color)) return true;
         }
         return false;
     }
@@ -109,9 +113,9 @@ public class ModelView {
         this.actualPlayerId = actualPlayerId;
     }
 
-    public void setNextPlayerId(){
+    public void setNextPlayerId() {
         actualPlayerId = (actualPlayerId + 1) % players.size();
-        if(actualPlayerId == deletedPlayerId){
+        if (actualPlayerId == deletedPlayerId) {
             actualPlayerId = (actualPlayerId + 1) % players.size();
         }
     }
@@ -126,7 +130,7 @@ public class ModelView {
         setNextPlayerId();
     }
 
-    public int getGodlyId(){
+    public int getGodlyId() {
         return godlyId;
     }
 
@@ -135,25 +139,37 @@ public class ModelView {
     }
 
     public void addChosenGods(ArrayList<String> chosenGods) {
-        for (String s : chosenGods){
-            for(String[] g : gods){
-                if(s.equalsIgnoreCase(g[0])){
+        for (String s : chosenGods) {
+            for (String[] g : gods) {
+                if (s.equalsIgnoreCase(g[0])) {
                     this.chosenGods.add(g);
                 }
             }
         }
     }
 
-    public class PlayerView{
+    public void setGod(int id, String god) {
+        String[] toRemove = new String[2];
+        for (String[] s : chosenGods) {
+            if (s[0].equalsIgnoreCase(god)){
+                getPlayer(id).setGod(s);
+                toRemove = s;
+            }
+        }
+        chosenGods.remove(toRemove);
+    }
+
+    public class PlayerView {
         private int id;
         private String nickname;
         private String[] god;
         private Color color;
 
-        public PlayerView(int id, String nickname){
+        public PlayerView(int id, String nickname) {
             this.id = id;
             this.nickname = nickname;
         }
+
         public int getId() {
             return id;
         }
