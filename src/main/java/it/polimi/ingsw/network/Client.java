@@ -43,68 +43,11 @@ public class Client {
 
 
     public void start() {
-        System.out.println("CLIENT SOUT" + this);
-
         try {
             this.online = true;
             inputStream = new ObjectInputStream(socket.getInputStream());
             printStream = new ObjectOutputStream(socket.getOutputStream());
-/*
-            // OPEN READER
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (online) {
-                            Object inputObject = inputStream.readObject();
 
-                            if (inputObject instanceof WelcomeMessage) {
-                                view.welcomeMessage();
-                            } else if (inputObject instanceof NicknameMessage) {
-                                send(view.askNickPlayer((NicknameMessage) inputObject));
-                            } else if (inputObject instanceof ColorMessage) {
-                                send(view.askColor((ColorMessage) inputObject));
-                            } else if (inputObject instanceof ColorSelectedMessage) {
-                                view.showColor((ColorSelectedMessage) inputObject);
-                            } else if (inputObject instanceof FirstPlayerMessage) {
-                                send(view.firstPlayer((FirstPlayerMessage) inputObject));
-                            } else if (inputObject instanceof WorkerMessage) {
-                                send(view.setWorker((WorkerMessage) inputObject));
-                            } else if (inputObject instanceof ActionMessage) {
-                                send(view.askAction((ActionMessage) inputObject));
-                            } else if (inputObject instanceof ChoiceMessage) {
-                                send(view.askChoice((ChoiceMessage) inputObject));
-                            } else if (inputObject instanceof InitialCardsMessage) {
-                                send(view.askGodList((InitialCardsMessage) inputObject));
-                            } else if (inputObject instanceof GodMessage) {
-                                send(view.askGod((GodMessage) inputObject));
-                            } else if (inputObject instanceof SetupMessage) {
-                                send(view.askNumOfPlayers((SetupMessage) inputObject));
-                            } else if (inputObject instanceof StartGameMessage) {
-                                view.gameIsReady((StartGameMessage) inputObject);
-                            } else if (inputObject instanceof WaitingMessage) {
-                                view.waitingMess((WaitingMessage) inputObject);
-                            }  else if (inputObject instanceof GenericMessage) {
-                                view.genericMess((GenericMessage) inputObject);
-                            } else if (inputObject instanceof WinnerMessage) {
-                                view.winnerMess((WinnerMessage) inputObject);
-                                online = false;
-                            } else if (inputObject instanceof VirtualSlotMessage) {
-                                view.updateVBoard((VirtualSlotMessage) inputObject);
-
-                            }
-
-                            // TODO collegarsi alla remoteView (CLI o GUI) del client
-
-                        }
-                        closeConnection();
-                    } catch (Exception e) {
-                        // online = false;
-                        e.printStackTrace();
-                    }
-                }
-            }).start();
-*/
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -121,6 +64,7 @@ public class Client {
                         }
                     } catch (IOException | ClassNotFoundException e) {
                         logger.log(Level.SEVERE, e.getMessage());
+                        e.printStackTrace();
 
                     }
                 }
@@ -144,8 +88,9 @@ public class Client {
 
     public void sendEvent(PropertyChangeEvent evt) {
         try {
-            if (evt.getNewValue() instanceof Message)
+            if (evt.getNewValue() instanceof Message) {
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());
+            }
             synchronized (printStream) {
                 printStream.reset();
                 printStream.writeObject(evt);

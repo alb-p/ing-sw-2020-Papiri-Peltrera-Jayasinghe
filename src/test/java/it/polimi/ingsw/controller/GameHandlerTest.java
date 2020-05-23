@@ -98,7 +98,8 @@ public class GameHandlerTest {
                 "firstPlayerResponse", null, firstPlayerMessage));
         workerMessage = new WorkerMessage(1, 0);
         workerMessage.setCoordinate(new Coordinate(1,1));
-
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "setWorkerResponse", null, workerMessage));
     }
 
     @Test

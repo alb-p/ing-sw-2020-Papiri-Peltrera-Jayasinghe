@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
+
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.WinnerMessage;
+import it.polimi.ingsw.utils.messages.WorkerMessage;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -39,12 +41,15 @@ public class Model {
 
 
     public boolean addWorker(int playerIndex, Coordinate c, int workerIndex) {
-        oldBoard = new VirtualBoard(board);
+        oldBoard = cloneVBoard(board);
         try {
             if (c.isValid() && board.infoSlot(c).isFree()) {
                 board.infoSlot(c).occupy(this.getPlayer(playerIndex).getWorker(workerIndex));
                 this.getPlayer(playerIndex).getWorker(workerIndex).setPosition(c);
-            } else return false;
+            } else {
+                return false;
+            }
+
             notifyChanges();
             return true;
         } catch (Exception e) {
@@ -62,33 +67,53 @@ public class Model {
     }
 
 
-
     public void turnHandler(int idPlayerPlaying, Action message) {
-        oldBoard = new VirtualBoard(board);
+        oldBoard = cloneVBoard(board);
         try {
             this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
+            System.out.println(board);
         } catch (Exception e) {
             e.printStackTrace();
         }
         notifyChanges();
     }
 
+    public VirtualBoard cloneVBoard(IslandBoard board) {
+        VirtualBoard newBoard = new VirtualBoard();
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
+                Color color = null;
+                Coordinate c = new Coordinate(row, col);
+                if (board.infoSlot(c).getWorker() != null) {
+                    color = board.infoSlot(c).getWorker().getColor();
+                }
+                VirtualSlot tempo = new VirtualSlot(color,
+                        board.infoSlot(c).getConstructionLevel(), board.infoSlot(c).hasADome(), c);
+                newBoard.setSlot(tempo);
+            }
+        }
+        return newBoard;
+    }
+
     public void notifyChanges() {
         VirtualSlot oldVSlot;
         for (int i = 0; i < board.board.length; i++) {
             for (int j = 0; j < board.board.length; j++) {
-
                 oldVSlot = oldBoard.getSlot(i, j);
-                vSlot = new VirtualSlot(board.getSlot(i, j), new Coordinate(i, j));
+                Color color = null;
+                if (board.getSlot(i, j).getWorker() != null) {
+                    color = board.getSlot(i, j).getWorker().getColor();
+                }
+                vSlot = new VirtualSlot(color, board.getSlot(i, j).getConstructionLevel(),
+                        board.getSlot(i, j).hasADome(), new Coordinate(i, j));
+
                 if (!oldVSlot.equals(vSlot)) {
-                    System.out.println("CAMBIATO SLOT");
                     modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
                 }
                 modelListeners.firePropertyChange("deltaUpdate", oldVSlot, vSlot);
 
             }
         }
-        System.out.println("OLDBOARD:: " + oldBoard);
     }
 
 
@@ -107,9 +132,9 @@ public class Model {
         try {
             getPlayer(ID).playerTreeSetup(board);
             treeEditorBySpecialRule(ID);
-            ActionMessage message=getPlayer(ID).getNextActions();
-            if(!message.getChoices().isEmpty())
-                modelListeners.firePropertyChange("ActionsAvailableResponse",null,message);
+            ActionMessage message = getPlayer(ID).getNextActions();
+            if (!message.getChoices().isEmpty())
+                modelListeners.firePropertyChange("ActionsAvailableResponse", null, message);
             else notifyPlayerHasLost(ID);
 
         } catch (Exception e) {

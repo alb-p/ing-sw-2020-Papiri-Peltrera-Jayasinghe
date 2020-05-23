@@ -37,30 +37,35 @@ public abstract class RemoteView {
     public void notifyEvent(PropertyChangeEvent evt) {
 
         String propertyName = evt.getPropertyName();
-        if (propertyName.equalsIgnoreCase("colorConfirm")) {
-            this.colorReceived((ColorMessage) evt.getNewValue());
-        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
-            this.modelView.getBoard().setSlot((VirtualSlot) evt.getNewValue());
-        } else if (propertyName.equalsIgnoreCase("god1ofNConfirmed")) {
-            chosenGods((InitialCardsMessage) evt.getNewValue());
-        } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
-
-        } else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
-            this.nicknameReceived((NicknameMessage) evt.getNewValue());
-        } else if (propertyName.equalsIgnoreCase("currPlayerUpdate")) {
-
-        } else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
-            this.setGodly(((GodlyMessage) evt.getNewValue()).getId());
-        } else if (propertyName.equalsIgnoreCase("freeWorkerPositions")) {
-
-        } else if (propertyName.equalsIgnoreCase("godConfirm")) {
-            assignedGod((GodMessage) evt.getNewValue());
-
-        } else if (propertyName.equalsIgnoreCase("gameReady")) {
+        if (propertyName.equalsIgnoreCase("gameReady")) {
             setPlayerId((int) evt.getNewValue());
             gameReady();
+        } else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
+            this.nicknameReceived((NicknameMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("colorConfirm")) {
+            this.colorReceived((ColorMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
+            this.setGodly(((GodlyMessage) evt.getNewValue()).getId());
+        } else if (propertyName.equalsIgnoreCase("god1ofNConfirmed")) {
+            chosenGods((InitialCardsMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("godConfirm")) {
+            assignedGod((GodMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("firstPlayerConfirmed")) {
+            setFirstPlayer((NicknameMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
+            modelView.updateBoard((VirtualSlot)evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("workerConfirm")) {
+            setWorker((WorkerMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
+
+        }else if (propertyName.equalsIgnoreCase("vrwvrwrv")) {
+
         }
     }
+
+    protected abstract void setWorker(WorkerMessage message);
+
+    protected abstract void setFirstPlayer(NicknameMessage message);
 
     protected abstract void assignedGod(GodMessage message);
 

@@ -16,10 +16,10 @@ public class NicknameMessage implements Message , Serializable {
 
     }
 
-    public NicknameMessage(int i) {
+    public NicknameMessage(int id) {
         this.message = "Choose a nickname:";
         this.nick = null;
-        id = i;
+        this.id = id;
     }
 
     public void setNick(String nick) {
@@ -35,8 +35,8 @@ public class NicknameMessage implements Message , Serializable {
     }
 
     @Override
-    public void setId(int i) {
-        this.id = i;
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
 
 
@@ -156,7 +157,7 @@ public class InitSetup {
     }
 
 
-    public void FirstPlayer(FirstPlayerMessage mess) {
+    public void FirstPlayer(NicknameMessage mess) {
         initSetupListeners.firePropertyChange("firstPlayerConfirmed", null, mess);
     }
 

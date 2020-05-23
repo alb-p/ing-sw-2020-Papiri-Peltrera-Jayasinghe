@@ -5,7 +5,6 @@ import it.polimi.ingsw.controller.TurnHandler;
 import it.polimi.ingsw.model.InitSetup;
 import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.network.SocketClientConnection;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
@@ -23,7 +22,6 @@ public class Room {
     public void addPlayer(SocketClientConnection connection) throws Exception {
         if (this.playersPerGame > connections.size()) {
             this.connections.add(connection);
-            System.out.println("CONNECTION ADDED" + connection.getId());
         } else {
             throw new Exception();
         }
@@ -55,13 +53,11 @@ public class Room {
             model.addModelListener(c);
             initSetup.addInitSetupListener(c);
             executor.submit(c);
-            System.out.println("Connection da room" + c);
         }
 
     }
 
     public int currentPlayerId() {
-        System.out.println("CURRENT num of connections = " + this.connections.size());
         return this.connections.size();
     }
 

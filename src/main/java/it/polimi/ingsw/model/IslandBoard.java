@@ -44,6 +44,7 @@ public class IslandBoard implements Cloneable{
         return (total.toString());
     }
 
+    //TODO sostituire i suoi utilizzi con infoSlot(new Coord)
     public Slot getSlot(int i,int j){
         return board[i][j];
 

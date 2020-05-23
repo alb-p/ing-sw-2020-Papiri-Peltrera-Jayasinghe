@@ -78,7 +78,7 @@ public class BasicGodCard {
 
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
-        if (virtualBoard.getSlot(w.getOldPosition().getRow(),w.getOldPosition().getCol()).getHeight() == 2 &&
+        if (virtualBoard.getSlot(w.getOldPosition().getRow(),w.getOldPosition().getCol()).getLevel() == 2 &&
                 board.infoSlot(w.getPosition()).getConstructionLevel() == 3) {
             return true;
         }

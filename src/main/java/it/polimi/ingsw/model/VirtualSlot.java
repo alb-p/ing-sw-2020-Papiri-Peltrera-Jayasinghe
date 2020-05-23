@@ -1,49 +1,77 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.ANSIColor;
+
 import java.io.Serializable;
 
 public class VirtualSlot implements Serializable {
 
 
-    private String content;
-    private int height = 0;
-    private Coordinate coordinate;
+    private final Color color;
+    private int level = 0;
+    private final boolean dome;
+    private final Coordinate coordinate;
 
-    public VirtualSlot(Slot s, Coordinate c) {
-        this.content = s.toString();
+    public VirtualSlot(Color color, int level, boolean dome, Coordinate c) {
+        this.color = color;
+        this.level = level;
+        this.dome = dome;
         this.coordinate = c;
-        this.height =  s.getConstructionLevel();
-    }
-    public VirtualSlot(Coordinate coordinate) {
-        this.coordinate = coordinate;
-        this.content = "  ";
     }
 
-    public VirtualSlot() {
-        this.coordinate = null;
-        this.content = "  ";
+    public VirtualSlot(Coordinate c){
+        this.color = null;
+        this.level = 0;
+        this.dome = false;
+        this.coordinate = c;
     }
 
-    @Override
-    public String toString() {
-        return this.content;
-    }
 
     public Coordinate getCoordinate() {
         return this.coordinate;
     }
 
+    public int getLevel() {
+        return level;
+    }
+
+    public Color getColor() {
+        return color;
+    }
+
+    public boolean hasWorker() {
+        return color != null;
+    }
+
+    public boolean isFree(){
+        return color == null && !dome;
+    }
 
     @Override
     public boolean equals(Object that) {
-
         if (that instanceof VirtualSlot)
-            return this.content.equals(((VirtualSlot) that).content);
-
+            return this.toString().equals(that.toString());
         return false;
     }
 
-    public int getHeight() {
-        return height;
+
+
+    @Override
+    public String toString() {
+        String colorString;
+        String floor;
+        if (!hasWorker()) {
+            colorString = " ";
+        } else {
+            colorString = color.toString();
+        }
+        if (dome) {
+            floor = "D";
+        } else if (!hasWorker() && level == 0) {
+            floor = " ";
+        } else {
+            floor = String.valueOf(level);
+        }
+        return (colorString + floor + ANSIColor.RESET);
     }
 }

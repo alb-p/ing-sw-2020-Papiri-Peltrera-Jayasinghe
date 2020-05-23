@@ -63,16 +63,15 @@ public class GameHandler implements PropertyChangeListener {
                 atLeastOneGod = true;
             }
 
-        } else if (evt.getPropertyName().equals("notifyFirstPlayer") && atLeastOneGod && data.chosenGodsSize() == 0) {
-            FirstPlayerMessage message = (FirstPlayerMessage) evt.getNewValue();
-            String name = message.getChosenName();
-            if (message.getId() == currentPlayerID && data.isInUser(name)) {
+        } else if (evt.getPropertyName().equals("firstPlayerSelected") && atLeastOneGod && data.chosenGodsSize() == 0) {
+            NicknameMessage message = (NicknameMessage) evt.getNewValue();
+            String name = message.getNick();
+            //TODO capire se message.getId() == currentPlayerID in if qui sotto con 63 in un if per escludere godly
+            if ( data.isInUser(name)) {
                 for (int i = 0; i < playersPerGame; i++) {
-                    System.out.println(playersMap);
                     if (playersMap.get(i).equals(name)) {
                         firstPlayerChosenID = i;
                         currentPlayerID = firstPlayerChosenID;
-                        System.out.println("FIRSTPLAYERID " + firstPlayerChosenID);
                         turnHandler.setTotalTurnCounter(i);
                         data.FirstPlayer(message);
                         break;
@@ -82,15 +81,15 @@ public class GameHandler implements PropertyChangeListener {
 
         } else if (evt.getPropertyName().equals("notifyWorker") && firstPlayerChosenID != -1) {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
-            System.out.println("ID PLAYER DA SETWORKER:: " + message.getId());
             Coordinate coordinate = message.getCoordinate();
             if (currentPlayerID == message.getId()) {
-                if (!workerPlaced && model.addWorker(currentPlayerID, coordinate, message.getWorkerNumber())) {
+                boolean addedWorker =  model.addWorker(currentPlayerID, coordinate, message.getWorkerNumber());
+                if (!workerPlaced && addedWorker) {
                     workerPlaced = true;
                     data.workerPlaced(message);
-                } else if (workerPlaced && model.addWorker(currentPlayerID, coordinate, message.getWorkerNumber())) {
+                } else if (workerPlaced && addedWorker) {
                     workerPlaced = false;
-                    currentPlayerID++;
+                    currentPlayerID = (currentPlayerID + 1) % playersPerGame;
                     data.workerPlaced(message);
                 }
 
@@ -105,12 +104,10 @@ public class GameHandler implements PropertyChangeListener {
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());
         } else if (value instanceof ColorMessage) {
             ColorMessage message = (ColorMessage) value;
-            System.out.println("GET : " + message.getColor());
             model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));
             if (model.getNumOfPlayers() == this.playersPerGame) {
                 Random random = new Random();
                 currentPlayerID = random.nextInt(model.getNumOfPlayers());
-                System.out.println("Last player is: " + currentPlayerID);
                 data.notifyGodly(currentPlayerID);
             }
         }

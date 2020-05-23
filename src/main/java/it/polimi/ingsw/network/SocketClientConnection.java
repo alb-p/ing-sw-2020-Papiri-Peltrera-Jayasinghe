@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
-import it.polimi.ingsw.view.VirtualView;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,7 +22,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     private PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
 
 
-    private VirtualView view;
 
 
     private int id;
@@ -87,10 +86,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         return id;
     }
 
-    public void setView(VirtualView view) {
-        this.view = view;
-    }
-
 
     @Override
     public void run() {
@@ -98,6 +93,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
             sendEvent(new PropertyChangeEvent(this, "gameReady", null, id));
             while (true) {
                 Object inputObject = inSocket.readObject();
+
 
                 if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message

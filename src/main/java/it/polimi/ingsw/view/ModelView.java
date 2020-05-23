@@ -3,6 +3,7 @@ package it.polimi.ingsw.view;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.model.VirtualBoard;
+import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.GodMessage;
 
 import javax.management.AttributeList;
@@ -12,13 +13,14 @@ import java.util.Collections;
 
 public class ModelView {
 
-    private VirtualBoard board;
+    private VirtualBoard board = new VirtualBoard();
     private ArrayList<Color> colors = new ArrayList<>();
     private ArrayList<PlayerView> players = new ArrayList<>();
     private ArrayList<String[]> gods = new ArrayList<>();
     private ArrayList<String[]> chosenGods = new ArrayList<>();
     private int actualPlayerId;
     private int godlyId;
+    private int firstPlayerId;
     private int deletedPlayerId = -1;
 
     public ModelView() {
@@ -72,6 +74,21 @@ public class ModelView {
             if (p.getId() == id) return p;
         }
         return null;
+    }
+
+    public PlayerView getPlayer(String nickname) {
+        for (PlayerView p : players) {
+            if (p.getNickname().equals(nickname)) return p;
+        }
+        return null;
+    }
+
+    public void setActualPlayerId(String nickname){
+        for(PlayerView p : players) {
+            if(p.getNickname().equals(nickname)){
+                setActualPlayerId(p.getId());
+            }
+        }
     }
 
     public void addPlayer(int id, String nick) {
@@ -134,6 +151,14 @@ public class ModelView {
         return godlyId;
     }
 
+    public int getFirstPlayerId() {
+        return firstPlayerId;
+    }
+
+    public void setFirstPlayerId(int firstPlayerId) {
+        this.firstPlayerId = firstPlayerId;
+    }
+
     public ArrayList<String[]> getChosenGods() {
         return chosenGods;
     }
@@ -157,6 +182,10 @@ public class ModelView {
             }
         }
         chosenGods.remove(toRemove);
+    }
+
+    public void updateBoard(VirtualSlot vSlot) {
+        board.setSlot(vSlot);
     }
 
     public class PlayerView {
