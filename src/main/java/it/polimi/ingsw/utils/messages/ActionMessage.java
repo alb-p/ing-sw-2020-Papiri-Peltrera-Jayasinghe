@@ -8,71 +8,46 @@ import java.util.ArrayList;
 
 public class ActionMessage implements Message, Serializable {
 
-    private String message;
-    private String nickname;
-    private ActionsEnum actionAvailable;
-    private int id;
+    private int ID;
+    private boolean isOptional;
+    private ArrayList<Action> choices;
     private Action action;
-    private ArrayList<String> choices = new ArrayList<>();
 
-    public ActionMessage() {
+
+    public ActionMessage(ArrayList<Action> list, boolean b, int i) {
+        this.choices=list;
+        this.isOptional=b;
+        this.ID=i;
     }
 
-    public ActionMessage(int id, String nickname) {
-        this.id = id;
-        this.nickname = nickname;
+    public Action getAction(){
+        return this.action;
     }
 
-    public ActionMessage(int id, ActionsEnum actionAvailable, String nickname) {
-        this.id = id;
-        this.actionAvailable = actionAvailable;
-        this.nickname = nickname;
+    public void setAction(Action a){
+         this.action=a;
     }
 
-    public Action getAction() {
-        return action;
+    public ArrayList<Action> getChoices(){
+        return this.choices;
     }
 
-    public void setAction(Action action) {
-        this.action = action;
+    public boolean getIsOptional(){
+        return this.isOptional;
     }
 
     @Override
     public String getMessage() {
-        return message;
-    }
-
-    public String getNickname() {
-        return nickname;
+        return null;
     }
 
     @Override
     public void setId(int id) {
-        this.id = id;
+
     }
 
     @Override
     public int getId() {
-        return id;
-    }
-
-    public ArrayList<String> getChoices() {
-        return this.choices;
-    }
-
-    public void addChoice(String choice) {
-        this.choices.add(choice);
-    }
-
-    public void setActionsAvailable(ActionsEnum actionsAvailable) {
-        this.actionAvailable = actionsAvailable;
-    }
-
-    public String getActionsAvailableName() {
-        return this.actionAvailable.getName();
-    }
-
-    public ActionsEnum getActionsAvailable() {
-        return this.actionAvailable;
+        return this.ID;
     }
 }

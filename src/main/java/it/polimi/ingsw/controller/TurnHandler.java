@@ -1,11 +1,17 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.model.Model;
+import it.polimi.ingsw.gods.*;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.ChoiceMessage;
+import it.polimi.ingsw.utils.messages.Message;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 public class TurnHandler implements PropertyChangeListener {
     private Model model;
@@ -13,7 +19,6 @@ public class TurnHandler implements PropertyChangeListener {
     private int playerDefeatedID = -1;
     private int totalTurnCounter = 0;
 
-    //int indice giocatore inziale
     public TurnHandler(Model model, int playersPerGame) {
         this.model = model;
         this.playersPerGame = playersPerGame;
@@ -21,69 +26,61 @@ public class TurnHandler implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equals("actionMessageResponse")) {
+        if (evt.getPropertyName().equalsIgnoreCase("ActionsRequest")) {
+            Message message = (Message) evt.getNewValue();
+            int ID = actualPlayerID();
+            if (message.getId() == ID) {
+                model.buildTree(ID);
+                if (model.getPlayer(ID).checkLoser())
+                    playerHasLost(ID);
+
+            }
+        }
+
+        if (evt.getPropertyName().equalsIgnoreCase("NotifyAction")) {
             ActionMessage message = (ActionMessage) evt.getNewValue();
-            turnManager(message);
-        } else if (evt.getPropertyName().equals("gameReadyResponse")) {
-            if (model.buildPlayerTree(actualPlayer())) {
-                playerHasLost(actualPlayer());
-            } else model.selectPlayerPlaying(actualPlayer());
-
-        } else if (evt.getPropertyName().equals("choiceResponse")) {
-
-
-            if (!model.selectChoice((ChoiceMessage) evt.getNewValue())) {
-                endTurnManager();
+            int ID = actualPlayerID();
+            if (message.getId() == ID) {
+                model.turnHandler(ID, message.getAction());
+                if (model.getPlayer(ID).hasDone())
+                    endTurnManager(ID);
             }
         }
+
     }
 
-    private void turnManager(ActionMessage message) {
-        model.turnHandler(actualPlayer(), message.getAction());
-        if (!model.getPlayer(actualPlayer()).hasDone()) {
-            model.selectPlayerPlaying(actualPlayer());
-        } else {
-            endTurnManager();
-        }
-    }
-
-
-    private void endTurnManager() {
-        if (model.checkWinner(actualPlayer())) {
-            //game ended
-        } else {
-            model.getPlayer(actualPlayer()).setNotDone();
+    //fa finire il turno e crea l'albero per il giocatore succesivo + controllo se ha perso
+    private void endTurnManager(int ID) {
+        if (!model.checkWinner(ID)) {
+            model.getPlayer(ID).setEndTurn();
             totalTurnCounter++;
-            if (model.buildPlayerTree(actualPlayer())) {
-                playerHasLost(actualPlayer());
-            }
-            model.selectPlayerPlaying(actualPlayer());
+
+
         }
     }
 
-    public void playerHasLost(int id) {
-        model.notifyPlayerHasLost(id);
+    //fa quello che deve fare se si è rilevato che un player ha perso
+    public void playerHasLost(int ID) {
         if (playersPerGame == 2) {
-            model.endGameForNoAvailableMoves(id);
+            model.endGameForNoAvailableMoves(ID);
         } else {
-            playerDefeatedID = id;
-            model.removePlayer(id);
+            playerDefeatedID = ID;
+            model.removePlayer(ID);
             totalTurnCounter++;
-            if (model.buildPlayerTree(actualPlayer())) {
-                playerHasLost(actualPlayer());
-            }
-            model.selectPlayerPlaying(actualPlayer());
         }
     }
 
-    public int actualPlayer() {
-        if (playerDefeatedID == totalTurnCounter % playersPerGame) {
+    //restituisce l'id del giocatore in questo turno
+    public int actualPlayerID() {
+        if (playerDefeatedID == totalTurnCounter % playersPerGame)
             totalTurnCounter++;
-        }
         return totalTurnCounter % playersPerGame;
     }
 
-    public void setTotalTurnCounter(int tt) {
-        this.totalTurnCounter = tt;
+    //imposta il primo giocatore
+    public void setTotalTurnCounter(int ID) {
+        this.totalTurnCounter = ID;
     }
+
+
 }

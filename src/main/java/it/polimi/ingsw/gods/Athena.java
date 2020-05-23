@@ -9,23 +9,19 @@ public class Athena extends BasicGodCard {
 
     //SE SALGO DI LIVELLO GLI AVVERSARI NON POSSONO FARLO DURANTE QUESTO TURNO
 
-    private boolean specialRuleActivated=false;
+    private boolean specialRuleActivated = false;
 
 
     @Override
-    public void specialRule(HashMap<Worker, TreeActionNode> trees, Set<Worker> hashList, IslandBoard board) {
-        if(specialRuleActivated){
-            for(Worker w: hashList){
-                TreeActionNode root=trees.get(w);
-                elaboration(root,board,0);
-            }
-
+    public void specialRule(TreeActionNode tree, IslandBoard board) {
+        if (specialRuleActivated) {
+            elaboration(tree, board, 0);
         }
     }
 
     private void elaboration(TreeActionNode node, IslandBoard board, int index) {
 
-        if(!node.isLeaf()) {
+        if (!node.isLeaf()) {
             for (int i = 0; i < node.getChildren().size(); i++) {
                 if (node.getChild(i).getData() instanceof Move) {
                     int start = board.infoSlot(node.getChild(i).getData().getStart()).getConstructionLevel();
@@ -34,14 +30,13 @@ public class Athena extends BasicGodCard {
                     if (end - start > 0) {
                         node.removeChild(i);
                         i--;
-                    }
-                    else elaboration(node.getChild(i), board,i);
-                } else elaboration(node.getChild(i), board,i);
+                    } else elaboration(node.getChild(i), board, i);
+                } else elaboration(node.getChild(i), board, i);
 
 
             }
-        }else{
-            if(node.getData() instanceof Move){
+        } else {
+            if (node.getData() instanceof Move) {
                 int start = board.infoSlot(node.getData().getStart()).getConstructionLevel();
                 int end = board.infoSlot(node.getData().getEnd()).getConstructionLevel();
 
@@ -54,14 +49,14 @@ public class Athena extends BasicGodCard {
 
     @Override
     public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
-        specialRuleActivated=false;
+        specialRuleActivated = false;
         int workerSlotLevel = board.infoSlot(w.getPosition()).getConstructionLevel();
         int destSlotLevel = board.infoSlot(coord).getConstructionLevel();
-        if(super.move(w, coord, board)){
-           if(destSlotLevel-workerSlotLevel>0) {
-               specialRuleActivated = true;
-               System.out.println("Athena u akbar");
-           }
+        if (super.move(w, coord, board)) {
+            if (destSlotLevel - workerSlotLevel > 0) {
+                specialRuleActivated = true;
+                System.out.println("Athena u akbar");
+            }
             return true;
         }
         return false;

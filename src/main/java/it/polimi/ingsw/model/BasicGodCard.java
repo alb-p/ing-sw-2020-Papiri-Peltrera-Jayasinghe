@@ -36,7 +36,7 @@ public class BasicGodCard {
         return true;
     }
 
-    public void specialRule(HashMap<Worker, TreeActionNode> trees, Set<Worker> hashList, IslandBoard board) {
+    public void specialRule(TreeActionNode root, IslandBoard board) {
         System.out.println("SPECIALRULE");
         return;
     }

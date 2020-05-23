@@ -161,7 +161,4 @@ public class InitSetup {
     }
 
 
-    public void notifyGameReady() {
-        initSetupListeners.firePropertyChange("gameReady", null, new StartGameMessage());
-    }
 }

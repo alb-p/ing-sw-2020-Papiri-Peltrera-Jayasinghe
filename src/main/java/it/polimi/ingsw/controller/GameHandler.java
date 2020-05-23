@@ -92,7 +92,6 @@ public class GameHandler implements PropertyChangeListener {
                     workerPlaced = false;
                     currentPlayerID++;
                     data.workerPlaced(message);
-                    if (currentPlayerID == firstPlayerChosenID) data.notifyGameReady();
                 }
 
 

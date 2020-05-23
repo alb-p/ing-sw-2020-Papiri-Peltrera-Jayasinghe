@@ -1,8 +1,5 @@
 package it.polimi.ingsw.model;
-
-import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
-import it.polimi.ingsw.utils.messages.ChoiceMessage;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.WinnerMessage;
 
@@ -20,10 +17,26 @@ public class Model {
 
     private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
 
+    public void addModelListener(PropertyChangeListener listener) {
+        modelListeners.addPropertyChangeListener(listener);
+    }
 
     public void addPlayer(Player p) {
         players.add(p);
     }
+
+    public IslandBoard getBoard() {
+        return this.board;
+    }
+
+    public int getNumOfPlayers() {
+        return this.players.size();
+    }
+
+    public void setCard(int playerID, String card) {
+        this.getPlayer(playerID).setCard(card.toUpperCase());
+    }
+
 
     public boolean addWorker(int playerIndex, Coordinate c, int workerIndex) {
         oldBoard = new VirtualBoard(board);
@@ -41,16 +54,6 @@ public class Model {
     }
 
 
-    public void addModelListener(PropertyChangeListener listener) {
-        modelListeners.addPropertyChangeListener(listener);
-    }
-
-
-    public void setCard(int playerID, String card) {
-        this.getPlayer(playerID).setCard(card.toUpperCase());
-    }
-
-
     public Player getPlayer(int id) {
         for (Player p : players) {
             if (p.getId() == id) return p;
@@ -58,9 +61,7 @@ public class Model {
         return null;
     }
 
-    public int getNumOfPlayers() {
-        return this.players.size();
-    }
+
 
     public void turnHandler(int idPlayerPlaying, Action message) {
         oldBoard = new VirtualBoard(board);
@@ -70,12 +71,6 @@ public class Model {
             e.printStackTrace();
         }
         notifyChanges();
-        if (this.getPlayer(idPlayerPlaying).hasDone()) {
-
-        } else {
-
-        }
-        modelListeners.firePropertyChange("turnHandler", null, true);
     }
 
     public void notifyChanges() {
@@ -96,51 +91,33 @@ public class Model {
         System.out.println("OLDBOARD:: " + oldBoard);
     }
 
-    public boolean buildPlayerTree(int i) {
-        try {
-            this.getPlayer(i).playerTreeSetup(board);
-            if (getPlayer(i).treesAreLeaf()) {
-                return true;
+
+    //It invokes specialRule on opponent gods'
+    public void treeEditorBySpecialRule(int currPlayer) {
+        for (Player p : players) {
+            if (p.getId() != currPlayer) {
+                p.getCard().specialRule(this.getPlayer(currPlayer).getTree(), board);
             }
-            verifyTree(i);
+        }
+
+    }
+
+    //crea l'albero e lo fa correggere dagli altri dei. //si potrebbe spostare in model.java
+    public void buildTree(int ID) {
+        try {
+            getPlayer(ID).playerTreeSetup(board);
+            treeEditorBySpecialRule(ID);
+            ActionMessage message=getPlayer(ID).getNextActions();
+            if(!message.getChoices().isEmpty())
+                modelListeners.firePropertyChange("ActionsAvailableResponse",null,message);
+            else notifyPlayerHasLost(ID);
 
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return getPlayer(i).treesAreLeaf();
+
     }
 
-    //It invokes specialRule on opponent gods'
-    public void verifyTree(int currPlayer) {
-        for (Player p : players) {
-            if (p.getId() != currPlayer) {
-                p.getCard().specialRule(this.getPlayer(currPlayer).getTrees(), this.getPlayer(currPlayer).getHashList(), board);
-
-            }
-        }
-    }
-
-    public void selectPlayerPlaying(int id) {
-        ActionMessage message = this.getPlayer(id).getAvailableAction();
-        if (message.getActionsAvailable().equals(ActionsEnum.BUILD)) {
-            modelListeners.firePropertyChange("sendAction",
-                    null, message);
-        } else {
-            modelListeners.firePropertyChange("sendChoice",
-                    null, new ChoiceMessage(message));
-        }
-    }
-
-    //It modifies the action tree and returns true when player continues his turn, false when he want to end the turn
-    public boolean selectChoice(ChoiceMessage message) {
-        ActionMessage actionMessage = this.getPlayer(message.getId()).modifierTree(message.getMessage());
-        if (actionMessage != null) {
-            modelListeners.firePropertyChange("sendAction",
-                    null, actionMessage);
-            return true;
-        }
-        return false;
-    }
 
     public boolean checkWinner(int id) {
         if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
@@ -171,6 +148,7 @@ public class Model {
 
     public void notifyPlayerHasLost(int id) {
         modelListeners.firePropertyChange("playerLostDetected", null, new GenericMessage(id, this.getPlayer(id).getNickName(), " has no more available actions!"));
-
     }
+
+
 }
