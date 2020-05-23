@@ -67,17 +67,20 @@ public class CLI extends RemoteView implements Runnable {
 
     public ColorMessage askColor() {
         ColorMessage message = new ColorMessage(getPlayerId());
+        String isNumber;
+        int indexColor = 9;
         do {
-
             printAvailableColors();
             playerChoice = scanner.nextLine();
-            System.out.println(playerChoice);
-            for (Color c : modelView.getColors()) {
-                if (playerChoice.equalsIgnoreCase(c.getName()))
-                    message.setColor(c);
+            isNumber = playerChoice.replaceAll("[^0-9]", "");
+            if (!isNumber.equals("")) {
+                indexColor = Integer.parseInt(isNumber);
+                if (indexColor < modelView.getColors().size()) {
+                    message.setColor(modelView.getColors().get(indexColor));
+                }
             }
             printBreakers();
-        } while (!modelView.isInColor(message.getColor()));
+        } while (!modelView.isInColor(message.getColor()) || (indexColor > modelView.getColors().size()));
         this.color = message.getColor();
         return message;
     }
@@ -86,8 +89,9 @@ public class CLI extends RemoteView implements Runnable {
         printBreakers();
         printer.println("\n");
         printer.println("\nHey " + nickname + "! Which colour you want to choose? Available: ");
-        for (Color c : modelView.getColors()) {
-            printer.print(c.getName() + "\t");
+
+        for (int i = 0; i < modelView.getColors().size(); i++) {
+            printer.printf("%d- %-15s", i, modelView.getColors().get(i).getName());
         }
         printer.println();
         for (ModelView.PlayerView p : modelView.getPlayers()) {
@@ -144,22 +148,79 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
-
-    public void showColor(ColorSelectedMessage inputObject) {
-        if (inputObject.getMessage() != null) printer.println(inputObject.getMessage());
+    public GodMessage askGod() {
+        GodMessage message = new GodMessage();
+        message.setId(getPlayerId());
+        String s;
+        String isNumber;
+        int indexGod = 9;
+        printBreakers();
+        if (modelView.getChosenGods().size() == 1) {
+            message.setGod(modelView.getChosenGods().get(0)[0]);
+            modelView.getPlayer(getPlayerId()).setGod(modelView.getChosenGods().get(0));
+            printer.println("You automatically got "+modelView.getChosenGods().get(0)[0]+
+                    "\n"+modelView.getChosenGods().get(0)[1]+"\n");
+        } else {
+            do {
+                printer.println("\nSelect God among the chosen gods:\n");
+                for (int i = 0; i < modelView.getChosenGods().size(); i++) {
+                    printer.printf("%d- %-15s", i, modelView.getChosenGods().get(i)[0]);
+                }
+                printer.println();
+                startingBrackets();
+                s = scanner.nextLine();
+                isNumber = s.replaceAll("[^0-9]", "");
+                if (!isNumber.equals("")) {
+                    indexGod = Integer.parseInt(isNumber);
+                    if (indexGod < modelView.getChosenGods().size()) {
+                        if (s.contains("info") || s.contains("man")) {
+                            printer.println(modelView.getChosenGods().get(indexGod)[0]);
+                            printer.println(modelView.getChosenGods().get(indexGod)[1]);
+                            printBreakers();
+                        } else {
+                            message.setGod(modelView.getChosenGods().get(indexGod)[0]);
+                        }
+                    }
+                }
+            } while (indexGod > modelView.getChosenGods().size());
+        }
+        return message;
     }
 
 
-    public FirstPlayerMessage firstPlayer(FirstPlayerMessage message) {
-        printer.println(message.getMessage());
-        startingBrackets();
-        String name = scanner.nextLine();
-        for (String s : message.getNames()) {
-            if (s.equalsIgnoreCase(name))
-                message.setChosenName(name);
+    public synchronized void firstPlayer() throws InterruptedException {
+        int indexNickname = -1;
+        if (getPlayerId() == modelView.getGodlyId()) {
+            NicknameMessage message = new NicknameMessage();
+            String s;
+            String isNumber;
+            do {
+                printer.println("Chose first player: ");
+                for (int i = 0; i < modelView.getPlayers().size(); i++) {
+                    printer.printf("%d- %-15s", i, modelView.getPlayers().get(i).getNickname());
+                }
+                printer.println();
+                startingBrackets();
+                s = scanner.nextLine();
+                isNumber = s.replaceAll("[^0-9]", "");
+                if (!isNumber.equals("")) {
+                    indexNickname = Integer.parseInt(isNumber);
+                    if (indexNickname < modelView.getPlayers().size()) {
+                        if (s.contains("info") || s.contains("man")) {
+                            printer.println(modelView.getGods().get(indexNickname)[0]);
+                            printer.println(modelView.getGods().get(indexNickname)[1]);
+                            indexNickname = 9;
+                            printBreakers();
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            } while (indexNickname > modelView.getPlayers().size());
+            message.setNick(modelView.getPlayer(indexNickname).getNickname());
+            getConnection().sendEvent(new PropertyChangeEvent(this, "firstPlayerSelected", null, message));
         }
-        printBreakers();
-        return message;
+        wait();
     }
 
 
@@ -243,42 +304,6 @@ public class CLI extends RemoteView implements Runnable {
         printer.println("\n\n" + ANSIColor.BOLD + ANSIColor.RED + inputObject.getMessage() + ANSIColor.RESET + "\n\n");
         printBreakers();
         printBreakers();
-    }
-
-
-    public void waitingMess(WaitingMessage inputObject) {
-        printBoard();
-        printer.println(inputObject.getMessage());
-    }
-
-
-    public GodMessage askGod() {
-        GodMessage message = new GodMessage();
-        message.setId(getPlayerId());
-        boolean found = false;
-        printBreakers();
-        if (modelView.getChosenGods().size() == 1) {
-            message.setGod(modelView.getChosenGods().get(0)[0]);
-            modelView.getPlayer(getPlayerId()).setGod(modelView.getChosenGods().get(0));
-        } else {
-            do {
-                printer.println("\nSelect God among the chosen gods:\n");
-                for (String[] g : modelView.getChosenGods()) {
-                    printer.printf(" %-15s", g[0]);
-                }
-                printer.println();
-                startingBrackets();
-                String input = scanner.nextLine().toUpperCase();
-                for (String[] g : modelView.getChosenGods()) {
-                    if (g[0].equalsIgnoreCase(input)) {
-                        message.setGod(input);
-                        found = true;
-                        modelView.getPlayer(getPlayerId()).setGod(g);
-                    }
-                }
-            } while (!found);
-        }
-        return message;
     }
 
 
@@ -371,7 +396,9 @@ public class CLI extends RemoteView implements Runnable {
 
             godChoice();
             allGodSelected();
-            System.out.println("AOOO SO USCITO DAR GABBIO");
+            firstPlayer();
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
