@@ -44,6 +44,13 @@ public class Coordinate implements Serializable {
         return false;
 
     }
+    public boolean equalsTo(Coordinate that) {
+        if (this.getCol() == that.getCol() && this.getRow() == that.getRow()) {
+            return true;
+        }
+        return false;
+
+    }
 
 
     public ArrayList<Coordinate> getAdjacentCoords() {        //it returns a list of adjacent coordinates

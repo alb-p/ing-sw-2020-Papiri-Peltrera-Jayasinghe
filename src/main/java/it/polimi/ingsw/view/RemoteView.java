@@ -57,7 +57,7 @@ public abstract class RemoteView {
         } else if (propertyName.equalsIgnoreCase("workerConfirm")) {
             setWorker((WorkerMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
-
+            actionsAvailable((ActionMessage)evt.getNewValue());
         }else if (propertyName.equalsIgnoreCase("vrwvrwrv")) {
 
         }
@@ -66,6 +66,8 @@ public abstract class RemoteView {
     protected abstract void setWorker(WorkerMessage message);
 
     protected abstract void setFirstPlayer(NicknameMessage message);
+
+    protected abstract void actionsAvailable(ActionMessage newValue);
 
     protected abstract void assignedGod(GodMessage message);
 

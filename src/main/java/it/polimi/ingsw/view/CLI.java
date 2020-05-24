@@ -7,6 +7,7 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class CLI extends RemoteView implements Runnable {
@@ -110,7 +111,7 @@ public class CLI extends RemoteView implements Runnable {
         printer.println("\nHey " + nickname + "! Which colour you want to choose? Available: ");
 
         for (int i = 0; i < modelView.getColors().size(); i++) {
-            printer.printf(arrangeList, i+1, modelView.getColors().get(i).getName());
+            printer.printf(arrangeList, i + 1, modelView.getColors().get(i).getName());
         }
         printer.println();
         for (ModelView.PlayerView p : modelView.getPlayers()) {
@@ -135,7 +136,7 @@ public class CLI extends RemoteView implements Runnable {
             isNumber = s.replaceAll("[^0-9]", "");
             if (!isNumber.equals("")) {
                 int indexGod = Integer.parseInt(isNumber);
-                if(indexGod > 0) {
+                if (indexGod > 0) {
                     indexGod -= 1;
                     if (indexGod < modelView.getGods().size()) {
                         if (s.contains("info") || s.contains("man")) {
@@ -165,7 +166,7 @@ public class CLI extends RemoteView implements Runnable {
             if (i % 2 == 0) {
                 printer.println();
             }
-            printer.printf(arrangeList, i+1, modelView.getGods().get(i)[0]);
+            printer.printf(arrangeList, i + 1, modelView.getGods().get(i)[0]);
         }
         printer.println("\n");
 
@@ -186,8 +187,8 @@ public class CLI extends RemoteView implements Runnable {
         } else {
             do {
                 printer.println("\nSelect God among the chosen gods:\n");
-                for (int i = 0; i <= modelView.getChosenGods().size(); i++) {
-                    printer.printf(arrangeList, i+1, modelView.getChosenGods().get(i)[0]);
+                for (int i = 0; i < modelView.getChosenGods().size(); i++) {
+                    printer.printf(arrangeList, i + 1, modelView.getChosenGods().get(i)[0]);
                 }
                 printer.println();
                 startingBrackets();
@@ -222,7 +223,7 @@ public class CLI extends RemoteView implements Runnable {
             do {
                 printer.println("Chose first player: ");
                 for (int i = 0; i < modelView.getPlayers().size(); i++) {
-                    printer.printf(arrangeList, i+1, modelView.getPlayer(i).getNickname());
+                    printer.printf(arrangeList, i + 1, modelView.getPlayer(i).getNickname());
                 }
                 printer.println();
                 startingBrackets();
@@ -280,11 +281,58 @@ public class CLI extends RemoteView implements Runnable {
                     }
                 } while (!(row > 0 && row < 6 && col > 0 && col < 6));
 
-                c = new Coordinate(row-1, col-1);
+                c = new Coordinate(row - 1, col - 1);
                 message.setCoordinate(c);
             } while (!modelView.getBoard().getSlot(c).isFree());
 
             connection.sendEvent(new PropertyChangeEvent(this, "notifyWorker", null, message));
+            wait();
+        }
+    }
+
+    private synchronized void play() throws InterruptedException {
+        System.out.println("play");
+        while (getPlayerId() != modelView.getWinnerId() || getPlayerId() != modelView.getDeletedPlayerId()) {
+            System.out.println("ENTERED IN GAME");
+            while (getPlayerId() == modelView.getActualPlayerId()) {
+                connection.sendEvent(new PropertyChangeEvent(this, "ActionsRequest",
+                        null, new GenericMessage()));
+                wait();
+                if (!modelView.getActionsAvailable().isEmpty()) {
+                    ArrayList<String> choices = modelView.getActionChoices();
+                    Action action = null;
+                    do {
+                        printBoard();
+                        int choiceIndex = 0;
+                        ArrayList<Coordinate> coords;
+                        if (choices.size() > 1) {
+                            String inputChoice;
+                            printer.println("Which action do you want to perform?");
+                            for (int i = 0; i < choices.size(); i++) {
+                                printer.printf(arrangeList, i + 1, choices.get(i));
+                                do {
+                                    startingBrackets();
+                                    inputChoice = scanner.nextLine();
+                                    String numbers = inputChoice.replaceAll("[^0-9]", "");
+                                    if (numbers != "") {
+                                        choiceIndex = Integer.parseInt(numbers) - 1;
+                                    }
+                                } while (choiceIndex < 0 || choiceIndex > choices.size());
+                            }
+                        }
+                        printer.println("Perform your" + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
+                        coords = parseCoordinateAction(scanner.nextLine());
+                        if (coords.size() == 2) {
+                            action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
+                        }
+                    } while (action == null);
+                    ActionMessage mess = new ActionMessage();
+                    mess.setAction(action);
+                    connection.sendEvent(new PropertyChangeEvent(this,
+                            "NotifyAction", null, mess));
+                    printBreakers();
+                } else break;
+            }
             wait();
         }
     }
@@ -346,8 +394,6 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-
-
     public Action parseAction(String input, Action action) {
         String[] coords;
         String noSpaces;
@@ -366,6 +412,28 @@ public class CLI extends RemoteView implements Runnable {
         return action;
     }
 
+    public ArrayList<Coordinate> parseCoordinateAction(String input) {
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
+        String[] coords;
+        int[] nums = new int[4];
+        String noSpaces;
+        String noWrongChars;
+        //0,0 in 0,1 -> 0,0in0,1 -> 0 0,0 1
+        noSpaces = input.replace(" ", "");
+        noWrongChars = noSpaces.replaceAll("[^0-5]", "");
+        coords = noWrongChars.split("");
+        if (coords.length == 4) {
+            for (int i = 0; i < 4; i++) {
+                nums[i] = Integer.parseInt(coords[i]);
+                nums[i] -= 1;
+                System.out.println("PARSE  " + nums[i]);
+            }
+            coordinates.add(new Coordinate(nums[0], nums[1]));
+            coordinates.add(new Coordinate(nums[2], nums[3]));
+        }
+        return coordinates;
+    }
+
     public void printBoard() {
         printer.println(this.modelView.getBoard());
         printBreakers();
@@ -378,7 +446,6 @@ public class CLI extends RemoteView implements Runnable {
     public void printBreakers() {
         printer.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
     }
-
 
 
     @Override
@@ -405,6 +472,7 @@ public class CLI extends RemoteView implements Runnable {
             firstPlayer();
             setupWorkers();
             allWorkerPlaced();
+            play();
 
 
         } catch (InterruptedException e) {
@@ -413,10 +481,12 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
-    private synchronized void allWorkerPlaced() throws InterruptedException{
-        while(modelView.getFirstPlayerId() != modelView.getActualPlayerId()){
+    private synchronized void allWorkerPlaced() throws InterruptedException {
+        while (modelView.getFirstPlayerId() != modelView.getActualPlayerId()) {
             wait();
+            System.out.println("FIRST__ " + modelView.getFirstPlayerId() + "ACTUAL __" + modelView.getActualPlayerId());
         }
+        System.out.println("ALL WORKER PLACED");
     }
 
     private synchronized void allGodSelected() throws InterruptedException {
@@ -543,13 +613,22 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
-    protected synchronized void setWorker(WorkerMessage message){
+    protected synchronized void actionsAvailable(ActionMessage message) {
+        modelView.getActionsAvailable().addAll(message.getChoices());
+        notify();
+
+    }
+
+    @Override
+    protected synchronized void setWorker(WorkerMessage message) {
         printBoard();
-        if(message.getId() != getPlayerId()){
+        if (message.getId() != getPlayerId()) {
             //printBoard();
         }
-        if(message.getWorkerNumber() == 1){
+        System.out.println("WORKER ARRIVED");
+        if (message.getWorkerNumber() == 1) {
             modelView.setNextPlayerId();
+            System.out.println("INCREMENT ACTUAL PLAYER");
         }
         notify();
     }

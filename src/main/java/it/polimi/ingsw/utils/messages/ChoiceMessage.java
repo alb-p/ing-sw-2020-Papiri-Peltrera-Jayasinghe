@@ -11,9 +11,9 @@ public class ChoiceMessage implements Message, Serializable {
     private ArrayList<String> choices;
 /*
     public ChoiceMessage(ActionMessage message){
-        this.choices = message.getChoices();
+        //this.choices = message.getChoices();
         this.id = message.getId();
-        this.nickname = message.getNickname();
+        //this.nickname = message.getNickname();
     }
 */
     @Override

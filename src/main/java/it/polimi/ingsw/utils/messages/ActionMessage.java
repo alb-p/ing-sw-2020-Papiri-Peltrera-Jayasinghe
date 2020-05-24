@@ -20,6 +20,10 @@ public class ActionMessage implements Message, Serializable {
         this.ID=i;
     }
 
+    public ActionMessage() {
+
+    }
+
     public Action getAction(){
         return this.action;
     }

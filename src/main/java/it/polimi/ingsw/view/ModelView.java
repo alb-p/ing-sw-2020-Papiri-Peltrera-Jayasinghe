@@ -1,9 +1,6 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Player;
-import it.polimi.ingsw.model.VirtualBoard;
-import it.polimi.ingsw.model.VirtualSlot;
+import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.messages.GodMessage;
 
 import javax.management.AttributeList;
@@ -18,10 +15,12 @@ public class ModelView {
     private ArrayList<PlayerView> players = new ArrayList<>();
     private ArrayList<String[]> gods = new ArrayList<>();
     private ArrayList<String[]> chosenGods = new ArrayList<>();
+    private ArrayList<Action> actionsAvailable = new ArrayList<>();
     private int actualPlayerId;
     private int godlyId;
     private int firstPlayerId;
     private int deletedPlayerId = -1;
+    private int winnerId = -1;
 
     public ModelView() {
         Collections.addAll(colors, Color.values());
@@ -83,9 +82,9 @@ public class ModelView {
         return null;
     }
 
-    public void setActualPlayerId(String nickname){
-        for(PlayerView p : players) {
-            if(p.getNickname().equals(nickname)){
+    public void setActualPlayerId(String nickname) {
+        for (PlayerView p : players) {
+            if (p.getNickname().equals(nickname)) {
                 setActualPlayerId(p.getId());
             }
         }
@@ -176,7 +175,7 @@ public class ModelView {
     public void setGod(int id, String god) {
         String[] toRemove = new String[2];
         for (String[] s : chosenGods) {
-            if (s[0].equalsIgnoreCase(god)){
+            if (s[0].equalsIgnoreCase(god)) {
                 getPlayer(id).setGod(s);
                 toRemove = s;
             }
@@ -186,6 +185,51 @@ public class ModelView {
 
     public void updateBoard(VirtualSlot vSlot) {
         board.setSlot(vSlot);
+    }
+
+    public ArrayList<Action> getActionsAvailable() {
+        return this.actionsAvailable;
+    }
+
+    public void setActionsAvailable(ArrayList<Action> actions) {
+        this.actionsAvailable = actions;
+    }
+
+    public int getWinnerId() {
+        return this.winnerId;
+    }
+
+    public int getDeletedPlayerId() {
+        return this.deletedPlayerId;
+    }
+
+    public Action searchAction(String s, Coordinate start, Coordinate end) {
+        for (Action a : actionsAvailable) {
+            if (a.getActionName().equalsIgnoreCase(s) &&
+                    a.getStart().equals(start)
+                    && a.getEnd().equals(end)) {
+                return a;
+            }
+        }
+        return null;
+    }
+
+    public ArrayList<String> getActionChoices() {
+        ArrayList<String> choices = new ArrayList<>();
+        Boolean found = false;
+        for (Action a : actionsAvailable) {
+            for (String s : choices) {
+                if (s.equalsIgnoreCase(a.getActionName())) {
+                    found = true;
+                    break;
+                }
+            }
+            if (!found) {
+                choices.add(a.getActionName());
+            }
+            found = false;
+        }
+        return choices;
     }
 
     public class PlayerView {

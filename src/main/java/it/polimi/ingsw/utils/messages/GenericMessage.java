@@ -7,6 +7,7 @@ public class GenericMessage implements Message , Serializable {
     private String message;
     private int id;
 
+    public GenericMessage(){}
     public GenericMessage(int i,String s){
         this.message=s;
         this.id=i;

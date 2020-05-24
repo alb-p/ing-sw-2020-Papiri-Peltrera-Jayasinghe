@@ -130,11 +130,12 @@ public class Model {
     //crea l'albero e lo fa correggere dagli altri dei. //si potrebbe spostare in model.java
     public void buildTree(int ID) {
         try {
+            System.out.println("BUILD TREE MODEL");
             getPlayer(ID).playerTreeSetup(board);
             treeEditorBySpecialRule(ID);
             ActionMessage message = getPlayer(ID).getNextActions();
             if (!message.getChoices().isEmpty())
-                modelListeners.firePropertyChange("ActionsAvailableResponse", null, message);
+                modelListeners.firePropertyChange("ActionsAvailable", null, message);
             else notifyPlayerHasLost(ID);
 
         } catch (Exception e) {
