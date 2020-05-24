@@ -48,25 +48,22 @@ public class Client {
             inputStream = new ObjectInputStream(socket.getInputStream());
             printStream = new ObjectOutputStream(socket.getOutputStream());
 
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        while (true) {
-                            final Object inputObject = inputStream.readObject();
+            new Thread(() -> {
+                try {
+                    while (true) {
+                        final Object inputObject = inputStream.readObject();
 
-                            if (inputObject instanceof PropertyChangeEvent) {;
-                                view.notifyEvent((PropertyChangeEvent) inputObject);
-                            } else if (inputObject instanceof SetupMessage) {
-                                view.askNumOfPlayers();
-                            }
-
+                        if (inputObject instanceof PropertyChangeEvent) {;
+                            view.notifyEvent((PropertyChangeEvent) inputObject);
+                        } else if (inputObject instanceof SetupMessage) {
+                            view.askNumOfPlayers();
                         }
-                    } catch (IOException | ClassNotFoundException e) {
-                        logger.log(Level.SEVERE, e.getMessage());
-                        e.printStackTrace();
 
                     }
+                } catch (IOException | ClassNotFoundException e) {
+                    logger.log(Level.SEVERE, e.getMessage());
+                    e.printStackTrace();
+
                 }
             }).start();
         } catch (IOException e) {

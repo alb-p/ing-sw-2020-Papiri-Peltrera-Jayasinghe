@@ -295,8 +295,9 @@ public class CLI extends RemoteView implements Runnable {
         while (getPlayerId() != modelView.getWinnerId() || getPlayerId() != modelView.getDeletedPlayerId()) {
             System.out.println("ENTERED IN GAME");
             while (getPlayerId() == modelView.getActualPlayerId()) {
-                connection.sendEvent(new PropertyChangeEvent(this, "ActionsRequest",
+                connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                         null, new GenericMessage()));
+                System.out.println("WAITT FOR ACTIONs");
                 wait();
                 if (!modelView.getActionsAvailable().isEmpty()) {
                     ArrayList<String> choices = modelView.getActionChoices();
@@ -329,8 +330,9 @@ public class CLI extends RemoteView implements Runnable {
                     ActionMessage mess = new ActionMessage();
                     mess.setAction(action);
                     connection.sendEvent(new PropertyChangeEvent(this,
-                            "NotifyAction", null, mess));
+                            "notifyAction", null, mess));
                     printBreakers();
+                    modelView.getActionsAvailable().clear();
                 } else break;
             }
             wait();

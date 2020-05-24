@@ -124,7 +124,7 @@ public class Player {
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
         TreeActionNode attemptedActionNode;
         attemptedActionNode = tree.search(message);
-
+        this.actualWorker= board.infoSlot(message.getStart()).getWorker();
         this.tree = attemptedActionNode;
         if (!this.card.turnHandler(this, board, message))
             return false;//TODO mettere warning

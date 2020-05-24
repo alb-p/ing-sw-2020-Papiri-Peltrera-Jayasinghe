@@ -26,18 +26,21 @@ public class TurnHandler implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        if (evt.getPropertyName().equalsIgnoreCase("ActionsRequest")) {
+        if (evt.getPropertyName().equalsIgnoreCase("actionsRequest")) {
             Message message = (Message) evt.getNewValue();
             int ID = actualPlayerID();
             if (message.getId() == ID) {
-                model.buildTree(ID);
+                //TODO create tree only if first call to actionRequest,
+                // otherwise send children of the root.
+                model.sendActions(ID);
+                //model.buildTree(ID);
                 if (model.getPlayer(ID).checkLoser())
                     playerHasLost(ID);
 
             }
         }
 
-        if (evt.getPropertyName().equalsIgnoreCase("NotifyAction")) {
+        if (evt.getPropertyName().equalsIgnoreCase("notifyAction")) {
             ActionMessage message = (ActionMessage) evt.getNewValue();
             int ID = actualPlayerID();
             if (message.getId() == ID) {

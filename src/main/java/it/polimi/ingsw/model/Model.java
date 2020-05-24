@@ -126,6 +126,18 @@ public class Model {
         }
 
     }
+    public void sendActions(int id){
+        if(getPlayer(id).getTree()==null){
+            buildTree(id);
+        }
+        ActionMessage message = getPlayer(id).getNextActions();
+
+        if (!message.getChoices().isEmpty())
+            modelListeners.firePropertyChange("actionsAvailable", null, message);
+        else notifyPlayerHasLost(id);
+
+    }
+
 
     //crea l'albero e lo fa correggere dagli altri dei. //si potrebbe spostare in model.java
     public void buildTree(int ID) {
@@ -133,10 +145,6 @@ public class Model {
             System.out.println("BUILD TREE MODEL");
             getPlayer(ID).playerTreeSetup(board);
             treeEditorBySpecialRule(ID);
-            ActionMessage message = getPlayer(ID).getNextActions();
-            if (!message.getChoices().isEmpty())
-                modelListeners.firePropertyChange("ActionsAvailable", null, message);
-            else notifyPlayerHasLost(ID);
 
         } catch (Exception e) {
             e.printStackTrace();
