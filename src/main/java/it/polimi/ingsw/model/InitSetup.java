@@ -1,6 +1,5 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
 
 
@@ -56,7 +55,7 @@ public class InitSetup {
     }
 
     public void setNicknames(NicknameMessage message) {
-        nicknames.add(message.getNick());
+        nicknames.add(message.getNickname());
         initSetupListeners.firePropertyChange("nicknameConfirm", null, message);
     }
 

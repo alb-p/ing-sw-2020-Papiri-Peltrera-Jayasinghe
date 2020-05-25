@@ -2,16 +2,12 @@ package it.polimi.ingsw.controller;
 
 import it.polimi.ingsw.gods.*;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
-import it.polimi.ingsw.utils.messages.ChoiceMessage;
+import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.Message;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
 
 public class TurnHandler implements PropertyChangeListener {
     private Model model;
@@ -27,48 +23,54 @@ public class TurnHandler implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("actionsRequest")) {
-            Message message = (Message) evt.getNewValue();
-            int ID = actualPlayerID();
-            if (message.getId() == ID) {
-                //TODO create tree only if first call to actionRequest,
-                // otherwise send children of the root.
-                model.sendActions(ID);
-                //model.buildTree(ID);
-                if (model.getPlayer(ID).checkLoser())
-                    playerHasLost(ID);
-
+            int id = actualPlayerID();
+            Message message = (GenericMessage) evt.getNewValue();
+            if (message.getId() == id) {
+                model.sendActions(id);
+                if (model.getPlayer(id).checkLoser())
+                    playerHasLost(id);
             }
         }
 
         if (evt.getPropertyName().equalsIgnoreCase("notifyAction")) {
             ActionMessage message = (ActionMessage) evt.getNewValue();
-            int ID = actualPlayerID();
-            if (message.getId() == ID) {
-                model.turnHandler(ID, message.getAction());
-                if (model.getPlayer(ID).hasDone())
-                    endTurnManager(ID);
+            int id = actualPlayerID();
+            if (message.getId() == id) {
+                model.turnHandler(id, message.getAction());
+                if (model.getPlayer(id).hasDone()) {
+                    endTurnManager(id);
+                }
+            }
+        }
+
+        if (evt.getPropertyName().equalsIgnoreCase("endTurn")) {
+            GenericMessage message = (GenericMessage) evt.getNewValue();
+            int id = actualPlayerID();
+            if (message.getId() == id) {
+                if (model.getPlayer(id).essentialDone()) {
+                    endTurnManager(id);
+                }
             }
         }
 
     }
 
     //fa finire il turno e crea l'albero per il giocatore succesivo + controllo se ha perso
-    private void endTurnManager(int ID) {
-        if (!model.checkWinner(ID)) {
-            model.getPlayer(ID).setEndTurn();
+    private void endTurnManager(int id) {
+        if (!model.checkWinner(id)) {
+            model.endTurn(id);
             totalTurnCounter++;
-
-
         }
+
     }
 
     //fa quello che deve fare se si è rilevato che un player ha perso
-    public void playerHasLost(int ID) {
+    public void playerHasLost(int id) {
         if (playersPerGame == 2) {
-            model.endGameForNoAvailableMoves(ID);
+            model.endGameForNoAvailableMoves(id);
         } else {
-            playerDefeatedID = ID;
-            model.removePlayer(ID);
+            playerDefeatedID = id;
+            model.removePlayer(id);
             totalTurnCounter++;
         }
     }
@@ -81,8 +83,8 @@ public class TurnHandler implements PropertyChangeListener {
     }
 
     //imposta il primo giocatore
-    public void setTotalTurnCounter(int ID) {
-        this.totalTurnCounter = ID;
+    public void setTotalTurnCounter(int id) {
+        this.totalTurnCounter = id;
     }
 
 

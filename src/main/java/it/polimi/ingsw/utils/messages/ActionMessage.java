@@ -1,23 +1,22 @@
 package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.utils.ActionsEnum;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
 public class ActionMessage implements Message, Serializable {
 
-    private int ID;
+    private int id;
     private boolean isOptional;
     private ArrayList<Action> choices;
     private Action action;
 
 
-    public ActionMessage(ArrayList<Action> list, boolean b, int i) {
+    public ActionMessage(ArrayList<Action> list, boolean b, int id) {
         this.choices=list;
         this.isOptional=b;
-        this.ID=i;
+        this.id =id;
     }
 
     public ActionMessage() {
@@ -36,8 +35,12 @@ public class ActionMessage implements Message, Serializable {
         return this.choices;
     }
 
-    public boolean getIsOptional(){
+    public boolean isOptional(){
         return this.isOptional;
+    }
+
+    public void setOptional(boolean optional) {
+        isOptional = optional;
     }
 
     @Override
@@ -47,11 +50,11 @@ public class ActionMessage implements Message, Serializable {
 
     @Override
     public void setId(int id) {
-
+        this.id = id;
     }
 
     @Override
     public int getId() {
-        return this.ID;
+        return this.id;
     }
 }

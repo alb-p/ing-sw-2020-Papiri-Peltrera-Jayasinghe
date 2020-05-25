@@ -28,8 +28,8 @@ public class GenericMessage implements Message , Serializable {
     }
 
     @Override
-    public void setId(int i) {
-
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

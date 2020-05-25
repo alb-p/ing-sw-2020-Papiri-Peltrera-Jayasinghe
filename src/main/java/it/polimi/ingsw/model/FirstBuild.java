@@ -11,7 +11,7 @@ public class FirstBuild extends Build implements Serializable {
 
     @Override
     public String getActionName() {
-        return "First build";
+        return "build";
     }
 
     @Override

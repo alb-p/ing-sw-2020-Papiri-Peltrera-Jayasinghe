@@ -1,33 +1,37 @@
 package it.polimi.ingsw.utils.messages;
 
-import it.polimi.ingsw.network.SocketClientConnection;
-
 import java.io.Serializable;
 
 public class NicknameMessage implements Message , Serializable {
 
     private String message;
-    private String nick;
+    private String nickname;
     private int id;
 
     public NicknameMessage() {
         this.message = "Choose a nickname:";
-        this.nick = null;
+        this.nickname = null;
 
     }
 
     public NicknameMessage(int id) {
         this.message = "Choose a nickname:";
-        this.nick = null;
+        this.nickname = null;
         this.id = id;
     }
 
-    public void setNick(String nick) {
-        this.nick = nick;
+    public NicknameMessage(int id, String nickname) {
+        this.id = id;
+        this.nickname = nickname;
+        this.message = "default";
     }
 
-    public String getNick() {
-        return nick;
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getNickname() {
+        return nickname;
     }
 
     public String getMessage() {

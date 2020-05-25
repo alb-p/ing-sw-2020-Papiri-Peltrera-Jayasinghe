@@ -11,7 +11,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class Client {
+public class SocketServerConnection {
 
     private Socket socket;
 
@@ -24,7 +24,7 @@ public class Client {
     //è strettamente necessario avere il nickname?
     String nickname;
 
-    public Client(String ip, int port, int chosenUI) {
+    public SocketServerConnection(String ip, int port, int chosenUI) {
 
         try {
             this.socket = new Socket(ip, port);

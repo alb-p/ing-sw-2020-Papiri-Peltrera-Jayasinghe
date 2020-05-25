@@ -2,12 +2,7 @@ package it.polimi.ingsw.model;
 
 //TODO renderla classe astratta
 
-
-import java.util.HashMap;
-import java.util.Set;
-
 public class BasicGodCard {
-    private boolean flag;
 
     public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         Slot workerSlot = board.infoSlot(w.getPosition());
@@ -37,7 +32,6 @@ public class BasicGodCard {
     }
 
     public void specialRule(TreeActionNode root, IslandBoard board) {
-        System.out.println("SPECIALRULE");
         return;
     }
 

@@ -1,8 +1,5 @@
 package it.polimi.ingsw.network;
 
-import it.polimi.ingsw.view.CLI;
-import it.polimi.ingsw.view.View;
-
 public class ClientMain {
 
     public static void main(String[] args){
@@ -19,7 +16,7 @@ public class ClientMain {
         }
 
         try {
-            new Client(ip, port, 0).start();
+            new SocketServerConnection(ip, port, 0).start();
         }catch (Exception e){
             e.printStackTrace();
         }

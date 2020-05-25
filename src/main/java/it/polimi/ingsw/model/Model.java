@@ -1,9 +1,6 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.utils.messages.ActionMessage;
-import it.polimi.ingsw.utils.messages.GenericMessage;
-import it.polimi.ingsw.utils.messages.WinnerMessage;
-import it.polimi.ingsw.utils.messages.WorkerMessage;
+import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -70,7 +67,8 @@ public class Model {
     public void turnHandler(int idPlayerPlaying, Action message) {
         oldBoard = cloneVBoard(board);
         try {
-            this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
+            boolean turnhan;
+            turnhan = this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
             System.out.println(board);
         } catch (Exception e) {
             e.printStackTrace();
@@ -131,18 +129,17 @@ public class Model {
             buildTree(id);
         }
         ActionMessage message = getPlayer(id).getNextActions();
-
-        if (!message.getChoices().isEmpty())
+        message.setOptional(getPlayer(id).essentialDone());
+        if (!message.getChoices().isEmpty()) {
             modelListeners.firePropertyChange("actionsAvailable", null, message);
+        }
         else notifyPlayerHasLost(id);
-
     }
 
 
     //crea l'albero e lo fa correggere dagli altri dei. //si potrebbe spostare in model.java
     public void buildTree(int ID) {
         try {
-            System.out.println("BUILD TREE MODEL");
             getPlayer(ID).playerTreeSetup(board);
             treeEditorBySpecialRule(ID);
 
@@ -155,7 +152,8 @@ public class Model {
 
     public boolean checkWinner(int id) {
         if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
-            modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(id, this.getPlayer(id).getNickName()));
+            modelListeners.firePropertyChange("winnerDetected", null,
+                    new WinnerMessage(id, this.getPlayer(id).getNickName()));
             return true;
         }
         return false;
@@ -176,13 +174,21 @@ public class Model {
         for (Player player : players) {
             if (player.getId() != id) winnerID = player.getId();
         }
-        modelListeners.firePropertyChange("winnerDetected", null, new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
+        modelListeners.firePropertyChange("winnerDetected", null,
+                new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
 
     }
 
     public void notifyPlayerHasLost(int id) {
-        modelListeners.firePropertyChange("playerLostDetected", null, new GenericMessage(id, this.getPlayer(id).getNickName(), " has no more available actions!"));
+        modelListeners.firePropertyChange("playerLostDetected", null,
+                new GenericMessage(id, this.getPlayer(id).getNickName(), " has no more available actions!"));
     }
 
 
+    public void endTurn(int id) {
+        getPlayer(id).setEndTurn();
+        modelListeners.firePropertyChange("endTurnConfirm", null,
+                new NicknameMessage(id, this.getPlayer(id).getNickName()));
+        notifyChanges();
+    }
 }

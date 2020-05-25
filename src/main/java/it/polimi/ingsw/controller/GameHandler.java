@@ -32,7 +32,7 @@ public class GameHandler implements PropertyChangeListener {
 
         if (evt.getPropertyName().equals("notifyNickname")) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
-            String name = message.getNick();
+            String name = message.getNickname();
             if (!data.isInUser(name)) {
                 data.setNicknames(message);
                 playerCreationQueue(message);
@@ -65,7 +65,7 @@ public class GameHandler implements PropertyChangeListener {
 
         } else if (evt.getPropertyName().equals("firstPlayerSelected") && atLeastOneGod && data.chosenGodsSize() == 0) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
-            String name = message.getNick();
+            String name = message.getNickname();
             //TODO capire se message.getId() == currentPlayerID in if qui sotto con 63 in un if per escludere godly
             if ( data.isInUser(name)) {
                 for (int i = 0; i < playersPerGame; i++) {
@@ -101,7 +101,7 @@ public class GameHandler implements PropertyChangeListener {
 
     private void playerCreationQueue(Object value) {
         if (value instanceof NicknameMessage) {
-            playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNick());
+            playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNickname());
         } else if (value instanceof ColorMessage) {
             ColorMessage message = (ColorMessage) value;
             model.addPlayer(new Player(message.getId(), playersMap.get(message.getId()), message.getColor()));

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.gods.*;
+import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 
@@ -75,8 +76,6 @@ public class Player {
         } else if (card.equals("PROMETHEUS")) {
             this.card = new Prometheus();
         }
-
-
     }
 
     public BasicGodCard getCard() {
@@ -126,8 +125,10 @@ public class Player {
         attemptedActionNode = tree.search(message);
         this.actualWorker= board.infoSlot(message.getStart()).getWorker();
         this.tree = attemptedActionNode;
-        if (!this.card.turnHandler(this, board, message))
+        if (!this.card.turnHandler(this, board, message)){
             return false;//TODO mettere warning
+        }
+
 
         if (message instanceof Move)
             moveDone = true;
@@ -145,6 +146,7 @@ public class Player {
         this.done = false;
         this.moveDone = false;
         this.buildDone = false;
+        tree = null;
         actualWorker = null;
     }
 
@@ -173,5 +175,8 @@ public class Player {
         if (this.tree.isLeaf())
             this.hasLost = true;
         return this.hasLost;
+    }
+    public boolean essentialDone(){
+        return moveDone && buildDone;
     }
 }

@@ -17,9 +17,9 @@ public class VirtualBoard {
         StringBuilder total = new StringBuilder(5 * 5 * 2);
 
         total.append("        \u2554\u2550\u2550\u2566\u2550\u2550\u2566\u2550\u2550\u2566\u2550\u2550\u2566\u2550\u2550\u2557").append('\n');
-        total.append("   \u24F9   \u2551" + board[4][0] + "\u2551" + board[4][1] + "\u2551" + board[4][2] + "\u2551" + board[4][3] + "\u2551" + board[4][4] + "\u2551").append('\n');
+        total.append("    \u24F9   \u2551" + board[4][0] + "\u2551" + board[4][1] + "\u2551" + board[4][2] + "\u2551" + board[4][3] + "\u2551" + board[4][4] + "\u2551").append('\n');
         total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');
-        total.append("   \u24F8   \u2551" + board[3][0] + "\u2551" + board[3][1] + "\u2551" + board[3][2] + "\u2551" + board[3][3] + "\u2551" + board[3][4] + "\u2551").append('\n');
+        total.append("    \u24F8   \u2551" + board[3][0] + "\u2551" + board[3][1] + "\u2551" + board[3][2] + "\u2551" + board[3][3] + "\u2551" + board[3][4] + "\u2551").append('\n');
         total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');
         total.append("   \u24F7   \u2551" + board[2][0] + "\u2551" + board[2][1] + "\u2551" + board[2][2] + "\u2551" + board[2][3] + "\u2551" + board[2][4] + "\u2551").append('\n');
         total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');

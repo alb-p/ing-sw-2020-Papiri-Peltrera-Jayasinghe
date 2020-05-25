@@ -21,6 +21,7 @@ public class ModelView {
     private int firstPlayerId;
     private int deletedPlayerId = -1;
     private int winnerId = -1;
+    private boolean optional;
 
     public ModelView() {
         Collections.addAll(colors, Color.values());
@@ -229,7 +230,17 @@ public class ModelView {
             }
             found = false;
         }
+        if(optional){
+            choices.add("end turn");
+        }
         return choices;
+    }
+    public boolean isOptional() {
+        return optional;
+    }
+
+    public void setOptional(boolean optional) {
+        this.optional = optional;
     }
 
     public class PlayerView {

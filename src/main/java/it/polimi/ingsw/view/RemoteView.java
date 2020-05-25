@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.VirtualSlot;
-import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.SocketServerConnection;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -10,7 +10,7 @@ public abstract class RemoteView {
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
     private ModelView modelView = new ModelView();
-    private Client connection;
+    private SocketServerConnection connection;
     private int id;
 
     public static Object getMonitor() {
@@ -19,14 +19,14 @@ public abstract class RemoteView {
 
     final static Object monitor = new Object();
 
-    public RemoteView(Client connection) {
+    public RemoteView(SocketServerConnection connection) {
         this.connection = connection;
     }
 
     public RemoteView() {
     }
 
-    public Client getConnection() {
+    public SocketServerConnection getConnection() {
         return connection;
     }
 
@@ -58,10 +58,14 @@ public abstract class RemoteView {
             setWorker((WorkerMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
             actionsAvailable((ActionMessage)evt.getNewValue());
+        }else if (propertyName.equalsIgnoreCase("endTurnConfirm")) {
+                endTurn((NicknameMessage) evt.getNewValue());
         }else if (propertyName.equalsIgnoreCase("vrwvrwrv")) {
 
         }
     }
+
+    protected abstract void endTurn(NicknameMessage message);
 
     protected abstract void setWorker(WorkerMessage message);
 

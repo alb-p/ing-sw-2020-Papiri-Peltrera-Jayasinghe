@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.network.Client;
+import it.polimi.ingsw.network.SocketServerConnection;
 import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
 
@@ -15,20 +15,19 @@ public class CLI extends RemoteView implements Runnable {
     private final Scanner scanner;
     private final PrintStream printer;
     private String playerChoice;
-    private Client connection;
+    private SocketServerConnection connection;
     private String nickname;
     private Color color;
     private Boolean nickValidate = false;
     private Boolean colorValidate = false;
     private boolean godlySelected = false;
+    private boolean endTurn;
     private ModelView modelView;
-    private final Object monitor;
-    private final String arrangeList = "%d- %-15s";
+    private static final String arrangeList = "%d- %-15s";
 
-    public CLI(Client connection) {
+    public CLI(SocketServerConnection connection) {
         super(connection);
         this.connection = connection;
-        this.monitor = getMonitor();
         this.scanner = new Scanner(System.in);
         this.printer = System.out;
         this.modelView = getModelView();
@@ -47,9 +46,6 @@ public class CLI extends RemoteView implements Runnable {
                 "░░░░░╠══║╬╚╣║║║╔╣╬║╔╣║║║║║░░░░░░░░░░░\n" +
                 "░░░░░╚══╩══╩╩═╩═╩═╩╝╚╩╩═╩╝░░░░░░░░░░░\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
-        System.out.println("\u0FD3");
-        System.out.println("\u24F5");
-        System.out.println("\u2615");
     }
 
     @Override
@@ -77,7 +73,7 @@ public class CLI extends RemoteView implements Runnable {
             printer.println(message.getMessage() + "\n");
             startingBrackets();
             playerChoice = scanner.nextLine();
-            message.setNick(playerChoice);
+            message.setNickname(playerChoice);
             this.nickname = playerChoice;
         } while (!modelView.checkNickname(nickname));
         return message;
@@ -244,7 +240,7 @@ public class CLI extends RemoteView implements Runnable {
                     }
                 }
             } while (indexNickname >= modelView.getPlayers().size());
-            message.setNick(modelView.getPlayer(indexNickname).getNickname());
+            message.setNickname(modelView.getPlayer(indexNickname).getNickname());
             connection.sendEvent(new PropertyChangeEvent(this,
                     "firstPlayerSelected", null, message));
         }
@@ -291,49 +287,65 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     private synchronized void play() throws InterruptedException {
-        System.out.println("play");
         while (getPlayerId() != modelView.getWinnerId() || getPlayerId() != modelView.getDeletedPlayerId()) {
-            System.out.println("ENTERED IN GAME");
-            while (getPlayerId() == modelView.getActualPlayerId()) {
+            modelView.getActionsAvailable().clear();
+            while (getPlayerId() == modelView.getActualPlayerId() && !endTurn) {
                 connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                         null, new GenericMessage()));
-                System.out.println("WAITT FOR ACTIONs");
                 wait();
-                if (!modelView.getActionsAvailable().isEmpty()) {
+                if (!modelView.getActionsAvailable().isEmpty() && getPlayerId() == modelView.getActualPlayerId()) {
                     ArrayList<String> choices = modelView.getActionChoices();
                     Action action = null;
                     do {
                         printBoard();
                         int choiceIndex = 0;
                         ArrayList<Coordinate> coords;
+                        printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname));
                         if (choices.size() > 1) {
                             String inputChoice;
-                            printer.println("Which action do you want to perform?");
-                            for (int i = 0; i < choices.size(); i++) {
-                                printer.printf(arrangeList, i + 1, choices.get(i));
-                                do {
-                                    startingBrackets();
-                                    inputChoice = scanner.nextLine();
-                                    String numbers = inputChoice.replaceAll("[^0-9]", "");
-                                    if (numbers != "") {
-                                        choiceIndex = Integer.parseInt(numbers) - 1;
-                                    }
-                                } while (choiceIndex < 0 || choiceIndex > choices.size());
+                            printer.println(" which action do you want to perform?");
+                            int i;
+                            for (i = 0; i < choices.size(); i++) {
+                                printer.printf(arrangeList, i + 1, choices.get(i).toLowerCase());
+                            }
+
+                            do {
+                                startingBrackets();
+                                inputChoice = scanner.nextLine();
+                                String numbers = inputChoice.replaceAll("[^0-9]", "");
+                                if (numbers != "") {
+                                    choiceIndex = Integer.parseInt(numbers) - 1;
+                                }
+                            } while (choiceIndex < 0 || choiceIndex > choices.size());
+                        }
+                        System.out.println();
+                        if(choices.get(choiceIndex).equals("end turn") && modelView.isOptional()){
+                            endTurn = true;
+                        }else {
+                            printer.println("Perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
+                            startingBrackets();
+                            coords = parseCoordinateAction(scanner.nextLine());
+                            if (coords.size() == 2) {
+                                action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
                             }
                         }
-                        printer.println("Perform your" + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
-                        coords = parseCoordinateAction(scanner.nextLine());
-                        if (coords.size() == 2) {
-                            action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
-                        }
-                    } while (action == null);
-                    ActionMessage mess = new ActionMessage();
-                    mess.setAction(action);
-                    connection.sendEvent(new PropertyChangeEvent(this,
-                            "notifyAction", null, mess));
+                    } while (action == null && !endTurn);
+
+                    if(endTurn){
+                        modelView.getActionsAvailable().clear();
+                        System.out.println("END TUEN ACTUVE" +endTurn);
+                        connection.sendEvent(new PropertyChangeEvent(this,
+                                "endTurn", null, new GenericMessage()));
+                    }else {
+                        ActionMessage mess = new ActionMessage();
+                        mess.setAction(action);
+                        modelView.getActionsAvailable().clear();
+                        connection.sendEvent(new PropertyChangeEvent(this,
+                                "notifyAction", null, mess));
+                    }
                     printBreakers();
-                    modelView.getActionsAvailable().clear();
-                } else break;
+
+                }
             }
             wait();
         }
@@ -350,49 +362,12 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
-/*
-    public ChoiceMessage askChoice(ChoiceMessage message) {
-        String input;
-        String onlyNumbers;
-        int parsed = 0;
-        printBoard();
-        printer.println("Hey " + nickname + "! Possibile actions: ");
-        do {
-            for (int i = 0; i < message.getChoices().size(); i++) {
-                printer.println(i + ":: " + message.getChoices().get(i));
-            }
-            startingBrackets();
-            input = scanner.nextLine();
-            onlyNumbers = input.replaceAll("[^0-5]", "");
-            if (!onlyNumbers.equals("")) {
-                parsed = Integer.parseInt(onlyNumbers);
-            }
-        } while (!(parsed < message.getChoices().size() && parsed >= 0));
-        message.setMessage(message.getChoices().get(parsed));
-        printBreakers();
-        printer.println();
-        return message;
-    }
-*/
-
     public void genericMess(GenericMessage inputObject) {
         printBreakers();
         printBreakers();
         printer.println("\n\n" + ANSIColor.BOLD + ANSIColor.RED + inputObject.getMessage() + ANSIColor.RESET + "\n\n");
         printBreakers();
         printBreakers();
-    }
-
-
-    public ActionMessage askAction(ActionMessage message) {
-        printBoard();
-        printer.println(nickname + " make " + message.getAction().getActionName() + " x,y in z,w");
-        startingBrackets();
-
-        playerChoice = scanner.nextLine();
-        message.setAction(parseAction(playerChoice, message.getAction()));
-
-        return message;
     }
 
 
@@ -428,10 +403,12 @@ public class CLI extends RemoteView implements Runnable {
             for (int i = 0; i < 4; i++) {
                 nums[i] = Integer.parseInt(coords[i]);
                 nums[i] -= 1;
-                System.out.println("PARSE  " + nums[i]);
             }
             coordinates.add(new Coordinate(nums[0], nums[1]));
             coordinates.add(new Coordinate(nums[2], nums[3]));
+        }else{
+            coordinates.add(new Coordinate(-1, -1));
+            coordinates.add(new Coordinate(-1, -1));
         }
         return coordinates;
     }
@@ -486,9 +463,7 @@ public class CLI extends RemoteView implements Runnable {
     private synchronized void allWorkerPlaced() throws InterruptedException {
         while (modelView.getFirstPlayerId() != modelView.getActualPlayerId()) {
             wait();
-            System.out.println("FIRST__ " + modelView.getFirstPlayerId() + "ACTUAL __" + modelView.getActualPlayerId());
         }
-        System.out.println("ALL WORKER PLACED");
     }
 
     private synchronized void allGodSelected() throws InterruptedException {
@@ -542,8 +517,8 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected synchronized void nicknameReceived(NicknameMessage newValue) {
-        modelView.addPlayer(newValue.getId(), newValue.getNick());
-        if (!newValue.getNick().equals(nickname)) {
+        modelView.addPlayer(newValue.getId(), newValue.getNickname());
+        if (!newValue.getNickname().equals(nickname)) {
             //printer.println("\n" + newValue.getNick() + " joined the game!");
             //if (!nickValidate) startingBrackets();
             return;
@@ -606,10 +581,10 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected synchronized void setFirstPlayer(NicknameMessage message) {
-        modelView.setActualPlayerId(message.getNick());
-        modelView.setFirstPlayerId(modelView.getPlayer(message.getNick()).getId());
+        modelView.setActualPlayerId(message.getNickname());
+        modelView.setFirstPlayerId(modelView.getPlayer(message.getNickname()).getId());
         printer.println(modelView.getPlayer(modelView.getGodlyId()).getNickname() +
-                " chose " + message.getNick() + " as first player!");
+                " chose " + message.getNickname() + " as first player!");
         printBreakers();
         notify();
     }
@@ -617,21 +592,26 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     protected synchronized void actionsAvailable(ActionMessage message) {
         modelView.getActionsAvailable().addAll(message.getChoices());
+        modelView.setOptional(message.isOptional());
         notify();
-
     }
 
     @Override
     protected synchronized void setWorker(WorkerMessage message) {
         printBoard();
-        if (message.getId() != getPlayerId()) {
-            //printBoard();
-        }
-        System.out.println("WORKER ARRIVED");
         if (message.getWorkerNumber() == 1) {
             modelView.setNextPlayerId();
-            System.out.println("INCREMENT ACTUAL PLAYER");
         }
         notify();
     }
+
+    @Override
+    protected synchronized void endTurn(NicknameMessage message) {
+        System.out.println("SIBI ENDTUYRN CONFIRM");
+        printBoard();
+        modelView.setNextPlayerId();
+        endTurn = false;
+        notify();
+    }
+
 }
