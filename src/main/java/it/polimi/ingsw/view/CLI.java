@@ -21,6 +21,7 @@ public class CLI extends RemoteView implements Runnable {
     private Boolean nickValidate = false;
     private Boolean colorValidate = false;
     private boolean godlySelected = false;
+    private boolean winnerDetected = false;
     private boolean endTurn;
     private ModelView modelView;
     private static final String arrangeList = "%d- %-15s";
@@ -205,6 +206,7 @@ public class CLI extends RemoteView implements Runnable {
                 }
             } while (indexGod >= modelView.getChosenGods().size());
         }
+        printBreakers();
         return message;
     }
 
@@ -255,7 +257,7 @@ public class CLI extends RemoteView implements Runnable {
         Coordinate c;
         for (int i = 0; i < 2; i++) {
             message = new WorkerMessage(getPlayerId(), i);
-            printBoard();
+            //printBoard();
             do {
                 int row;
                 row = 9;
@@ -287,42 +289,43 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     private synchronized void play() throws InterruptedException {
-        while (getPlayerId() != modelView.getWinnerId() || getPlayerId() != modelView.getDeletedPlayerId()) {
+        while (!winnerDetected && getPlayerId() != modelView.getDeletedPlayerId()) {
             modelView.getActionsAvailable().clear();
             while (getPlayerId() == modelView.getActualPlayerId() && !endTurn) {
                 connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                         null, new GenericMessage()));
                 wait();
-                if (!modelView.getActionsAvailable().isEmpty() && getPlayerId() == modelView.getActualPlayerId()) {
+                if (!modelView.getActionsAvailable().isEmpty() && getPlayerId() == modelView.getActualPlayerId() && !winnerDetected) {
                     ArrayList<String> choices = modelView.getActionChoices();
                     Action action = null;
                     do {
-                        printBoard();
                         int choiceIndex = 0;
                         ArrayList<Coordinate> coords;
-                        printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname));
                         if (choices.size() > 1) {
                             String inputChoice;
-                            printer.println(" which action do you want to perform?");
+                            printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
+                                    +", which action do you want to perform?");
                             int i;
                             for (i = 0; i < choices.size(); i++) {
                                 printer.printf(arrangeList, i + 1, choices.get(i).toLowerCase());
                             }
 
                             do {
+                                printer.println();
                                 startingBrackets();
                                 inputChoice = scanner.nextLine();
                                 String numbers = inputChoice.replaceAll("[^0-9]", "");
-                                if (numbers != "") {
+                                if (!numbers.equals("")) {
                                     choiceIndex = Integer.parseInt(numbers) - 1;
                                 }
-                            } while (choiceIndex < 0 || choiceIndex > choices.size());
+                            } while (choiceIndex < 0 || choiceIndex >= choices.size());
                         }
                         System.out.println();
-                        if(choices.get(choiceIndex).equals("end turn") && modelView.isOptional()){
+                        if (choices.get(choiceIndex).equals("end turn") && modelView.isOptional()) {
                             endTurn = true;
-                        }else {
-                            printer.println("Perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
+                        } else {
+                            printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
+                                    +", perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
                             startingBrackets();
                             coords = parseCoordinateAction(scanner.nextLine());
                             if (coords.size() == 2) {
@@ -331,12 +334,11 @@ public class CLI extends RemoteView implements Runnable {
                         }
                     } while (action == null && !endTurn);
 
-                    if(endTurn){
+                    if (endTurn) {
                         modelView.getActionsAvailable().clear();
-                        System.out.println("END TUEN ACTUVE" +endTurn);
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "endTurn", null, new GenericMessage()));
-                    }else {
+                    } else {
                         ActionMessage mess = new ActionMessage();
                         mess.setAction(action);
                         modelView.getActionsAvailable().clear();
@@ -346,6 +348,7 @@ public class CLI extends RemoteView implements Runnable {
                     printBreakers();
 
                 }
+                if (winnerDetected) return;
             }
             wait();
         }
@@ -371,24 +374,6 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-    public Action parseAction(String input, Action action) {
-        String[] coords;
-        String noSpaces;
-        String noWrongChars;
-        //0,0 in 0,1 -> 0,0in0,1 -> 0 0,0 1
-        noSpaces = input.replace(" ", "");
-        noWrongChars = noSpaces.replaceAll("[^0-5]", "");
-        coords = noWrongChars.split("");
-        if (coords.length != 4) {
-            action.setStart(null);
-            action.setEnd(null);
-        } else {
-            action.setStart(new Coordinate(Integer.parseInt(coords[0]), Integer.parseInt(coords[1])));
-            action.setEnd(new Coordinate(Integer.parseInt(coords[2]), Integer.parseInt(coords[3])));
-        }
-        return action;
-    }
-
     public ArrayList<Coordinate> parseCoordinateAction(String input) {
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         String[] coords;
@@ -406,7 +391,7 @@ public class CLI extends RemoteView implements Runnable {
             }
             coordinates.add(new Coordinate(nums[0], nums[1]));
             coordinates.add(new Coordinate(nums[2], nums[3]));
-        }else{
+        } else {
             coordinates.add(new Coordinate(-1, -1));
             coordinates.add(new Coordinate(-1, -1));
         }
@@ -452,6 +437,7 @@ public class CLI extends RemoteView implements Runnable {
             setupWorkers();
             allWorkerPlaced();
             play();
+            System.out.println("ENDGAME");
 
 
         } catch (InterruptedException e) {
@@ -583,9 +569,10 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void setFirstPlayer(NicknameMessage message) {
         modelView.setActualPlayerId(message.getNickname());
         modelView.setFirstPlayerId(modelView.getPlayer(message.getNickname()).getId());
+        printBreakers();
         printer.println(modelView.getPlayer(modelView.getGodlyId()).getNickname() +
                 " chose " + message.getNickname() + " as first player!");
-        printBreakers();
+        printBoard();
         notify();
     }
 
@@ -593,6 +580,7 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void actionsAvailable(ActionMessage message) {
         modelView.getActionsAvailable().addAll(message.getChoices());
         modelView.setOptional(message.isOptional());
+        printBoard();
         notify();
     }
 
@@ -607,10 +595,23 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected synchronized void endTurn(NicknameMessage message) {
-        System.out.println("SIBI ENDTUYRN CONFIRM");
-        printBoard();
         modelView.setNextPlayerId();
         endTurn = false;
+        notify();
+    }
+
+    @Override
+    protected synchronized void winnerDetected(WinnerMessage message) {
+        winnerDetected = true;
+        winnerMess(message);
+        notify();
+    }
+
+    @Override
+    protected synchronized void playerHasLost(GenericMessage newValue) {
+        printer.println("\n" + modelView.getPlayer(newValue.getId()).getColor().colorizedText(modelView.getPlayer(newValue.getId()).getNickname()) + " has lost for no available moves!\n");
+        modelView.setNextPlayerId();
+        printBreakers();
         notify();
     }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.GodMessage;
 
 import javax.management.AttributeList;
@@ -204,6 +205,10 @@ public class ModelView {
         return this.deletedPlayerId;
     }
 
+    public void setWinnerId(int id){
+        this.winnerId = id;
+    }
+
     public Action searchAction(String s, Coordinate start, Coordinate end) {
         for (Action a : actionsAvailable) {
             if (a.getActionName().equalsIgnoreCase(s) &&
@@ -241,6 +246,10 @@ public class ModelView {
 
     public void setOptional(boolean optional) {
         this.optional = optional;
+    }
+
+    public void playerLost(int id) {
+        this.deletedPlayerId=id;
     }
 
     public class PlayerView {

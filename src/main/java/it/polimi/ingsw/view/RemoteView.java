@@ -53,17 +53,25 @@ public abstract class RemoteView {
         } else if (propertyName.equalsIgnoreCase("firstPlayerConfirmed")) {
             setFirstPlayer((NicknameMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("deltaUpdate")) {
-            modelView.updateBoard((VirtualSlot)evt.getNewValue());
+            modelView.updateBoard((VirtualSlot) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("workerConfirm")) {
             setWorker((WorkerMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
-            actionsAvailable((ActionMessage)evt.getNewValue());
-        }else if (propertyName.equalsIgnoreCase("endTurnConfirm")) {
-                endTurn((NicknameMessage) evt.getNewValue());
-        }else if (propertyName.equalsIgnoreCase("vrwvrwrv")) {
-
+            actionsAvailable((ActionMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("endTurnConfirm")) {
+            endTurn((NicknameMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("playerLostDetected")) {
+            modelView.playerLost(((GenericMessage) evt.getNewValue()).getId());
+            playerHasLost((GenericMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("winnerDetected")) {
+            modelView.setWinnerId(((WinnerMessage) evt.getNewValue()).getId());
+            winnerDetected((WinnerMessage) evt.getNewValue());
         }
     }
+
+    protected abstract void playerHasLost(GenericMessage newValue);
+
+    protected abstract void winnerDetected(WinnerMessage newValue);
 
     protected abstract void endTurn(NicknameMessage message);
 
