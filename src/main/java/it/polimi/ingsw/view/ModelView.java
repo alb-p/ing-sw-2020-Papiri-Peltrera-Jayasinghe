@@ -1,10 +1,15 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.messages.ColorMessage;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.GodMessage;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.view.GUIpackage.NickNamePanel;
 
 import javax.management.AttributeList;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,6 +28,8 @@ public class ModelView {
     private int deletedPlayerId = -1;
     private int winnerId = -1;
     private boolean optional;
+    private PropertyChangeSupport nickNameListener = new PropertyChangeSupport(this);
+    private PropertyChangeSupport colorListener = new PropertyChangeSupport(this);
 
     public ModelView() {
         Collections.addAll(colors, Color.values());
@@ -94,6 +101,11 @@ public class ModelView {
 
     public void addPlayer(int id, String nick) {
         players.add(new PlayerView(id, nick));
+        NicknameMessage message = new NicknameMessage();
+        message.setId(id);
+        message.setNickname(nick);
+        System.out.println("ADDED +"+nick);
+        nickNameListener.firePropertyChange("nicknameConfirm", null, message);
     }
 
     public boolean checkNickname(String nickname) {
@@ -106,6 +118,9 @@ public class ModelView {
     public void setColor(int id, Color color) {
         getPlayer(id).setColor(color);
         colors.remove(color);
+        ColorMessage message = new ColorMessage(id);
+        message.setColor(color);
+        colorListener.firePropertyChange("colorConfirm", null, message);
     }
 
     public boolean isInColor(Color color) {
@@ -250,6 +265,14 @@ public class ModelView {
 
     public void playerLost(int id) {
         this.deletedPlayerId=id;
+    }
+
+    public void addNicknameListener(PropertyChangeListener listener){
+        this.nickNameListener.addPropertyChangeListener(listener);
+    }
+
+    public void addColorListener(PropertyChangeListener listener){
+        this.colorListener.addPropertyChangeListener(listener);
     }
 
     public class PlayerView {

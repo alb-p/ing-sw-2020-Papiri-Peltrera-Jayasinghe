@@ -6,7 +6,7 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 
-public abstract class RemoteView {
+public abstract class RemoteView implements Runnable{
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
     private ModelView modelView = new ModelView();
@@ -45,7 +45,7 @@ public abstract class RemoteView {
         } else if (propertyName.equalsIgnoreCase("colorConfirm")) {
             this.colorReceived((ColorMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("godlySelected")) { //godlySelected contains godlyMessage
-            this.setGodly(((GodlyMessage) evt.getNewValue()).getId());
+            this.setGodly(((GodlyMessage) evt.getNewValue()));
         } else if (propertyName.equalsIgnoreCase("god1ofNConfirmed")) {
             chosenGods((InitialCardsMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("godConfirm")) {
@@ -69,33 +69,53 @@ public abstract class RemoteView {
         }
     }
 
-    protected abstract void playerHasLost(GenericMessage newValue);
+    protected void playerHasLost(GenericMessage newValue) {
+        modelView.setNextPlayerId();
+    }
 
     protected abstract void winnerDetected(WinnerMessage newValue);
 
-    protected abstract void endTurn(NicknameMessage message);
-
-    protected abstract void setWorker(WorkerMessage message);
-
-    protected abstract void setFirstPlayer(NicknameMessage message);
-
-    protected abstract void actionsAvailable(ActionMessage newValue);
-
-    protected abstract void assignedGod(GodMessage message);
-
-    protected abstract void chosenGods(InitialCardsMessage newValue);
-
-    protected synchronized void setGodly(int godlyId) {
-        this.modelView.setGodlyId(godlyId);
-        godlyReceived();
-        notifyAll();
+    protected void endTurn(NicknameMessage message) {
+        modelView.setNextPlayerId();
     }
 
-    protected abstract void colorReceived(ColorMessage newValue);
+    protected void setWorker(WorkerMessage message) {
+        if (message.getWorkerNumber() == 1) {
+            modelView.setNextPlayerId();
+        }
+    }
 
-    protected abstract void nicknameReceived(NicknameMessage newValue);
+    protected void setFirstPlayer(NicknameMessage message) {
 
-    protected abstract void godlyReceived();
+        modelView.setActualPlayerId(message.getNickname());
+        modelView.setFirstPlayerId(modelView.getPlayer(message.getNickname()).getId());
+    }
+
+    protected void actionsAvailable(ActionMessage message) {
+        modelView.getActionsAvailable().addAll(message.getChoices());
+        modelView.setOptional(message.isOptional());
+    }
+
+    protected void assignedGod(GodMessage message) {
+        modelView.setGod(message.getId(), message.getGod());
+        modelView.setNextPlayerId();
+    }
+
+    protected void chosenGods(InitialCardsMessage message) {
+        modelView.addChosenGods(message.getSelectedList());
+    }
+
+    protected void setGodly(GodlyMessage message) {
+        modelView.setGodlyId(message.getId());
+    }
+
+    protected void colorReceived(ColorMessage message){
+        modelView.setColor(message.getId(), message.getColor());
+    }
+
+    protected void nicknameReceived(NicknameMessage message){
+        modelView.addPlayer(message.getId(), message.getNickname());
+    }
 
     protected void setPlayerId(int id) {
         this.id = id;

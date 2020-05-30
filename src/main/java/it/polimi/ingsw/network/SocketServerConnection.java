@@ -2,6 +2,7 @@ package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
+import it.polimi.ingsw.view.GUIpackage.GUI;
 import it.polimi.ingsw.view.RemoteView;
 
 import javax.swing.*;
@@ -14,7 +15,8 @@ import java.util.logging.Logger;
 public class SocketServerConnection {
 
     private Socket socket;
-
+    private final String ip;
+    private final int port;
     boolean online = false;
     private RemoteView view;
     private ObjectInputStream inputStream;
@@ -25,24 +27,25 @@ public class SocketServerConnection {
     String nickname;
 
     public SocketServerConnection(String ip, int port, int chosenUI) {
+        this.ip = ip;
+        this.port = port;
+        if (chosenUI == 0) {
+            this.view = new CLI(this);
+            new Thread(this.view).start();
+        } else {
+            this.view = new GUI(this);
+            javax.swing.SwingUtilities.invokeLater(view);
+        }
+    }
 
+
+    public void start() {
         try {
             this.socket = new Socket(ip, port);
 
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
-
-        if (chosenUI == 0) {
-            this.view = new CLI(this);
-            new Thread((Runnable) this.view).start();
-        } else {
-            //TODO this.view = new GUI();
-        }
-    }
-
-
-    public void start() {
         try {
             this.online = true;
             inputStream = new ObjectInputStream(socket.getInputStream());
@@ -53,7 +56,8 @@ public class SocketServerConnection {
                     while (true) {
                         final Object inputObject = inputStream.readObject();
 
-                        if (inputObject instanceof PropertyChangeEvent) {;
+                        if (inputObject instanceof PropertyChangeEvent) {
+                            ;
                             view.notifyEvent((PropertyChangeEvent) inputObject);
                         } else if (inputObject instanceof SetupMessage) {
                             view.askNumOfPlayers();

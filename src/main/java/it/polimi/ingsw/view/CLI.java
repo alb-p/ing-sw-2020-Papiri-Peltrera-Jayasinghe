@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.network.ClientMain;
 import it.polimi.ingsw.network.SocketServerConnection;
 import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
@@ -29,7 +30,7 @@ public class CLI extends RemoteView implements Runnable {
     public CLI(SocketServerConnection connection) {
         super(connection);
         this.connection = connection;
-        this.scanner = new Scanner(System.in);
+        this.scanner = ClientMain.scanner;
         this.printer = System.out;
         this.modelView = getModelView();
     }
@@ -468,6 +469,19 @@ public class CLI extends RemoteView implements Runnable {
 
     private synchronized void startingGame() throws InterruptedException {
         welcomeMessage();
+        int choiceMenu;
+        do{
+            printer.println("\t0- play\t1- help");
+            String input = scanner.nextLine();
+            String nums =input.replaceAll("[^0-9]", "");
+            if(!nums.equalsIgnoreCase("")){
+                choiceMenu = Integer.parseInt(nums);
+            }else choiceMenu=-1;
+            if (choiceMenu == 1){
+                printer.println("HELPFAKE");
+            }
+        } while (choiceMenu!=0);
+        connection.start();
         this.wait();
     }
 
@@ -502,48 +516,50 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
-    protected synchronized void nicknameReceived(NicknameMessage newValue) {
-        modelView.addPlayer(newValue.getId(), newValue.getNickname());
-        if (!newValue.getNickname().equals(nickname)) {
-            //printer.println("\n" + newValue.getNick() + " joined the game!");
+    protected synchronized void nicknameReceived(NicknameMessage message) {
+        super.nicknameReceived(message);
+        if (!message.getNickname().equals(nickname)) {
+            //printer.println("\n" + message.getNick() + " joined the game!");
             //if (!nickValidate) startingBrackets();
             return;
         }
-        if (newValue.getId() == this.getPlayerId()) {
+        if (message.getId() == this.getPlayerId()) {
             nickValidate = true;
         }
         this.notify();
     }
 
     @Override
-    protected synchronized void colorReceived(ColorMessage newValue) {
-        modelView.setColor(newValue.getId(), newValue.getColor());
-        if (!newValue.getColor().equals(color)) {
+    protected synchronized void colorReceived(ColorMessage message) {
+        super.colorReceived(message);
+        if (!message.getColor().equals(color)) {
 
             if (!colorValidate && nickValidate) {
                 printAvailableColors();
             }
             return;
         }
-        if (newValue.getId() == this.getPlayerId()) {
+        if (message.getId() == this.getPlayerId()) {
             colorValidate = true;
         }
         this.notify();
     }
 
     @Override
-    protected void godlyReceived() {
+    protected synchronized void setGodly(GodlyMessage message) {
+        super.setGodly(message);
         if (getPlayerId() != modelView.getGodlyId()) {
             printer.println("\n" + modelView.getPlayer(modelView.getGodlyId()).getNickname() + " is choosing Gods\n");
             printBreakers();
         }
         godlySelected = true;
+        notify();
     }
 
 
     @Override
     protected synchronized void chosenGods(InitialCardsMessage message) {
-        modelView.addChosenGods(message.getSelectedList());
+        super.chosenGods(message);
         if (modelView.getChosenGods().size() == modelView.getPlayers().size()) {
             printer.println("\tCHOSEN GODS:");
             for (String[] g : modelView.getChosenGods()) {
@@ -555,8 +571,7 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected synchronized void assignedGod(GodMessage message) {
-        modelView.setGod(message.getId(), message.getGod());
-        modelView.setNextPlayerId();
+        super.assignedGod(message);
         if (modelView.getChosenGods().isEmpty()) {
             for (ModelView.PlayerView p : modelView.getPlayers()) {
                 printer.println(p.getNickname() + " chose " + p.getGod()[0]);
@@ -567,8 +582,7 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected synchronized void setFirstPlayer(NicknameMessage message) {
-        modelView.setActualPlayerId(message.getNickname());
-        modelView.setFirstPlayerId(modelView.getPlayer(message.getNickname()).getId());
+        super.setFirstPlayer(message);
         printBreakers();
         printer.println(modelView.getPlayer(modelView.getGodlyId()).getNickname() +
                 " chose " + message.getNickname() + " as first player!");
@@ -578,24 +592,21 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected synchronized void actionsAvailable(ActionMessage message) {
-        modelView.getActionsAvailable().addAll(message.getChoices());
-        modelView.setOptional(message.isOptional());
+        super.actionsAvailable(message);
         printBoard();
         notify();
     }
 
     @Override
     protected synchronized void setWorker(WorkerMessage message) {
+        super.setWorker(message);
         printBoard();
-        if (message.getWorkerNumber() == 1) {
-            modelView.setNextPlayerId();
-        }
         notify();
     }
 
     @Override
     protected synchronized void endTurn(NicknameMessage message) {
-        modelView.setNextPlayerId();
+        super.endTurn(message);
         endTurn = false;
         notify();
     }
@@ -608,9 +619,9 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
-    protected synchronized void playerHasLost(GenericMessage newValue) {
-        printer.println("\n" + modelView.getPlayer(newValue.getId()).getColor().colorizedText(modelView.getPlayer(newValue.getId()).getNickname()) + " has lost for no available moves!\n");
-        modelView.setNextPlayerId();
+    protected synchronized void playerHasLost(GenericMessage message) {
+        super.playerHasLost(message);
+        printer.println("\n" + modelView.getPlayer(message.getId()).getColor().colorizedText(modelView.getPlayer(message.getId()).getNickname()) + " has lost for no available moves!\n");
         printBreakers();
         notify();
     }
