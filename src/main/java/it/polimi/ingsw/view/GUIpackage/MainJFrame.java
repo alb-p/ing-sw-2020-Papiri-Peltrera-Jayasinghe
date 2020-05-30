@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.view.GUIpackage.Components.ChooseColorPanel;
-import it.polimi.ingsw.view.GUIpackage.Components.MainPanel;
+import it.polimi.ingsw.view.GUIpackage.MainPanel;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
