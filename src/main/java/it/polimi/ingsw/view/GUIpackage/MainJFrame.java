@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.utils.messages.WaitingMessage;
 import it.polimi.ingsw.view.GUIpackage.Components.ChooseColorPanel;
+import it.polimi.ingsw.view.GUIpackage.Components.MainPanel;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
@@ -11,7 +11,7 @@ import java.beans.PropertyChangeListener;
 
 public class MainJFrame extends JFrame implements PropertyChangeListener {
 
-    JPanel contentPane;
+    MainPanel contentPane;
     CardLayout layout;
     LogoPanel logo;
 
@@ -24,7 +24,8 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         // window.setBackground(new Color(0, 0, 0, 0)); //trasperenza
         this.setLocationRelativeTo(null); //posiziona al centro all'apertura
         layout = new CardLayout();
-        contentPane = new  JPanel(layout);
+        contentPane = new MainPanel(this);
+        contentPane.setLayout(layout);
         this.setContentPane(contentPane);
         logo = new LogoPanel();
         contentPane.add("LogoPanel", logo);

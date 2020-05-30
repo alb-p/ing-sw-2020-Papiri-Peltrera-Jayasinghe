@@ -8,6 +8,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 public class HomePanel extends JPanel implements ActionListener {
     private PropertyChangeSupport homePanelListeners = new PropertyChangeSupport(this);
@@ -50,6 +54,20 @@ public class HomePanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(playButton)){
             homePanelListeners.firePropertyChange("play", null,true);
+        }
+        if (actionEvent.getSource().equals(exitButton)){
+            System.exit(0);
+        }
+        if (actionEvent.getSource().equals(helpButton)){
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    URL resource = this.getClass().getResource("/Home/rules.pdf");
+                    Desktop.getDesktop().browse(new URI(String.valueOf(resource)));
+
+                } catch (IOException | URISyntaxException ex) {
+                    // no application registered for PDFs
+                }
+            }
         }
     }
 
