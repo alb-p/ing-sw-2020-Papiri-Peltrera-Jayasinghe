@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 
 public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private PropertyChangeSupport numberOfPlayerPanelListeners = new PropertyChangeSupport(this);
@@ -15,9 +16,13 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private JButton twoPlayers;
     private JButton threePlayers;
 
-    public NumberOfPlayerPanel(){
+    public NumberOfPlayerPanel() throws IOException, FontFormatException {
+        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
+
         this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.png")).getImage();
-        this.add(new JLabel("Select Number of Players"));
+        JLabel label=new JLabel("Select Number of Players");
+        label.setFont(font.deriveFont(Font.PLAIN,20)); //imposta font liscio e dimensione 20
+        this.add(label);
         //twoPlayers = new CustomButton("twoPlayers");
         twoPlayers = new JButton("twoPlayers");
         //threePlayers = new CustomButton("threePlayers");

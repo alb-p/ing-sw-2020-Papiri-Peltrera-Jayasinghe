@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 public class MainJFrame extends JFrame implements PropertyChangeListener {
 
@@ -15,7 +16,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     CardLayout layout;
     LogoPanel logo;
 
-    public MainJFrame(GUI gui, ModelView modelView){
+    public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
         this.setDefaultCloseOperation(MainJFrame.EXIT_ON_CLOSE);
         this.setSize(800,600);

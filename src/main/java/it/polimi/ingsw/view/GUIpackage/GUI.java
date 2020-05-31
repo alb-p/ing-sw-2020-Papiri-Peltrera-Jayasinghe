@@ -10,6 +10,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.IOException;
 
 import static java.lang.Thread.interrupted;
 import static java.lang.Thread.sleep;
@@ -111,7 +112,13 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     public void run() {
         //create and show gui
-        window = new MainJFrame(this, modelView);
+        try {
+            window = new MainJFrame(this, modelView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (FontFormatException e) {
+            e.printStackTrace();
+        }
         window.setVisible(true);
         window.layout.show(window.getContentPane(), "LogoPanel");
         window.startLogo();
