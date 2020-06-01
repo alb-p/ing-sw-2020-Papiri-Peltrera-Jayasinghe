@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -15,10 +16,11 @@ import java.util.ArrayList;
 public class NickNamePanel extends JPanel implements ActionListener , PropertyChangeListener{
 
     private Image image;
-    private Image imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(600,455,1);
+    private Image imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(656,375,Image.SCALE_SMOOTH);
     private JPanel nickpanel;
     private JTextField nickToFill;
     private JButton submitButton;
+    // private CustomButton submitButton;
     private JLabel textLabel;
     private JLabel invalidNickLabel;
     private int playerId;
@@ -45,24 +47,28 @@ public class NickNamePanel extends JPanel implements ActionListener , PropertyCh
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         textLabel.setFont(labelFont);
         textLabel.setText("Type your nickname");
-        textLabel.setForeground(Color.WHITE);
+        textLabel.setForeground(new Color(223, 212, 202));
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         nickToFill = new JTextField();
         nickToFill.setFont(font);
         nickToFill.setHorizontalAlignment(JTextField.CENTER);
+        nickToFill.setForeground(Color.WHITE);
         invalidNickLabel = new JLabel();
         invalidNickLabel.setFont(errorFont);
-        invalidNickLabel.setForeground(Color.RED);
+        invalidNickLabel.setForeground(new Color(245, 215, 33));
+        nickToFill.setOpaque(false);
         nickpanel = new JPanel(new BorderLayout());
-        nickpanel.setBackground(new Color(0, 0, 0, 0));
+        nickpanel.setOpaque(false);
         nickpanel.add(nickToFill, BorderLayout.NORTH);
         nickpanel.add(invalidNickLabel, BorderLayout.CENTER);
         nickpanel.setBorder(BorderFactory.createEmptyBorder(50,200,60,200));
         submitButton = new JButton("Submit");
+        //submitButton = new CustomButton("nome path");
         submitButton.setFont(font);
-        submitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
-        submitButton.setVerticalAlignment(0);
-        submitButton.setSize(80,40);
+        submitButton.setContentAreaFilled(false);
+        submitButton.setBorder(null);
+        nickToFill.setBorder(null);
+        submitButton.setPreferredSize(new Dimension(20,60));
         invalidNickLabel.setHorizontalAlignment(0);
         playerId = id;
         this.add(Box.createVerticalStrut(120));
@@ -70,11 +76,9 @@ public class NickNamePanel extends JPanel implements ActionListener , PropertyCh
         this.add(Box.createVerticalStrut(0));
         this.add(nickpanel);
         this.add(Box.createVerticalStrut(0));
-        //this.add(submitButton);
         nickpanel.add(submitButton, BorderLayout.SOUTH);
         this.add(Box.createVerticalStrut(80));
         submitButton.addActionListener(this);
-        //nickToFill.addActionListener(this);
         invalidNickLabel.setText(" ");
     }
 
@@ -82,17 +86,16 @@ public class NickNamePanel extends JPanel implements ActionListener , PropertyCh
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(this.image, 0, 0, this);
-        g.drawImage(this.imageNick, 100, 72, this);
-        //g.drawImage(this.imagePanel, 100, 90, this);
+        g.drawImage(this.imageNick, 72, 113, this);
+        g.setColor(new Color(223, 202, 181));
+        g.fillRect(200,300,400,5);
     }
 
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(submitButton)) {
-            invalidNickLabel.setText("nickname already assigned!");
 
-            System.out.println("BUTTON PRESSED");
             boolean valid = true;
             for (String s : invalidNicknames) {
                 if (s.equals(nickToFill.getText())) {
