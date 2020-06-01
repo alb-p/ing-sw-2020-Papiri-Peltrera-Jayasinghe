@@ -70,6 +70,18 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     @Override
+    protected void setGodly(GodlyMessage message) {
+        super.setGodly(message);
+        if (message.getId() == getPlayerId()){
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GeneralGodsSelectionPanel");
+
+        }else {
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
+
+        }
+    }
+
+    @Override
     protected void colorReceived(ColorMessage message) {
         super.colorReceived(message);
         if(message.getId() == getPlayerId()){

@@ -18,7 +18,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     private ArrayList<JButton> godsButton = new ArrayList<>();
     private ArrayList<String> selectedGods = new ArrayList<>();
     private JButton submit;
-    private int playerPerGame;
+    private int playerPerGame = 0;
 
     public GeneralGodsSelectionPanel(ModelView model) {
         gods = model.getGods();
@@ -29,6 +29,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
             button.addActionListener(this);
         }
         playerPerGame = model.getPlayers().size();
+        System.out.println(playerPerGame);
         submit = new JButton("Submit");
         this.setLayout(new FlowLayout());
         this.add(submit);
@@ -78,7 +79,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-
+        if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("nicknameConfirm"))playerPerGame++;
     }
 
 

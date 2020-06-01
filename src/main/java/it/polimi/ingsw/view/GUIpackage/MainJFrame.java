@@ -45,7 +45,10 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         colorPanel.addColorPanelListener(gui);
         modelView.addColorListener(colorPanel);
         contentPane.add("ColorPanel", colorPanel);
-
+        GeneralGodsSelectionPanel generalGodsSelectionPanel = new GeneralGodsSelectionPanel(modelView);
+        generalGodsSelectionPanel.addGeneralGodSelectionListener(gui);
+        contentPane.add("GeneralGodsSelectionPanel", generalGodsSelectionPanel);
+        modelView.addNicknameListener(generalGodsSelectionPanel); //to know how many players in the game
 
     }
     public void startLogo(){
