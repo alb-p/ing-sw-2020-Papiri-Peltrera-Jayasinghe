@@ -29,6 +29,7 @@ public class NickNamePanel extends JPanel implements ActionListener , PropertyCh
     private ArrayList<String> invalidNicknames = new ArrayList<>();
 
     public NickNamePanel(int id) {
+        //this.image = new ImageIcon(this.getClass().getResource("/island0214.jpg")).getImage();
         this.image = new ImageIcon(this.getClass().getResource("/Name/setupBG.jpg")).getImage();
         //this.imageNick = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage();
         Font font;
@@ -86,7 +87,7 @@ public class NickNamePanel extends JPanel implements ActionListener , PropertyCh
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(this.image, 0, 0, this);
-        g.drawImage(this.imageNick, 72, 113, this);
+        //g.drawImage(this.imageNick, 72, 113, this);
         g.setColor(new Color(223, 202, 181));
         g.fillRect(200,300,400,5);
     }
@@ -103,7 +104,7 @@ public class NickNamePanel extends JPanel implements ActionListener , PropertyCh
                     break;
                 }
             }
-            if(valid){
+            if(valid && !nickToFill.getText().equalsIgnoreCase("")){
                 nickPanelListener.firePropertyChange("nicknameReceived", null, nickToFill.getText());
                 submitButton.setEnabled(false);
                 attemptedNick = nickToFill.getText();
