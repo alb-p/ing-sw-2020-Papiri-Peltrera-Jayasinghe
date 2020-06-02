@@ -47,7 +47,6 @@ public class IslandBoard implements Cloneable{
     //TODO sostituire i suoi utilizzi con infoSlot(new Coord)
     public Slot getSlot(int i,int j){
         return board[i][j];
-
     }
 
     @Override
@@ -57,5 +56,12 @@ public class IslandBoard implements Cloneable{
             result.board[i] = board[i].clone();
         }
         return result;
+    }
+
+    //TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
+    public boolean isPerimeter(Coordinate coordinate) {
+        int row = coordinate.getRow();
+        int col = coordinate.getCol();
+        return row == 0 || row == 4 || col == 0 || col == 4;
     }
 }

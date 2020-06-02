@@ -48,12 +48,18 @@ public class ModelView {
                 "move up this turn."});
         gods.add(new String[]{"ATLAS", "Your Build: Your Worker may\n" +
                 "build a dome at any level. "});
+        gods.add(new String[]{"CHRONUS", "Win Condition: You also win\n" +
+                "when there are at least five\n" +
+                "Complete Towers on the board"});
         gods.add(new String[]{"DEMETER", "Your Build: Your Worker may\n" +
                 "build one additional time, but not\n" +
                 "on the same space."});
         gods.add(new String[]{"HEPHAESTUS", "Your Build: Your Worker may\n" +
                 "build one additional block (not\n" +
                 "dome) on top of your first block"});
+        gods.add(new String[]{"HESTIA", "Your Build: Your Worker may\n" +
+                "build one additional time, but this\n" +
+                "cannot be on a perimeter space"});
         gods.add(new String[]{"MINOTAUR", "Your Move: Your Worker may\n" +
                 "move into an opponent Worker’s\n" +
                 "space, if their Worker can be\n" +
@@ -235,6 +241,7 @@ public class ModelView {
 
     public Action searchAction(String s, Coordinate start, Coordinate end) {
         for (Action a : actionsAvailable) {
+            System.out.println("ACT NAME:: "+a.getActionName()+ a.getStart() + a.getEnd());
             if (a.getActionName().equalsIgnoreCase(s) &&
                     a.getStart().equals(start)
                     && a.getEnd().equals(end)) {

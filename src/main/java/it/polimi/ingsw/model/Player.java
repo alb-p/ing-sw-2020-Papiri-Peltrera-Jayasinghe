@@ -75,6 +75,10 @@ public class Player {
             this.card = new Pan();
         } else if (card.equals("PROMETHEUS")) {
             this.card = new Prometheus();
+        } else if (card.equals("HESTIA")) {
+            this.card = new Hestia();
+        } else if (card.equals("CHRONUS")) {
+            this.card = new Chronus();
         }
     }
 
@@ -126,6 +130,7 @@ public class Player {
         this.actualWorker= board.infoSlot(message.getStart()).getWorker();
         this.tree = attemptedActionNode;
         if (!this.card.turnHandler(this, board, message)){
+            System.out.println(ANSIColor.RED + "TurnHan di card ha ritornato FALSE" + ANSIColor.RESET);
             return false;//TODO mettere warning
         }
 

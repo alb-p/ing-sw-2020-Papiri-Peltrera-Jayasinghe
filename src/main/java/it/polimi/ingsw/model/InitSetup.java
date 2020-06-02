@@ -30,8 +30,10 @@ public class InitSetup {
         gods.add("ARTEMIS");
         gods.add("ATHENA");
         gods.add("ATLAS");
+        gods.add("CHRONUS");
         gods.add("DEMETER");
         gods.add("HEPHAESTUS");
+        gods.add("HESTIA");
         gods.add("MINOTAUR");
         gods.add("PAN");
         gods.add("PROMETHEUS");

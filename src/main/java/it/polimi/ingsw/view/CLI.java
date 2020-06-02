@@ -19,8 +19,8 @@ public class CLI extends RemoteView implements Runnable {
     private SocketServerConnection connection;
     private String nickname;
     private Color color;
-    private Boolean nickValidate = false;
-    private Boolean colorValidate = false;
+    private boolean nickValidate = false;
+    private boolean colorValidate = false;
     private boolean godlySelected = false;
     private boolean winnerDetected = false;
     private boolean endTurn;
@@ -175,6 +175,7 @@ public class CLI extends RemoteView implements Runnable {
         message.setId(getPlayerId());
         String s;
         String isNumber;
+        //TODO deidere convenzione per inizializzazione dei controlli o 9 o -2
         int indexGod = 9;
         printBreakers();
         if (modelView.getChosenGods().size() == 1) {
@@ -199,13 +200,14 @@ public class CLI extends RemoteView implements Runnable {
                         if (s.contains("info") || s.contains("man")) {
                             printer.println(modelView.getChosenGods().get(indexGod)[0]);
                             printer.println(modelView.getChosenGods().get(indexGod)[1]);
+                            indexGod = 9;
                             printBreakers();
                         } else {
                             message.setGod(modelView.getChosenGods().get(indexGod)[0]);
                         }
                     }
                 }
-            } while (indexGod >= modelView.getChosenGods().size());
+            } while (indexGod >= modelView.getChosenGods().size() );
         }
         printBreakers();
         return message;
@@ -242,7 +244,8 @@ public class CLI extends RemoteView implements Runnable {
                         }
                     }
                 }
-            } while (indexNickname >= modelView.getPlayers().size());
+            } while (indexNickname >= modelView.getPlayers().size() || indexNickname < 0);
+
             message.setNickname(modelView.getPlayer(indexNickname).getNickname());
             connection.sendEvent(new PropertyChangeEvent(this,
                     "firstPlayerSelected", null, message));
@@ -306,6 +309,7 @@ public class CLI extends RemoteView implements Runnable {
                             String inputChoice;
                             printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
                                     +", which action do you want to perform?");
+
                             int i;
                             for (i = 0; i < choices.size(); i++) {
                                 printer.printf(arrangeList, i + 1, choices.get(i).toLowerCase());
@@ -321,7 +325,7 @@ public class CLI extends RemoteView implements Runnable {
                                 }
                             } while (choiceIndex < 0 || choiceIndex >= choices.size());
                         }
-                        System.out.println();
+                        printer.println();
                         if (choices.get(choiceIndex).equals("end turn") && modelView.isOptional()) {
                             endTurn = true;
                         } else {
@@ -329,22 +333,30 @@ public class CLI extends RemoteView implements Runnable {
                                     +", perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
                             startingBrackets();
                             coords = parseCoordinateAction(scanner.nextLine());
+                            System.out.println(coords);
                             if (coords.size() == 2) {
+                                System.out.println("Mossa presa");
                                 action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
                             }
                         }
+                        System.out.println("ENDTURN:: "+ endTurn);
+                        System.out.println("ACTion null :: "+ action);
                     } while (action == null && !endTurn);
 
                     if (endTurn) {
+                        System.out.println("SNO ENDTURN");
                         modelView.getActionsAvailable().clear();
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "endTurn", null, new GenericMessage()));
                     } else {
+                        System.out.println("TURNO NON FINITO, ");
                         ActionMessage mess = new ActionMessage();
                         mess.setAction(action);
                         modelView.getActionsAvailable().clear();
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "notifyAction", null, mess));
+                        System.out.println("EVENTO SENDATO," + mess.getAction().getActionName()+mess.getAction().getStart()
+                        +mess.getAction().getEnd());
                     }
                     printBreakers();
 

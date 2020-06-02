@@ -48,19 +48,20 @@ public class BasicGodCard {
 
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board){
         TreeActionNode tree = new TreeActionNode(null);
-        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {  //controllo intorno al worker per fare move
+        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {  //check around worker position to perform a Move
 
             if (board.infoSlot(c1).isFree() &&
                     (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
 
                 TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c1));
-                for (Coordinate c2 : c1.getAdjacentCoords()) {                          //controllo intorno ad ogni posizione per fare build con un worker falso
-                    if (board.infoSlot(c2).isFree()) {                                          //stesso controllo che si fa anche nel build del basicGod
+                for (Coordinate c2 : c1.getAdjacentCoords()) {                       //check around every position to perform a Build
+                    if (board.infoSlot(c2).isFree()) {
                         TreeActionNode buildNode = new TreeActionNode(new Build(c1, c2));
                         moveNode.addChild(buildNode);
                     }
                 }
-                TreeActionNode buildNode = new TreeActionNode(new Build(c1, w.getPosition()));  //aggiungo possibilità di build nella primissima posizione di partenza
+                //adding the initial worker position as a possible Build position
+                TreeActionNode buildNode = new TreeActionNode(new Build(c1, w.getPosition()));
                 moveNode.addChild(buildNode);
                 tree.addChild(moveNode);
 
@@ -70,6 +71,7 @@ public class BasicGodCard {
 
     }
 
+    //TODO capire se necessrio passare entrambe le board a questo livello
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
         if (virtualBoard.getSlot(w.getOldPosition().getRow(),w.getOldPosition().getCol()).getLevel() == 2 &&
