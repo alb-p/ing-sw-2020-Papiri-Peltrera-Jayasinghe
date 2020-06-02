@@ -30,6 +30,8 @@ public class ModelView {
     private boolean optional;
     private PropertyChangeSupport nickNameListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport colorListener = new PropertyChangeSupport(this);
+    private PropertyChangeSupport selectedGodsListener = new PropertyChangeSupport(this);
+    private PropertyChangeSupport selectedSingleGodListener = new PropertyChangeSupport(this);
 
     public ModelView() {
         Collections.addAll(colors, Color.values());
@@ -187,6 +189,8 @@ public class ModelView {
                 }
             }
         }
+        selectedGodsListener.firePropertyChange("notifySelectedGods", false, this .chosenGods);
+
     }
 
     public void setGod(int id, String god) {
@@ -198,6 +202,11 @@ public class ModelView {
             }
         }
         chosenGods.remove(toRemove);
+        ArrayList<String> godSelected= new ArrayList<String>();
+        godSelected.add(getPlayer(id).nickname);
+        godSelected.add(god);
+        selectedSingleGodListener.firePropertyChange("notifyGodSelected",null, godSelected);
+
     }
 
     public void updateBoard(VirtualSlot vSlot) {
@@ -274,7 +283,12 @@ public class ModelView {
     public void addColorListener(PropertyChangeListener listener){
         this.colorListener.addPropertyChangeListener(listener);
     }
-
+    public void addSelectedGodsListener(PropertyChangeListener listener){
+        this.selectedGodsListener.addPropertyChangeListener(listener);
+    }
+    public void addSelectedSingleGodListener(PropertyChangeListener listener){
+        selectedSingleGodListener.addPropertyChangeListener(listener);
+    }
     public class PlayerView {
         private int id;
         private String nickname;

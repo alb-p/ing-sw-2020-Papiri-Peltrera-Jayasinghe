@@ -49,7 +49,13 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         generalGodsSelectionPanel.addGeneralGodSelectionListener(gui);
         contentPane.add("GeneralGodsSelectionPanel", generalGodsSelectionPanel);
         modelView.addNicknameListener(generalGodsSelectionPanel); //to know how many players in the game
-
+        GodSelectionPanel godSelectionPanel = new GodSelectionPanel();
+        gui.addGuiListener(godSelectionPanel);
+        modelView.addSelectedGodsListener(godSelectionPanel);
+        modelView.addNicknameListener(godSelectionPanel);
+        modelView.addSelectedSingleGodListener(godSelectionPanel);
+        godSelectionPanel.addGodSelectionListener(gui);
+        contentPane.add("GodSelectionPanel", godSelectionPanel);
     }
     public void startLogo(){
         this.logo.addPropertyChangeListener(this);

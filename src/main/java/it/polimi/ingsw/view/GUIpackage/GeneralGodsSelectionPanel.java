@@ -38,6 +38,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         }
         submit.setEnabled(false);
 
+        submit.addActionListener(this);
 
     }
 
