@@ -29,9 +29,9 @@ public class HomePanel extends JPanel implements ActionListener {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 
-        playButton = new CustomButton("play");
-        helpButton = new CustomButton("help");
-        exitButton = new CustomButton("exit");
+        playButton = new CustomButton("/Home/play");
+        helpButton = new CustomButton("/Home/help");
+        exitButton = new CustomButton("/Home/exit");
         playButton.addActionListener(this);
         helpButton.addActionListener(this);
         exitButton.addActionListener(this);
