@@ -15,23 +15,66 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private Image image;
     private JButton twoPlayers;
     private JButton threePlayers;
+    private JLabel label;
 
     public NumberOfPlayerPanel() throws IOException, FontFormatException {
-        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
+        JPanel innerPanel =new JPanel(){
+            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(530,307,Image.SCALE_SMOOTH);
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(this.image, 0, 0, this);
+            }
+        };
+
+
+
+
+        label=new JLabel("Select Number of Players");
+        twoPlayers = new CustomButton("/SelectPlayers/2");
+        threePlayers = new CustomButton("/SelectPlayers/3");
         this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.png")).getImage();
-        JLabel label=new JLabel("Select Number of Players");
-        label.setFont(font.deriveFont(Font.PLAIN,20)); //imposta font liscio e dimensione 20
-        this.add(label);
-        //twoPlayers = new CustomButton("twoPlayers");
-        twoPlayers = new JButton("twoPlayers");
-        //threePlayers = new CustomButton("threePlayers");
-        threePlayers = new JButton("threePlayers");
+        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
+        JPanel innerPanel2=new JPanel();
+
+
+
+        this.setLayout(new GridBagLayout());
+        innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
+        innerPanel2.setLayout(new BoxLayout(innerPanel2,BoxLayout.X_AXIS));
+        label.setFont(font.deriveFont(Font.PLAIN,45)); //imposta font liscio e dimensione 45
+        label.setForeground(Color.WHITE);
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
         twoPlayers.addActionListener(this);
         threePlayers.addActionListener(this);
 
-        this.add(twoPlayers);
-        this.add(threePlayers);
+
+
+
+
+
+
+
+
+
+
+        innerPanel2.setOpaque(false);
+        innerPanel.setOpaque(false);
+
+        innerPanel.setPreferredSize(new Dimension(530, 307));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        innerPanel.add(label);
+        innerPanel.add(Box.createRigidArea(new Dimension(0,50)));
+        innerPanel.add(innerPanel2);
+
+
+        innerPanel2.add(twoPlayers);
+        innerPanel2.add(Box.createRigidArea(new Dimension(50,0)));
+        innerPanel2.add(threePlayers);
+
+        this.add(innerPanel);
+
     }
 
     @Override

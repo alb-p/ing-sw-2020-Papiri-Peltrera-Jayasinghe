@@ -19,9 +19,9 @@ public class CustomButton extends JButton implements MouseListener{
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
-        this.normal=new ImageIcon(this.getClass().getResource("/Home/"+name+"_normal.png"));
-        this.onMouse=new ImageIcon(this.getClass().getResource("/Home/"+name+"_onmouse.png"));
-        this.pressed=new ImageIcon(this.getClass().getResource("/Home/"+name+"_pressed.png"));
+        this.normal=new ImageIcon(this.getClass().getResource(name+"_normal.png"));
+        this.onMouse=new ImageIcon(this.getClass().getResource(name+"_onmouse.png"));
+        this.pressed=new ImageIcon(this.getClass().getResource(name+"_pressed.png"));
 
         this.setIcon(this.normal);
         this.addMouseListener(this);
