@@ -85,8 +85,6 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
         animation.setIcon(frames[this.currentFrame%this.frames.length]);
         if (this.currentFrame==120) stopTimer(); //l'animazione va avanti per 120 transizioni
         else this.currentFrame++;
-
-        System.out.println(this.currentFrame);
     }
 
 
