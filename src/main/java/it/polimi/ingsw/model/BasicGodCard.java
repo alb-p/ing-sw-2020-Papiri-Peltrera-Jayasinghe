@@ -71,7 +71,6 @@ public class BasicGodCard {
 
     }
 
-    //TODO capire se necessrio passare entrambe le board a questo livello
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
         if (virtualBoard.getSlot(w.getOldPosition().getRow(),w.getOldPosition().getCol()).getLevel() == 2 &&

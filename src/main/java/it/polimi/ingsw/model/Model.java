@@ -99,11 +99,11 @@ public class Model {
             for (int j = 0; j < board.board.length; j++) {
                 oldVSlot = oldBoard.getSlot(i, j);
                 Color color = null;
-                if (board.getSlot(i, j).getWorker() != null) {
-                    color = board.getSlot(i, j).getWorker().getColor();
+                if (board.infoSlot(new Coordinate(i, j)).getWorker() != null) {
+                    color = board.infoSlot(new Coordinate(i, j)).getWorker().getColor();
                 }
-                vSlot = new VirtualSlot(color, board.getSlot(i, j).getConstructionLevel(),
-                        board.getSlot(i, j).hasADome(), new Coordinate(i, j));
+                vSlot = new VirtualSlot(color, board.infoSlot(new Coordinate(i, j)).getConstructionLevel(),
+                        board.infoSlot(new Coordinate(i, j)).hasADome(), new Coordinate(i, j));
 
                 if (!oldVSlot.equals(vSlot)) {
                     modelListeners.firePropertyChange("deltaUpdate", null, vSlot);

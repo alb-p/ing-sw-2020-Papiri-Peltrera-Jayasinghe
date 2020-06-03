@@ -20,7 +20,7 @@ public class Chronus extends BasicGodCard {
         int towersNumber = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board.getSlot(i, j).getConstructionLevel() == 3) {
+                if (board.infoSlot(new Coordinate(i, j)).getConstructionLevel() == 3) {
                     towersNumber++;
                 }
             }

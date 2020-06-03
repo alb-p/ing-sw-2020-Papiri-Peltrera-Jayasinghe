@@ -2,16 +2,11 @@ package it.polimi.ingsw.view;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.messages.ColorMessage;
-import it.polimi.ingsw.utils.messages.GenericMessage;
-import it.polimi.ingsw.utils.messages.GodMessage;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.view.GUIpackage.NickNamePanel;
 
-import javax.management.AttributeList;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 public class ModelView {

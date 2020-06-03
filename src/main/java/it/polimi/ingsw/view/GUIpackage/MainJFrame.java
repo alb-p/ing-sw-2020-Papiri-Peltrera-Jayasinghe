@@ -1,7 +1,6 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.view.GUIpackage.Components.ChooseColorPanel;
-import it.polimi.ingsw.view.GUIpackage.MainPanel;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
@@ -37,7 +36,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         NumberOfPlayerPanel numberOfPlayerPanel = new NumberOfPlayerPanel();
         numberOfPlayerPanel.addHomePanelListener(gui);
         contentPane.add("chooseNumberOfPlayers", numberOfPlayerPanel);
-        NickNamePanel nickPane= new NickNamePanel(gui.getPlayerId());
+        NicknamePanel nickPane= new NicknamePanel(gui.getPlayerId());
         contentPane.add("NicknamePanel",nickPane);
         nickPane.addNicknamePanelListener(gui);
         modelView.addNicknameListener(nickPane);
