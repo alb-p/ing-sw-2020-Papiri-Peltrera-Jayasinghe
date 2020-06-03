@@ -37,6 +37,7 @@ public class InitSetup {
         gods.add("MINOTAUR");
         gods.add("PAN");
         gods.add("PROMETHEUS");
+        gods.add("ZEUS");
     }
 
     public void addInitSetupListener(PropertyChangeListener listener) {

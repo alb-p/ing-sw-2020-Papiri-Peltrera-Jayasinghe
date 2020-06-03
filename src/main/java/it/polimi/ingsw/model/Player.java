@@ -65,20 +65,22 @@ public class Player {
             this.card = new Athena();
         } else if (card.equals("ATLAS")) {
             this.card = new Atlas();
+        } else if (card.equals("CHRONUS")) {
+            this.card = new Chronus();
         } else if (card.equals("DEMETER")) {
             this.card = new Demeter();
         } else if (card.equals("HEPHAESTUS")) {
             this.card = new Hephaestus();
+        } else if (card.equals("HESTIA")) {
+            this.card = new Hestia();
         } else if (card.equals("MINOTAUR")) {
             this.card = new Minotaur();
         } else if (card.equals("PAN")) {
             this.card = new Pan();
         } else if (card.equals("PROMETHEUS")) {
             this.card = new Prometheus();
-        } else if (card.equals("HESTIA")) {
-            this.card = new Hestia();
-        } else if (card.equals("CHRONUS")) {
-            this.card = new Chronus();
+        } else if (card.equals("ZEUS")) {
+            this.card = new Zeus();
         }
     }
 

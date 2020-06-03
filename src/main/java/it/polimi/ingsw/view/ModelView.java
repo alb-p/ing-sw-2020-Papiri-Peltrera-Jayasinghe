@@ -71,6 +71,8 @@ public class ModelView {
         gods.add(new String[]{"PROMETHEUS", "Your Turn: If your Worker does\n" +
                 "not move up, it may build both\n" +
                 "before and after moving"});
+        gods.add(new String[]{"ZEUS", "Your Build: Your Worker may\n" +
+                "build a block under itself."});
     }
 
     public ArrayList<String[]> getGods() {
