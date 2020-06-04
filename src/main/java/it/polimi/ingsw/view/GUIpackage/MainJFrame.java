@@ -18,7 +18,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
         this.setDefaultCloseOperation(MainJFrame.EXIT_ON_CLOSE);
-        this.setSize(800,600);
+        this.setSize(960 ,720);
         this.setUndecorated(true); //nasconde titlebar
         this.setResizable(false);
         // window.setBackground(new Color(0, 0, 0, 0)); //trasperenza
@@ -29,14 +29,14 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         this.setContentPane(contentPane);
         logo = new LogoPanel();
         contentPane.add("LogoPanel", logo);
-        contentPane.add( "InitialWaitingPanel", new InitialWaitingPanel());
-        HomePanel homePanel =  new HomePanel();
+        contentPane.add( "InitialWaitingPanel", new InitialWaitingPanel(this.getSize()));
+        HomePanel homePanel =  new HomePanel(this.getSize());
         homePanel.addHomePanelListener(gui);
         contentPane.add( "HomePanel",homePanel);
-        NumberOfPlayerPanel numberOfPlayerPanel = new NumberOfPlayerPanel();
+        NumberOfPlayerPanel numberOfPlayerPanel = new NumberOfPlayerPanel(this.getSize());
         numberOfPlayerPanel.addHomePanelListener(gui);
         contentPane.add("chooseNumberOfPlayers", numberOfPlayerPanel);
-        NicknamePanel nickPane= new NicknamePanel(gui.getPlayerId());
+        NicknamePanel nickPane= new NicknamePanel(gui.getPlayerId(),this.getSize());
         contentPane.add("NicknamePanel",nickPane);
         nickPane.addNicknamePanelListener(gui);
         modelView.addNicknameListener(nickPane);

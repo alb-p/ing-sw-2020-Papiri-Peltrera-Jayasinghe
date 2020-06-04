@@ -19,13 +19,15 @@ public class HomePanel extends JPanel implements ActionListener {
     private CustomButton playButton;
     private CustomButton helpButton;
     private CustomButton exitButton;
+    Dimension frameDimension;
 
 
 
-    public HomePanel() {
+    public HomePanel(Dimension d) {
 
+        frameDimension=d;
 
-        this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.png")).getImage();
+        this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 
@@ -35,11 +37,11 @@ public class HomePanel extends JPanel implements ActionListener {
         playButton.addActionListener(this);
         helpButton.addActionListener(this);
         exitButton.addActionListener(this);
-        this.add(Box.createVerticalStrut(320));
+        this.add(Box.createVerticalStrut((int) (frameDimension.height/1.875)));
         this.add(playButton);
-        this.add(Box.createVerticalStrut(25));
+        this.add(Box.createVerticalStrut((int) (frameDimension.height/24)));
         this.add(helpButton);
-        this.add(Box.createVerticalStrut(25));
+        this.add(Box.createVerticalStrut((int) (frameDimension.height/24)));
         this.add(exitButton);
     }
 

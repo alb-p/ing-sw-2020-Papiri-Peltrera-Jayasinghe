@@ -16,11 +16,14 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private JButton twoPlayers;
     private JButton threePlayers;
     private JLabel label;
+    private Dimension frameDimension;
 
-    public NumberOfPlayerPanel() throws IOException, FontFormatException {
+
+    public NumberOfPlayerPanel(Dimension d) throws IOException, FontFormatException {
+        frameDimension=d;
 
         JPanel innerPanel =new JPanel(){
-            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(530,307,Image.SCALE_SMOOTH);
+            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95),Image.SCALE_SMOOTH);
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -31,10 +34,11 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
 
 
 
+
         label=new JLabel("Select Number of Players");
         twoPlayers = new CustomButton("/SelectPlayers/2");
         threePlayers = new CustomButton("/SelectPlayers/3");
-        this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.png")).getImage();
+        this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
         Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
         JPanel innerPanel2=new JPanel();
 
@@ -43,7 +47,7 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
         this.setLayout(new GridBagLayout());
         innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
         innerPanel2.setLayout(new BoxLayout(innerPanel2,BoxLayout.X_AXIS));
-        label.setFont(font.deriveFont(Font.PLAIN,45)); //imposta font liscio e dimensione 45
+        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18)); //imposta font liscio e dimensione 45
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         twoPlayers.addActionListener(this);
@@ -62,15 +66,15 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
         innerPanel2.setOpaque(false);
         innerPanel.setOpaque(false);
 
-        innerPanel.setPreferredSize(new Dimension(530, 307));
-        innerPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        innerPanel.setPreferredSize(new Dimension((int) (frameDimension.width/1.5), (int) (frameDimension.height/1.95)));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/15))));
         innerPanel.add(label);
-        innerPanel.add(Box.createRigidArea(new Dimension(0,50)));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/12))));
         innerPanel.add(innerPanel2);
 
 
         innerPanel2.add(twoPlayers);
-        innerPanel2.add(Box.createRigidArea(new Dimension(50,0)));
+        innerPanel2.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/16),0)));
         innerPanel2.add(threePlayers);
 
         this.add(innerPanel);

@@ -15,12 +15,13 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
     ImageIcon[] frames=new ImageIcon[7];
     int currentFrame=0;
     JLabel animation;
+    private Dimension frameDimension;
 
-
-    public InitialWaitingPanel() throws IOException, FontFormatException{
+    public InitialWaitingPanel(Dimension d) throws IOException, FontFormatException{
+        frameDimension=d;
 
         JPanel innerPanel =new JPanel(){
-            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(530,307,Image.SCALE_SMOOTH);
+            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95),Image.SCALE_SMOOTH);
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -35,7 +36,7 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
 
         timer =new Timer(500,this);
         animation=new JLabel();
-        this.background=new ImageIcon(this.getClass().getResource("/Home/HomeBG.png")).getImage();
+        this.background=new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
         label=new JLabel("Waiting for players...");
         Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
@@ -43,16 +44,16 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
         innerPanel.setOpaque(false);
         innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
         this.setLayout(new GridBagLayout());
-        label.setFont(font.deriveFont(Font.PLAIN,45)); //imposta font liscio e dimensione 45
+        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18)); //imposta font liscio e dimensione 45
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        innerPanel.setPreferredSize(new Dimension(530, 307));
+        innerPanel.setPreferredSize(new Dimension((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95)));
         animation.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 
 
 
-        innerPanel.add(Box.createRigidArea(new Dimension(0,40)));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/15))));
         innerPanel.add(label);
         innerPanel.add(animation);
 
