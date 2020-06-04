@@ -36,7 +36,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         NumberOfPlayerPanel numberOfPlayerPanel = new NumberOfPlayerPanel(this.getSize());
         numberOfPlayerPanel.addHomePanelListener(gui);
         contentPane.add("chooseNumberOfPlayers", numberOfPlayerPanel);
-        NicknamePanel nickPane= new NicknamePanel(gui.getPlayerId(),this.getSize());
+        NicknamePanel nickPane= new NicknamePanel(gui.getPlayerId());
         contentPane.add("NicknamePanel",nickPane);
         nickPane.addNicknamePanelListener(gui);
         modelView.addNicknameListener(nickPane);
