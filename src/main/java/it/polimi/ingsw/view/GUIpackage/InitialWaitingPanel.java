@@ -6,14 +6,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class InitialWaitingPanel extends JPanel implements ActionListener {
+public class InitialWaitingPanel extends JPanel {
 
 
     Image background;
     private JLabel label;
-    private Timer timer;
-    ImageIcon[] frames=new ImageIcon[7];
-    int currentFrame=0;
     JLabel animation;
     private Dimension frameDimension;
 
@@ -29,12 +26,7 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
             }
         };
 
-        for(int i =0;i<7;i++){
-            frames[i]=new ImageIcon(this.getClass().getResource("/SelectPlayers/Loading/loading"+(i+1)+".png"));
-        }
 
-
-        timer =new Timer(500,this);
         animation=new JLabel();
         this.background=new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
         label=new JLabel("Waiting for players...");
@@ -49,6 +41,8 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         innerPanel.setPreferredSize(new Dimension((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95)));
         animation.setAlignmentX(Component.CENTER_ALIGNMENT);
+        animation.setIcon(new ImageIcon(this.getClass().getResource("/SelectPlayers/loading.gif")));
+
 
 
 
@@ -59,18 +53,8 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
 
         this.add(innerPanel);
 
-        startTimer();
 
 
-
-    }
-
-    public void startTimer(){
-        this.timer.start();
-    }
-
-    public void stopTimer(){
-        this.timer.stop();
     }
 
 
@@ -81,12 +65,7 @@ public class InitialWaitingPanel extends JPanel implements ActionListener {
         g.drawImage(this.background, 0, 0, this);
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        animation.setIcon(frames[this.currentFrame%this.frames.length]);
-        if (this.currentFrame==120) stopTimer(); //l'animazione va avanti per 120 transizioni
-        else this.currentFrame++;
-    }
+
 
 
 
