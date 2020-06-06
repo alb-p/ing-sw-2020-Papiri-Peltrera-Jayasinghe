@@ -73,7 +73,9 @@ public class Player {
             this.card = new Hephaestus();
         } else if (card.equals("HESTIA")) {
             this.card = new Hestia();
-        } else if (card.equals("MINOTAUR")) {
+        } else if(card.equals("HYPNUS")){
+            this.card = new Hypnus();
+        }else if (card.equals("MINOTAUR")) {
             this.card = new Minotaur();
         } else if (card.equals("PAN")) {
             this.card = new Pan();

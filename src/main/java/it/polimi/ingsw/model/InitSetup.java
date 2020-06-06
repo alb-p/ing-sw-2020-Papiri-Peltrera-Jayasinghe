@@ -34,6 +34,7 @@ public class InitSetup {
         gods.add("DEMETER");
         gods.add("HEPHAESTUS");
         gods.add("HESTIA");
+        gods.add("HYPNUS");
         gods.add("MINOTAUR");
         gods.add("PAN");
         gods.add("PROMETHEUS");

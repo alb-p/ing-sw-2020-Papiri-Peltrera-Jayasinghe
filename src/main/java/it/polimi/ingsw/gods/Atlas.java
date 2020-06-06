@@ -17,7 +17,6 @@ public class Atlas extends BasicGodCard {
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
 
         if (action.getActionName().equals("Build a dome")) {
-            System.out.println("BUILDING DOME ::");
 
             return buildDome(player, board, action);
         }else return super.turnHandler(player, board, action);
@@ -25,7 +24,6 @@ public class Atlas extends BasicGodCard {
     }
 
     private boolean buildDome(Player player, IslandBoard board, Action action) throws Exception {
-        System.out.println("BUILDING DOME ::");
         if(board.infoSlot(action.getEnd()).isFree()){
             board.infoSlot(action.getEnd()).construct(Construction.DOME);
             return true;

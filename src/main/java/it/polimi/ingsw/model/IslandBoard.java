@@ -23,6 +23,12 @@ public class IslandBoard implements Cloneable{
         }
     }
 
+    //TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
+    public boolean isPerimeter(Coordinate coordinate) {
+        int row = coordinate.getRow();
+        int col = coordinate.getCol();
+        return row == 0 || row == 4 || col == 0 || col == 4;
+    }
 
     public String toString (){
         StringBuilder total = new StringBuilder(5*5*2);
@@ -45,10 +51,5 @@ public class IslandBoard implements Cloneable{
     }
 
 
-    //TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
-    public boolean isPerimeter(Coordinate coordinate) {
-        int row = coordinate.getRow();
-        int col = coordinate.getCol();
-        return row == 0 || row == 4 || col == 0 || col == 4;
-    }
+
 }

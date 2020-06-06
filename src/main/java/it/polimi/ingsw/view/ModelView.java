@@ -27,6 +27,7 @@ public class ModelView {
     private PropertyChangeSupport colorListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport selectedGodsListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport selectedSingleGodListener = new PropertyChangeSupport(this);
+    private PropertyChangeSupport boardListener = new PropertyChangeSupport(this);
 
     public ModelView() {
         Collections.addAll(colors, Color.values());
@@ -55,6 +56,10 @@ public class ModelView {
         gods.add(new String[]{"HESTIA", "Your Build: Your Worker may\n" +
                 "build one additional time, but this\n" +
                 "cannot be on a perimeter space"});
+        gods.add(new String[]{"HYPNUS","Start of Opponent’s Turn: If one\n" +
+                "of your opponent’s Workers is\n" +
+                "higher than all of their others, it\n" +
+                "cannot move."});
         gods.add(new String[]{"MINOTAUR", "Your Move: Your Worker may\n" +
                 "move into an opponent Worker’s\n" +
                 "space, if their Worker can be\n" +
@@ -214,6 +219,7 @@ public class ModelView {
 
     public void updateBoard(VirtualSlot vSlot) {
         board.setSlot(vSlot);
+        boardListener.firePropertyChange("boardUpdate", null, vSlot);
     }
 
     public ArrayList<Action> getActionsAvailable() {
@@ -293,6 +299,11 @@ public class ModelView {
     public void addSelectedSingleGodListener(PropertyChangeListener listener){
         selectedSingleGodListener.addPropertyChangeListener(listener);
     }
+
+    public void addBoardListener(PropertyChangeListener listener){
+        boardListener.addPropertyChangeListener(listener);
+    }
+
     public class PlayerView {
         private int id;
         private String nickname;

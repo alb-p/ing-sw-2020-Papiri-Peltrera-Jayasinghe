@@ -7,7 +7,10 @@ import java.util.Set;
 
 public class Athena extends BasicGodCard {
 
-    //SE SALGO DI LIVELLO GLI AVVERSARI NON POSSONO FARLO DURANTE QUESTO TURNO
+    //Opponent’s Turn: If one of your
+    //Workers moved up on your last
+    //turn, opponent Workers cannot
+    //move up this turn.
 
     private boolean specialRuleActivated = false;
 
@@ -55,7 +58,6 @@ public class Athena extends BasicGodCard {
         if (super.move(w, coord, board)) {
             if (destSlotLevel - workerSlotLevel > 0) {
                 specialRuleActivated = true;
-                System.out.println("Athena u akbar");
             }
             return true;
         }
