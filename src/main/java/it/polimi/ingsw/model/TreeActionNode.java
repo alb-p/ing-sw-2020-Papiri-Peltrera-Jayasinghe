@@ -5,13 +5,13 @@ import java.util.ArrayList;
 public class TreeActionNode {
 
 
-    private Action data;
+    private final Action data;
     private TreeActionNode parent;
-    private ArrayList<TreeActionNode> children;
+    private final ArrayList<TreeActionNode> children;
 
     public TreeActionNode(Action data){
         this.data = data;
-        this.children = new ArrayList<TreeActionNode>();
+        this.children = new ArrayList<>();
     }
 
     private void setParent(TreeActionNode parent){
@@ -50,27 +50,20 @@ public class TreeActionNode {
             choice = t.getData().getActionName();
             for (int i = 0; i < choices.size(); i++) {
                 Action a = choices.get(i);
-                if (a.getActionName().equalsIgnoreCase(choice)) found = true;
+                if (a.getActionName().equalsIgnoreCase(choice)) {
+                    found = true;
+                    break;
+                }
             }
             if (!found) choices.add(t.getData());
             found = false;
         }
-        for(Action a : choices) System.out.println("CHOICES:: "+a.getActionName());
         return choices;
     }
 
 
     public Action getData() {
         return data;
-    }
-
-    public boolean isInChoices(String choice){
-        for (TreeActionNode s : children){
-            System.out.print("S:: "+s.getData().getActionName());
-            System.out.println("\tC:: "+choice);
-            if(s.getData().getActionName().equalsIgnoreCase(choice))return true;
-        }
-        return false;
     }
 
     public TreeActionNode getChild(int i) {

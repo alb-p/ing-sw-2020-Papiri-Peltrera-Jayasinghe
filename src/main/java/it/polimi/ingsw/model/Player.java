@@ -1,8 +1,6 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.gods.*;
-import it.polimi.ingsw.utils.ANSIColor;
-import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 
 import java.util.ArrayList;
@@ -10,10 +8,10 @@ import java.util.ArrayList;
 public class Player {
 
 
-    private ArrayList<Worker> workers = new ArrayList<Worker>();
+    private final ArrayList<Worker> workers = new ArrayList<>();
     private TreeActionNode tree;
 
-    private String nickName;
+    private final String nickName;
     private BasicGodCard card;
     private boolean done;
     private boolean moveDone;
@@ -55,8 +53,6 @@ public class Player {
 
     public void setCard(String card) {
 
-        BasicGodCard godCard = new BasicGodCard();
-
         if (card.equals("APOLLO")) {
             this.card = new Apollo();
         } else if (card.equals("ARTEMIS")) {
@@ -73,9 +69,9 @@ public class Player {
             this.card = new Hephaestus();
         } else if (card.equals("HESTIA")) {
             this.card = new Hestia();
-        } else if(card.equals("HYPNUS")){
+        } else if (card.equals("HYPNUS")) {
             this.card = new Hypnus();
-        }else if (card.equals("MINOTAUR")) {
+        } else if (card.equals("MINOTAUR")) {
             this.card = new Minotaur();
         } else if (card.equals("PAN")) {
             this.card = new Pan();
@@ -118,23 +114,20 @@ public class Player {
         return this.tree;
     }
 
-    public void playerTreeSetup(IslandBoard board) throws Exception {
+    public void playerTreeSetup(IslandBoard board) {
         TreeActionNode tree = this.card.cardTreeSetup(this.getWorker(0), board);
         TreeActionNode temp = this.card.cardTreeSetup(this.getWorker(1), board);
         for (TreeActionNode t : temp.getChildren())
             tree.addChild(t);
         this.tree = tree;
-
-
     }
 
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
         TreeActionNode attemptedActionNode;
         attemptedActionNode = tree.search(message);
-        this.actualWorker= board.infoSlot(message.getStart()).getWorker();
+        this.actualWorker = board.infoSlot(message.getStart()).getWorker();
         this.tree = attemptedActionNode;
-        if (!this.card.turnHandler(this, board, message)){
-            System.out.println(ANSIColor.RED + "TurnHan di card ha ritornato FALSE" + ANSIColor.RESET);
+        if (!this.card.turnHandler(this, board, message)) {
             return false;//TODO mettere warning
         }
 
@@ -161,9 +154,9 @@ public class Player {
 
     //It set actual worker
     public boolean selectWorker(Coordinate coord) {
-        for (int i = 0; i < workers.size(); i++) {
-            if (workers.get(i).getPosition().equals(coord)) {
-                actualWorker = workers.get(i);
+        for (Worker worker : workers) {
+            if (worker.getPosition().equals(coord)) {
+                actualWorker = worker;
             }
         }
         return (actualWorker != null);
@@ -185,7 +178,8 @@ public class Player {
             this.hasLost = true;
         return this.hasLost;
     }
-    public boolean essentialDone(){
+
+    public boolean essentialDone() {
         return moveDone && buildDone;
     }
 }

@@ -2,9 +2,6 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.HashMap;
-import java.util.Set;
-
 public class Athena extends BasicGodCard {
 
     //Opponent’s Turn: If one of your
@@ -23,7 +20,6 @@ public class Athena extends BasicGodCard {
     }
 
     private void elaboration(TreeActionNode node, IslandBoard board, int index) {
-
         if (!node.isLeaf()) {
             for (int i = 0; i < node.getChildren().size(); i++) {
                 if (node.getChild(i).getData() instanceof Move) {
