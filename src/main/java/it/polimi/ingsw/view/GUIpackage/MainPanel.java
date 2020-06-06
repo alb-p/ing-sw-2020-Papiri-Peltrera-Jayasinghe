@@ -17,7 +17,7 @@ public class MainPanel extends JPanel {
 //-----------------------------------------SI TIENE? BHOOOO-------------------------
         Random r=new Random();
         //bho
-        if(r.nextInt(10)==4){
+        if(false){
             Thread musicThread = new Thread(() -> {
                 try {
                     sleep(2000);

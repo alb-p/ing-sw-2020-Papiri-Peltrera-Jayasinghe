@@ -36,7 +36,7 @@ public class InitialWaitingPanel extends JPanel {
         innerPanel.setOpaque(false);
         innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
         this.setLayout(new GridBagLayout());
-        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18)); //imposta font liscio e dimensione 45
+        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18)); //imposta font liscio e dimensione
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         innerPanel.setPreferredSize(new Dimension((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95)));

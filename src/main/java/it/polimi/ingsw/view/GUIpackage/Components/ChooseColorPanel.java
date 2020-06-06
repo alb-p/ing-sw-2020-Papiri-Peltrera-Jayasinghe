@@ -23,21 +23,33 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     private JButton colorButton3;
     private ArrayList<Color> colors = new ArrayList<>();
     private PropertyChangeSupport colorPanelListener = new PropertyChangeSupport(this);
+    private Dimension frameDimension;
+    Image background;
 
+    public ChooseColorPanel(int id, Dimension d) {
+        frameDimension=d;
 
-    public ChooseColorPanel(int id) {
-        Collections.addAll(colors, Color.values());
-        playerId = id;
-        colorButton1 = new JButton("BLUE");
+        background= new ImageIcon(this.getClass().getResource("/Colors/BG.jpg")).getImage();
+        colorButton1 = new CustomButton("/Colors/blue");
         colorButton1.addActionListener(this);
-        colorButton2 = new JButton("RED");
+        colorButton2 = new CustomButton("/Colors/red");
         colorButton2.addActionListener(this);
-        colorButton3 = new JButton("WHITE");
+        colorButton3 = new CustomButton("/Colors/tan");
         colorButton3.addActionListener(this);
 
+
+        Collections.addAll(colors, Color.values());
+        playerId = id;
+        this.setLayout(new BoxLayout(this,BoxLayout.X_AXIS));
+        this.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/20),0)));
         this.add(colorButton1);
+        this.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/10),0)));
         this.add(colorButton2);
+        this.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/12),0)));
         this.add(colorButton3);
+
+
+
     }
 
     @Override
@@ -82,4 +94,8 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
         colorPanelListener.addPropertyChangeListener(listener);
     }
 
+    @Override
+    protected void paintComponent(Graphics g) {
+        g.drawImage(this.background, 0, 0, this);
+    }
 }

@@ -26,37 +26,58 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     JLabel description;
     private JButton submit;
     private int playerPerGame = 0;
+    ImageIcon imagedx;
+    ImageIcon imagesx;
+    private Dimension frameDimension;
+    JPanel paneldx;
 
-    public GeneralGodsSelectionPanel(ModelView model) {
-        JPanel sxPanel = new JPanel();
+
+    public GeneralGodsSelectionPanel(ModelView model,Dimension d) {
+
+        imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/paneldx.jpg"));
+        imagesx=new ImageIcon(this.getClass().getResource("/GodSelection/panelsx.jpg"));
+
+        JPanel panelsx = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                imagesx.paintIcon(this,g,0,0);
+            }
+
+
+        };
+
+        paneldx = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                imagedx.paintIcon(this,g,0,0);
+            }
+        };
+
         JPanel godsList = new JPanel();
-        JPanel selectedGod = new JPanel();
-        selectedGod.addMouseListener(this);
         Font font;
-        title = new JLabel();
-        try {
-            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 40); //carica font
-        }catch(IOException | FontFormatException e){
-            font = title.getFont();
-        }
-
+        title = new JLabel("Select gods");
         description = new JLabel();
-        description.setFont(font);
-        selectedGod.setPreferredSize(new Dimension(200,600));
-        selectedGod.add(description);
+        FlowLayout flow = new FlowLayout(FlowLayout.CENTER, 30,30);
+        submit = new CustomButton("/Home/help");
 
 
-        title.setFont(font);
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 
-
-        sxPanel.setPreferredSize(new Dimension(600,600));
-        sxPanel.setLayout(new BoxLayout(sxPanel, BoxLayout.Y_AXIS));
-        sxPanel.add(title);
-
-
+        submit.setName("submit");
+        playerPerGame = model.getPlayers().size();
         gods = model.getGods();
+        godsList.setLayout(flow);
+        this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+        panelsx.setLayout(new BoxLayout(panelsx, BoxLayout.Y_AXIS));
+        frameDimension=d;
+        submit.setEnabled(false);
+        godsList.setOpaque(false);
+        paneldx.addMouseListener(this);
+        submit.addActionListener(this);
+        paneldx.setPreferredSize(new Dimension((int)(frameDimension.width/2.823),frameDimension.height));
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        panelsx.setPreferredSize(new Dimension((int)(frameDimension.width/1.548),frameDimension.height));
+
+
         for (String[] s : gods) {
             String god = s[0];
             GodsButton button = new GodsButton(god);
@@ -65,22 +86,36 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
             button.addActionListener(this);
             button.addMouseListener(this);
         }
-        playerPerGame = model.getPlayers().size();
-        submit = new CustomButton("/Home/help");
-        submit.setName("submit");
-        FlowLayout flow = new FlowLayout(FlowLayout.CENTER, 10,10);
-        godsList.setLayout(flow);
+
 
         for (JButton b : godsButton){
             godsList.add(b);
         }
-        godsList.add(submit);
-        submit.setEnabled(false);
 
-        submit.addActionListener(this);
-        sxPanel.add(godsList);
-        this.add(sxPanel);
-        this.add(selectedGod);
+
+        try {
+            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 40); //carica font
+        }catch(IOException | FontFormatException e){
+            font = title.getFont();
+        }
+
+        description.setFont(font);
+        title.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/15));
+
+
+
+
+
+
+
+        godsList.add(submit);
+        paneldx.add(description);
+        panelsx.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/30))));
+        panelsx.add(title);
+        panelsx.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/18))));
+        panelsx.add(godsList);
+        this.add(panelsx);
+        this.add(paneldx);
     }
 
     @Override
@@ -151,6 +186,9 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     public void mouseEntered(MouseEvent e) {
         System.out.println("MOUSEENTERED!!");
         if(e.getSource() instanceof GodsButton) {
+
+            imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/"+((GodsButton) e.getSource()).getName().toLowerCase()+" info.jpg"));
+            paneldx.repaint();
             description.setText(((GodsButton) e.getSource()).getName());
         }
     }

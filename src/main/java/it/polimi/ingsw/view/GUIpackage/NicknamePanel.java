@@ -47,7 +47,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         textLabel.setFont(labelFont);
         textLabel.setText("Type your nickname");
-        textLabel.setForeground(new Color(223, 212, 202));
+        textLabel.setForeground(Color.WHITE);
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
         nickToFill = new JTextField();
         nickToFill.setFont(font);
