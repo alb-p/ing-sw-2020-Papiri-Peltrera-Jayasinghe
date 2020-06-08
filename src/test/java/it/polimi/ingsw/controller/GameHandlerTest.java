@@ -21,11 +21,10 @@ public class GameHandlerTest {
     ColorMessage colorMessage;
     GodMessage godMessage;
     InitialCardsMessage initialCardsMessage;
-    FirstPlayerMessage firstPlayerMessage;
     WorkerMessage workerMessage;
     ArrayList<Color> colors;
     ArrayList<String> gods;
-    ArrayList<String> nickname;
+
     TurnHandler turnHandler;
 
     @Before
@@ -59,8 +58,23 @@ public class GameHandlerTest {
         assertTrue(initSetup.isInUser("Pippo"));
 
 
+        nicknameMessage = new NicknameMessage(1);
+        nicknameMessage.setNickname("Pluto");
+
+        assertFalse(initSetup.isInUser("Pluto"));
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "notifyNickname", null, nicknameMessage));
+        assertTrue(initSetup.isInUser("Pluto"));
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "notifyNickname", null, nicknameMessage));
+        assertTrue(initSetup.isInUser("Pluto"));
+
+
+
+
 
         assertTrue(initSetup.isInColor(Color.WHITE));
+        assertTrue(initSetup.isInColor(Color.BLUE));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notifyColor", null, colorMessage));
         assertFalse(initSetup.isInColor(Color.WHITE));
@@ -68,18 +82,23 @@ public class GameHandlerTest {
                 "notifyColor", null, colorMessage));
         assertFalse(initSetup.isInColor(Color.WHITE));
 
+        colorMessage = new ColorMessage(1);
+        colorMessage.setColor(Color.BLUE);
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "notifyColor", null, colorMessage));
+        assertFalse(initSetup.isInColor(Color.BLUE));
 
-        gods.add("PAN");
+
+
         initialCardsMessage = new InitialCardsMessage();
         initialCardsMessage.addToSelectedList("PAN");
-        initialCardsMessage.setId(-1);
+        initialCardsMessage.setId(gameHandler.getCurrentPlayerID()%playersNum);
         assertTrue(initSetup.isInListGod("PAN"));
         assertTrue(initSetup.chosenGodsSize()==0);
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notify1ofNGod", null, initialCardsMessage));
         assertFalse(initSetup.isInListGod("PAN"));
         assertTrue(initSetup.chosenGodsSize()==1);
-        gods.add("APOLLO");
         initialCardsMessage.addToSelectedList("APOLLO");
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notify1ofNGod", null, initialCardsMessage));
@@ -92,77 +111,39 @@ public class GameHandlerTest {
 
         godMessage = new GodMessage();
         godMessage.setGod("PAN");
-        godMessage.setId(0);
+        godMessage.setId(gameHandler.getCurrentPlayerID()%playersNum);
         assertTrue(initSetup.isInGod("PAN"));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notifyGod", null, godMessage));
         assertFalse(initSetup.isInGod("PAN"));
-
-
-
-
-
-/*
-
-
-
-
-
-
-
-
-
-        nickname = new ArrayList<>();
-        initSetup.setNicknames("Pippo");
-        initSetup.setNicknames("Pluto");
-        nickname.add("Pippo");
-        nickname.add("Pluto");
-        firstPlayerMessage = new FirstPlayerMessage(0, nickname);
-        firstPlayerMessage.setChosenName("Plutonio");
+        godMessage.setGod("APOLLO");
+        godMessage.setId(gameHandler.getCurrentPlayerID()%playersNum);
+        assertTrue(initSetup.isInGod("APOLLO"));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "firstPlayerResponse", null, firstPlayerMessage));
-        firstPlayerMessage.setChosenName("Pluto");
+                "notifyGod", null, godMessage));
+        assertFalse(initSetup.isInGod("APOLLO"));
+
+
+
+        NicknameMessage m1=new NicknameMessage((gameHandler.getCurrentPlayerID()-1)%playersNum,"Pluto");
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "firstPlayerResponse", null, firstPlayerMessage));
-        workerMessage = new WorkerMessage(1, 0);
+                "firstPlayerSelected", null, m1));
+        assertTrue(gameHandler.getCurrentPlayerID()==1);
+
+
+        assertTrue(model.getBoard().infoSlot(new Coordinate(1,1)).isFree());
+        workerMessage = new WorkerMessage(gameHandler.getCurrentPlayerID()%playersNum, 0);
         workerMessage.setCoordinate(new Coordinate(1,1));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "setWorkerResponse", null, workerMessage));
-    }
+                "notifyWorker", null, workerMessage));
+        assertFalse(model.getBoard().infoSlot(new Coordinate(1,1)).isFree());
+        assertTrue(model.getBoard().infoSlot(new Coordinate(1,0)).isFree());
+        workerMessage = new WorkerMessage(gameHandler.getCurrentPlayerID()%playersNum, 1);
+        workerMessage.setCoordinate(new Coordinate(1,0));
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "notifyWorker", null, workerMessage));
+        assertFalse(model.getBoard().infoSlot(new Coordinate(1,0)).isFree());
 
-    @Test
-    public void godTest(){
-        Player player = new Player(0, "Pippo", Color.WHITE);
-        model.addPlayer(player);
-        nickname = new ArrayList<>();
-        initSetup.setNicknames("Pippo");
-        initSetup.setNicknames("Pluto");
-        nickname.add("Pippo");
-        nickname.add("Pluto");
 
-        gods.add("PAN");
-        initialCardsMessage = new InitialCardsMessage(gods, 0, playersNum);
-        initialCardsMessage.addToSelectedList("PAN");
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "initialCardsResponse", null, initialCardsMessage));
-        gods.add("APOLLO");
-        initialCardsMessage.addToSelectedList("APOLLO");
-        initialCardsMessage = new InitialCardsMessage(gods, 0, playersNum);
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "initialCardsResponse", null, initialCardsMessage));
-        godMessage = new GodMessage(0, gods);
-        godMessage.setGod("POTTER");
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "godMessageResponse", null, godMessage));
-        godMessage.setGod("PAN");
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "godMessageResponse", null, godMessage));
-        assertTrue(model.getPlayer(0).getCard() instanceof Pan);
-        firstPlayerMessage = new FirstPlayerMessage(0, nickname);
-        firstPlayerMessage.setChosenName("Plutonio");
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "firstPlayerResponse", null, firstPlayerMessage));
-
-*/
     }
 }

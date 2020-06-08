@@ -50,24 +50,23 @@ public class GameHandler implements PropertyChangeListener {
             InitialCardsMessage message = (InitialCardsMessage) evt.getNewValue();
             if (message.getId() == currentPlayerID) {
                 for (String s : message.getSelectedList()) if (data.isInListGod(s)) data.addChosenGod(s, message);
-                if (data.chosenGodsSize() == playersPerGame) currentPlayerID = (currentPlayerID + 1) % playersPerGame;
+                if (data.chosenGodsSize() == playersPerGame) currentPlayerID++;
             }
 
         } else if (evt.getPropertyName().equals("notifyGod")) {
             GodMessage message = (GodMessage) evt.getNewValue();
             String god = message.getGod();
-            if (message.getId() == currentPlayerID && data.isInGod(god)) {
+            if (message.getId() == currentPlayerID%playersPerGame && data.isInGod(god)) {
                 model.setCard(message.getId(), god);
                 data.delGod(message);
-                currentPlayerID = (currentPlayerID + 1) % playersPerGame;
+                currentPlayerID++;
                 atLeastOneGod = true;
             }
 
         } else if (evt.getPropertyName().equals("firstPlayerSelected") && atLeastOneGod && data.chosenGodsSize() == 0) {
             NicknameMessage message = (NicknameMessage) evt.getNewValue();
             String name = message.getNickname();
-            //TODO capire se message.getId() == currentPlayerID in if qui sotto con 63 in un if per escludere godly
-            if ( data.isInUser(name)) {
+            if ( data.isInUser(name) && message.getId() == (currentPlayerID-1)%playersPerGame) {
                 for (int i = 0; i < playersPerGame; i++) {
                     if (playersMap.get(i).equals(name)) {
                         firstPlayerChosenID = i;
@@ -82,14 +81,14 @@ public class GameHandler implements PropertyChangeListener {
         } else if (evt.getPropertyName().equals("notifyWorker") && firstPlayerChosenID != -1) {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
             Coordinate coordinate = message.getCoordinate();
-            if (currentPlayerID == message.getId()) {
-                boolean addedWorker =  model.addWorker(currentPlayerID, coordinate, message.getWorkerNumber());
+            if (currentPlayerID%playersPerGame == message.getId()) {
+                boolean addedWorker =  model.addWorker(currentPlayerID%playersPerGame, coordinate, message.getWorkerNumber());
                 if (!workerPlaced && addedWorker) {
                     workerPlaced = true;
                     data.workerPlaced(message);
                 } else if (workerPlaced && addedWorker) {
                     workerPlaced = false;
-                    currentPlayerID = (currentPlayerID + 1) % playersPerGame;
+                    currentPlayerID++;
                     data.workerPlaced(message);
                 }
 
@@ -118,4 +117,10 @@ public class GameHandler implements PropertyChangeListener {
     public void setTurnHandler(TurnHandler turnHandler) {
         this.turnHandler = turnHandler;
     }
+
+    public int getCurrentPlayerID(){ //usato solamente per i test
+        return this.currentPlayerID;
+    }
 }
+
+
