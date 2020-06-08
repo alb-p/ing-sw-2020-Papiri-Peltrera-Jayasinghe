@@ -94,18 +94,18 @@ public class GameHandlerTest {
         initialCardsMessage.addToSelectedList("PAN");
         initialCardsMessage.setId(gameHandler.getCurrentPlayerID()%playersNum);
         assertTrue(initSetup.isInListGod("PAN"));
-        assertTrue(initSetup.chosenGodsSize()==0);
+        assertEquals(0, initSetup.chosenGodsSize());
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notify1ofNGod", null, initialCardsMessage));
         assertFalse(initSetup.isInListGod("PAN"));
-        assertTrue(initSetup.chosenGodsSize()==1);
+        assertEquals(1, initSetup.chosenGodsSize());
         initialCardsMessage.addToSelectedList("APOLLO");
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notify1ofNGod", null, initialCardsMessage));
-        assertTrue(initSetup.chosenGodsSize()==2);
+        assertEquals(2, initSetup.chosenGodsSize());
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "notify1ofNGod", null, initialCardsMessage));
-        assertTrue(initSetup.chosenGodsSize()==2);
+        assertEquals(2, initSetup.chosenGodsSize());
 
 
 
@@ -128,7 +128,7 @@ public class GameHandlerTest {
         NicknameMessage m1=new NicknameMessage((gameHandler.getCurrentPlayerID()-1)%playersNum,"Pluto");
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "firstPlayerSelected", null, m1));
-        assertTrue(gameHandler.getCurrentPlayerID()==1);
+        assertEquals(1, gameHandler.getCurrentPlayerID());
 
 
         assertTrue(model.getBoard().infoSlot(new Coordinate(1,1)).isFree());
