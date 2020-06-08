@@ -28,14 +28,26 @@ public class PanTest {
 
     @Test
     public void winningConditionWithPowerTest() throws Exception {
-        Player player = new Player(0, "Pippo", Color.GRAY);
+        Player player = new Player(0, "Pippo", Color.RED);
         player.setCard("PAN");
         player.selectWorker(new Coordinate(2, 0));
         board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(2, 0));
 
 
-        VirtualBoard virtualBoard=new VirtualBoard(board);
+        VirtualBoard virtualBoard= new VirtualBoard();
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
+                Color color = null;
+                Coordinate c = new Coordinate(row, col);
+                if (board.infoSlot(c).getWorker() != null) {
+                    color = board.infoSlot(c).getWorker().getColor();
+                }
+                VirtualSlot tempo = new VirtualSlot(color,
+                        board.infoSlot(c).getConstructionLevel(), board.infoSlot(c).hasADome(), c);
+                virtualBoard.setSlot(tempo);
+            }
+        }
 
 
         player.selectWorker(new Coordinate(2, 0));
@@ -47,14 +59,27 @@ public class PanTest {
 
     @Test
     public void winningConditionNormalTest() throws Exception {
-        Player player = new Player(0, "Pippo", Color.GRAY);
+        Player player = new Player(0, "Pippo", Color.RED);
         player.setCard("PAN");
         player.selectWorker(new Coordinate(2, 0));
         board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(2, 0));
 
 
-        VirtualBoard virtualBoard=new VirtualBoard(board);
+
+        VirtualBoard virtualBoard= new VirtualBoard();
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
+                Color color = null;
+                Coordinate c = new Coordinate(row, col);
+                if (board.infoSlot(c).getWorker() != null) {
+                    color = board.infoSlot(c).getWorker().getColor();
+                }
+                VirtualSlot tempo = new VirtualSlot(color,
+                        board.infoSlot(c).getConstructionLevel(), board.infoSlot(c).hasADome(), c);
+                virtualBoard.setSlot(tempo);
+            }
+        }
 
 
         player.selectWorker(new Coordinate(2, 0));

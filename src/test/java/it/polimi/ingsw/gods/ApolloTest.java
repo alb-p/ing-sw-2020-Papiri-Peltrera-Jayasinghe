@@ -14,14 +14,14 @@ public class ApolloTest {
     public void init() throws Exception {
         board = new IslandBoard();
         //Gray player can only move switching with the opponent player
-        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.GRAY));
+        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.RED));
         board.infoSlot(new Coordinate(0, 1)).occupy(new Worker(new Coordinate(0, 1), Color.WHITE));
         board.infoSlot(new Coordinate(0, 0)).construct(Construction.DOME);
         board.infoSlot(new Coordinate(1, 1)).construct(Construction.DOME);
         board.infoSlot(new Coordinate(2, 1)).construct(Construction.DOME);
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.DOME);
         //Gray player can't move
-        board.infoSlot(new Coordinate(4, 4)).occupy(new Worker(new Coordinate(4, 4), Color.GRAY));
+        board.infoSlot(new Coordinate(4, 4)).occupy(new Worker(new Coordinate(4, 4), Color.RED));
         board.infoSlot(new Coordinate(3, 3)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(3, 3)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(3, 3)).occupy(new Worker(new Coordinate(3, 3), Color.WHITE));
@@ -32,7 +32,7 @@ public class ApolloTest {
 
     @Test
     public void modMoveTest() throws Exception {
-        Player player = new Player("pippo", "gray");
+        Player player = new Player("pippo", "red");
         player.setCard("APOLLO");
         board.infoSlot(new Coordinate(1,0)).free();
         board.infoSlot(new Coordinate(4,4)).free();

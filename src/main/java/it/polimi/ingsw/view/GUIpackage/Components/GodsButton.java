@@ -13,6 +13,8 @@ public class GodsButton extends JButton {
 
     public GodsButton(String god){
         this.name=god;
+        System.out.println("God" +
+                god);
         //System.out.println("aaaaaaaaa "+this.name.toLowerCase());
         this.setBorder(null);
         this.setContentAreaFilled(false);//trasparenza
@@ -20,7 +22,8 @@ public class GodsButton extends JButton {
         /*this.glow=new ImageIcon(this.getClass().getResource("/GodsMiniature/glow.png"));//overlay glow
         this.godMiniature=new ImageIcon(this.getClass().getResource("/GodsMiniature/"+god+".png"));*/
         this.glow=new ImageIcon(this.getClass().getResource("/GodSelection/gold.png"));//overlay glow
-        this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/"+this.name.toLowerCase()+".png"));
+        if(!god.equalsIgnoreCase("hypnus"))this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/"+this.name.toLowerCase()+".png"));
+        else this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/zeus.png"));
         this.setIcon(godMiniature);
     }
 

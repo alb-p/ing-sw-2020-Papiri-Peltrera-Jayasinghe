@@ -15,11 +15,10 @@ public class AtlasTest {
     public void init() throws Exception {
         board = new IslandBoard();
 
-        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.GRAY));
-        board.infoSlot(new Coordinate(1, 3)).occupy(new Worker(new Coordinate(1, 3), Color.GRAY));
-        board.infoSlot(new Coordinate(0, 1)).occupy(new Worker(new Coordinate(0, 1), Color.GRAY));
+        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.RED));
+        board.infoSlot(new Coordinate(1, 3)).occupy(new Worker(new Coordinate(1, 3), Color.RED));
+        board.infoSlot(new Coordinate(0, 1)).occupy(new Worker(new Coordinate(0, 1), Color.RED));
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.DOME);
-
     }
 
     @Test

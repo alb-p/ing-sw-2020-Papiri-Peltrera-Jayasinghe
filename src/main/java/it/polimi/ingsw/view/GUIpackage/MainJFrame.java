@@ -18,7 +18,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
         this.setDefaultCloseOperation(MainJFrame.EXIT_ON_CLOSE);
-        this.setSize(960 ,720);
+        this.setSize(GUI.getDimension());
         this.setUndecorated(true); //nasconde titlebar
         this.setResizable(false);
         // window.setBackground(new Color(0, 0, 0, 0)); //trasperenza

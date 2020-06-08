@@ -2,6 +2,8 @@ package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.utils.messages.ColorMessage;
 import it.polimi.ingsw.utils.messages.GodMessage;
+import it.polimi.ingsw.utils.messages.InitialCardsMessage;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -33,9 +35,12 @@ public class InitSetupTest {
     @Test
     public void usernameTest(){
         assertFalse(initSetup.isInUser("Pippo"));
-        initSetup.setNicknames("Pippo");
+        NicknameMessage message = new NicknameMessage();
+        message.setNickname("Pippo");
+        initSetup.setNicknames(message);
+        message.setNickname("Pluto");
         assertTrue(initSetup.isInUser("Pippo"));
-        initSetup.setNicknames("Pluto");
+        initSetup.setNicknames(message);
         assertTrue(initSetup.isInUser("Pluto"));
     }
 
@@ -44,7 +49,7 @@ public class InitSetupTest {
         assertTrue(initSetup.isInColor(Color.BLUE));
         ArrayList<Color> colors = new ArrayList<>();
         Collections.addAll(colors, Color.values());
-        ColorMessage message = new ColorMessage(0,colors);
+        ColorMessage message = new ColorMessage(0);
         message.setColor(Color.BLUE);
         initSetup.delColor(message);
         assertFalse(initSetup.isInColor(Color.BLUE));
@@ -55,18 +60,22 @@ public class InitSetupTest {
         assertFalse(initSetup.isInGod("Pippo"));
         assertFalse(initSetup.isInGod("atlas"));
         assertTrue(initSetup.isInListGod("atlas"));
-        initSetup.addChosenGod("atlas");
-        initSetup.addChosenGod("pan");
-        initSetup.addChosenGod("minotaur");
-        GodMessage mess1 = new GodMessage(0, gods);
+        InitialCardsMessage message = new InitialCardsMessage();
+        message.addToSelectedList("Atlas");
+        message.addToSelectedList("Pan");
+        message.addToSelectedList("Minotaur");
+        initSetup.addChosenGod("atlas",message);
+        initSetup.addChosenGod("pan",message);
+        initSetup.addChosenGod("minotaur",message);
+        GodMessage mess1 = new GodMessage();
         mess1.setGod("atlas");
         assertTrue(initSetup.isInGod("atlas"));
-        initSetup.delGod(mess1, 2);
+        initSetup.delGod(mess1);
         assertFalse(initSetup.isInGod("atlas"));
         assertTrue(initSetup.isInGod("pan"));
-        GodMessage mess2 = new GodMessage(1, gods);
+        GodMessage mess2 = new GodMessage();
         mess2.setGod("pan");
-        initSetup.delGod(mess2, 2);
+        initSetup.delGod(mess2);
         assertFalse(initSetup.isInGod("pan"));
 
 

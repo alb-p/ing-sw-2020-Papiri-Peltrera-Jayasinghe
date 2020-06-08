@@ -16,8 +16,8 @@ public class MinotaurTest {
 
         board.infoSlot(new Coordinate(0, 0)).occupy(new Worker(new Coordinate(0, 0), Color.BLUE));
         board.infoSlot(new Coordinate(0, 1)).occupy(new Worker(new Coordinate(0, 1), Color.BLUE));
-        board.infoSlot(new Coordinate(1, 1)).occupy(new Worker(new Coordinate(1, 1), Color.GRAY));
-        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.GRAY));
+        board.infoSlot(new Coordinate(1, 1)).occupy(new Worker(new Coordinate(1, 1), Color.RED));
+        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.RED));
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.DOME);
     }
 

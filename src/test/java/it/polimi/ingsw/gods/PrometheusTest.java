@@ -21,8 +21,8 @@ public class PrometheusTest {
         board.infoSlot(new Coordinate(4, 4)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(4, 3)).construct(Construction.DOME);
         board.infoSlot(new Coordinate(3, 4)).construct(Construction.DOME);
-        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.GRAY));
-        board.infoSlot(new Coordinate(4, 4)).occupy(new Worker(new Coordinate(4, 4), Color.GRAY));
+        board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.RED));
+        board.infoSlot(new Coordinate(4, 4)).occupy(new Worker(new Coordinate(4, 4), Color.RED));
     }
 
     @Test
@@ -39,7 +39,7 @@ public class PrometheusTest {
 
     @Test
     public void modMoveTest() throws Exception {
-        Player player = new Player("pippo", "gray");
+        Player player = new Player("pippo", "red");
         player.setCard("PROMETHEUS");
         board.infoSlot(new Coordinate(1, 0)).occupy(player.getWorker(0));
         board.infoSlot(new Coordinate(4, 4)).occupy(player.getWorker(1));

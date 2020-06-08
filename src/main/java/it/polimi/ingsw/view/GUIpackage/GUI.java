@@ -22,7 +22,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     private ModelView modelView;
     private SocketServerConnection connection;
     private MainJFrame window;
-    private Integer numOfPlayers = new Integer(1);
+    private Integer numOfPlayers = 1;
+    public static Dimension getDimension(){ return new Dimension(960,720);}
     private PropertyChangeSupport guiListeners = new PropertyChangeSupport(this);
     public GUI(SocketServerConnection connection) {
         super(connection);

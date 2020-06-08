@@ -14,7 +14,7 @@ public class ArtemisTest {
     @Before
     public void init() throws Exception {
 
-        board.infoSlot(new Coordinate(1, 3)).occupy(new Worker(new Coordinate(1, 3), Color.GRAY));
+        board.infoSlot(new Coordinate(1, 3)).occupy(new Worker(new Coordinate(1, 3), Color.RED));
 
     }
 

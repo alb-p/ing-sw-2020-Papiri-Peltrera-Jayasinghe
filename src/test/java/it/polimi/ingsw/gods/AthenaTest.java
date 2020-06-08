@@ -39,7 +39,7 @@ public class AthenaTest {
     @Test
     public void moveAndSpecialRuleTest() throws Exception {
 
-        Player player = new Player(0, "Pippo", Color.GRAY);
+        Player player = new Player(0, "Pippo", Color.RED);
         player.setCard("ATHENA");
         Player enemy = new Player(1, "Pluto", Color.BLUE);
         player.setCard("PAN");
@@ -55,13 +55,9 @@ public class AthenaTest {
         enemy.getWorker(0).setPosition(new Coordinate(0, 0));
         //creo albero dell'avversario
         TreeActionNode root= card.cardTreeSetup(board.infoSlot(new Coordinate(0,0)).getWorker(),board);
-        HashMap<Worker,TreeActionNode> map=new HashMap();
-        map.put(enemy.getWorker(0),root);
-        Set<Worker> keys=map.keySet();
-
 
         //faccio correggere albero avversario da athena
-        card.specialRule(map,keys,board);
+        card.specialRule(root,board);
 
 
         assertTrue(root.getChildren().size()==0);

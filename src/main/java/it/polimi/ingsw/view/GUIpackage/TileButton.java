@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUIpackage;
 import it.polimi.ingsw.model.Coordinate;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class TileButton extends JButton {
 
@@ -10,12 +11,23 @@ public class TileButton extends JButton {
     private boolean occupied=false;
     private String color;
     private int level=0;
+    private Image worker;
+    private Point initialClick;
 
 
     public TileButton(int row, int col){
         coordinate=new Coordinate(row,col);
         this.setText(coordinate.toString()); //debug
     }
+
+    public void setWorker(Image worker) {
+        this.worker = worker;
+        repaint();
+    }
+    public Image getWorker(){
+        return worker;
+    }
+
 
     public Coordinate getCoordinate() {
         return this.coordinate;
@@ -37,5 +49,18 @@ public class TileButton extends JButton {
     public String toString() {
         return "tilebutton";
     }
+
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(worker!=null){
+            g.drawImage(this.worker, 0,0,this);
+        }
+        Toolkit.getDefaultToolkit().sync();
+
+    }
+
+
 }
 

@@ -36,7 +36,7 @@ public class PlayerTest {
         assertFalse(player.hasDone());
         assertNull(player.getActualWorker());
         player.playerTreeSetup(board);
-        assertNotNull(player.getAvailableAction());
+        assertNotNull(player.getNextActions());
         assertFalse(player.selectWorker(new Coordinate(4,4)));
 
     }
