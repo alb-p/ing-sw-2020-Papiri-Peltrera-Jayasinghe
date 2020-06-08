@@ -45,45 +45,73 @@ public class GameHandlerTest {
     @Test
     public void propertyChangeTest() {
         nicknameMessage = new NicknameMessage(0);
-        nicknameMessage.setNick("Pippo");
-        colorMessage = new ColorMessage(0, colors);
+        nicknameMessage.setNickname("Pippo");
+        colorMessage = new ColorMessage(0);
         colorMessage.setColor(Color.WHITE);
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "nickMessageResponse", null, nicknameMessage));
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "nickMessageResponse", null, nicknameMessage));
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "colorMessageResponse", null, colorMessage));
-        gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "colorMessageResponse", null, colorMessage));
-        assertEquals("Pippo", model.getPlayer(0).getNickName());
-        assertEquals(Color.WHITE, model.getPlayer(0).getWorker(0).getColor());
 
-        nicknameMessage = new NicknameMessage(1);
-        nicknameMessage.setNick("Pluto");
-        colorMessage = new ColorMessage(0, colors);
-        colorMessage.setColor(Color.BLUE);
+
+        assertFalse(initSetup.isInUser("Pippo"));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "nickMessageResponse", null, nicknameMessage));
+                "notifyNickname", null, nicknameMessage));
+        assertTrue(initSetup.isInUser("Pippo"));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "colorMessageResponse", null, colorMessage));
+                "notifyNickname", null, nicknameMessage));
+        assertTrue(initSetup.isInUser("Pippo"));
+
+
+
+        assertTrue(initSetup.isInColor(Color.WHITE));
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "notifyColor", null, colorMessage));
+        assertFalse(initSetup.isInColor(Color.WHITE));
+        gameHandler.propertyChange(new PropertyChangeEvent(this,
+                "notifyColor", null, colorMessage));
+        assertFalse(initSetup.isInColor(Color.WHITE));
+
+
         gods.add("PAN");
-        initialCardsMessage = new InitialCardsMessage(gods, 0, playersNum);
+        initialCardsMessage = new InitialCardsMessage();
         initialCardsMessage.addToSelectedList("PAN");
+        initialCardsMessage.setId(-1);
+        assertTrue(initSetup.isInListGod("PAN"));
+        assertTrue(initSetup.chosenGodsSize()==0);
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "initialCardsResponse", null, initialCardsMessage));
+                "notify1ofNGod", null, initialCardsMessage));
+        assertFalse(initSetup.isInListGod("PAN"));
+        assertTrue(initSetup.chosenGodsSize()==1);
         gods.add("APOLLO");
         initialCardsMessage.addToSelectedList("APOLLO");
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "initialCardsResponse", null, initialCardsMessage));
-        godMessage = new GodMessage(0, gods);
-        godMessage.setGod("POTTER");
+                "notify1ofNGod", null, initialCardsMessage));
+        assertTrue(initSetup.chosenGodsSize()==2);
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "godMessageResponse", null, godMessage));
+                "notify1ofNGod", null, initialCardsMessage));
+        assertTrue(initSetup.chosenGodsSize()==2);
+
+
+
+        godMessage = new GodMessage();
         godMessage.setGod("PAN");
+        godMessage.setId(0);
+        assertTrue(initSetup.isInGod("PAN"));
         gameHandler.propertyChange(new PropertyChangeEvent(this,
-                "godMessageResponse", null, godMessage));
-        assertTrue(model.getPlayer(0).getCard() instanceof Pan);
+                "notifyGod", null, godMessage));
+        assertFalse(initSetup.isInGod("PAN"));
+
+
+
+
+
+/*
+
+
+
+
+
+
+
+
+
         nickname = new ArrayList<>();
         initSetup.setNicknames("Pippo");
         initSetup.setNicknames("Pluto");
@@ -135,6 +163,6 @@ public class GameHandlerTest {
         gameHandler.propertyChange(new PropertyChangeEvent(this,
                 "firstPlayerResponse", null, firstPlayerMessage));
 
-
+*/
     }
 }

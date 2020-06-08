@@ -11,15 +11,6 @@ public class GodMessage implements Message, Serializable {
     String god;
     int id;
 
-    public GodMessage(int i,String god){
-        this.message = "god selected from id "+i+": "+god;
-        this.god=god;
-        this.id=i;
-    }
-
-    public GodMessage() {
-
-    }
 
 
     public void setGod(String god) {

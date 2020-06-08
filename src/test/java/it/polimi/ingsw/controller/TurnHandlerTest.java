@@ -16,7 +16,7 @@ public class TurnHandlerTest {
     TurnHandler turnHandler;
     TurnHandler turnHandler2;
     TurnHandler turnHandler3;
-
+/*
     @Before
     public void init() throws CloneNotSupportedException {
         Model model = new Model();
@@ -145,5 +145,5 @@ public class TurnHandlerTest {
 
     }
 
-
+*/
 }
