@@ -114,7 +114,6 @@ public class ModelView {
         NicknameMessage message = new NicknameMessage();
         message.setId(id);
         message.setNickname(nick);
-        System.out.println("ADDED +"+nick);
         nickNameListener.firePropertyChange("nicknameConfirm", null, message);
     }
 
@@ -244,7 +243,6 @@ public class ModelView {
 
     public Action searchAction(String s, Coordinate start, Coordinate end) {
         for (Action a : actionsAvailable) {
-            System.out.println("ACT NAME:: "+a.getActionName()+ a.getStart() + a.getEnd());
             if (a.getActionName().equalsIgnoreCase(s) &&
                     a.getStart().equals(start)
                     && a.getEnd().equals(end)) {

@@ -17,14 +17,14 @@ public class Chronus extends BasicGodCard {
     }
 
     private boolean fiveTower(IslandBoard board) {
-        int towersNumber = 0;
+        int completeTowersNumber = 0;
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                if (board.infoSlot(new Coordinate(i, j)).getConstructionLevel() == 3) {
-                    towersNumber++;
+                if (board.infoSlot(new Coordinate(i, j)).getConstructionLevel() == 3 && board.infoSlot(new Coordinate(i, j)).hasADome()) {
+                    completeTowersNumber++;
                 }
             }
-            if (towersNumber >= 5) return true;
+            if (completeTowersNumber >= 5) return true;
         }
         return false;
     }
