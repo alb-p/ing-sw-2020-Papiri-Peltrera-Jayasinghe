@@ -25,7 +25,7 @@ public class CLI extends RemoteView implements Runnable {
     private boolean winnerDetected = false;
     private boolean endTurn;
     private ModelView modelView;
-    private static final String arrangeList = "%d- %-15s";
+    private static final String arrangeList = "%d- %-20s";
 
     public CLI(SocketServerConnection connection) {
         super(connection);
@@ -333,30 +333,22 @@ public class CLI extends RemoteView implements Runnable {
                                     +", perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
                             startingBrackets();
                             coords = parseCoordinateAction(scanner.nextLine());
-                            System.out.println(coords);
                             if (coords.size() == 2) {
-                                System.out.println("Mossa presa");
                                 action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
                             }
                         }
-                        System.out.println("ENDTURN:: "+ endTurn);
-                        System.out.println("ACTion null :: "+ action);
                     } while (action == null && !endTurn);
 
                     if (endTurn) {
-                        System.out.println("SNO ENDTURN");
                         modelView.getActionsAvailable().clear();
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "endTurn", null, new GenericMessage()));
                     } else {
-                        System.out.println("TURNO NON FINITO, ");
                         ActionMessage mess = new ActionMessage();
                         mess.setAction(action);
                         modelView.getActionsAvailable().clear();
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "notifyAction", null, mess));
-                        System.out.println("EVENTO SENDATO," + mess.getAction().getActionName()+mess.getAction().getStart()
-                        +mess.getAction().getEnd());
                     }
                     printBreakers();
 
