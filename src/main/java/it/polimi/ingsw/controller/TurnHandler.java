@@ -14,6 +14,7 @@ public class TurnHandler implements PropertyChangeListener {
     private int playersPerGame;
     private int playerDefeatedID = -1;
     private int totalTurnCounter = 0;
+    private int firstPlayerID;
 
     public TurnHandler(Model model, int playersPerGame) {
         this.model = model;
@@ -30,9 +31,7 @@ public class TurnHandler implements PropertyChangeListener {
                 if (model.getPlayer(id).checkLoser())
                     playerHasLost(id);
             }
-        }
-
-        if (evt.getPropertyName().equalsIgnoreCase("notifyAction")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("notifyAction")) {
             ActionMessage message = (ActionMessage) evt.getNewValue();
             int id = actualPlayerID();
             if (message.getId() == id) {
@@ -41,15 +40,25 @@ public class TurnHandler implements PropertyChangeListener {
                     endTurnManager(id);
                 }
             }
-        }
-
-        if (evt.getPropertyName().equalsIgnoreCase("endTurn")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("endTurn")) {
             GenericMessage message = (GenericMessage) evt.getNewValue();
             int id = actualPlayerID();
             if (message.getId() == id) {
                 if (model.getPlayer(id).essentialDone()) {
                     endTurnManager(id);
                 }
+            }
+        } else if(evt.getPropertyName().equalsIgnoreCase("playerDisconnected")){
+            if(totalTurnCounter!=firstPlayerID){
+                playerDefeatedID = (int)evt.getNewValue();
+                this.model.removeModelListener((PropertyChangeListener)evt.getOldValue());
+                playerHasLost((int)evt.getNewValue());
+            }
+            else {
+                System.out.println("ENDGAME _________ Player DISCONNECTED"+ evt.getNewValue());
+                this.model.removeModelListener((PropertyChangeListener)evt.getOldValue());
+                model.endGame(-1);
+
             }
         }
 
@@ -60,7 +69,7 @@ public class TurnHandler implements PropertyChangeListener {
         if (!model.checkWinner(id)) {
             model.endTurn(id);
             totalTurnCounter++;
-        }
+        }else model.endGame(id);
 
     }
 
@@ -85,6 +94,7 @@ public class TurnHandler implements PropertyChangeListener {
     //imposta il primo giocatore
     public void setTotalTurnCounter(int id) {
         this.totalTurnCounter = id;
+        this.firstPlayerID = id;
     }
 
 

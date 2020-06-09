@@ -102,7 +102,7 @@ public class SocketServerConnection {
         }
     }
 
-    private void closeConnection() {
+    public void closeConnection() {
         try {
             socket.close();
         } catch (IOException e) {

@@ -6,7 +6,7 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 
-public abstract class RemoteView implements Runnable{
+public abstract class RemoteView implements Runnable {
     //client invoca funzioni di questa classe per richiedere input
     // all'utente a seguito di richieste specifiche
     private ModelView modelView = new ModelView();
@@ -66,6 +66,10 @@ public abstract class RemoteView implements Runnable{
         } else if (propertyName.equalsIgnoreCase("winnerDetected")) {
             modelView.setWinnerId(((WinnerMessage) evt.getNewValue()).getId());
             winnerDetected((WinnerMessage) evt.getNewValue());
+        } else if (propertyName.equalsIgnoreCase("endGame")) {
+            System.out.println("ENDGAME");
+            connection.closeConnection();
+            System.exit(0);
         }
     }
 
@@ -109,11 +113,11 @@ public abstract class RemoteView implements Runnable{
         modelView.setGodlyId(message.getId());
     }
 
-    protected void colorReceived(ColorMessage message){
+    protected void colorReceived(ColorMessage message) {
         modelView.setColor(message.getId(), message.getColor());
     }
 
-    protected void nicknameReceived(NicknameMessage message){
+    protected void nicknameReceived(NicknameMessage message) {
         modelView.addPlayer(message.getId(), message.getNickname());
     }
 

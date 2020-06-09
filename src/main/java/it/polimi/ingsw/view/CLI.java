@@ -404,7 +404,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     public void printBoard() {
-        printer.println(this.modelView.getBoard());
+        if(!winnerDetected)printer.println(this.modelView.getBoard());
         printBreakers();
     }
 

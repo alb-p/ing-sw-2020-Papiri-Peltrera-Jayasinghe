@@ -169,6 +169,10 @@ public class Model {
         notifyChanges();
     }
 
+    public void removeModelListener(PropertyChangeListener listener){
+        modelListeners.removePropertyChangeListener(listener);
+    }
+
     public void endGameForNoAvailableMoves(int id) {
         int winnerID = -1;
         for (Player player : players) {
@@ -190,5 +194,16 @@ public class Model {
         modelListeners.firePropertyChange("endTurnConfirm", null,
                 new NicknameMessage(id, this.getPlayer(id).getNickName()));
         notifyChanges();
+    }
+
+    public void endGame(int id) {
+        if(id<0){
+            modelListeners.firePropertyChange("endGame", false, true);
+            int n = modelListeners.getPropertyChangeListeners().length;
+            for (int i = 0 ; i<n; i++){
+                modelListeners.removePropertyChangeListener(modelListeners.getPropertyChangeListeners()[0]);
+
+            }
+        }
     }
 }

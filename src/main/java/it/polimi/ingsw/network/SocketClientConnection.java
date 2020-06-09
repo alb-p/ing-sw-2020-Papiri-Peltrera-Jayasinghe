@@ -22,8 +22,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     private PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
 
 
-
-
     private int id;
     private Server server;
 
@@ -47,7 +45,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
 
     public synchronized void send(Object message) {
         try {
-            if (socket.isClosed()) return;
             outSocket.reset();
             outSocket.writeObject(message);
             outSocket.flush();
@@ -91,10 +88,8 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     public void run() {
         try {
             sendEvent(new PropertyChangeEvent(this, "gameReady", null, id));
-            while (true) {
+            while (socket.isConnected()) {
                 Object inputObject = inSocket.readObject();
-
-
                 if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message
                         && ((Message) ((PropertyChangeEvent) inputObject).getNewValue()).getId() == id) {
@@ -115,18 +110,32 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         sendEvent(evt);
+        if (evt.getPropertyName().equalsIgnoreCase("endGame")){
+            try {
+                socket.close();
+                System.out.println("DOPO ENDGAME CHIUDO CONNESSIONE "+id);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void sendEvent(PropertyChangeEvent evt) {
         try {
             synchronized (outSocket) {
-                if (socket.isClosed()) return;
                 outSocket.reset();
                 outSocket.writeObject(evt);
                 outSocket.flush();
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                socket.close();
+                System.out.println("Connection "+ id+ " SOCKET CLOSED");
+            } catch (IOException ioException) {
+                e.printStackTrace();
+            }finally {
+                sccListeners.firePropertyChange("playerDisconnected", this, id);
+            }
         }
 
     }
