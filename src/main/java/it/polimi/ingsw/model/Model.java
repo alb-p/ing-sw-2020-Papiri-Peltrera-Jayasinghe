@@ -185,7 +185,7 @@ public class Model {
 
     public void notifyPlayerHasLost(int id) {
         modelListeners.firePropertyChange("playerLostDetected", null,
-                new GenericMessage(id, this.getPlayer(id).getNickName(), " has no more available actions!"));
+                new GenericMessage(id,"", " has no more available actions!"));
     }
 
 

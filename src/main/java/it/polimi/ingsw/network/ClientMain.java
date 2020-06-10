@@ -11,6 +11,7 @@ public class ClientMain {
 
         //String ip = "gc20.ddns.net"; // per giocare online
         String ip = "127.0.0.1";
+        //String ip = "79.55.133.164";
         int port = 4566;
         int chosenUI = 0;
 
