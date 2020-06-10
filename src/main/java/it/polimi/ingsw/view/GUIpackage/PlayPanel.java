@@ -37,7 +37,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private TileButton boardOfButtons[][] = new TileButton[5][5];
 
 
-    public PlayPanel(int id) {
+    public PlayPanel(ModelView modelView) {
+        this.modelView = modelView;
         this.setLayout(new BorderLayout());
         TileButton east = new TileButton(-1, -1);
         TransferHandler dragAndDrop = new DragAndDrop();
@@ -217,7 +218,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                 !((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
                             tDest.setWorker(((TransferableImage) val).getImage());
                             bool = true;
-                        } else if (((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
+                        } else if (((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1)) && workerPlaced<2) {
                             tDest.setWorker(new ImageIcon(this.getClass().getResource("/Home/exit_onmouse.png")).getImage());
                             workerPlaced++;
                             System.out.println(workerPlaced);

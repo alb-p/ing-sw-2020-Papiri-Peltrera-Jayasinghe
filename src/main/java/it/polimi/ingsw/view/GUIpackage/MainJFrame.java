@@ -55,6 +55,11 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         modelView.addSelectedSingleGodListener(godSelectionPanel);
         godSelectionPanel.addGodSelectionListener(gui);
         contentPane.add("GodSelectionPanel", godSelectionPanel);
+        PlayPanel playPanel = new PlayPanel(modelView);
+        modelView.addBoardListener(playPanel);
+        gui.addGuiListener(playPanel);
+        contentPane.add("PlayPanel", playPanel);
+
     }
     public void startLogo(){
         this.logo.addPropertyChangeListener(this);

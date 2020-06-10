@@ -23,15 +23,21 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     private SocketServerConnection connection;
     private MainJFrame window;
     private Integer numOfPlayers = 1;
-    public static Dimension getDimension(){ return new Dimension(960,720);}
+
+    public static Dimension getDimension() {
+        return new Dimension(960, 720);
+    }
+
     private PropertyChangeSupport guiListeners = new PropertyChangeSupport(this);
+
     public GUI(SocketServerConnection connection) {
         super(connection);
         this.connection = connection;
         this.modelView = getModelView();
 
     }
-    public void addGuiListener(PropertyChangeListener listener){
+
+    public void addGuiListener(PropertyChangeListener listener) {
         guiListeners.addPropertyChangeListener(listener);
     }
 
@@ -68,8 +74,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void assignedGod(GodMessage message) {
         super.assignedGod(message);
-        if (modelView.getActualPlayerId() == getPlayerId()){
-            guiListeners.firePropertyChange("myTurn", false,true);
+
+        if (modelView.getPlayer(modelView.getActualPlayerId()).getGod() !=null) {
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "PlayPanel");
+        } else if (modelView.getActualPlayerId() == getPlayerId()) {
+            guiListeners.firePropertyChange("myTurn", false, true);
         }
     }
 
@@ -77,8 +86,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     protected void chosenGods(InitialCardsMessage newValue) {
         super.chosenGods(newValue);
         System.out.println("RECEIVED GODS");
-        if (modelView.getActualPlayerId() == getPlayerId()){
-          guiListeners.firePropertyChange("myTurn", false,true);
+        if (modelView.getActualPlayerId() == getPlayerId()) {
+            guiListeners.firePropertyChange("myTurn", false, true);
         }
         ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GodSelectionPanel");
 
@@ -87,10 +96,10 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void setGodly(GodlyMessage message) {
         super.setGodly(message);
-        if (message.getId() == getPlayerId()){
+        if (message.getId() == getPlayerId()) {
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GeneralGodsSelectionPanel");
 
-        }else {
+        } else {
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
 
         }
@@ -99,7 +108,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void colorReceived(ColorMessage message) {
         super.colorReceived(message);
-        if(message.getId() == getPlayerId()){
+        if (message.getId() == getPlayerId()) {
             System.out.println("RICEVUTO MIO COLORE");
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
         }
@@ -185,24 +194,24 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             connection.sendEvent(new PropertyChangeEvent(this, "notifyNickname", null, message));
 
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("colorReceived")){
+        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("colorReceived")) {
             ColorMessage message = new ColorMessage(getPlayerId());
-            message.setColor((Color)propertyChangeEvent.getNewValue());
+            message.setColor((Color) propertyChangeEvent.getNewValue());
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
-            connection.sendEvent(new PropertyChangeEvent(this,"notifyColor", null ,message));
+            connection.sendEvent(new PropertyChangeEvent(this, "notifyColor", null, message));
 
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("godsSelected")){
+        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("godsSelected")) {
             InitialCardsMessage message = new InitialCardsMessage();
-            ArrayList<String> selectedGods = (ArrayList<String>)propertyChangeEvent.getNewValue();
-            for (String s: selectedGods)message.addToSelectedList(s);
-            getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, message ));
+            ArrayList<String> selectedGods = (ArrayList<String>) propertyChangeEvent.getNewValue();
+            for (String s : selectedGods) message.addToSelectedList(s);
+            getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, message));
             System.out.println("SENDED GODS");
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
 
-        } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("godSelected")){
+        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("godSelected")) {
             GodMessage message = new GodMessage();
             message.setGod((String) (propertyChangeEvent.getNewValue()));
-            getConnection().sendEvent(new PropertyChangeEvent(this, "notifyGod",null, message));
+            getConnection().sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
         }
     }
 }
