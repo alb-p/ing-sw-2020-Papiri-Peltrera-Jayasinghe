@@ -137,7 +137,7 @@ public class Model {
     }
 
 
-    //crea l'albero e lo fa correggere dagli altri dei. //si potrebbe spostare in model.java
+    //crea l'albero e lo fa correggere dagli altri dei.
     public void buildTree(int ID) {
         try {
             getPlayer(ID).playerTreeSetup(board);

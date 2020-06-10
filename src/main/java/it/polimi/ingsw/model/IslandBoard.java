@@ -1,7 +1,11 @@
 package it.polimi.ingsw.model;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 public class IslandBoard implements Cloneable{
 
+    private Logger logger = Logger.getLogger("model.board");
     Slot[][] board = new Slot[5][5];
 
     public IslandBoard(){
@@ -12,12 +16,13 @@ public class IslandBoard implements Cloneable{
         }
     }
 
-    public Slot infoSlot(Coordinate coord) {
-        if(coord.getCol()>=0 && coord.getCol()<5 &&
-                coord.getRow()>=0 && coord.getRow()<5){
-            return board[coord.getRow()][coord.getCol()];
+    public Slot infoSlot(Coordinate coordinate) {
+        if(coordinate.getCol()>=0 && coordinate.getCol()<5 &&
+                coordinate.getRow()>=0 && coordinate.getRow()<5){
+            return board[coordinate.getRow()][coordinate.getCol()];
         }
         else{
+            logger.log(Level.WARNING, "Invalid Coordinate");
             //TODO checking valid Coordinate, add logger if necessary
             return null;
         }

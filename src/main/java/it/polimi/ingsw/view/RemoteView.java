@@ -67,7 +67,6 @@ public abstract class RemoteView implements Runnable {
             modelView.setWinnerId(((WinnerMessage) evt.getNewValue()).getId());
             winnerDetected((WinnerMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("endGame")) {
-            System.out.println("ENDGAME");
             connection.closeConnection();
             System.exit(0);
         }

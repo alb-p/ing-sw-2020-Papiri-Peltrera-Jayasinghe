@@ -7,6 +7,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Server {
 
@@ -14,7 +16,7 @@ public class Server {
     private ServerSocket serverSocket = new ServerSocket(PORT);
     private ExecutorService executor = Executors.newFixedThreadPool(128);
     private Room room = new Room(executor);
-
+    private Logger logger = Logger.getLogger("server");
 
     public Server() throws IOException {
     }
@@ -36,37 +38,27 @@ public class Server {
 
                  */
                 synchronized (room) {
-                    System.out.println("sincronizzato su room");
+                    logger.log(Level.INFO,"Server synchronized on Room");
                     if (room.isUninitialized()) {
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
-                        System.out.println("numero di gioc : "+numOfPlayers);
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId()-1);
-                        //in attesa di n-1 gioc
                     }else if(!room.isReady()){
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId()-1);
-                        System.out.println("ROOM TO BE STARTED");
                         if(room.isReady())room.start();
                     }else{
                         socketConnection.notifyGamePlaying();
-                        //waitingList.add(socketConnection);
                         room= new Room(executor);
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
-                        System.out.println("numero di gioc : "+numOfPlayers);
                         room.setNumOfPlayers(numOfPlayers);
                         room.addPlayer(socketConnection);
                         socketConnection.setId(room.currentPlayerId()-1);
                     }
-                    //executor.submit(socketConnection);
-
-
-
                 }
-
             } catch (Exception e) {
-               // e.printStackTrace();
+                logger.log(Level.WARNING, e.getMessage());
             }
         }
 

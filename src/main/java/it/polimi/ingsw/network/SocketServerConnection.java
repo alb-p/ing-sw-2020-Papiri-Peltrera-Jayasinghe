@@ -5,7 +5,6 @@ import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUIpackage.GUI;
 import it.polimi.ingsw.view.RemoteView;
 
-import javax.swing.*;
 import java.beans.PropertyChangeEvent;
 import java.io.*;
 import java.net.Socket;
@@ -21,7 +20,7 @@ public class SocketServerConnection {
     private RemoteView view;
     private ObjectInputStream inputStream;
     private ObjectOutputStream printStream;
-    private Logger logger = Logger.getLogger("CLI");
+    private Logger logger = Logger.getLogger("network.ssc");
     //oppure trovare soluzione più definitiva per associare id e nome player
     //è strettamente necessario avere il nickname?
     String nickname;
@@ -57,7 +56,6 @@ public class SocketServerConnection {
                         final Object inputObject = inputStream.readObject();
 
                         if (inputObject instanceof PropertyChangeEvent) {
-                            ;
                             view.notifyEvent((PropertyChangeEvent) inputObject);
                         } else if (inputObject instanceof SetupMessage) {
                             view.askNumOfPlayers();
@@ -66,8 +64,6 @@ public class SocketServerConnection {
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     logger.log(Level.SEVERE, e.getMessage());
-                    e.printStackTrace();
-
                 }
             }).start();
         } catch (IOException e) {

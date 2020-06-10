@@ -55,7 +55,6 @@ public class TurnHandler implements PropertyChangeListener {
                 playerHasLost((int)evt.getNewValue());
             }
             else {
-                System.out.println("ENDGAME _________ Player DISCONNECTED"+ evt.getNewValue());
                 this.model.removeModelListener((PropertyChangeListener)evt.getOldValue());
                 model.endGame(-1);
 

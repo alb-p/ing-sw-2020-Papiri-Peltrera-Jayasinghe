@@ -1,11 +1,13 @@
 package it.polimi.ingsw.network;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ServerMain {
 
-    private Map<String, SocketClientConnection> waitingConnection = new HashMap<>();
-    private int numOfPlayers;
+    private static Logger logger = Logger.getLogger("serverMain");
+
 
     public static void main(String[] args){
 
@@ -14,7 +16,7 @@ public class ServerMain {
             server = new Server();
             server.run();
         } catch (Exception e) {
-            System.err.println("Impossible to initialize the server: " + e.getMessage() + "!");
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 
