@@ -14,7 +14,7 @@ public class TurnHandler implements PropertyChangeListener {
     private int playersPerGame;
     private int playerDefeatedID = -1;
     private int totalTurnCounter = 0;
-    private int firstPlayerID;
+    private boolean gameStarted = false;
 
     public TurnHandler(Model model, int playersPerGame) {
         this.model = model;
@@ -24,6 +24,7 @@ public class TurnHandler implements PropertyChangeListener {
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("actionsRequest")) {
+            gameStarted = true;
             int id = actualPlayerID();
             Message message = (GenericMessage) evt.getNewValue();
             if (message.getId() == id) {
@@ -49,7 +50,7 @@ public class TurnHandler implements PropertyChangeListener {
                 }
             }
         } else if(evt.getPropertyName().equalsIgnoreCase("playerDisconnected")){
-            if(totalTurnCounter!=firstPlayerID){
+            if(gameStarted){
                 playerDefeatedID = (int)evt.getNewValue();
                 this.model.removeModelListener((PropertyChangeListener)evt.getOldValue());
                 playerHasLost((int)evt.getNewValue());
@@ -75,26 +76,29 @@ public class TurnHandler implements PropertyChangeListener {
 
     //fa quello che deve fare se si è rilevato che un player ha perso
     public void playerHasLost(int id) {
-        if (playersPerGame == 2) {
+        if (model.getNumOfPlayers() == 2) {
             model.endGameForNoAvailableMoves(id);
         } else {
             playerDefeatedID = id;
             model.removePlayer(id);
-            totalTurnCounter++;
+            System.out.println("ACTUAL ID "+actualPlayerID()+ " LOST ID "+id);
+            if(id == actualPlayerID())totalTurnCounter++;
+            model.notifyPlayerHasLost(id);
         }
     }
 
     //restituisce l'id del giocatore in questo turno
     public int actualPlayerID() {
-        if (playerDefeatedID == totalTurnCounter % playersPerGame)
+        if (playerDefeatedID == totalTurnCounter % playersPerGame) {
             totalTurnCounter++;
+            System.out.println("SERVER SALTO IL MORTO");
+        }
         return totalTurnCounter % playersPerGame;
     }
 
     //imposta il primo giocatore
     public void setTotalTurnCounter(int id) {
         this.totalTurnCounter = id;
-        this.firstPlayerID = id;
     }
 
 

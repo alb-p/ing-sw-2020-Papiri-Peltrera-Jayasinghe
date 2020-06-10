@@ -61,6 +61,7 @@ public abstract class RemoteView implements Runnable {
         } else if (propertyName.equalsIgnoreCase("endTurnConfirm")) {
             endTurn((NicknameMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("playerLostDetected")) {
+            System.out.println("PLAYER LOST DETECTED");
             modelView.playerLost(((GenericMessage) evt.getNewValue()).getId());
             playerHasLost((GenericMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("winnerDetected")) {
@@ -73,8 +74,9 @@ public abstract class RemoteView implements Runnable {
         }
     }
 
-    protected void playerHasLost(GenericMessage newValue) {
-        modelView.setNextPlayerId();
+    protected void playerHasLost(GenericMessage message) {
+        System.out.println("REMOTE VIEW PLAYER HAS LOST : id__"+message.getId());
+        if(message.getId() == modelView.getActualPlayerId())modelView.setNextPlayerId();
     }
 
     protected abstract void winnerDetected(WinnerMessage newValue);

@@ -218,7 +218,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                 !((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
                             tDest.setWorker(((TransferableImage) val).getImage());
                             bool = true;
-                        } else if (((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1)) && workerPlaced<2) {
+                        } else if (((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1)) && workerPlaced < 2) {
+
                             tDest.setWorker(new ImageIcon(this.getClass().getResource("/Home/exit_onmouse.png")).getImage());
                             workerPlaced++;
                             System.out.println(workerPlaced);

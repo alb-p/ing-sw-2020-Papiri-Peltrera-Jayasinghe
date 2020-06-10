@@ -158,6 +158,7 @@ public class ModelView {
     public void setNextPlayerId() {
         actualPlayerId = (actualPlayerId + 1) % players.size();
         if (actualPlayerId == deletedPlayerId) {
+            System.out.println("STAREBBE AL MORTO LO SALTO3");
             actualPlayerId = (actualPlayerId + 1) % players.size();
         }
     }
