@@ -442,7 +442,6 @@ public class CLI extends RemoteView implements Runnable {
             setupWorkers();
             allWorkerPlaced();
             play();
-            System.out.println("ENDGAME");
 
 
         } catch (InterruptedException e) {

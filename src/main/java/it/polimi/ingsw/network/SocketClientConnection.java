@@ -1,17 +1,16 @@
 package it.polimi.ingsw.network;
-
-import it.polimi.ingsw.utils.ANSIColor;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 
 public class SocketClientConnection implements Runnable, PropertyChangeListener {
@@ -20,7 +19,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     private ObjectOutputStream outSocket;
     private ObjectInputStream inSocket;
     private PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
-
+    private Logger logger = Logger.getLogger("network.scc");
 
     private int id;
     private Server server;
@@ -32,9 +31,9 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
             socket = newSocket;
             outSocket = new ObjectOutputStream(newSocket.getOutputStream());
             inSocket = new ObjectInputStream(newSocket.getInputStream());
-            System.out.println("CREATA CONNECTION");
+            logger.log(Level.INFO, "Connection created");
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 
@@ -50,7 +49,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
             outSocket.flush();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
 
     }
@@ -66,13 +65,13 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 read = ((SetupMessage) inSocket.readObject()).getField();
             }
         } catch (IOException | NoSuchElementException | ClassNotFoundException e) {
-            System.err.println("Error!" + e.getMessage());
+            logger.log(Level.SEVERE, e.getMessage());
         }
         return read;
     }
 
     public void notifyGamePlaying() {
-        send("The Lobby is full!! Please Wait");
+        send("The Lobby is full! Please Wait");
     }
 
     public void setId(int i) {
@@ -102,7 +101,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
             try {
                 socket.close();
             } catch (IOException ioException) {
-                ioException.printStackTrace();
+                logger.log(Level.SEVERE, e.getMessage());
             }
         }
     }
@@ -115,7 +114,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 socket.close();
                 System.out.println("DOPO ENDGAME CHIUDO CONNESSIONE "+id);
             } catch (IOException e) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, e.getMessage());
             }
         }
     }
@@ -132,7 +131,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 socket.close();
                 System.out.println("Connection "+ id+ " SOCKET CLOSED");
             } catch (IOException ioException) {
-                e.printStackTrace();
+                logger.log(Level.SEVERE, e.getMessage());
             }finally {
                 sccListeners.firePropertyChange("playerDisconnected", this, id);
             }
