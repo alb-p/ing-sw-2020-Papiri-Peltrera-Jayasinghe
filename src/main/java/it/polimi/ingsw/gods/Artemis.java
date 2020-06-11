@@ -4,7 +4,9 @@ import it.polimi.ingsw.model.*;
 
 public class Artemis extends BasicGodCard {
 
-    //POSSO FARE DUE MOVE
+    //Your Move: Your Worker may
+    //move one additional time, but not
+    //back to its initial space.
 
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {

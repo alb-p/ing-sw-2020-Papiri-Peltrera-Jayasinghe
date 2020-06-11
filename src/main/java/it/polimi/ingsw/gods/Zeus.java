@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.*;
 public class Zeus extends BasicGodCard {
     //Your Build: Your Worker may
     //build a block under itself.
+
     boolean specialBuild = false;
 
     @Override

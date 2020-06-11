@@ -7,7 +7,10 @@ import it.polimi.ingsw.model.Worker;
 
 public class Pan extends BasicGodCard {
 
-    //VINCO SE SCENDO DI DUE LIVELLI
+
+    /**Win Condition: You also win if
+     your Worker moves down two or
+     more levels.**/
 
     @Override
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {

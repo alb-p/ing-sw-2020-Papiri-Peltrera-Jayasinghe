@@ -4,14 +4,17 @@ import it.polimi.ingsw.model.*;
 
 import java.util.ArrayList;
 
+/**
+ * Your Move: Your Worker may
+ * move into an opponent Worker’s
+ * space, if their Worker can be
+ * forced one space straight backwards to an
+ * unoccupied space at any level
+ */
+
 public class Minotaur extends BasicGodCard {
 
-    //Your Move:
-    //Your Worker may move into
-    //an opponent Worker's space,
-    //if their worker can be forced
-    //one space backwards to an
-    //unoccupied space at any level.
+
 
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
@@ -27,8 +30,7 @@ public class Minotaur extends BasicGodCard {
     }
 
 
-    private boolean modMove(Worker w, Coordinate coord, IslandBoard board) throws Exception {
-        System.out.println("\n\n\nMODMOVE ::\n\n\n");
+    private boolean modMove(Worker w, Coordinate coord, IslandBoard board) {
         String relPos = relativePosition(w.getPosition(), coord);
         Coordinate next = nextRelCoord(coord, relPos);
         Worker oppWorker;

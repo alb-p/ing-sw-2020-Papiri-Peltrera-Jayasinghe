@@ -74,6 +74,7 @@ public class BasicGodCardTest {
         assertFalse(card.build(player.getWorker(0),new Coordinate(4,0),board));
         assertTrue(card.build(player.getWorker(0),new Coordinate(3,0),board));
         assertTrue(card.build(player.getWorker(0),new Coordinate(3,1),board));
+        //assertTrue(card.build(player.getWorker(0),new Coordinate(-1,-1),board));
     }
 
     @Test

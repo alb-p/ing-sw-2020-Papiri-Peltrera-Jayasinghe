@@ -1,10 +1,8 @@
 package it.polimi.ingsw.model;
 
-//TODO renderla classe astratta
-
 public class BasicGodCard {
 
-    public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
+    public boolean move(Worker w, Coordinate coord, IslandBoard board) {
         Slot workerSlot = board.infoSlot(w.getPosition());
         Slot destSlot = board.infoSlot(coord);
         if (w.getPosition().isAdjacent(coord) &&
@@ -26,7 +24,12 @@ public class BasicGodCard {
                 slot.construct(Construction.DOME);
             }
         } else {
-            return false;
+            try {
+                throw new IllegalArgumentException("NON DOVREI ESSERE");
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                return false;
+            }
         }
         return true;
     }
@@ -46,12 +49,12 @@ public class BasicGodCard {
     }
 
 
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board){
+    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode tree = new TreeActionNode(null);
         for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {  //check around worker position to perform a Move
 
             if (board.infoSlot(c1).isFree() &&
-                    (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
+                    (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1)) {
 
                 TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c1));
                 for (Coordinate c2 : c1.getAdjacentCoords()) {                       //check around every position to perform a Build
@@ -73,7 +76,7 @@ public class BasicGodCard {
 
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
-        if (virtualBoard.getSlot(w.getOldPosition().getRow(),w.getOldPosition().getCol()).getLevel() == 2 &&
+        if (virtualBoard.getSlot(w.getOldPosition().getRow(), w.getOldPosition().getCol()).getLevel() == 2 &&
                 board.infoSlot(w.getPosition()).getConstructionLevel() == 3) {
             return true;
         }

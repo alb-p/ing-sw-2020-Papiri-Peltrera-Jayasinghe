@@ -47,7 +47,7 @@ public class Athena extends BasicGodCard {
     }
 
     @Override
-    public boolean move(Worker w, Coordinate coord, IslandBoard board) throws Exception {
+    public boolean move(Worker w, Coordinate coord, IslandBoard board){
         specialRuleActivated = false;
         int workerSlotLevel = board.infoSlot(w.getPosition()).getConstructionLevel();
         int destSlotLevel = board.infoSlot(coord).getConstructionLevel();

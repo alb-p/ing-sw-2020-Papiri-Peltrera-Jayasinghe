@@ -4,7 +4,6 @@ import it.polimi.ingsw.model.*;
 
 public class Hephaestus extends BasicGodCard {
 
-
     //Your Build:
     //Your Worker may build
     //one additional block
