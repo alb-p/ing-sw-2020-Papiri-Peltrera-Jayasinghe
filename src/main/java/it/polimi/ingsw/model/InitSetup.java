@@ -37,6 +37,7 @@ public class InitSetup {
         gods.add("HYPNUS");
         gods.add("MINOTAUR");
         gods.add("PAN");
+        gods.add("POSEIDON");
         gods.add("PROMETHEUS");
         gods.add("ZEUS");
     }

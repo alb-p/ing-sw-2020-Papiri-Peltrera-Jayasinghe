@@ -68,6 +68,10 @@ public class ModelView {
         gods.add(new String[]{"PAN", "Win Condition: You also win if\n" +
                 "your Worker moves down two or\n" +
                 "more levels"});
+        gods.add(new String[]{"POSEIDON", "End of Your Turn: If your\n" +
+                "unmoved Worker is on the\n" +
+                "ground level, it may build up to\n" +
+                "three times."});
         gods.add(new String[]{"PROMETHEUS", "Your Turn: If your Worker does\n" +
                 "not move up, it may build both\n" +
                 "before and after moving"});
@@ -158,7 +162,6 @@ public class ModelView {
     public void setNextPlayerId() {
         actualPlayerId = (actualPlayerId + 1) % players.size();
         if (actualPlayerId == deletedPlayerId) {
-            System.out.println("STAREBBE AL MORTO LO SALTO3");
             actualPlayerId = (actualPlayerId + 1) % players.size();
         }
     }

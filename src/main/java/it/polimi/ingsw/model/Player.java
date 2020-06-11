@@ -75,6 +75,8 @@ public class Player {
             this.card = new Minotaur();
         } else if (card.equals("PAN")) {
             this.card = new Pan();
+        } else if(card.equals("POSEIDON")) {
+            this.card = new Poseidon();
         } else if (card.equals("PROMETHEUS")) {
             this.card = new Prometheus();
         } else if (card.equals("ZEUS")) {
