@@ -42,28 +42,28 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     @Override
-    protected void playerHasLost(GenericMessage newValue) {
-
+    protected void playerHasLost(GenericMessage message) {
+        super.playerHasLost(message);
     }
 
     @Override
-    protected void winnerDetected(WinnerMessage newValue) {
+    protected void winnerDetected(WinnerMessage message) {
 
     }
 
     @Override
     protected void endTurn(NicknameMessage message) {
-
+        super.endTurn(message);
     }
 
     @Override
     protected void setWorker(WorkerMessage message) {
-
+        super.setWorker(message);
     }
 
     @Override
     protected void setFirstPlayer(NicknameMessage message) {
-
+        super.setFirstPlayer(message);
     }
 
     @Override
@@ -75,8 +75,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     protected void assignedGod(GodMessage message) {
         super.assignedGod(message);
 
-        if (modelView.getPlayer(modelView.getActualPlayerId()).getGod() !=null) {
-            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "PlayPanel");
+        if (modelView.getPlayer(modelView.getActualPlayerId()).getGod() != null) {
+            window.startIslandAnimation();
         } else if (modelView.getActualPlayerId() == getPlayerId()) {
             guiListeners.firePropertyChange("myTurn", false, true);
         }
@@ -128,7 +128,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void gameReady() {
         ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "NicknamePanel");
-
+        guiListeners.firePropertyChange("playerID", null, getPlayerId());
     }
 
     @Override
@@ -156,25 +156,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             e.printStackTrace();
         }
         window.setVisible(true);
-        window.layout.show(window.getContentPane(), "LogoPanel");
         window.startLogo();
-    }
-
-    public void changeicon() {
-        window.layout.show(window.contentPane, "HomePanel");
-        System.out.println("SI HO HOME");
-    }
-
-    public void changedualicon() {
-        window.layout.show(window.contentPane, "InitialWaitingPanel");
-        System.out.println("SI HO WAITING");
-    }
-
-    public void changetripleicon() {
-        window.layout.show(window.contentPane, "LogoPanel");
-        window.startLogo();
-
-        System.out.println("SI HO icon");
     }
 
     @Override
@@ -211,7 +193,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("godSelected")) {
             GodMessage message = new GodMessage();
             message.setGod((String) (propertyChangeEvent.getNewValue()));
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
+        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("workerReceived")) {
+            WorkerMessage message = (WorkerMessage)propertyChangeEvent.getNewValue();
+            getConnection().sendEvent(new PropertyChangeEvent(this, "notifyWorker", null, message));
         }
     }
 }

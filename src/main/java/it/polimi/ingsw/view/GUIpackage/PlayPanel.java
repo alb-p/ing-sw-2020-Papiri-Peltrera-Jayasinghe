@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.controller.TurnHandler;
 import it.polimi.ingsw.model.Coordinate;
+import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
 import it.polimi.ingsw.view.ModelView;
 
@@ -16,6 +16,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -24,15 +25,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     // private Image bgIsland  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(656,375,Image.SCALE_SMOOTH);
 
 
-    int workerPlaced = 0;
+    boolean workerPlaced = false;
+    private ArrayList<Coordinate> workerPositions = new ArrayList<>();
 
     private ModelView modelView;//da impostare
     private int playerID;//da impostare
     private String color;
     private JPanel boardPanel;
     private JLabel messageCenter = new JLabel("");
-    private JButton messageSouth = new JButton("Submit");
-    private Coordinate toBeSendedWorker = new Coordinate(-1,-1);
+    private JButton submitButton = new JButton("Submit");
+    private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
 
     private TileButton boardOfButtons[][] = new TileButton[5][5];
 
@@ -52,7 +54,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 handle.exportAsDrag(button, e, TransferHandler.MOVE);
             }
         });
-        messageSouth.addActionListener(this);
+        submitButton.addActionListener(this);
         TileButton west = new TileButton(-1, -1);
 
         west.setWorker(new ImageIcon(this.getClass().getResource("/Home/blue_normal_res.png")).getImage());
@@ -107,26 +109,24 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         p.setOpaque(false);
         this.add(p, BorderLayout.WEST);
         this.add(messageCenter, BorderLayout.NORTH);
-        messageSouth.setName("submit");
-        this.add(messageSouth, BorderLayout.SOUTH);
+        submitButton.setName("submit");
+        submitButton.setEnabled(false);
+        this.add(submitButton, BorderLayout.SOUTH);
         repaint();
     }
 
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (this.playerID !=4 && e.getSource().equals("tilebutton")) {
+        if (this.playerID != 4 && e.getSource().equals("tilebutton")) {
             TileButton t = (TileButton) e.getSource();
 
             {
                 turnHandler(t.getCoordinate());
             }
 
-        } else if(((JComponent)e.getSource()).getName().equalsIgnoreCase("submit")){
-            System.out.println("non è il tuo turno coglione");
-            if(workerPlaced!=0);
-
-
+        } else if (((JComponent) e.getSource()).getName().equalsIgnoreCase("submit")) {
+            sendWorkers();
         }
 
 
@@ -137,17 +137,25 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     }
 
-    private void sendWorkers(Coordinate c) {
-        if (modelView.getBoard().getSlot(c).isFree()) {
-            workerPlaced++;
-            boardOfButtons[c.getRow()][c.getCol()].setColor(color);
-            this.playPanelListener.firePropertyChange("workerReceived", null, c);
-        } else System.out.println("è occupato");
+    private void sendWorkers() {
+        for (int i = 0; i < 2; i++) {
+            WorkerMessage mess = new WorkerMessage(playerID, i);
+            mess.setCoordinate(workerPositions.get(i));
+            playPanelListener.firePropertyChange("workerReceived", null, mess);
+        }
+        submitButton.setEnabled(false);
+        workerPlaced = true;
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
+        if(evt.getPropertyName().equalsIgnoreCase("playerID")){
+            playerID = (int)evt.getNewValue();
+        } else if(evt.getPropertyName().equalsIgnoreCase("boardUpdate")){
+            VirtualSlot vSlot = (VirtualSlot)evt.getNewValue();
+            // UPDATE BOARD
+            boardOfButtons[vSlot.getCoordinate().getRow()][vSlot.getCoordinate().getCol()].updateView(vSlot);
+        }
     }
 
     public void addPlayPanelListener(PropertyChangeListener listener) {
@@ -190,6 +198,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     tSource.setWorker(null);
                     tSource.repaint();
                     tSource.setOpaque(false);
+                    if (!workerPlaced) {
+                        if (!tSource.getCoordinate().equals(new Coordinate(-1, -1)))
+                            workerPositions.remove(tSource.getCoordinate());
+                        if (workerPositions.size() == 2) {
+                            submitButton.setEnabled(true);
+                        } else submitButton.setEnabled(false);
+
+                    } else {
+                        //PLAY
+                    }
                 }
             }
         }
@@ -210,26 +228,34 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     Transferable t = support.getTransferable();
                     Object val = t.getTransferData(DataFlavor.imageFlavor);
                     Component dest = support.getComponent();
-                    if (val instanceof TransferableImage && dest instanceof TileButton) {
+                    if (val instanceof TransferableImage && dest instanceof TileButton && playerID == modelView.getActualPlayerId()) {
                         TileButton tDest = (TileButton) dest;
-                        if (tDest.getWorker() != null || tDest.getCoordinate().equals(new Coordinate(-1, -1)))
-                            return false;
-                        if (!((TransferableImage) val).getCoordinate().equals(tDest.getCoordinate()) &&
-                                !((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
-                            tDest.setWorker(((TransferableImage) val).getImage());
-                            bool = true;
-                        } else if (((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1)) && workerPlaced < 2) {
+                        if (!workerPlaced) {
+                            if (tDest.getWorker() != null || tDest.getCoordinate().equals(new Coordinate(-1, -1))
+                                    || ((TransferableImage) val).getCoordinate().equals(tDest.getCoordinate())
+                                    || modelView.getBoard().getSlot(tDest.getCoordinate()).hasWorker()) { // Last condition MUST NOT be in the play else i.e. minotaur
+                                return false;
+                            }
+                            workerPositions.add(tDest.getCoordinate());
+                            // Setting the image of the button
+                            if (!((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
+                                tDest.setWorker(((TransferableImage) val).getImage());
+                            } else {
+                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/Home/exit_onmouse.png")).getImage());
+                            }
 
-                            tDest.setWorker(new ImageIcon(this.getClass().getResource("/Home/exit_onmouse.png")).getImage());
-                            workerPlaced++;
                             System.out.println(workerPlaced);
                             bool = true;
-                        }
 
-                    } else System.out.println(val.getClass());
-                } catch (UnsupportedFlavorException e) {
+                        } else {
+                            // PLAY
+                        }
+                    }
+                } catch (
+                        UnsupportedFlavorException e) {
                     e.printStackTrace();
-                } catch (IOException e) {
+                } catch (
+                        IOException e) {
                     e.printStackTrace();
                 }
             }

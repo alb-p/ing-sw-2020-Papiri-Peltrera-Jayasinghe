@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.model.Coordinate;
+import it.polimi.ingsw.model.VirtualSlot;
 
 import javax.swing.*;
 import java.awt.*;
@@ -62,5 +63,9 @@ public class TileButton extends JButton {
     }
 
 
+    public void updateView(VirtualSlot vSlot) {
+        // rebase the image on vSlot
+        this.setText(vSlot.toString());
+    }
 }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.view.GUIpackage.Components.ChooseColorPanel;
+import it.polimi.ingsw.view.GUIpackage.Components.IslandAnimationPanel;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
@@ -11,9 +12,10 @@ import java.io.IOException;
 
 public class MainJFrame extends JFrame implements PropertyChangeListener {
 
-    MainPanel contentPane;
-    CardLayout layout;
-    LogoPanel logo;
+    private MainPanel contentPane;
+    private CardLayout layout;
+    private LogoPanel logo;
+    private IslandAnimationPanel islandAnimationPanel;
 
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
@@ -58,18 +60,29 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         PlayPanel playPanel = new PlayPanel(modelView);
         modelView.addBoardListener(playPanel);
         gui.addGuiListener(playPanel);
+        playPanel.addPlayPanelListener(gui);
         contentPane.add("PlayPanel", playPanel);
+        islandAnimationPanel= new IslandAnimationPanel();
+        contentPane.add("IslandAnimationPanel", islandAnimationPanel);
 
     }
     public void startLogo(){
+        layout.show(getContentPane(),"LogoPanel");
         this.logo.addPropertyChangeListener(this);
         this.logo.startTransition();
+    }
+    public void startIslandAnimation(){
+        layout.show(getContentPane(),"IslandAnimationPanel");
+        this.islandAnimationPanel.addPropertyChangeListener(this);
+        this.islandAnimationPanel.startTransition();
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("logoTransitionEnded")){
             layout.show(getContentPane(),"HomePanel");
+        } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("islandTransitionEnded")){
+            layout.show(getContentPane(),"PlayPanel");
         }
     }
 }
