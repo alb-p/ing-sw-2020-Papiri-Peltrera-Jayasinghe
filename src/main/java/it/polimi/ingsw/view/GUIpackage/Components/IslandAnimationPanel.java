@@ -21,7 +21,7 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
 
         lista = new PropertyChangeSupport(this);
 
-        frames = new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg"));
+        frames = new ImageIcon(this.getClass().getResource("/IslandAnimation/island" + (currentFrame) + ".jpg"));
 
     }
 
@@ -39,16 +39,17 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
         frames.paintIcon(this, g, 0, 0);
 
         this.currentFrame++;
-        frames=new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg"));
+        frames=new ImageIcon(this.getClass().getResource("/IslandAnimation/island" + (currentFrame) + ".jpg"));
+
 
 
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (this.currentFrame == 90) {
+        if (this.currentFrame == 120) {
             timer.stop();
-            lista.firePropertyChange("logoTransitionEnded",null,true);//attiva propertyChange dei listeners con passando in questo caso delle stringhe
+            lista.firePropertyChange("islandTransitionEnded",null,true);
             frames=null;
             System.gc();//consiglia di far partire il garbage collector
         } else {
