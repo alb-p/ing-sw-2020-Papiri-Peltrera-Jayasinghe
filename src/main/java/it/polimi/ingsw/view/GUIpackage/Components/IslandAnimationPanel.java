@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.Components;
 
 import javax.swing.*;
 import java.awt.*;
@@ -7,9 +7,7 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
-import static java.lang.Thread.sleep;
-
-public class LogoPanel extends JPanel implements ActionListener {
+public class IslandAnimationPanel extends JPanel implements ActionListener {
 
 
     ImageIcon frames;
@@ -19,7 +17,7 @@ public class LogoPanel extends JPanel implements ActionListener {
     private PropertyChangeSupport lista;
 
 
-    public LogoPanel() {
+    public IslandAnimationPanel() {
 
         lista = new PropertyChangeSupport(this);
 
