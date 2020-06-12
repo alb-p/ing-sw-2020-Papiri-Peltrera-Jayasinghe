@@ -24,12 +24,7 @@ public class BasicGodCard {
                 slot.construct(Construction.DOME);
             }
         } else {
-            try {
-                throw new IllegalArgumentException("NON DOVREI ESSERE");
-            } catch (IllegalArgumentException e) {
-                e.printStackTrace();
-                return false;
-            }
+            return false;
         }
         return true;
     }

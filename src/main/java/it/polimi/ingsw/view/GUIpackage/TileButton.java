@@ -9,15 +9,15 @@ import java.awt.*;
 public class TileButton extends JButton {
 
     private Coordinate coordinate;
-    private boolean occupied=false;
+    private boolean occupied = false;
     private String color;
-    private int level=0;
+    private int level = 0;
     private Image worker;
     private Point initialClick;
 
 
-    public TileButton(int row, int col){
-        coordinate=new Coordinate(row,col);
+    public TileButton(int row, int col) {
+        coordinate = new Coordinate(row, col);
         this.setText(coordinate.toString()); //debug
     }
 
@@ -36,14 +36,14 @@ public class TileButton extends JButton {
 
     public void setColor(String c) {
         this.color = c;
-        if(level==0) this.setText(color);
-        else this.setText(color+level);
+        if (level == 0) this.setText(color);
+        else this.setText(color + level);
     }
 
     public void setLevel(int level) {
         this.level = level;
-        if(level==0) this.setText(color);
-        else this.setText(color+level);
+        if (level == 0) this.setText(color);
+        else this.setText(color + level);
     }
 
     @Override

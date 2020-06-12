@@ -11,8 +11,8 @@ public class Zeus extends BasicGodCard {
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
-        for(TreeActionNode move : root.getChildren()){
-            if(board.infoSlot(move.getData().getEnd()).getConstructionLevel() < 3){
+        for (TreeActionNode move : root.getChildren()) {
+            if (board.infoSlot(move.getData().getEnd()).getConstructionLevel() < 3) {
                 move.addChild(new TreeActionNode(new Build(move.getData().getEnd(), move.getData().getEnd())));
             }
         }
@@ -21,8 +21,8 @@ public class Zeus extends BasicGodCard {
 
     @Override
     public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
-        if(!super.build(w, coord, board)){
-            if(w.getPosition().equals(coord)){
+        if (!super.build(w, coord, board)) {
+            if (w.getPosition().equals(coord) && board.infoSlot(coord).getConstructionLevel() < 3) {
                 board.infoSlot(coord).free();
                 board.infoSlot(coord).construct(Construction.FLOOR);
                 board.infoSlot(coord).occupy(w);
@@ -30,8 +30,9 @@ public class Zeus extends BasicGodCard {
                 return true;
             }
             return false;
-        }else return true;
+        } else return true;
     }
+
 
     @Override
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {

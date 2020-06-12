@@ -13,9 +13,6 @@ public class GodsButton extends JButton {
 
     public GodsButton(String god){
         this.name=god;
-        System.out.println("God" +
-                god);
-        //System.out.println("aaaaaaaaa "+this.name.toLowerCase());
         this.setBorder(null);
         this.setContentAreaFilled(false);//trasparenza
         this.setAlignmentX(Component.CENTER_ALIGNMENT);

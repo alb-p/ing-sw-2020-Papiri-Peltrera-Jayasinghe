@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
-    private Image bgIsland = new ImageIcon(this.getClass().getResource("/Home/island0217.jpg")).getImage();
+    private Image bgIsland = new ImageIcon(this.getClass().getResource("/IslandAnimation/island120.jpg")).getImage();
     // private Image bgIsland  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(656,375,Image.SCALE_SMOOTH);
 
 

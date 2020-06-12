@@ -34,7 +34,6 @@ public class ClientMain {
                     chosenUI = Integer.parseInt(nums);
                 }else chosenUI=-1;
             } while (chosenUI!=0 && chosenUI!=1);
-            //scanner.reset();
             System.out.println("CHOSEN UI "+chosenUI);
         }
         try {
