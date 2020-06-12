@@ -22,17 +22,17 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     private ArrayList<String[]> gods;
     private ArrayList<GodsButton> godsButton = new ArrayList<>();
     private ArrayList<String> selectedGods = new ArrayList<>();
-    JLabel title;
-    JLabel description;
+    private JLabel title;
+    private JLabel description;
     private JButton submit;
     private int playerPerGame = 0;
-    ImageIcon imagedx;
-    ImageIcon imagesx;
+    private ImageIcon imagedx;
+    private ImageIcon imagesx;
     private Dimension frameDimension;
-    JPanel paneldx;
+    private JPanel paneldx;
 
 
-    public GeneralGodsSelectionPanel(ModelView model,Dimension d) {
+    public GeneralGodsSelectionPanel(ModelView model) {
 
         imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/paneldx.jpg"));
         imagesx=new ImageIcon(this.getClass().getResource("/GodSelection/panelsx.jpg"));
@@ -58,7 +58,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         title = new JLabel("Select gods");
         description = new JLabel();
         FlowLayout flow = new FlowLayout(FlowLayout.CENTER, 30,30);
-        submit = new CustomButton("/Home/help");
+        submit = new CustomButton("/GodSelection/next/next");
 
 
 
@@ -68,10 +68,9 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         godsList.setLayout(flow);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         panelsx.setLayout(new BoxLayout(panelsx, BoxLayout.Y_AXIS));
-        frameDimension=d;
+        frameDimension=GUI.getDimension();
         submit.setEnabled(false);
         godsList.setOpaque(false);
-        paneldx.addMouseListener(this);
         submit.addActionListener(this);
         paneldx.setPreferredSize(new Dimension((int)(frameDimension.width/2.823),frameDimension.height));
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -86,6 +85,8 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
             button.addActionListener(this);
             button.addMouseListener(this);
         }
+
+
 
 
         for (JButton b : godsButton){
@@ -184,7 +185,6 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
 
     @Override
     public void mouseEntered(MouseEvent e) {
-        System.out.println("MOUSEENTERED!!");
         if(e.getSource() instanceof GodsButton) {
 
             imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/"+((GodsButton) e.getSource()).getName().toLowerCase()+" info.jpg"));
