@@ -23,11 +23,12 @@ public class TurnHandler implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+        System.out.println("ACTUAL PLAYER  __"+actualPlayerID());
         if (evt.getPropertyName().equalsIgnoreCase("actionsRequest")) {
             gameStarted = true;
             int id = actualPlayerID();
             Message message = (GenericMessage) evt.getNewValue();
-            if (message.getId() == id) {
+            if (message.getId() == id && !model.isWinnerDetected()) {
                 model.sendActions(id);
                 if (model.getPlayer(id).checkLoser())
                     playerHasLost(id);
@@ -64,7 +65,7 @@ public class TurnHandler implements PropertyChangeListener {
 
     }
 
-    //fa finire il turno e crea l'albero per il giocatore succesivo + controllo se ha perso
+    //fa finire il turno
     private void endTurnManager(int id) {
         if (!model.checkWinner(id)) {
             model.endTurn(id);
@@ -98,6 +99,8 @@ public class TurnHandler implements PropertyChangeListener {
     //imposta il primo giocatore
     public void setTotalTurnCounter(int id) {
         this.totalTurnCounter = id;
+        System.out.println(model.getPlayer(0).getNickName() + " ID"+0);
+        System.out.println(model.getPlayer(1).getNickName() + " ID"+1);
     }
 
 

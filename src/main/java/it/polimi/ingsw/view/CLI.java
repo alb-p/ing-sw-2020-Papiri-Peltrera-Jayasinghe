@@ -293,9 +293,11 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     private synchronized void play() throws InterruptedException {
-        while (!winnerDetected && getPlayerId() != modelView.getDeletedPlayerId()) {
+        while (!winnerDetected || getPlayerId() == modelView.getDeletedPlayerId()) {
             modelView.getActionsAvailable().clear();
             while (getPlayerId() == modelView.getActualPlayerId() && !endTurn) {
+                if (winnerDetected) return;
+                System.out.println("RICHIESTA MOSSE");
                 connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                         null, new GenericMessage()));
                 wait();
@@ -353,7 +355,7 @@ public class CLI extends RemoteView implements Runnable {
                     printBreakers();
 
                 }
-                if (winnerDetected) return;
+                //if (winnerDetected) return;
             }
             wait();
         }
@@ -442,6 +444,8 @@ public class CLI extends RemoteView implements Runnable {
             setupWorkers();
             allWorkerPlaced();
             play();
+
+            System.out.println("FINE ASSOLUTA");
 
 
         } catch (InterruptedException e) {

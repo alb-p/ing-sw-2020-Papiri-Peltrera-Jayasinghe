@@ -16,6 +16,8 @@ public class Model {
 
     private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
 
+    private boolean winnerDetected = false;
+
     public void addModelListener(PropertyChangeListener listener) {
         modelListeners.addPropertyChangeListener(listener);
     }
@@ -152,6 +154,7 @@ public class Model {
 
     public boolean checkWinner(int id) {
         if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
+            winnerDetected = true;
             modelListeners.firePropertyChange("winnerDetected", null,
                     new WinnerMessage(id, this.getPlayer(id).getNickName()));
             return true;
@@ -206,4 +209,9 @@ public class Model {
             }
         }
     }
+
+    public boolean isWinnerDetected() {
+        return winnerDetected;
+    }
+
 }

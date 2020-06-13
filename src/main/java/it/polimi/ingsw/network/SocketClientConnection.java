@@ -1,4 +1,6 @@
 package it.polimi.ingsw.network;
+import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -11,6 +13,7 @@ import java.net.Socket;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 
 public class SocketClientConnection implements Runnable, PropertyChangeListener {
@@ -92,6 +95,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message
                         && ((Message) ((PropertyChangeEvent) inputObject).getNewValue()).getId() == id) {
+                    receiveDebug((PropertyChangeEvent)inputObject);
                     sccListeners.firePropertyChange((PropertyChangeEvent) inputObject);
                 }
             }
@@ -104,6 +108,13 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 logger.log(Level.SEVERE, e.getMessage());
             }
         }
+    }
+
+    private void receiveDebug(PropertyChangeEvent inputObject) {
+        System.out.println("\n\n\t\t |RECEIVED EVENT");
+        System.out.println("\t\t |"+inputObject.getPropertyName());
+        System.out.println("\t\t |"+"ID SENDER "+id);
+        System.out.println("\t\t | ______________________________");
     }
 
     @Override
@@ -120,6 +131,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     }
 
     public void sendEvent(PropertyChangeEvent evt) {
+        debug(evt);
         try {
             synchronized (outSocket) {
                 outSocket.reset();
@@ -136,6 +148,39 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 sccListeners.firePropertyChange("playerDisconnected", this, id);
             }
         }
+
+    }
+
+    private void debug(PropertyChangeEvent evt) {
+        System.out.println("| "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+"\n|\n|\n|");
+        if(evt.getNewValue() instanceof Message){
+            if (evt.getNewValue() instanceof ActionMessage){
+                System.out.println("| ACTION MESSAGE SENDING");
+                System.out.println(evt.getPropertyName());
+                for (Action a: ((ActionMessage) evt.getNewValue()).getChoices()){
+                    System.out.println("| "+a.getActionName()+a.getStart() + a.getEnd());
+                    System.out.println("| OPTIONAL : "+a.isOption());
+                }
+                System.out.println("| MESSAGE ID : "+((ActionMessage) evt.getNewValue()).getId());
+                System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            } else if (evt.getNewValue() instanceof GenericMessage){
+                System.out.println("| GENERIC MESSAGE SENDING");
+                System.out.println("| "+evt.getPropertyName());
+                System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            }else if (evt.getNewValue() instanceof NicknameMessage){
+                System.out.println("| NICKNAME MESSAGE SENDING");
+                System.out.println("| "+evt.getPropertyName());
+                System.out.println("| NICK : "+((NicknameMessage) evt.getNewValue()).getNickname());
+                System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            }
+        } else if(evt.getNewValue() instanceof VirtualSlot){
+            System.out.println("| "+"VIRTUALSLOT SENDING");
+            System.out.println("| "+((VirtualSlot) evt.getNewValue()).getCoordinate());
+            System.out.println("| "+"_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+
+        }
+        System.out.println("| "+evt.getPropertyName());
+        System.out.println("| "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+"\n\n\n ");
 
     }
 

@@ -1,5 +1,7 @@
 package it.polimi.ingsw.network;
 
+import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUIpackage.GUI;
@@ -84,6 +86,7 @@ public class SocketServerConnection {
     }
 
     public void sendEvent(PropertyChangeEvent evt) {
+        debug(evt);
         try {
             if (evt.getNewValue() instanceof Message) {
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());
@@ -104,6 +107,37 @@ public class SocketServerConnection {
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
+    }
+
+
+    private void debug(PropertyChangeEvent evt) {
+        System.out.println("---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " ");
+        if (evt.getNewValue() instanceof Message) {
+            if (evt.getNewValue() instanceof ActionMessage) {
+                System.out.println("ACTION MESSAGE SENDING");
+                System.out.println(evt.getPropertyName());
+                Action a = ((ActionMessage) evt.getNewValue()).getAction();
+                System.out.println(a.getActionName() + a.getStart() + a.getEnd());
+                System.out.println("OPTIONAL : " + a.isOption());
+            }
+            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+        } else if (evt.getNewValue() instanceof GenericMessage) {
+            System.out.println("GENERIC MESSAGE SENDING");
+            System.out.println(evt.getPropertyName());
+            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+        } else if (evt.getNewValue() instanceof NicknameMessage) {
+            System.out.println("NICKNAME MESSAGE SENDING");
+            System.out.println(evt.getPropertyName());
+            System.out.println("NICK : " + ((NicknameMessage) evt.getNewValue()).getNickname());
+            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+        } else {
+            System.out.println("SENDING");
+            System.out.println(evt.getPropertyName());
+            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+
+        }
+        System.out.println("END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " ");
+
     }
 
 
