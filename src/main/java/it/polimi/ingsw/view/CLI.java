@@ -222,7 +222,7 @@ public class CLI extends RemoteView implements Runnable {
             String s;
             String isNumber;
             do {
-                printer.println("Chose first player: ");
+                printer.println("Choose first player: ");
                 for (int i = 0; i < modelView.getPlayers().size(); i++) {
                     printer.printf(arrangeList, i + 1, modelView.getPlayer(i).getNickname());
                 }

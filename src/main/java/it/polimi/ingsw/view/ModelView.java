@@ -28,7 +28,7 @@ public class ModelView {
     private PropertyChangeSupport selectedGodsListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport selectedSingleGodListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport boardListener = new PropertyChangeSupport(this);
-
+    private PropertyChangeSupport firstPlayerListener = new PropertyChangeSupport(this);
     public ModelView() {
         Collections.addAll(colors, Color.values());
         gods.add(new String[]{"APOLLO", "Your Move: Your Worker may\n" +
@@ -186,6 +186,7 @@ public class ModelView {
 
     public void setFirstPlayerId(int firstPlayerId) {
         this.firstPlayerId = firstPlayerId;
+        firstPlayerListener.firePropertyChange("firstPlayer", null ,true);
     }
 
     public ArrayList<String[]> getChosenGods() {
@@ -300,6 +301,9 @@ public class ModelView {
     }
     public void addSelectedSingleGodListener(PropertyChangeListener listener){
         selectedSingleGodListener.addPropertyChangeListener(listener);
+    }
+    public void addFirstPlayerListener(PropertyChangeListener listener){
+        firstPlayerListener.addPropertyChangeListener(listener);
     }
 
     public void addBoardListener(PropertyChangeListener listener){

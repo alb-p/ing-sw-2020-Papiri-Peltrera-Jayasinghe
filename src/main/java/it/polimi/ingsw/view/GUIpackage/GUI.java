@@ -64,6 +64,9 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void setFirstPlayer(NicknameMessage message) {
         super.setFirstPlayer(message);
+        if(modelView.getGodlyId() == getPlayerId()){
+            window.startIslandAnimation();
+        }
     }
 
     @Override
@@ -75,8 +78,10 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     protected void assignedGod(GodMessage message) {
         super.assignedGod(message);
 
-        if (modelView.getPlayer(modelView.getActualPlayerId()).getGod() != null) {
-            window.startIslandAnimation();
+        if (modelView.getChosenGods().isEmpty()) {
+            if(modelView.getGodlyId() == getPlayerId()){
+                ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "FirstPlayerSelectionPanel");
+            } else window.startIslandAnimation();
         } else if (modelView.getActualPlayerId() == getPlayerId()) {
             guiListeners.firePropertyChange("myTurn", false, true);
         }
@@ -195,8 +200,13 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             message.setGod((String) (propertyChangeEvent.getNewValue()));
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
+        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("firstPlayerSelected")) {
+            NicknameMessage nicknameMessage;
+            nicknameMessage =(NicknameMessage) propertyChangeEvent.getNewValue();
+            getConnection().sendEvent(new PropertyChangeEvent(this, "firstPlayerSelected", null, nicknameMessage));
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
         } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("workerReceived")) {
-            WorkerMessage message = (WorkerMessage)propertyChangeEvent.getNewValue();
+            WorkerMessage message = (WorkerMessage) propertyChangeEvent.getNewValue();
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyWorker", null, message));
         }
     }

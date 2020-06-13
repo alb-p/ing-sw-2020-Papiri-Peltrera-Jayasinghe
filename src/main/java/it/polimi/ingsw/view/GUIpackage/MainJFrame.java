@@ -22,7 +22,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         this.setDefaultCloseOperation(MainJFrame.EXIT_ON_CLOSE);
         this.setSize(GUI.getDimension());
         this.setUndecorated(true); //nasconde titlebar
-        this.setResizable(false);
+        this.setResizable(true);
         // window.setBackground(new Color(0, 0, 0, 0)); //trasperenza
         this.setLocationRelativeTo(null); //posiziona al centro all'apertura
         layout = new CardLayout();
@@ -57,8 +57,14 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         modelView.addSelectedSingleGodListener(godSelectionPanel);
         godSelectionPanel.addGodSelectionListener(gui);
         contentPane.add("GodSelectionPanel", godSelectionPanel);
+        FirstPlayerSelectionPanel firstPlayerSelectionPanel = new FirstPlayerSelectionPanel();
+        gui.addGuiListener(firstPlayerSelectionPanel);
+        modelView.addSelectedSingleGodListener(firstPlayerSelectionPanel);
+        firstPlayerSelectionPanel.addFirstPlayerSelectionListener(gui);
+        contentPane.add("FirstPlayerSelectionPanel", firstPlayerSelectionPanel);
         PlayPanel playPanel = new PlayPanel(modelView);
         modelView.addBoardListener(playPanel);
+        modelView.addFirstPlayerListener(playPanel);
         gui.addGuiListener(playPanel);
         playPanel.addPlayPanelListener(gui);
         contentPane.add("PlayPanel", playPanel);

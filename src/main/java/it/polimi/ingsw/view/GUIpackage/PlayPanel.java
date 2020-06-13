@@ -44,7 +44,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         this.setLayout(new BorderLayout());
         TileButton east = new TileButton(-1, -1);
         TransferHandler dragAndDrop = new DragAndDrop();
-        east.setWorker(new ImageIcon(this.getClass().getResource("/Home/blue_normal_res.png")).getImage());
+        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/blue_normal.png")).getImage());
         east.setTransferHandler(dragAndDrop);
         east.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -57,7 +57,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         submitButton.addActionListener(this);
         TileButton west = new TileButton(-1, -1);
 
-        west.setWorker(new ImageIcon(this.getClass().getResource("/Home/blue_normal_res.png")).getImage());
+        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/blue_normal.png")).getImage());
         west.setTransferHandler(dragAndDrop);
         west.addMouseMotionListener(new MouseAdapter() {
             @Override
