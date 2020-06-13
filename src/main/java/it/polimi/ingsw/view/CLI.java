@@ -334,10 +334,17 @@ public class CLI extends RemoteView implements Runnable {
                             printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
                                     +", perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
                             startingBrackets();
-                            coords = parseCoordinateAction(scanner.nextLine());
-                            if (coords.size() == 2) {
-                                action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
+                            String inputAction = scanner.nextLine();
+                            if(inputAction.contains("info") || inputAction.contains("man")){
+                                printer.println(modelView.getPlayer(getPlayerId()).getGod()[0]);
+                                printer.println(modelView.getPlayer(getPlayerId()).getGod()[1]);
+                            }else {
+                                coords = parseCoordinateAction(inputAction);
+                                if (coords.size() == 2) {
+                                    action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
+                                }
                             }
+
                         }
                     } while (action == null && !endTurn);
 
@@ -446,7 +453,7 @@ public class CLI extends RemoteView implements Runnable {
             play();
 
             System.out.println("FINE ASSOLUTA");
-
+            System.exit(0);
 
         } catch (InterruptedException e) {
             e.printStackTrace();

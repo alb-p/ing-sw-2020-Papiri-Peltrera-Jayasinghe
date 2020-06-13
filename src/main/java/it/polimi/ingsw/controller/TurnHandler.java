@@ -67,9 +67,10 @@ public class TurnHandler implements PropertyChangeListener {
 
     //fa finire il turno
     private void endTurnManager(int id) {
+        System.out.println("\t\t\t\tEND TURN MANAGER CALLED BY ID: "+id);
         if (!model.checkWinner(id)) {
-            model.endTurn(id);
             totalTurnCounter++;
+            model.endTurn(id);
         }else model.endGame(id);
 
     }

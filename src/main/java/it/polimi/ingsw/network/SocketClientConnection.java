@@ -162,7 +162,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                     System.out.println("| OPTIONAL : "+a.isOption());
                 }
                 System.out.println("| MESSAGE ID : "+((ActionMessage) evt.getNewValue()).getId());
-                System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+                System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
             } else if (evt.getNewValue() instanceof GenericMessage){
                 System.out.println("| GENERIC MESSAGE SENDING");
                 System.out.println("| "+evt.getPropertyName());
@@ -171,7 +171,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 System.out.println("| NICKNAME MESSAGE SENDING");
                 System.out.println("| "+evt.getPropertyName());
                 System.out.println("| NICK : "+((NicknameMessage) evt.getNewValue()).getNickname());
-                System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+                System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
             }
         } else if(evt.getNewValue() instanceof VirtualSlot){
             System.out.println("| "+"VIRTUALSLOT SENDING");

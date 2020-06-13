@@ -107,9 +107,6 @@ public class Model {
                 vSlot = new VirtualSlot(color, board.infoSlot(new Coordinate(i, j)).getConstructionLevel(),
                         board.infoSlot(new Coordinate(i, j)).hasADome(), new Coordinate(i, j));
 
-                if (!oldVSlot.equals(vSlot)) {
-                    modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
-                }
                 modelListeners.firePropertyChange("deltaUpdate", oldVSlot, vSlot);
 
             }
@@ -196,7 +193,7 @@ public class Model {
         getPlayer(id).setEndTurn();
         modelListeners.firePropertyChange("endTurnConfirm", null,
                 new NicknameMessage(id, this.getPlayer(id).getNickName()));
-        notifyChanges();
+        //notifyChanges();
     }
 
     public void endGame(int id) {
