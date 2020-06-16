@@ -11,9 +11,7 @@ public class Chronus extends BasicGodCard {
 
     @Override
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
-        return (virtualBoard.getSlot(w.getOldPosition().getRow(), w.getOldPosition().getCol()).getLevel() == 2 &&
-                board.infoSlot(w.getPosition()).getConstructionLevel() == 3) //standard winning condition
-                && fiveTower(board); //Chronus special winning condition
+        return (super.winningCondition(w,board,virtualBoard) || fiveTower(board));
     }
 
     private boolean fiveTower(IslandBoard board) {

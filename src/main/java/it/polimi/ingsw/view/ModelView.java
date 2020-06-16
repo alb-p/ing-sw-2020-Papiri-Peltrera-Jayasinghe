@@ -214,7 +214,7 @@ public class ModelView {
             }
         }
         chosenGods.remove(toRemove);
-        ArrayList<String> godSelected= new ArrayList<String>();
+        ArrayList<String> godSelected= new ArrayList<>();
         godSelected.add(getPlayer(id).nickname);
         godSelected.add(god);
         selectedSingleGodListener.firePropertyChange("notifyGodSelected",null, godSelected);
