@@ -54,11 +54,13 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void endTurn(NicknameMessage message) {
         super.endTurn(message);
+        guiListeners.firePropertyChange("endTurnConfirm", false ,true);
     }
 
     @Override
     protected void setWorker(WorkerMessage message) {
         super.setWorker(message);
+        guiListeners.firePropertyChange("workerConfirm", null, message);
     }
 
     @Override
@@ -70,8 +72,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     @Override
-    protected void actionsAvailable(ActionMessage newValue) {
-
+    protected void actionsAvailable(ActionMessage message) {
+        super.actionsAvailable(message);
     }
 
     @Override
@@ -208,6 +210,9 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("workerReceived")) {
             WorkerMessage message = (WorkerMessage) propertyChangeEvent.getNewValue();
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyWorker", null, message));
+        } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("actionRequest")){
+            connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
+                    null, new GenericMessage()));
         }
     }
 }

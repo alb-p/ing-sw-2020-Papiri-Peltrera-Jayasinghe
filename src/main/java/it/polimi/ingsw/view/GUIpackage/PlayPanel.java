@@ -2,6 +2,8 @@ package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.model.Coordinate;
 import it.polimi.ingsw.model.VirtualSlot;
+import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.utils.messages.NicknameMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
 import it.polimi.ingsw.view.ModelView;
 
@@ -23,10 +25,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     private PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
     private Image bgIsland = new ImageIcon(this.getClass().getResource("/IslandAnimation/island120.jpg")).getImage();
-    // private Image bgIsland  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance(656,375,Image.SCALE_SMOOTH);
 
     int i = 0;
     boolean workerPlaced = false;
+    boolean play = false;
+    boolean myTurn = false;
     boolean firstPlayerSelected = false;
     private ArrayList<Coordinate> workerPositions = new ArrayList<>();
 
@@ -97,15 +100,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
                     @Override
                     public void mouseDragged(MouseEvent e) {
+                        ((JComponent)e.getSource()).repaint();
                         JButton button = (JButton) e.getSource();
                         TransferHandler handle = button.getTransferHandler();
                         handle.exportAsDrag(button, e, TransferHandler.MOVE);
                     }
 
-                    @Override
-                    public void mouseEntered(MouseEvent e) {
-                        super.mouseEntered(e);
-                    }
                 });
 
                 boardOfButtons[row][col].setBackground(new Color(0, 0, 0, 0));
@@ -149,18 +149,21 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (this.playerID != 4 && e.getSource().equals("tilebutton")) {
+        if (e.getSource() instanceof TileButton) {
             TileButton t = (TileButton) e.getSource();
 
             {
                 turnHandler(t.getCoordinate());
             }
-            ((JComponent)((TileButton) e.getSource())).setEnabled(false);
-        } else if (((JComponent) e.getSource()).getName().equalsIgnoreCase("submit")) {
+            ((JComponent)(e.getSource())).repaint();
+        } else if (e.getSource() instanceof JButton &&
+                ((JComponent) e.getSource()).getName().equalsIgnoreCase("submit")) {
             sendWorkers();
+            submitButton.setEnabled(false);
         }
 
         repaint();
+
     }
 
     private void turnHandler(Coordinate coordinate) {
@@ -190,7 +193,35 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         } else if (evt.getPropertyName().equalsIgnoreCase("firstPlayer")) {
             firstPlayerSelected = true;
             messagePlayerSettingWorkers();
+        } else if(evt.getPropertyName().equalsIgnoreCase("workerConfirm")){
+            WorkerMessage message = (WorkerMessage)evt.getNewValue();
+            if(message.getWorkerNumber() == 1
+                    && modelView.getFirstPlayerId() == modelView.getActualPlayerId()){
+                play = true;
+                if(playerID == modelView.getActualPlayerId()){
+                    //richiedi mosse disponibili
+                    playPanelListener.firePropertyChange("actionRequest", false , true);
+                }else {
+                    String playing = modelView.getPlayer(modelView.getActualPlayerId()).getNickname();
+                    messageCenter.setText(playing+"'s turn... please wait");
+                }
+            } else if(message.getWorkerNumber() == 1){
+                messagePlayerSettingWorkers();
+            }
+        } else if(evt.getPropertyName().equalsIgnoreCase("actionsReceived")){
+            if(playerID == modelView.getActualPlayerId()){
+                messageCenter.setText("This is your turn!");
+                myTurn = true;
+            }
+        } else if(evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")){
+            if(playerID != modelView.getActualPlayerId()){
+                String playing = modelView.getPlayer(modelView.getActualPlayerId()).getNickname();
+                messageCenter.setText(playing+"'s turn... please wait");
+            }else {
+                playPanelListener.firePropertyChange("actionRequest", false , true);
+            }
         }
+
         repaint();
     }
 
@@ -261,8 +292,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             submitButton.setEnabled(true);
                         } else submitButton.setEnabled(false);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
-                    } else {
+                    } else if(play){
                         //PLAY
+                        if(myTurn){
+
+                        }
                     }
                 }
             }
@@ -314,8 +348,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             System.out.println(workerPlaced);
                             bool = true;
 
-                        } else {
+                        } else if(play) {
                             // PLAY
+                            if(myTurn){
+
+                            }
                         }
                     }
                 } catch (

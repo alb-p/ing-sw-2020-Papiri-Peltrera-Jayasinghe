@@ -29,6 +29,8 @@ public class ModelView {
     private PropertyChangeSupport selectedSingleGodListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport boardListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport firstPlayerListener = new PropertyChangeSupport(this);
+    private PropertyChangeSupport actionListener = new PropertyChangeSupport(this);
+
     public ModelView() {
         Collections.addAll(colors, Color.values());
         gods.add(new String[]{"APOLLO", "Your Move: Your Worker may\n" +
@@ -56,7 +58,7 @@ public class ModelView {
         gods.add(new String[]{"HESTIA", "Your Build: Your Worker may\n" +
                 "build one additional time, but this\n" +
                 "cannot be on a perimeter space"});
-        gods.add(new String[]{"HYPNUS","Start of Opponent’s Turn: If one\n" +
+        gods.add(new String[]{"HYPNUS", "Start of Opponent’s Turn: If one\n" +
                 "of your opponent’s Workers is\n" +
                 "higher than all of their others, it\n" +
                 "cannot move."});
@@ -186,7 +188,7 @@ public class ModelView {
 
     public void setFirstPlayerId(int firstPlayerId) {
         this.firstPlayerId = firstPlayerId;
-        firstPlayerListener.firePropertyChange("firstPlayer", null ,true);
+        firstPlayerListener.firePropertyChange("firstPlayer", null, true);
     }
 
     public ArrayList<String[]> getChosenGods() {
@@ -201,7 +203,7 @@ public class ModelView {
                 }
             }
         }
-        selectedGodsListener.firePropertyChange("notifySelectedGods", false, this .chosenGods);
+        selectedGodsListener.firePropertyChange("notifySelectedGods", false, this.chosenGods);
 
     }
 
@@ -214,10 +216,10 @@ public class ModelView {
             }
         }
         chosenGods.remove(toRemove);
-        ArrayList<String> godSelected= new ArrayList<>();
+        ArrayList<String> godSelected = new ArrayList<>();
         godSelected.add(getPlayer(id).nickname);
         godSelected.add(god);
-        selectedSingleGodListener.firePropertyChange("notifyGodSelected",null, godSelected);
+        selectedSingleGodListener.firePropertyChange("notifyGodSelected", null, godSelected);
 
     }
 
@@ -232,6 +234,7 @@ public class ModelView {
 
     public void setActionsAvailable(ArrayList<Action> actions) {
         this.actionsAvailable = actions;
+        actionListener.firePropertyChange("actionsReceived", false , true);
     }
 
     public int getWinnerId() {
@@ -242,7 +245,7 @@ public class ModelView {
         return this.deletedPlayerId;
     }
 
-    public void setWinnerId(int id){
+    public void setWinnerId(int id) {
         this.winnerId = id;
     }
 
@@ -272,11 +275,12 @@ public class ModelView {
             }
             found = false;
         }
-        if(optional){
+        if (optional) {
             choices.add("end turn");
         }
         return choices;
     }
+
     public boolean isOptional() {
         return optional;
     }
@@ -286,28 +290,34 @@ public class ModelView {
     }
 
     public void playerLost(int id) {
-        this.deletedPlayerId=id;
+        this.deletedPlayerId = id;
     }
 
-    public void addNicknameListener(PropertyChangeListener listener){
+    public void addNicknameListener(PropertyChangeListener listener) {
         this.nickNameListener.addPropertyChangeListener(listener);
     }
 
-    public void addColorListener(PropertyChangeListener listener){
+    public void addColorListener(PropertyChangeListener listener) {
         this.colorListener.addPropertyChangeListener(listener);
     }
-    public void addSelectedGodsListener(PropertyChangeListener listener){
+
+    public void addSelectedGodsListener(PropertyChangeListener listener) {
         this.selectedGodsListener.addPropertyChangeListener(listener);
     }
-    public void addSelectedSingleGodListener(PropertyChangeListener listener){
+
+    public void addSelectedSingleGodListener(PropertyChangeListener listener) {
         selectedSingleGodListener.addPropertyChangeListener(listener);
     }
-    public void addFirstPlayerListener(PropertyChangeListener listener){
+
+    public void addFirstPlayerListener(PropertyChangeListener listener) {
         firstPlayerListener.addPropertyChangeListener(listener);
     }
 
-    public void addBoardListener(PropertyChangeListener listener){
+    public void addBoardListener(PropertyChangeListener listener) {
         boardListener.addPropertyChangeListener(listener);
+
+    } public void addActionListener(PropertyChangeListener listener) {
+        actionListener.addPropertyChangeListener(listener);
     }
 
     public class PlayerView {

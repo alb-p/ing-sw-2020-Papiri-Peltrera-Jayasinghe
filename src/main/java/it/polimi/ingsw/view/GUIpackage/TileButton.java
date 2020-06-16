@@ -32,12 +32,8 @@ public class TileButton extends JButton {
             //this.setText("      "); //debug
             this.setPreferredSize(new Dimension(120, 120));
             this.setMinimumSize(new Dimension(120, 120));
-
         } else {
-            //setText("           ");
-
             setPreferredSize(new Dimension(130, 200));
-
         }
         this.panel = panel;
     }
@@ -88,7 +84,7 @@ public class TileButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //if (vSlot.getColor() != null && !coordinate.equals(new Coordinate(-1, -1)))
+        //g.drawImage(this.getFloor(), 0, 0, panel);
         g.drawImage(this.getWorker(), 0, 0, panel);
 
     }

@@ -65,6 +65,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         PlayPanel playPanel = new PlayPanel(modelView);
         modelView.addBoardListener(playPanel);
         modelView.addFirstPlayerListener(playPanel);
+        modelView.addActionListener(playPanel);
         gui.addGuiListener(playPanel);
         playPanel.addPlayPanelListener(gui);
         contentPane.add("PlayPanel", playPanel);
