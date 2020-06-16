@@ -60,7 +60,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
         messageCenter.setFont(messageFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
-        messageCenter.setBackground(Color.BLUE);
+        messageCenter.setIcon(new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")));
         this.modelView = modelView;
         this.setLayout(new BorderLayout());
         east = new TileButton(-1, -1, this);
