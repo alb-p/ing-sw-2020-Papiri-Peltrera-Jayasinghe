@@ -44,7 +44,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private TileButton east;
     private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
 
-    private TileButton boardOfButtons[][] = new TileButton[5][5];
+    private TileButton[][] boardOfButtons = new TileButton[5][5];
+private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960,50,Image.SCALE_SMOOTH);
 
 
     public PlayPanel(ModelView modelView) {
@@ -60,7 +61,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
         messageCenter.setFont(messageFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
-        messageCenter.setIcon(new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")));
         this.modelView = modelView;
         this.setLayout(new BorderLayout());
         east = new TileButton(-1, -1, this);
@@ -141,7 +141,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         submitButton.setEnabled(false);
         this.add(submitButton, BorderLayout.SOUTH);
         repaint();
-        messageCenter.setBackground(new Color(65, 81, 194,150));
+        messageCenter.setBackground(new Color(65, 81, 194,0));
         messageCenter.setOpaque(true);
         messageCenter.setText("Godly player is selecting the first player");
     }
@@ -161,8 +161,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             sendWorkers();
             submitButton.setEnabled(false);
         }
+        messageCenter.setOpaque(false);
+
 
         repaint();
+
 
     }
 
@@ -252,7 +255,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             east.repaint();
             west.repaint();
         }
+        messageCenter.repaint();
         Toolkit.getDefaultToolkit().sync();
+        g.drawImage(banner, 0, 0, this);
 
     }
 
@@ -270,7 +275,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         @Override
         protected Transferable createTransferable(JComponent c) {
-            Transferable t = null;
+            Transferable t;
             if (c instanceof TileButton)
                 System.out.println("CREO TRANSFERABLE");
             t = new TransferableImage(((TileButton) c).getWorker(), ((TileButton) c).getCoordinate());
@@ -288,9 +293,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         if (!tSource.getCoordinate().equals(new Coordinate(-1, -1)))
                             workerPositions.remove(tSource.getCoordinate());
                         else tSource.setTransferHandler(null);
-                        if (workerPositions.size() == 2) {
-                            submitButton.setEnabled(true);
-                        } else submitButton.setEnabled(false);
+                        submitButton.setEnabled(workerPositions.size() == 2);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
                     } else if(play){
                         //PLAY
@@ -358,8 +361,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 } catch (
                         UnsupportedFlavorException e) {
                     e.printStackTrace();
-                } catch (
-                        IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -385,7 +387,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             return DataFlavor.imageFlavor.equals(flavor);
         }
 
-        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
+        public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
             if (!DataFlavor.imageFlavor.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);
             }
