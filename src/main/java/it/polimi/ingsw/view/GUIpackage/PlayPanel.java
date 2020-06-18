@@ -44,7 +44,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private TileButton east;
     private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
 
-    private TileButton boardOfButtons[][] = new TileButton[5][5];
+    private TileButton[][] boardOfButtons = new TileButton[5][5];
+private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960,70,Image.SCALE_SMOOTH);
 
 
     public PlayPanel(ModelView modelView) {
@@ -60,7 +61,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
         messageCenter.setFont(messageFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
-        messageCenter.setBackground(Color.BLUE);
         this.modelView = modelView;
         this.setLayout(new BorderLayout());
         east = new TileButton(-1, -1, this);
@@ -119,7 +119,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
         this.setOpaque(false);
         //boardPanel.setBorder(BorderFactory.createEmptyBorder(135, 120, 60, 135));
-        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.18*GUI.getDimension().height), (int) (0.165*GUI.getDimension().height), (int) (.09*GUI.getDimension().height), (int) (0.19*GUI.getDimension().height)));
+        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.155*GUI.getDimension().height), (int) (0.165*GUI.getDimension().height), (int) (.09*GUI.getDimension().height), (int) (0.19*GUI.getDimension().height)));
         boardPanel.setOpaque(false);
         this.add(boardPanel, BorderLayout.CENTER);
         JPanel p = new JPanel();
@@ -139,6 +139,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         p.add(west);
         p.setOpaque(false);
         this.add(p, BorderLayout.WEST);
+        messageCenter.setBorder(BorderFactory.createEmptyBorder(15,0,0,0));
         this.add(messageCenter, BorderLayout.NORTH);
         submitButton.setName("submit");
         submitButton.setFont(submitFont);
@@ -147,7 +148,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         this.add(submitButton, BorderLayout.SOUTH);
         repaint();
         //messageCenter.setBackground(new Color(65, 81, 194,150));
-        messageCenter.setOpaque(true);
+        messageCenter.setOpaque(false);
         messageCenter.setText("Godly player is selecting the first player");
     }
 
@@ -260,6 +261,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             //west.repaint();
         }
         Toolkit.getDefaultToolkit().sync();
+        g.drawImage(banner, 0, 0, this);
 
     }
 
