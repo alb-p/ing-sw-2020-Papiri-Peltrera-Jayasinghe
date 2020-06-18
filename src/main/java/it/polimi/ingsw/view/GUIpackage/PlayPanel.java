@@ -44,8 +44,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private TileButton east;
     private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
 
-    private TileButton[][] boardOfButtons = new TileButton[5][5];
-private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960,50,Image.SCALE_SMOOTH);
+    private TileButton boardOfButtons[][] = new TileButton[5][5];
 
 
     public PlayPanel(ModelView modelView) {
@@ -61,6 +60,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         }
         messageCenter.setFont(messageFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
+        messageCenter.setBackground(Color.BLUE);
         this.modelView = modelView;
         this.setLayout(new BorderLayout());
         east = new TileButton(-1, -1, this);
@@ -100,15 +100,20 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
 
                     @Override
                     public void mouseDragged(MouseEvent e) {
-                        ((JComponent)e.getSource()).repaint();
+                        //((JComponent)e.getSource()).repaint();
                         JButton button = (JButton) e.getSource();
                         TransferHandler handle = button.getTransferHandler();
                         handle.exportAsDrag(button, e, TransferHandler.MOVE);
                     }
 
+                    /*@Override
+                    public void mouseMoved(MouseEvent e) {
+                        super.mouseMoved(e);
+                        repaint();
+                    }*/
                 });
 
-                boardOfButtons[row][col].setBackground(new Color(0, 0, 0, 0));
+                //boardOfButtons[row][col].setBackground(new Color(0, 0, 0, 0));
                 boardPanel.add(boardOfButtons[row][col]);
             }
         }
@@ -129,8 +134,8 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.add(Box.createVerticalStrut(200));
         west.setBorder(BorderFactory.createEmptyBorder(100, 75, 100, 75));
-        east.setBackground(new Color(0,0,0,0));
-        west.setBackground(new Color(0,0,0,0));
+        //east.setBackground(new Color(0,0,0,0));
+        //west.setBackground(new Color(0,0,0,0));
         p.add(west);
         p.setOpaque(false);
         this.add(p, BorderLayout.WEST);
@@ -141,7 +146,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         submitButton.setEnabled(false);
         this.add(submitButton, BorderLayout.SOUTH);
         repaint();
-        messageCenter.setBackground(new Color(65, 81, 194,0));
+        //messageCenter.setBackground(new Color(65, 81, 194,150));
         messageCenter.setOpaque(true);
         messageCenter.setText("Godly player is selecting the first player");
     }
@@ -155,17 +160,16 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
             {
                 turnHandler(t.getCoordinate());
             }
-            ((JComponent)(e.getSource())).repaint();
+            //((JComponent)(e.getSource())).repaint();
         } else if (e.getSource() instanceof JButton &&
                 ((JComponent) e.getSource()).getName().equalsIgnoreCase("submit")) {
             sendWorkers();
             submitButton.setEnabled(false);
         }
-        messageCenter.setOpaque(false);
+        //messageCenter.setOpaque(false);
 
 
         repaint();
-
 
     }
 
@@ -248,16 +252,14 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         g.drawImage(this.bgIsland, 0, 0, this);
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
-                boardOfButtons[i][j].repaint();
+                //boardOfButtons[i][j].repaint();
             }
         }
         if(!workerPlaced){
-            east.repaint();
-            west.repaint();
+            //east.repaint();
+            //west.repaint();
         }
-        messageCenter.repaint();
         Toolkit.getDefaultToolkit().sync();
-        g.drawImage(banner, 0, 0, this);
 
     }
 

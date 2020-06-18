@@ -83,7 +83,7 @@ public class TileButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
+        //super.paintComponent(g);
         //g.drawImage(this.getFloor(), 0, 0, panel);
         g.drawImage(this.getWorker(), 0, 0, panel);
 
