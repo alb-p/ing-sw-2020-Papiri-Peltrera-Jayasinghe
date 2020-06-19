@@ -80,6 +80,9 @@ public class TileButton extends JButton {
         return "tilebutton";
     }
 
+    @Override
+    public void repaint() {
+    }
 
     @Override
     protected void paintComponent(Graphics g) {

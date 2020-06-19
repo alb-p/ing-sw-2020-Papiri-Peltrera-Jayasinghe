@@ -306,6 +306,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                         }
                     }
                 }
+                repaint();
             }
         }
         /*
