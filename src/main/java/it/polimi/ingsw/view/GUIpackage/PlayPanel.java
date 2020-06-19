@@ -20,6 +20,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -43,7 +44,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private TileButton west;
     private TileButton east;
     private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
-
+    private Coordinate selected;
+    private boolean buildDome = false;
     private TileButton[][] boardOfButtons = new TileButton[5][5];
 private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960,70,Image.SCALE_SMOOTH);
 
@@ -157,21 +159,49 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof TileButton) {
             TileButton t = (TileButton) e.getSource();
-
-            {
-                turnHandler(t.getCoordinate());
+            if(myTurn) {
+                List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
+                if(selected == null) {
+                    for (Action a : actions) {
+                        if (a.getStart().equals(t.getCoordinate())) {
+                            selected = t.getCoordinate();
+                        }
+                    }
+                    if(selected == null) {
+                        Coordinate startBuild = actions.get(0).getStart();
+                        for (Action a : actions) {
+                            if (!a.getStart().equals(startBuild)) return;
+                        }
+                        tryBuild(t, actions);
+                    }
+                } else {
+                    tryBuild(t, actions);
+                    selected = null;
+                    return;
+                }
             }
-            //((JComponent)(e.getSource())).repaint();
         } else if (e.getSource() instanceof JButton &&
                 ((JComponent) e.getSource()).getName().equalsIgnoreCase("submit")) {
             sendWorkers();
             submitButton.setEnabled(false);
         }
 
-
-
         repaint();
 
+    }
+
+    private void tryBuild(TileButton t, List<Action> actions){
+        for (Action a : actions) {
+            if (a.getEnd().equals(t.getCoordinate())) {
+                if (a.getActionName().equalsIgnoreCase("BUILD") || a instanceof Build) {
+                    if(buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME") ){
+                        sendAction(new BuildDome(a.getStart(), a.getEnd()));
+                    }else if(!buildDome) {
+                        sendAction(new Build(a.getStart(), a.getEnd()));
+                    }
+                }
+            }
+        }
     }
 
     private void turnHandler(Coordinate coordinate) {
@@ -289,6 +319,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         @Override
         protected void exportDone(JComponent source, Transferable data, int action) {
             if (action != NONE) {
+                repaint();
                 if (source instanceof TileButton) {
                     TileButton tSource = (TileButton) source;
                     tSource.setWorker(null);
@@ -337,9 +368,10 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                                 break;
                             }
                         }
+                        System.out.println("NOT MY WORK"+(!myWorker && !sourceCoord.equals(new Coordinate(-1, -1))));
                         if (!myWorker && !sourceCoord.equals(new Coordinate(-1, -1))) return false; //trying to move an opponent worker
 
-                        if (!workerPlaced) {
+                        if (!workerPlaced && (myWorker || sourceCoord.equals(new Coordinate(-1, -1)))) {
                             if (tDest.getWorker() != null || tDest.getCoordinate().equals(new Coordinate(-1, -1))
                                     || sourceCoord.equals(tDest.getCoordinate())
                                     || modelView.getBoard().getSlot(tDest.getCoordinate()).hasWorker()) { // Last condition MUST NOT be in the play else i.e. minotaur
@@ -361,7 +393,8 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                             if(myTurn){
                                 Move attemptedMove=new Move(sourceCoord,tDest.getCoordinate());
                                 System.out.println("aaaaa");
-                                for(Action a : modelView.getActionsAvailable()){
+                                List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
+                                for(Action a : actions){
                                     if(a.equals(attemptedMove)){
                                         dragAndDropResult=true;
                                         sendAction(attemptedMove);
@@ -369,7 +402,6 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
 
                                     }
                                 }
-
                             }
                         }
                     }
@@ -386,7 +418,10 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
 
     private void sendAction(Action attemptedAction) {
         playPanelListener.firePropertyChange("actionReceived",false,attemptedAction);
+        myTurn = false;
+        modelView.getActionsAvailable().clear();
         playPanelListener.firePropertyChange("actionRequest",false,true);
+
     }
 
 

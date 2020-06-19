@@ -115,6 +115,7 @@ public class TileButton extends JButton {
         g.drawImage(this.getWorker(), 0, 0, panel);
     }
 
+
     public void updateView(VirtualSlot vSlot) {
         // rebase the image on vSlot
         this.vSlot = vSlot;
