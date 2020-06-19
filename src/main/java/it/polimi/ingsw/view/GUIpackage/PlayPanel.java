@@ -1,14 +1,14 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.model.Coordinate;
-import it.polimi.ingsw.model.VirtualSlot;
-import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Color;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
@@ -167,7 +167,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
             sendWorkers();
             submitButton.setEnabled(false);
         }
-        //messageCenter.setOpaque(false);
+
 
 
         repaint();
@@ -320,7 +320,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
 
         @Override
         public boolean importData(TransferSupport support) {
-            boolean bool = false;
+            boolean dragAndDropResult = false;
             if (!firstPlayerSelected) return false;
             if (canImport(support)) {
                 try {
@@ -354,11 +354,21 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                             }
 
                             System.out.println(workerPlaced);
-                            bool = true;
+                            dragAndDropResult = true;
 
                         } else if(play) {
                             // PLAY
                             if(myTurn){
+                                Move attemptedMove=new Move(sourceCoord,tDest.getCoordinate());
+                                System.out.println("aaaaa");
+                                for(Action a : modelView.getActionsAvailable()){
+                                    if(a.equals(attemptedMove)){
+                                        dragAndDropResult=true;
+                                        sendAction(attemptedMove);
+                                        System.out.println("bbbbbbbb");
+
+                                    }
+                                }
 
                             }
                         }
@@ -370,8 +380,13 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                     e.printStackTrace();
                 }
             }
-            return bool;
+            return dragAndDropResult;
         }
+    }
+
+    private void sendAction(Action attemptedAction) {
+        playPanelListener.firePropertyChange("actionReceived",false,attemptedAction);
+        playPanelListener.firePropertyChange("actionRequest",false,true);
     }
 
 

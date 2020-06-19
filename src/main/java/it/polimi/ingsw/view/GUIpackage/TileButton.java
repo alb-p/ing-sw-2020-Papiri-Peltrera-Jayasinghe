@@ -21,13 +21,22 @@ public class TileButton extends JButton {
     private JPanel panel;
     int i = 0;
 
+    private Image uno ;
+    private Image due;
+    private Image tre;
+    private Image floor;
+
 
     public TileButton(int row, int col, JPanel panel) {
         coordinate = new Coordinate(row, col);
         vSlot = new VirtualSlot(coordinate);
-        red = new ImageIcon(GUI.class.getResource("/Colors/red_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);;
-        blue = new ImageIcon(GUI.class.getResource("/Colors/blue_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);;
-        white = new ImageIcon(GUI.class.getResource("/Colors/white_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);;
+        red = new ImageIcon(GUI.class.getResource("/Colors/red_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+        blue = new ImageIcon(GUI.class.getResource("/Colors/blue_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+        white = new ImageIcon(GUI.class.getResource("/Colors/white_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+        uno = new ImageIcon(GUI.class.getResource("/Buildings/1.jpg")).getImage();
+        due = new ImageIcon(GUI.class.getResource("/Buildings/2.jpg")).getImage();
+        tre = new ImageIcon(GUI.class.getResource("/Buildings/3.jpg")).getImage();
+
         if (!coordinate.equals(new Coordinate(-1, -1))) {
             //this.setText("      "); //debug
             this.setPreferredSize(new Dimension(120, 120));
@@ -52,6 +61,21 @@ public class TileButton extends JButton {
         } else if (vSlot.getColor().equals(Color.WHITE)) {
             worker = white;
         }
+    }
+
+    public void rebaseFloor(){
+        if(vSlot.getLevel()==1){
+            floor=uno;
+        }else if(vSlot.getLevel()==2){
+            floor=due;
+        }else if(vSlot.getLevel()==3){
+            floor=tre;
+        }
+
+    }
+
+    public Image getFloor(){
+        return floor;
     }
 
     public Image getWorker() {
@@ -87,15 +111,15 @@ public class TileButton extends JButton {
     @Override
     protected void paintComponent(Graphics g) {
         //super.paintComponent(g);
-        //g.drawImage(this.getFloor(), 0, 0, panel);
+        g.drawImage(this.getFloor(), 3, 3, panel);
         g.drawImage(this.getWorker(), 0, 0, panel);
-
     }
 
     public void updateView(VirtualSlot vSlot) {
         // rebase the image on vSlot
         this.vSlot = vSlot;
         rebaseWorker();
+        rebaseFloor();
     }
 }
 

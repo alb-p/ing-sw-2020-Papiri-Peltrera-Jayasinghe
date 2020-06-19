@@ -1,5 +1,6 @@
 package it.polimi.ingsw.view.GUIpackage;
 
+import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.Color;
 import it.polimi.ingsw.network.SocketServerConnection;
 import it.polimi.ingsw.utils.messages.*;
@@ -213,6 +214,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("actionRequest")){
             connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                     null, new GenericMessage()));
+        }else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("actionReceived")){
+            ActionMessage mess = new ActionMessage();
+            mess.setAction((Action)propertyChangeEvent.getNewValue());
+            modelView.getActionsAvailable().clear();
+            connection.sendEvent(new PropertyChangeEvent(this,"notifyAction", null, mess));
         }
     }
 }
