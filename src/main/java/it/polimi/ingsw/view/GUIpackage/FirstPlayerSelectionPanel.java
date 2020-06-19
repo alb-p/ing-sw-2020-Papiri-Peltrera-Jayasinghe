@@ -10,26 +10,54 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class FirstPlayerSelectionPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private JPanel panel = new JPanel();
-    private JButton submit;
-    private JButton playerSelected;
+
+
     private PropertyChangeSupport firstPlayerSelectionListener = new PropertyChangeSupport(this);
+    private Dimension frameDimension;
+    private Image image;
+    private JPanel innerPanel;
 
-    public FirstPlayerSelectionPanel(){
 
+    public FirstPlayerSelectionPanel() throws IOException, FontFormatException {
+        frameDimension=GUI.getDimension();
+
+        innerPanel =new JPanel(){
+            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95),Image.SCALE_SMOOTH);
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                g.drawImage(this.image, 0, 0, this);
+            }
+        };
+
+
+        this.image = new ImageIcon(this.getClass().getResource("/Name/setupBG.jpg")).getImage();
         JLabel title = new JLabel("Choose first player: ");
+        title.setAlignmentX(Component.CENTER_ALIGNMENT);
+        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
-        submit = new JButton("submit");
-        submit.addActionListener(this);
-        submit.setEnabled(false);
-        this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.add(title);
-        this.add(panel);
-        this.add(submit);
+
+
+
+        innerPanel.setOpaque(false);
+        innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
+        innerPanel.setPreferredSize(new Dimension((int) (frameDimension.width/1.5), (int) (frameDimension.height/1.95)));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/15))));
+        innerPanel.add(title);
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/12))));
+
+        title.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18));
+
+        this.setLayout(new GridBagLayout());
+        this.add(innerPanel);
+
+
 
 
     }
@@ -38,15 +66,8 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() instanceof JButton){
-            if((e.getSource()).equals(submit)){
-                firstPlayerSelectionListener.firePropertyChange("firstPlayerSelected",
-                        null, new NicknameMessage(0, playerSelected.getName()));
-            } else{
-                submit.setEnabled(true);
-                if(playerSelected != null) playerSelected.setForeground(Color.BLACK);
-                playerSelected = ((JButton) e.getSource());
-                ((JButton) e.getSource()).setForeground(Color.ORANGE);
-            }
+            firstPlayerSelectionListener.firePropertyChange("firstPlayerSelected",
+                        null, new NicknameMessage(0, ((JButton) e.getSource()).getName()));
         }
     }
 
@@ -56,11 +77,19 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
             JButton choosePlayer = new JButton(((ArrayList<String>) evt.getNewValue()).get(0));
             choosePlayer.setName(((ArrayList<String>) evt.getNewValue()).get(0));
             choosePlayer.addActionListener(this);
-            panel.add(choosePlayer);
+            choosePlayer.setAlignmentX(Component.CENTER_ALIGNMENT);
+            innerPanel.add(choosePlayer);
+            innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
         }
     }
 
     public void addFirstPlayerSelectionListener (PropertyChangeListener listener){
         firstPlayerSelectionListener.addPropertyChangeListener(listener);
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        g.drawImage(this.image, 0, 0, this);
     }
 }

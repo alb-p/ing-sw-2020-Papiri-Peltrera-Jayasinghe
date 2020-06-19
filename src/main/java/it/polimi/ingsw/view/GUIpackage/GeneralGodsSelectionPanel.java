@@ -56,6 +56,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         JPanel godsList = new JPanel();
         Font font;
         title = new JLabel("Select gods");
+        title.setForeground(new Color(255, 235, 140));
         description = new JLabel();
         FlowLayout flow = new FlowLayout(FlowLayout.CENTER, 30,30);
         submit = new CustomButton("/GodSelection/next/next");
@@ -189,7 +190,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
 
             imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/"+((GodsButton) e.getSource()).getName().toLowerCase()+" info.jpg"));
             paneldx.repaint();
-            description.setText(((GodsButton) e.getSource()).getName());
+            description.setText("<html>"+((GodsButton) e.getSource()).getName()+"<br><br><br><br><br>ciaoo</html");
         }
     }
 
