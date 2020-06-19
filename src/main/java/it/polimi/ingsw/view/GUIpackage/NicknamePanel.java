@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -63,13 +64,10 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         nicknamePanel.add(nickToFill, BorderLayout.NORTH);
         nicknamePanel.add(invalidNickLabel, BorderLayout.CENTER);
         nicknamePanel.setBorder(BorderFactory.createEmptyBorder((int)(GUI.getDimension().height/14.4),(int)(GUI.getDimension().width/4.8),(int)(GUI.getDimension().height/9),(int)(GUI.getDimension().width/4.8)));
-        submitButton = new JButton("Submit");
+        submitButton = new CustomButton("/Name/submit");
         //submitButton = new CustomButton("nome path");
         submitButton.setFont(font);
-        submitButton.setContentAreaFilled(false);
-        submitButton.setBorder(null);
         nickToFill.setBorder(null);
-        submitButton.setPreferredSize(new Dimension(GUI.getDimension().width/48,GUI.getDimension().height/12));
         invalidNickLabel.setHorizontalAlignment(0);
         playerId = id;
         this.add(Box.createVerticalStrut((GUI.getDimension().height)/4));
