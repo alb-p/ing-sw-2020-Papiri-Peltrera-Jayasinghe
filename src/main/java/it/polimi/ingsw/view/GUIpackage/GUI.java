@@ -220,7 +220,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             connection.sendEvent(new PropertyChangeEvent(this, "notifyAction", null, message));
         } else if(evt.getPropertyName().equalsIgnoreCase("end turn")){
             Message message = (GenericMessage) evt.getNewValue();
-            connection.sendEvent(new PropertyChangeEvent(this, "end turn", null, message));
+            connection.sendEvent(new PropertyChangeEvent(this, "endTurn", null, message));
             
         }
     }

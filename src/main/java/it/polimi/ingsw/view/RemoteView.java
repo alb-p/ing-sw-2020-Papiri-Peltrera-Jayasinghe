@@ -59,6 +59,7 @@ public abstract class RemoteView implements Runnable {
         } else if (propertyName.equalsIgnoreCase("actionsAvailable")) {
             actionsAvailable((ActionMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("endTurnConfirm")) {
+            modelView.getActionsAvailable().clear();
             endTurn((NicknameMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("playerLostDetected")) {
             System.out.println("PLAYER LOST DETECTED");
@@ -98,8 +99,8 @@ public abstract class RemoteView implements Runnable {
 
     protected void actionsAvailable(ActionMessage message) {
         //modelView.getActionsAvailable().addAll(message.getChoices());
-        modelView.setActionsAvailable(message.getChoices());
         modelView.setOptional(message.isOptional());
+        modelView.setActionsAvailable(message.getChoices());
     }
 
     protected void assignedGod(GodMessage message) {

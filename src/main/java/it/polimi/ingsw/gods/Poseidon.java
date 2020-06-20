@@ -70,7 +70,6 @@ public class Poseidon extends BasicGodCard {
                                         TreeActionNode extraBuild2 = new TreeActionNode(new Build(otherWorker.getPosition(), c2));
                                         extraBuild1.addChild(extraBuild2);
                                         for (Coordinate c3 : otherWorker.getPosition().getAdjacentCoords()) {
-                                            System.out.println("Costruisco livello 3" + c3);
                                             boolean thirdBuildAdd = true;
                                             boolean bE3 = c3.equals(buildNode.getData().getEnd());
                                             if (bE3) {

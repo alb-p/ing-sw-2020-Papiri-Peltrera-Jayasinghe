@@ -189,7 +189,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             } else if (button.getName().equalsIgnoreCase("end turn")) {
                 submitButton.setEnabled(false);
                 modelView.getActionsAvailable().clear();
-                playPanelListener.firePropertyChange("endTurn", null, new GenericMessage());
+                playPanelListener.firePropertyChange("end turn", null, new GenericMessage());
             } else if (button.getName().equalsIgnoreCase("Build a dome")) {
                 if (buildDome) {
                     buildDome = false;
@@ -262,6 +262,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             messageCenterTurn();
 
         } else if (evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")) {
+            modelView.getActionsAvailable().clear();
             if (playerID != modelView.getActualPlayerId()) {
                 messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait 253");
             } else {
@@ -276,7 +277,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         if (modelView.getWinnerId() == -1) {
             if (playerID == modelView.getActualPlayerId()) {
                 //show options
-                List<String> choices = modelView.getActionChoices();
+                List<String> choices = (List<String>) modelView.getActionChoices().clone();
                 if (choices.size() == 1)
                     messageCenter.setText("It's your turn, make your " + choices.get(0)); //prob da poter togliere
                 else {
@@ -294,7 +295,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     StringBuilder message = new StringBuilder("It's your turn, make your");
                     for (int i = 0; i < choices.size() - 1; i++) {
                         message.append(" " + choices.get(i));
-                        message.append("or");
+                        message.append(" or ");
                     }
                     message.append(choices.get(choices.size() - 1));
                     messageCenter.setText(message.toString());
@@ -303,6 +304,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
             }
         }
+        repaint();
     }
 
     private void messagePlayerSettingWorkers() {
@@ -456,6 +458,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private void sendAction(Action attemptedAction) {
         playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
         myTurn = false;
+        submitButton.setEnabled(false);
         modelView.getActionsAvailable().clear();
         playPanelListener.firePropertyChange("actionRequest", false, true);
 
