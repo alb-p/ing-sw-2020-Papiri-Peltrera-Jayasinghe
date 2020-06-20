@@ -72,7 +72,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         east = new TileButton(-1, -1, this);
         //east.setPreferredSize(new Dimension(130,200));
         TransferHandler dragAndDrop = new DragAndDrop();
-        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(135, 200, Image.SCALE_SMOOTH));
+        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         east.setTransferHandler(dragAndDrop);
         east.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -84,7 +84,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         });
         submitButton.addActionListener(this);
         west = new TileButton(-1, -1, this);
-        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/blue_normal.png")).getImage().getScaledInstance(135, 200, Image.SCALE_SMOOTH));
+        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         west.setTransferHandler(dragAndDrop);
         west.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -95,7 +95,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
 
         });
-        boardPanel = new JPanel(new GridLayout(5, 5, 7, 7));
+        boardPanel = new JPanel(new GridLayout(5, 5, 10, 10));
         for (int row = 4; row >= 0; row--) {
             for (int col = 0; col < 5; col++) {
                 boardOfButtons[row][col] = new TileButton(row, col, this);
@@ -125,7 +125,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
         this.setOpaque(false);
 
-        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.236 * GUI.getDimension().height), (int) (0.333 * GUI.getDimension().height), (int) (0.125 * GUI.getDimension().height), (int) (0.347 * GUI.getDimension().height)));
+        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.245 * GUI.getDimension().height), (int) (0.345 * GUI.getDimension().height),
+                (int) (0.125 * GUI.getDimension().height), (int) (0.365 * GUI.getDimension().height)));
         boardPanel.setOpaque(false);
         boardPanel.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
         layeredPane.add(boardPanel, JLayeredPane.PALETTE_LAYER);
@@ -137,15 +138,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         //west.setBorder(BorderFactory.createEmptyBorder(300, 0, 0, 0));
         //east.setBorder(BorderFactory.createEmptyBorder(300, 0, 100, 0));
         workerToSet.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
-        west.setBorder(BorderFactory.createEmptyBorder(100 , 75, 100, 75));
-        east.setBorder(BorderFactory.createEmptyBorder(100 , 75, 100, 75));
-        workerToSet.setAlignmentY(1);
-        west.setPreferredSize(new Dimension(135,200));
-        east.setPreferredSize(new Dimension(135,200));
+        west.setBorder(BorderFactory.createEmptyBorder(150, 150, 150, 150));
+        east.setBorder(BorderFactory.createEmptyBorder(150, 150, 150, 150));
+        west.setPreferredSize(new Dimension(135, 200));
+        east.setPreferredSize(new Dimension(135, 200));
 
+        workerToSet.add(Box.createHorizontalStrut(3));
         workerToSet.add(west);
         workerToSet.add(Box.createHorizontalGlue());
         workerToSet.add(east);
+        workerToSet.add(Box.createHorizontalStrut(30));
         workerToSet.setOpaque(false);
 
         layeredPane.add(workerToSet, JLayeredPane.DRAG_LAYER);
@@ -296,39 +298,43 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (playerID == modelView.getActualPlayerId()) {
                 //show options
                 List<String> choices = (List<String>) modelView.getActionChoices().clone();
-                if (choices.size() == 1)
-                    messageCenter.setText("It's your turn, make your " + choices.get(0)); //prob da poter togliere
-                else {
-                    if (choices.contains("end turn")) {
-                        submitButton.setText("End turn");
-                        submitButton.setName("End turn");
-                        submitButton.setEnabled(true);
-                    } else if (choices.contains("Build a dome")) {
-                        submitButton.setText("Build a dome");
-                        submitButton.setName("Build a dome");
-                        submitButton.setForeground(Color.BLACK);
-                        buildDome = false;
-                        submitButton.setEnabled(true);
-                    }
-                    StringBuilder message = new StringBuilder("It's your turn, make your");
-                    for (int i = 0; i < choices.size() - 1; i++) {
-                        message.append(" " + choices.get(i));
-                        message.append(" or ");
-                    }
-                    message.append(choices.get(choices.size() - 1));
-                    messageCenter.setText(message.toString());
+
+                if (choices.contains("end turn")) {
+                    submitButton.setText("End turn");
+                    submitButton.setName("End turn");
+                    submitButton.setEnabled(true);
+                } else if (choices.contains("Build a dome")) {
+                    submitButton.setText("Build a dome");
+                    submitButton.setName("Build a dome");
+                    submitButton.setForeground(Color.BLACK);
+                    buildDome = false;
+                    submitButton.setEnabled(true);
                 }
-            } else {
-                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
+                StringBuilder message = new StringBuilder("It's your turn, make your");
+                for (int i = 0; i < choices.size() - 1; i++) {
+                    message.append(" " + choices.get(i));
+                    message.append(" or ");
+                }
+                message.append(choices.get(choices.size() - 1));
+                messageCenter.setForeground(new Color(255, 235, 140));
+
+                messageCenter.setText(message.toString());
             }
+        } else {
+            messageCenter.setForeground(Color.WHITE);
+            messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
         }
+
         repaint();
     }
 
     private void messagePlayerSettingWorkers() {
         if (modelView.getActualPlayerId() == playerID) {
+            messageCenter.setForeground(new Color(255, 235, 140));
             messageCenter.setText("Select your workers!");
         } else {
+            messageCenter.setForeground(Color.WHITE);
+
             String playing = modelView.getPlayer(modelView.getActualPlayerId()).getNickname();
             messageCenter.setText(playing + " is selecting his workers!");
         }
@@ -442,7 +448,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             if (!((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
                                 tDest.setWorker(((TransferableImage) val).getImage());
                             } else {
-                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
+                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/WorkersAnimation/inactive.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
                             }
 
                             System.out.println(workerPlaced);
