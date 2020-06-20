@@ -32,9 +32,10 @@ public class TileButton extends JButton {
     public TileButton(int row, int col, JPanel panel) {
         coordinate = new Coordinate(row, col);
         vSlot = new VirtualSlot(coordinate);
-        red = new ImageIcon(GUI.class.getResource("/Colors/red_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
-        blue = new ImageIcon(GUI.class.getResource("/Colors/blue_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
-        white = new ImageIcon(GUI.class.getResource("/Colors/white_normal.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH);
+        setBorder(null);
+        red = new ImageIcon(GUI.class.getResource("/WorkersAnimation/red.png")).getImage();
+        blue = new ImageIcon(GUI.class.getResource("/WorkersAnimation/blue.png")).getImage();
+        white = new ImageIcon(GUI.class.getResource("/WorkersAnimation/tan.png")).getImage();
         uno = new ImageIcon(GUI.class.getResource("/Buildings/1.jpg")).getImage();
         due = new ImageIcon(GUI.class.getResource("/Buildings/2.jpg")).getImage();
         tre = new ImageIcon(GUI.class.getResource("/Buildings/3.jpg")).getImage();
@@ -117,7 +118,7 @@ public class TileButton extends JButton {
     protected void paintComponent(Graphics g) {
         //super.paintComponent(g);
         g.drawImage(this.getFloor(), 3, 3, panel);
-        g.drawImage(this.getWorker(), 0, 0, panel);
+        g.drawImage(this.getWorker(), 17, 17, panel);
     }
 
 
