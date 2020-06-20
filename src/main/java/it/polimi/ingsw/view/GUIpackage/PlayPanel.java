@@ -27,17 +27,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     private PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
     private Image bgIsland = new ImageIcon(this.getClass().getResource("/IslandAnimation/island120.jpg")).getImage();
-
     int i = 0;
     boolean workerPlaced = false;
     boolean play = false;
     boolean myTurn = false;
     boolean firstPlayerSelected = false;
     private ArrayList<Coordinate> workerPositions = new ArrayList<>();
+    JLayeredPane layeredPane = new JLayeredPane();
 
-
-    private ModelView modelView;//da impostare
-    private int playerID;//da impostare
+    private ModelView modelView;
+    private int playerID;
     private String color;
     private JPanel boardPanel;
     private JLabel messageCenter;
@@ -62,6 +61,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             messageFont = messageCenter.getFont();
             submitFont = messageCenter.getFont();
         }
+
+        layeredPane.setPreferredSize(GUI.getDimension());
+
+
         messageCenter.setFont(messageFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
         this.modelView = modelView;
@@ -69,7 +72,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         east = new TileButton(-1, -1, this);
         //east.setPreferredSize(new Dimension(130,200));
         TransferHandler dragAndDrop = new DragAndDrop();
-        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
+        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(135, 200, Image.SCALE_SMOOTH));
         east.setTransferHandler(dragAndDrop);
         east.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -81,7 +84,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         });
         submitButton.addActionListener(this);
         west = new TileButton(-1, -1, this);
-        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
+        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/blue_normal.png")).getImage().getScaledInstance(135, 200, Image.SCALE_SMOOTH));
         west.setTransferHandler(dragAndDrop);
         west.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -121,38 +124,52 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
         }
         this.setOpaque(false);
-        //boardPanel.setBorder(BorderFactory.createEmptyBorder(135, 120, 60, 135));
-        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.155 * GUI.getDimension().height), (int) (0.165 * GUI.getDimension().height), (int) (.09 * GUI.getDimension().height), (int) (0.19 * GUI.getDimension().height)));
+
+        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.236 * GUI.getDimension().height), (int) (0.333 * GUI.getDimension().height), (int) (0.125 * GUI.getDimension().height), (int) (0.347 * GUI.getDimension().height)));
         boardPanel.setOpaque(false);
-        this.add(boardPanel, BorderLayout.CENTER);
-        JPanel p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.add(Box.createVerticalStrut(200));
-        east.setBorder(BorderFactory.createEmptyBorder(100, 75, 100, 75));
-        p.add(east);
-        p.setAlignmentY(1);
-        p.setOpaque(false);
-        this.add(p, BorderLayout.EAST);
-        p = new JPanel();
-        p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-        p.add(Box.createVerticalStrut(200));
-        west.setBorder(BorderFactory.createEmptyBorder(100, 75, 100, 75));
-        //east.setBackground(new Color(0,0,0,0));
-        //west.setBackground(new Color(0,0,0,0));
-        p.add(west);
-        p.setOpaque(false);
-        this.add(p, BorderLayout.WEST);
+        boardPanel.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+        layeredPane.add(boardPanel, JLayeredPane.PALETTE_LAYER);
+
+
+        JPanel workerToSet = new JPanel();
+        workerToSet.setLayout(new BoxLayout(workerToSet, BoxLayout.X_AXIS));
+
+        //west.setBorder(BorderFactory.createEmptyBorder(300, 0, 0, 0));
+        //east.setBorder(BorderFactory.createEmptyBorder(300, 0, 100, 0));
+        workerToSet.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+        west.setBorder(BorderFactory.createEmptyBorder(100 , 75, 100, 75));
+        east.setBorder(BorderFactory.createEmptyBorder(100 , 75, 100, 75));
+        workerToSet.setAlignmentY(1);
+        west.setPreferredSize(new Dimension(135,200));
+        east.setPreferredSize(new Dimension(135,200));
+
+        workerToSet.add(west);
+        workerToSet.add(Box.createHorizontalGlue());
+        workerToSet.add(east);
+        workerToSet.setOpaque(false);
+
+        layeredPane.add(workerToSet, JLayeredPane.DRAG_LAYER);
+
         messageCenter.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
-        this.add(messageCenter, BorderLayout.NORTH);
-        submitButton.setName("submit");
-        submitButton.setFont(submitFont);
         messageCenter.setForeground(Color.WHITE);
-        submitButton.setEnabled(false);
-        this.add(submitButton, BorderLayout.SOUTH);
-        repaint();
-        //messageCenter.setBackground(new Color(65, 81, 194,150));
         messageCenter.setOpaque(false);
         messageCenter.setText("Godly player is selecting the first player");
+        messageCenter.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+
+
+        submitButton.setName("submit");
+        submitButton.setFont(submitFont);
+        submitButton.setEnabled(false);
+        JPanel buttons = new JPanel(new BorderLayout());
+        buttons.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+        buttons.setOpaque(false);
+        buttons.add(submitButton, BorderLayout.SOUTH);
+        buttons.add(messageCenter, BorderLayout.NORTH);
+        layeredPane.add(buttons, JLayeredPane.PALETTE_LAYER);
+
+        this.add(layeredPane);
+
+        repaint();
     }
 
 
@@ -260,7 +277,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 myTurn = true;
             }
             messageCenterTurn();
-
         } else if (evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")) {
             modelView.getActionsAvailable().clear();
             if (playerID != modelView.getActualPlayerId()) {
@@ -268,6 +284,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             } else {
                 playPanelListener.firePropertyChange("actionRequest", false, true);
             }
+        } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
+            messageCenter.setText("Game ended");
         }
 
         repaint();

@@ -49,7 +49,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
 
     @Override
     protected void winnerDetected(WinnerMessage message) {
-
+        guiListeners.firePropertyChange("winnerDetected", false, message);
     }
 
     @Override
