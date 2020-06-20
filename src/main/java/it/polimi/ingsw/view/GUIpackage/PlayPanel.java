@@ -298,27 +298,30 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (playerID == modelView.getActualPlayerId()) {
                 //show options
                 List<String> choices = (List<String>) modelView.getActionChoices().clone();
+                if (choices.size() == 1)
+                    messageCenter.setText("It's your turn, make your " + choices.get(0)); //prob da poter togliere
+                else {
+                    if (choices.contains("end turn")) {
+                        submitButton.setText("End turn");
+                        submitButton.setName("End turn");
+                        submitButton.setEnabled(true);
+                    } else if (choices.contains("Build a dome")) {
+                        submitButton.setText("Build a dome");
+                        submitButton.setName("Build a dome");
+                        submitButton.setForeground(Color.BLACK);
+                        buildDome = false;
+                        submitButton.setEnabled(true);
+                    }
+                    StringBuilder message = new StringBuilder("It's your turn, make your");
+                    for (int i = 0; i < choices.size() - 1; i++) {
+                        message.append(" " + choices.get(i));
+                        message.append(" or ");
+                    }
+                    message.append(choices.get(choices.size() - 1));
+                    messageCenter.setForeground(new Color(255, 235, 140));
 
-                if (choices.contains("end turn")) {
-                    submitButton.setText("End turn");
-                    submitButton.setName("End turn");
-                    submitButton.setEnabled(true);
-                } else if (choices.contains("Build a dome")) {
-                    submitButton.setText("Build a dome");
-                    submitButton.setName("Build a dome");
-                    submitButton.setForeground(Color.BLACK);
-                    buildDome = false;
-                    submitButton.setEnabled(true);
+                    messageCenter.setText(message.toString());
                 }
-                StringBuilder message = new StringBuilder("It's your turn, make your");
-                for (int i = 0; i < choices.size() - 1; i++) {
-                    message.append(" " + choices.get(i));
-                    message.append(" or ");
-                }
-                message.append(choices.get(choices.size() - 1));
-                messageCenter.setForeground(new Color(255, 235, 140));
-
-                messageCenter.setText(message.toString());
             }
         } else {
             messageCenter.setForeground(Color.WHITE);
@@ -448,7 +451,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             if (!((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
                                 tDest.setWorker(((TransferableImage) val).getImage());
                             } else {
-                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/WorkersAnimation/inactive.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
+                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/WorkersAnimation/inactive.png")).getImage());
                             }
 
                             System.out.println(workerPlaced);
