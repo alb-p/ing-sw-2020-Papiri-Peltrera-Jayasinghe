@@ -19,8 +19,7 @@ public class GodsButton extends JButton {
         /*this.glow=new ImageIcon(this.getClass().getResource("/GodsMiniature/glow.png"));//overlay glow
         this.godMiniature=new ImageIcon(this.getClass().getResource("/GodsMiniature/"+god+".png"));*/
         this.glow=new ImageIcon(this.getClass().getResource("/GodSelection/gold.png"));//overlay glow
-        if(!(god.equalsIgnoreCase("hypnus") || god.equalsIgnoreCase("poseidon")))this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/"+this.name.toLowerCase()+".png"));
-        else this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/zeus.png"));
+        this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/"+this.name.toLowerCase()+".png"));
         this.setIcon(godMiniature);
     }
 
