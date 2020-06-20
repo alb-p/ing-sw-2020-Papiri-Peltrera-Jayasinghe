@@ -24,7 +24,9 @@ public class TileButton extends JButton {
     private Image uno ;
     private Image due;
     private Image tre;
+    private Image dome;
     private Image floor;
+
 
 
     public TileButton(int row, int col, JPanel panel) {
@@ -36,6 +38,7 @@ public class TileButton extends JButton {
         uno = new ImageIcon(GUI.class.getResource("/Buildings/1.jpg")).getImage();
         due = new ImageIcon(GUI.class.getResource("/Buildings/2.jpg")).getImage();
         tre = new ImageIcon(GUI.class.getResource("/Buildings/3.jpg")).getImage();
+        dome = new ImageIcon(GUI.class.getResource("/Buildings/4.jpg")).getImage();
 
         if (!coordinate.equals(new Coordinate(-1, -1))) {
             //this.setText("      "); //debug
@@ -70,6 +73,8 @@ public class TileButton extends JButton {
             floor=due;
         }else if(vSlot.getLevel()==3){
             floor=tre;
+        } if(vSlot.hasDome()){
+            floor=dome;
         }
 
     }

@@ -47,6 +47,10 @@ public class VirtualSlot implements Serializable {
         return color == null && !dome;
     }
 
+    public boolean hasDome(){
+        return dome;
+    }
+
     @Override
     public boolean equals(Object that) {
         if (that instanceof VirtualSlot)
