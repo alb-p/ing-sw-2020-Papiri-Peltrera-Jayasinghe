@@ -49,6 +49,8 @@ public class InitialWaitingPanel extends JPanel {
 
         innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/15))));
         innerPanel.add(label);
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
+
         innerPanel.add(animation);
 
         this.add(innerPanel);

@@ -22,6 +22,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     private Dimension frameDimension;
     private Image image;
     private JPanel innerPanel;
+    Font font;
 
 
     public FirstPlayerSelectionPanel() throws IOException, FontFormatException {
@@ -39,8 +40,9 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
 
         this.image = new ImageIcon(this.getClass().getResource("/Name/setupBG.jpg")).getImage();
         JLabel title = new JLabel("Choose first player: ");
+        title.setForeground(Color.WHITE);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
+        font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
 
 
@@ -50,7 +52,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
         innerPanel.setPreferredSize(new Dimension((int) (frameDimension.width/1.5), (int) (frameDimension.height/1.95)));
         innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/15))));
         innerPanel.add(title);
-        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/12))));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
 
         title.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18));
 
@@ -78,8 +80,11 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
             choosePlayer.setName(((ArrayList<String>) evt.getNewValue()).get(0));
             choosePlayer.addActionListener(this);
             choosePlayer.setAlignmentX(Component.CENTER_ALIGNMENT);
+            choosePlayer.setBorder(null);
+            choosePlayer.setContentAreaFilled(false);//trasparenza
+            choosePlayer.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/30));
             innerPanel.add(choosePlayer);
-            innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
+            innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/25))));
         }
     }
 
