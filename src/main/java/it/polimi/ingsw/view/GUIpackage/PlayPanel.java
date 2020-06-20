@@ -300,9 +300,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (playerID == modelView.getActualPlayerId()) {
                 //show options
                 List<String> choices = (List<String>) modelView.getActionChoices().clone();
-                if (choices.size() == 1)
+                if (choices.size() == 1) {
+                    messageCenter.setForeground(new Color(255, 235, 140));
                     messageCenter.setText("It's your turn, make your " + choices.get(0)); //prob da poter togliere
-                else {
+                } else {
                     if (choices.contains("end turn")) {
                         submitButton.setText("End turn");
                         submitButton.setName("End turn");
@@ -321,15 +322,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     }
                     message.append(choices.get(choices.size() - 1));
                     messageCenter.setForeground(new Color(255, 235, 140));
-
                     messageCenter.setText(message.toString());
                 }
+            } else {
+                messageCenter.setForeground(Color.WHITE);
+                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
             }
-        } else {
-            messageCenter.setForeground(Color.WHITE);
-            messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
         }
-
         repaint();
     }
 
