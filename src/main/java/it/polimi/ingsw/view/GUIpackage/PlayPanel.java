@@ -462,7 +462,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             workerPositions.remove(tSource.getCoordinate());
                         submitButton.setEnabled(workerPositions.size() == 2);
                         submitButton.setVisible(workerPositions.size() == 2);
-                        layeredPane.remove(workerToSet);
+                        if(workerPositions.size() == 2)layeredPane.remove(workerToSet);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
                     } else if (play) {
                         //PLAY
