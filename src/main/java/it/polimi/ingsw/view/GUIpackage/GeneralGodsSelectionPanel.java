@@ -23,7 +23,6 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     private ArrayList<GodsButton> godsButton = new ArrayList<>();
     private ArrayList<String> selectedGods = new ArrayList<>();
     private JLabel title;
-    private JLabel description;
     private JButton submit;
     private int playerPerGame = 0;
     private ImageIcon imagedx;
@@ -57,12 +56,8 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         Font font;
         title = new JLabel("Select gods");
         title.setForeground(new Color(255, 235, 140));
-        description = new JLabel();
         FlowLayout flow = new FlowLayout(FlowLayout.CENTER, 30,30);
         submit = new CustomButton("/GodSelection/next/next");
-
-
-
         submit.setName("submit");
         playerPerGame = model.getPlayers().size();
         gods = model.getGods();
@@ -101,17 +96,8 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
             font = title.getFont();
         }
 
-        description.setFont(font);
         title.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/15));
-
-
-
-
-
-
-
         godsList.add(submit);
-        paneldx.add(description);
         panelsx.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/30))));
         panelsx.add(title);
         panelsx.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/18))));
@@ -187,10 +173,9 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     @Override
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() instanceof GodsButton) {
-
-            imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/"+((GodsButton) e.getSource()).getName().toLowerCase()+" info.jpg"));
+            imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/"+
+                    ((GodsButton) e.getSource()).getName().toLowerCase()+" info.jpg"));
             paneldx.repaint();
-            description.setText("<html>"+((GodsButton) e.getSource()).getName()+"<br><br><br><br><br>ciaoo</html");
         }
     }
 

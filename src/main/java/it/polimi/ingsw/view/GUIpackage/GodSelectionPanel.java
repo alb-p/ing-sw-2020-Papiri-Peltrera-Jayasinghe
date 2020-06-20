@@ -1,9 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.model.Model;
 import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
 import it.polimi.ingsw.view.GUIpackage.Components.GodsButton;
-import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,18 +17,17 @@ import java.util.ArrayList;
 
 public class GodSelectionPanel extends JPanel implements ActionListener, MouseListener, PropertyChangeListener {
 
-    private PropertyChangeSupport godSelectionListeners = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport godSelectionListeners = new PropertyChangeSupport(this);
     private int playersPerGame = 0;
-    private ArrayList<String[]> selectedGods = new ArrayList<>();
-    private ArrayList<GodsButton> godsButton = new ArrayList<>();
-    private JPanel buttonPanel;
-    private CustomButton submit;
-    private JLabel updates;
+    private final ArrayList<String[]> selectedGods = new ArrayList<>();
+    private final ArrayList<GodsButton> godsButton = new ArrayList<>();
+    private final JPanel buttonPanel;
+    private final CustomButton submit;
+    private final JLabel updates;
     private String selectedGod = "";
-    private boolean myturn = false;
+    private boolean myTurn = false;
     private JLabel label;
 
-    private JLabel description;
     private ImageIcon imagedx;
     private ImageIcon imagesx;
     private Dimension frameDimension;
@@ -58,10 +55,6 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
             }
         };
 
-
-
-        description = new JLabel();
-
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         panelsx.setLayout(new BoxLayout(panelsx, BoxLayout.Y_AXIS));
         frameDimension=GUI.getDimension();
@@ -83,7 +76,6 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         label = new JLabel("<html>Opponent player<br>&thinsp &thinsp is selecting...</html>");
         label.setForeground(new Color(255, 235, 140));
         label.setFont(font.deriveFont(Font.PLAIN,60));
-        description.setFont(font);
         buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setOpaque(false);
         submit = new CustomButton("/GodSelection/next/next");
@@ -97,8 +89,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         panelsx.add(submit);
         panelsx.add(Box.createVerticalStrut(40));
         panelsx.add(updates);
-
-        paneldx.add(description);
+;
         this.add(panelsx);
         this.add(paneldx);
         submit.setEnabled(false);
@@ -107,10 +98,10 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (myturn) {
+        if (myTurn) {
             if (actionEvent.getSource().equals(submit)) {
                 godSelectionListeners.firePropertyChange("godSelected", false, selectedGod);
-                myturn = false;
+                myTurn = false;
             } else {
                 if (selectedGod.equals(((JButton) actionEvent.getSource()).getName())) {
                     selectedGod = "";
@@ -153,7 +144,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
                 }
             }
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("myTurn")){
-            myturn=true;
+            myTurn =true;
             label.setText("Select your god!");
             label.setFont(font.deriveFont(Font.PLAIN,80));
 
@@ -201,10 +192,8 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
     @Override
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() instanceof GodsButton) {
-
             imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/"+((GodsButton) e.getSource()).getName().toLowerCase()+" info.jpg"));
             paneldx.repaint();
-            description.setText(((GodsButton) e.getSource()).getName());
         }
     }
 
