@@ -22,6 +22,7 @@ import java.io.IOException;
 import java.nio.file.DirectoryNotEmptyException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -529,6 +530,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                     if (a.equals(attemptedMove)) {
                                         dragAndDropResult = true;
                                         sendAction(attemptedMove);
+                                        Random r=new Random();
+                                        MainPanel.playSound("/Sounds/move"+r.nextInt(3)+".wav",0);
                                     }
                                 }
                             }

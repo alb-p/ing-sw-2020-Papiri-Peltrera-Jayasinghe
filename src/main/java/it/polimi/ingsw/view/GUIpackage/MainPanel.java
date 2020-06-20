@@ -11,34 +11,15 @@ import static java.lang.Thread.sleep;
 
 public class MainPanel extends JPanel {
     private Point initialClick;
+    private Boolean musicon=true;
 
     public MainPanel(final JFrame parent){
 
-//-----------------------------------------SI TIENE? BHOOOO-------------------------
-        Random r=new Random();
-        //bho
-        if(false){
-            Thread musicThread = new Thread(() -> {
-                try {
-                    sleep(2000);
-                    MakeSound sound = new MakeSound();
-                    sound.playSound("/Sounds/track1.wav");
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
 
-            });
-
-            musicThread.start();
-        }
-//---------------------------------------------------------------------------------
 
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();
-
             }
         });
 
@@ -62,4 +43,31 @@ public class MainPanel extends JPanel {
             }
         });
     }
+
+    //-----------------------------------------SI TIENE? BHOOOO-------------------------
+
+
+    public static void playSound(String name, int delay){
+
+            Thread musicThread = new Thread(() -> {
+                try {
+                    MakeSound sound = new MakeSound();
+                    sleep(delay);
+                    sound.playSound(name);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            });
+
+            musicThread.start();
+        }
+
+
+
+    //---------------------------------------------------------------------------------
+
+
 }

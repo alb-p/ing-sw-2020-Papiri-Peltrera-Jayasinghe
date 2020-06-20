@@ -1,5 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage.Components;
 
+import it.polimi.ingsw.view.GUIpackage.MainPanel;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -30,13 +32,14 @@ public class CustomButton extends JButton implements MouseListener{
 
     @Override
     public void mouseClicked(MouseEvent mouseEvent) {
-
     }
 
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
         this.setIcon(this.pressed);
+        MainPanel.playSound("/Sounds/click.wav",0);
+
     }
 
     @Override
