@@ -35,6 +35,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
     private ImageIcon imagesx;
     private Dimension frameDimension;
     private JPanel paneldx;
+    Font font;
 
     public GodSelectionPanel() {
 
@@ -58,7 +59,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         };
 
 
-        Font font;
+
         description = new JLabel();
 
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -79,22 +80,24 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
 
 
-        label = new JLabel("Opponent player is selecting...");
-        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/30));
+        label = new JLabel("<html>Opponent player<br>&thinsp &thinsp is selecting...</html>");
+        label.setForeground(new Color(255, 235, 140));
+        label.setFont(font.deriveFont(Font.PLAIN,60));
         description.setFont(font);
         buttonPanel = new JPanel(new FlowLayout());
         buttonPanel.setOpaque(false);
         submit = new CustomButton("/GodSelection/next/next");
         submit.addActionListener(this);
         updates = new JLabel("");
-        panelsx.add(Box.createVerticalStrut(120));
+        panelsx.add(Box.createVerticalStrut(70));
         panelsx.add(label);
-        panelsx.add(Box.createVerticalStrut(40));
+        panelsx.add(Box.createVerticalStrut(140));
         panelsx.add(buttonPanel);
         panelsx.add(Box.createVerticalStrut(40));
         panelsx.add(submit);
         panelsx.add(Box.createVerticalStrut(40));
         panelsx.add(updates);
+
         paneldx.add(description);
         this.add(panelsx);
         this.add(paneldx);
@@ -142,6 +145,8 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
             for (JButton b : godsButton) {
                 if (b.getName().equals(evt.get(1))) {
                     b.setEnabled(false);
+                    b.setVisible(false);
+
                     String text = updates.getText();
                     String toAppend = evt.get(0) + " selected " + evt.get(1);
                     updates.setText(text + "\n" + toAppend);
@@ -150,6 +155,8 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("myTurn")){
             myturn=true;
             label.setText("Select your god!");
+            label.setFont(font.deriveFont(Font.PLAIN,80));
+
         }
 
     }

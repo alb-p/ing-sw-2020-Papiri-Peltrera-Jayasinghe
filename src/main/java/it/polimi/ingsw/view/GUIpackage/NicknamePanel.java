@@ -57,7 +57,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         nickToFill.setForeground(Color.WHITE);
         invalidNickLabel = new JLabel();
         invalidNickLabel.setFont(errorFont);
-        invalidNickLabel.setForeground(new Color(245, 215, 33));
+        invalidNickLabel.setForeground(new Color(255, 178, 195));
         nickToFill.setOpaque(false);
         nicknamePanel = new JPanel(new BorderLayout());
         nicknamePanel.setOpaque(false);
@@ -65,8 +65,6 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         nicknamePanel.add(invalidNickLabel, BorderLayout.CENTER);
         nicknamePanel.setBorder(BorderFactory.createEmptyBorder((int)(GUI.getDimension().height/14.4),(int)(GUI.getDimension().width/4.8),(int)(GUI.getDimension().height/9),(int)(GUI.getDimension().width/4.8)));
         submitButton = new CustomButton("/Name/submit");
-        //submitButton = new CustomButton("nome path");
-        submitButton.setFont(font);
         nickToFill.setBorder(null);
         invalidNickLabel.setHorizontalAlignment(0);
         playerId = id;

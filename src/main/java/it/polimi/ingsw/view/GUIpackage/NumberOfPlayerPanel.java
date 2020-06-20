@@ -47,7 +47,7 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
         this.setLayout(new GridBagLayout());
         innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
         innerPanel2.setLayout(new BoxLayout(innerPanel2,BoxLayout.X_AXIS));
-        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18)); //imposta font liscio e dimensione 45
+        label.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18)); //imposta font liscio
         label.setForeground(Color.WHITE);
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
         twoPlayers.addActionListener(this);
