@@ -43,6 +43,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private JPanel boardPanel;
     private JLabel messageCenter;
     private JButton submitButton = new JButton("Submit");
+    private final JButton domeButton = new JButton("Build a dome");
+    private final JButton endTurnButton = new JButton("End turn");
     private TileButton west;
     private TileButton east;
     private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
@@ -58,7 +60,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         Font submitFont;
         try {
             messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 35); //carica font
-            submitFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 15); //carica font
+            submitFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 25); //carica font
         } catch (IOException | FontFormatException e) {
             messageFont = messageCenter.getFont();
             submitFont = messageCenter.getFont();
@@ -84,7 +86,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 handle.exportAsDrag(button, e, TransferHandler.MOVE);
             }
         });
-        submitButton.addActionListener(this);
+
         west = new TileButton(-1, -1, this);
         west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         west.setTransferHandler(dragAndDrop);
@@ -161,12 +163,23 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         messageCenter.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
 
 
+
+        endTurnButton.setName("End turn");
+        endTurnButton.setVisible(false);
+        endTurnButton.addActionListener(this);
+        domeButton.setName("Build a dome");
+        domeButton.setVisible(false);
+        domeButton.addActionListener(this);
         submitButton.setName("submit");
         submitButton.setFont(submitFont);
         submitButton.setEnabled(false);
+        submitButton.setVisible(false);
+        submitButton.addActionListener(this);
         JPanel buttons = new JPanel(new BorderLayout());
         buttons.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
         buttons.setOpaque(false);
+        buttons.add(domeButton, BorderLayout.WEST);
+        buttons.add(endTurnButton, BorderLayout.EAST);
         buttons.add(submitButton, BorderLayout.SOUTH);
         buttons.add(messageCenter, BorderLayout.NORTH);
         layeredPane.add(buttons, JLayeredPane.PALETTE_LAYER);
@@ -207,15 +220,22 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (button.getName().equalsIgnoreCase("submit")) {
                 sendWorkers();
                 submitButton.setEnabled(false);
+                submitButton.setVisible(false);
             } else if (button.getName().equalsIgnoreCase("end turn")) {
-                submitButton.setEnabled(false);
+                endTurnButton.setVisible(false);
                 modelView.getActionsAvailable().clear();
+                endTurnButton.setVisible(false);
                 playPanelListener.firePropertyChange("end turn", null, new GenericMessage());
             } else if (button.getName().equalsIgnoreCase("Build a dome")) {
+                System.out.println("PREMUTO DOMEEEE");
                 if (buildDome) {
                     buildDome = false;
-                    submitButton.setForeground(Color.BLACK);
-                } else buildDome = true;
+                    //TODO rendi cliccato il bottone
+                    domeButton.setForeground(Color.BLACK);
+                } else{
+                    buildDome = true;
+                    submitButton.setForeground(Color.RED);
+                }
             }
 
         }
@@ -302,18 +322,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 List<String> choices = (List<String>) modelView.getActionChoices().clone();
                 if (choices.size() == 1) {
                     messageCenter.setForeground(new Color(255, 235, 140));
-                    messageCenter.setText("It's your turn, make your " + choices.get(0)); //prob da poter togliere
+                    messageCenter.setText("It's your turn, make your " + choices.get(0));
                 } else {
-                    if (choices.contains("end turn")) {
-                        submitButton.setText("End turn");
-                        submitButton.setName("End turn");
-                        submitButton.setEnabled(true);
+                    if (choices.contains("end turn") && modelView.isOptional()) {
+                        endTurnButton.setEnabled(true);
+                        endTurnButton.setVisible(true);
                     } else if (choices.contains("Build a dome")) {
-                        submitButton.setText("Build a dome");
-                        submitButton.setName("Build a dome");
-                        submitButton.setForeground(Color.BLACK);
+                        domeButton.setForeground(Color.BLACK);
                         buildDome = false;
-                        submitButton.setEnabled(true);
+                        domeButton.setEnabled(true);
+                        domeButton.setVisible(true);
                     }
                     StringBuilder message = new StringBuilder("It's your turn, make your");
                     for (int i = 0; i < choices.size() - 1; i++) {
@@ -377,6 +395,20 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         seaAnimation.start();
     }
 
+    private void sendAction(Action attemptedAction) {
+        playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
+        myTurn = false;
+        if(buildDome){
+            buildDome = false;
+            domeButton.setForeground(Color.BLACK); //meh
+        }
+        domeButton.setVisible(false);
+        endTurnButton.setVisible(false);
+        modelView.getActionsAvailable().clear();
+        playPanelListener.firePropertyChange("actionRequest", false, true);
+
+    }
+
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -430,6 +462,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             workerPositions.remove(tSource.getCoordinate());
                         else tSource.setTransferHandler(null);
                         submitButton.setEnabled(workerPositions.size() == 2);
+                        submitButton.setVisible(workerPositions.size() == 2);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
                     } else if (play) {
                         //PLAY
@@ -512,14 +545,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
     }
 
-    private void sendAction(Action attemptedAction) {
-        playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
-        myTurn = false;
-        submitButton.setEnabled(false);
-        modelView.getActionsAvailable().clear();
-        playPanelListener.firePropertyChange("actionRequest", false, true);
 
-    }
 
 
     class TransferableImage implements Transferable {
