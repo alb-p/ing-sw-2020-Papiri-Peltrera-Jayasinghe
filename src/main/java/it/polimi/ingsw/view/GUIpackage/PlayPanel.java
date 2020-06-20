@@ -41,6 +41,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private int playerID;
     private String color;
     private JPanel boardPanel;
+    private JPanel workerToSet = new JPanel();
     private JLabel messageCenter;
     private JButton submitButton = new JButton("Submit");
     private final JButton domeButton = new JButton("Build a dome");
@@ -136,7 +137,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         layeredPane.add(boardPanel, JLayeredPane.PALETTE_LAYER);
 
 
-        JPanel workerToSet = new JPanel();
         workerToSet.setLayout(new BoxLayout(workerToSet, BoxLayout.X_AXIS));
 
         //west.setBorder(BorderFactory.createEmptyBorder(300, 0, 0, 0));
@@ -460,9 +460,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     if (!workerPlaced) {
                         if (!tSource.getCoordinate().equals(new Coordinate(-1, -1)))
                             workerPositions.remove(tSource.getCoordinate());
-                        else tSource.setTransferHandler(null);
                         submitButton.setEnabled(workerPositions.size() == 2);
                         submitButton.setVisible(workerPositions.size() == 2);
+                        layeredPane.remove(workerToSet);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
                     } else if (play) {
                         //PLAY
