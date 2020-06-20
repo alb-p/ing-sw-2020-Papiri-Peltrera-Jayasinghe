@@ -368,8 +368,6 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                                 break;
                             }
                         }
-                        System.out.println("NOT MY WORK"+(!myWorker && !sourceCoord.equals(new Coordinate(-1, -1))));
-                        if (!myWorker && !sourceCoord.equals(new Coordinate(-1, -1))) return false; //trying to move an opponent worker
 
                         if (!workerPlaced && (myWorker || sourceCoord.equals(new Coordinate(-1, -1)))) {
                             if (tDest.getWorker() != null || tDest.getCoordinate().equals(new Coordinate(-1, -1))
@@ -392,14 +390,11 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                             // PLAY
                             if(myTurn){
                                 Move attemptedMove=new Move(sourceCoord,tDest.getCoordinate());
-                                System.out.println("aaaaa");
                                 List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
                                 for(Action a : actions){
                                     if(a.equals(attemptedMove)){
                                         dragAndDropResult=true;
                                         sendAction(attemptedMove);
-                                        System.out.println("bbbbbbbb");
-
                                     }
                                 }
                             }
