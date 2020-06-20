@@ -34,6 +34,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     boolean firstPlayerSelected = false;
     private ArrayList<Coordinate> workerPositions = new ArrayList<>();
     JLayeredPane layeredPane = new JLayeredPane();
+    private Timer timer;
+    private int contatore=216;
 
     private ModelView modelView;
     private int playerID;
@@ -345,6 +347,35 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     public void addPlayPanelListener(PropertyChangeListener listener) {
         playPanelListener.addPropertyChangeListener(listener);
+    }
+
+    public void startAnimation(){
+
+        Thread seaAnimation = new Thread(()->{
+
+            try {
+                while (true){
+                    while (contatore < 320) {
+                        Thread.sleep(50);
+                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (contatore) + ".jpg")).getImage();
+                        contatore++;
+                        repaint();
+                    }
+                    while (contatore > 216) {
+                        Thread.sleep(50);
+                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (contatore) + ".jpg")).getImage();
+                        contatore--;
+                        repaint();
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+        });
+        seaAnimation.start();
     }
 
 

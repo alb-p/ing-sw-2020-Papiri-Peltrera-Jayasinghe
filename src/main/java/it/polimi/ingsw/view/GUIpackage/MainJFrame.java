@@ -16,6 +16,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     private CardLayout layout;
     private LogoPanel logo;
     private IslandAnimationPanel islandAnimationPanel;
+    private PlayPanel playPanel;
 
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
@@ -62,7 +63,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         modelView.addSelectedSingleGodListener(firstPlayerSelectionPanel);
         firstPlayerSelectionPanel.addFirstPlayerSelectionListener(gui);
         contentPane.add("FirstPlayerSelectionPanel", firstPlayerSelectionPanel);
-        PlayPanel playPanel = new PlayPanel(modelView);
+        playPanel = new PlayPanel(modelView);
         modelView.addBoardListener(playPanel);
         modelView.addFirstPlayerListener(playPanel);
         modelView.addActionListener(playPanel);
@@ -90,6 +91,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
             layout.show(getContentPane(),"HomePanel");
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("islandTransitionEnded")){
             layout.show(getContentPane(),"PlayPanel");
+            playPanel.startAnimation();
         }
     }
 }
