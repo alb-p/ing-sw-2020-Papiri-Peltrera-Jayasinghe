@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class VirtualSlot implements Serializable {
 
 
+    private  final static long serialVersionUID = -2883461245726706010L;
     private final Color color;
     private int level = 0;
     private final boolean dome;

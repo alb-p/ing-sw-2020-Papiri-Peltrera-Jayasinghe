@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class ColorMessage implements Message, Serializable {
 
+    private static final long serialVersionUID = -4150974628324626570L;
     private String message;
     private Color color;
     private int id;

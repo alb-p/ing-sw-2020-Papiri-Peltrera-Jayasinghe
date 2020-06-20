@@ -4,8 +4,9 @@ import java.io.Serializable;
 
 public class WinnerMessage implements Message, Serializable {
 
-    private int id;
-    private String message;
+    private static final long serialVersionUID = 7815827983162006979L;
+    private final int id;
+    private final String message;
     public WinnerMessage(int id, String nickname){
         this.id = id;
         this.message = nickname+ "\n" +

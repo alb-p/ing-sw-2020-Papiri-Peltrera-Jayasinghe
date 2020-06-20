@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 public class NicknameMessage implements Message , Serializable {
 
+    private static final long serialVersionUID = -7571629895902903270L;
     private String message;
     private String nickname;
     private int id;

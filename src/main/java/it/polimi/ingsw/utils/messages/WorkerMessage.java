@@ -1,13 +1,13 @@
 package it.polimi.ingsw.utils.messages;
 
 import it.polimi.ingsw.model.Coordinate;
-import it.polimi.ingsw.model.Worker;
 
 import java.io.Serializable;
 
 public class WorkerMessage implements Message, Serializable {
-    private int workerNumber;
-    private String message;
+    private static final long serialVersionUID = 6592641812520811496L;
+    private final int workerNumber;
+    private final String message;
     private Coordinate coordinate;
     private int id;
 

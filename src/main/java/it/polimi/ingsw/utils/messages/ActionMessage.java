@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class ActionMessage implements Message, Serializable {
 
+    private static final long serialVersionUID = -7780168581217375462L;
     private int id;
     private boolean isOptional;
     private ArrayList<Action> choices;

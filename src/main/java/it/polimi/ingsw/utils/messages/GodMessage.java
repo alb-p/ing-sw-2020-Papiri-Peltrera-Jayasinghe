@@ -1,12 +1,11 @@
 package it.polimi.ingsw.utils.messages;
 
-import it.polimi.ingsw.network.SocketClientConnection;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 public class GodMessage implements Message, Serializable {
 
+    private static final long serialVersionUID = 1648566943652144363L;
     String message;
     String god;
     int id;

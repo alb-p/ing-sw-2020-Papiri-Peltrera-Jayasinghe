@@ -2,12 +2,11 @@ package it.polimi.ingsw.utils.messages;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 public class InitialCardsMessage implements Message, Serializable {
 
-    private ArrayList<String> selectedList;
+    private static final long serialVersionUID = -5566840779833893228L;
+    private final ArrayList<String> selectedList;
     private String message;
     private int id;
 
