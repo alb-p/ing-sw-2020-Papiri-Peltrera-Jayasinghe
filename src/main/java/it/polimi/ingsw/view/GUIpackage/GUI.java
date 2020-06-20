@@ -55,7 +55,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void endTurn(NicknameMessage message) {
         super.endTurn(message);
-        guiListeners.firePropertyChange("endTurnConfirm", false ,true);
+        guiListeners.firePropertyChange("endTurnConfirm", false, true);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void setFirstPlayer(NicknameMessage message) {
         super.setFirstPlayer(message);
-        if(modelView.getGodlyId() == getPlayerId()){
+        if (modelView.getGodlyId() == getPlayerId()) {
             window.startIslandAnimation();
         }
     }
@@ -82,7 +82,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         super.assignedGod(message);
 
         if (modelView.getChosenGods().isEmpty()) {
-            if(modelView.getGodlyId() == getPlayerId()){
+            if (modelView.getGodlyId() == getPlayerId()) {
                 ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "FirstPlayerSelectionPanel");
             } else window.startIslandAnimation();
         } else if (modelView.getActualPlayerId() == getPlayerId()) {
@@ -168,57 +168,60 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
-        if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("play")) {
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equalsIgnoreCase("play")) {
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             getConnection().start();
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("numberOfPlayers")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("numberOfPlayers")) {
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             synchronized (this) {
-                numOfPlayers = (Integer) propertyChangeEvent.getNewValue();
+                numOfPlayers = (Integer) evt.getNewValue();
                 notify();
             }
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("nicknameReceived")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("nicknameReceived")) {
             NicknameMessage message = new NicknameMessage();
-            message.setNickname((String) propertyChangeEvent.getNewValue());
+            message.setNickname((String) evt.getNewValue());
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             connection.sendEvent(new PropertyChangeEvent(this, "notifyNickname", null, message));
 
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("colorReceived")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("colorReceived")) {
             ColorMessage message = new ColorMessage(getPlayerId());
-            message.setColor((Color) propertyChangeEvent.getNewValue());
+            message.setColor((Color) evt.getNewValue());
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             connection.sendEvent(new PropertyChangeEvent(this, "notifyColor", null, message));
 
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("godsSelected")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("godsSelected")) {
             InitialCardsMessage message = new InitialCardsMessage();
-            ArrayList<String> selectedGods = (ArrayList<String>) propertyChangeEvent.getNewValue();
+            ArrayList<String> selectedGods = (ArrayList<String>) evt.getNewValue();
             for (String s : selectedGods) message.addToSelectedList(s);
             getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, message));
             System.out.println("SENDED GODS");
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
 
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("godSelected")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("godSelected")) {
             GodMessage message = new GodMessage();
-            message.setGod((String) (propertyChangeEvent.getNewValue()));
+            message.setGod((String) (evt.getNewValue()));
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("firstPlayerSelected")) {
+        } else if (evt.getPropertyName().equalsIgnoreCase("firstPlayerSelected")) {
             NicknameMessage nicknameMessage;
-            nicknameMessage =(NicknameMessage) propertyChangeEvent.getNewValue();
+            nicknameMessage = (NicknameMessage) evt.getNewValue();
             getConnection().sendEvent(new PropertyChangeEvent(this, "firstPlayerSelected", null, nicknameMessage));
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
-        } else if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("workerReceived")) {
-            WorkerMessage message = (WorkerMessage) propertyChangeEvent.getNewValue();
+        } else if (evt.getPropertyName().equalsIgnoreCase("workerReceived")) {
+            WorkerMessage message = (WorkerMessage) evt.getNewValue();
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyWorker", null, message));
-        } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("actionRequest")){
+        } else if (evt.getPropertyName().equalsIgnoreCase("actionRequest")) {
             connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                     null, new GenericMessage()));
-        }else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("actionReceived")){
-            ActionMessage mess = new ActionMessage();
-            mess.setAction((Action)propertyChangeEvent.getNewValue());
-            modelView.getActionsAvailable().clear();
-            connection.sendEvent(new PropertyChangeEvent(this,"notifyAction", null, mess));
+        } else if (evt.getPropertyName().equalsIgnoreCase("actionReceived")) {
+            ActionMessage message= new ActionMessage();
+            message.setAction((Action) evt.getNewValue());
+            connection.sendEvent(new PropertyChangeEvent(this, "notifyAction", null, message));
+        } else if(evt.getPropertyName().equalsIgnoreCase("end turn")){
+            Message message = (GenericMessage) evt.getNewValue();
+            connection.sendEvent(new PropertyChangeEvent(this, "end turn", null, message));
+            
         }
     }
 }

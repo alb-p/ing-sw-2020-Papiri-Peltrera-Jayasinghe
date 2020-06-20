@@ -2,6 +2,7 @@ package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
 import it.polimi.ingsw.view.ModelView;
@@ -47,7 +48,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private Coordinate selected;
     private boolean buildDome = false;
     private TileButton[][] boardOfButtons = new TileButton[5][5];
-private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960,70,Image.SCALE_SMOOTH);
+    private Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
 
 
     public PlayPanel(ModelView modelView) {
@@ -68,7 +69,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         east = new TileButton(-1, -1, this);
         //east.setPreferredSize(new Dimension(130,200));
         TransferHandler dragAndDrop = new DragAndDrop();
-        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130,200,Image.SCALE_SMOOTH));
+        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         east.setTransferHandler(dragAndDrop);
         east.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -80,7 +81,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         });
         submitButton.addActionListener(this);
         west = new TileButton(-1, -1, this);
-        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130,200,Image.SCALE_SMOOTH));
+        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         west.setTransferHandler(dragAndDrop);
         west.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -121,13 +122,13 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         }
         this.setOpaque(false);
         //boardPanel.setBorder(BorderFactory.createEmptyBorder(135, 120, 60, 135));
-        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.155*GUI.getDimension().height), (int) (0.165*GUI.getDimension().height), (int) (.09*GUI.getDimension().height), (int) (0.19*GUI.getDimension().height)));
+        boardPanel.setBorder(BorderFactory.createEmptyBorder((int) (0.155 * GUI.getDimension().height), (int) (0.165 * GUI.getDimension().height), (int) (.09 * GUI.getDimension().height), (int) (0.19 * GUI.getDimension().height)));
         boardPanel.setOpaque(false);
         this.add(boardPanel, BorderLayout.CENTER);
         JPanel p = new JPanel();
         p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
         p.add(Box.createVerticalStrut(200));
-        east.setBorder(BorderFactory.createEmptyBorder(100,75, 100, 75));
+        east.setBorder(BorderFactory.createEmptyBorder(100, 75, 100, 75));
         p.add(east);
         p.setAlignmentY(1);
         p.setOpaque(false);
@@ -141,7 +142,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
         p.add(west);
         p.setOpaque(false);
         this.add(p, BorderLayout.WEST);
-        messageCenter.setBorder(BorderFactory.createEmptyBorder(15,0,0,0));
+        messageCenter.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
         this.add(messageCenter, BorderLayout.NORTH);
         submitButton.setName("submit");
         submitButton.setFont(submitFont);
@@ -159,15 +160,15 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof TileButton) {
             TileButton t = (TileButton) e.getSource();
-            if(myTurn) {
+            if (myTurn) {
                 List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
-                if(selected == null) {
+                if (selected == null) {
                     for (Action a : actions) {
                         if (a.getStart().equals(t.getCoordinate())) {
                             selected = t.getCoordinate();
                         }
                     }
-                    if(selected == null) {
+                    if (selected == null) {
                         Coordinate startBuild = actions.get(0).getStart();
                         for (Action a : actions) {
                             if (!a.getStart().equals(startBuild)) return;
@@ -180,23 +181,35 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                     return;
                 }
             }
-        } else if (e.getSource() instanceof JButton &&
-                ((JComponent) e.getSource()).getName().equalsIgnoreCase("submit")) {
-            sendWorkers();
-            submitButton.setEnabled(false);
+        } else if (e.getSource() instanceof JButton) {
+            JButton button = (JButton) e.getSource();
+            if (button.getName().equalsIgnoreCase("submit")) {
+                sendWorkers();
+                submitButton.setEnabled(false);
+            } else if (button.getName().equalsIgnoreCase("end turn")) {
+                submitButton.setEnabled(false);
+                modelView.getActionsAvailable().clear();
+                playPanelListener.firePropertyChange("endTurn", null, new GenericMessage());
+            } else if (button.getName().equalsIgnoreCase("Build a dome")) {
+                if (buildDome) {
+                    buildDome = false;
+                    submitButton.setForeground(Color.BLACK);
+                } else buildDome = true;
+            }
+
         }
 
         repaint();
 
     }
 
-    private void tryBuild(TileButton t, List<Action> actions){
+    private void tryBuild(TileButton t, List<Action> actions) {
         for (Action a : actions) {
             if (a.getEnd().equals(t.getCoordinate())) {
                 if (a.getActionName().equalsIgnoreCase("BUILD") || a instanceof Build) {
-                    if(buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME") ){
+                    if (buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME")) {
                         sendAction(new BuildDome(a.getStart(), a.getEnd()));
-                    }else if(!buildDome) {
+                    } else if (!buildDome) {
                         sendAction(new Build(a.getStart(), a.getEnd()));
                     }
                 }
@@ -225,42 +238,71 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
             playerID = (int) evt.getNewValue();
         } else if (evt.getPropertyName().equalsIgnoreCase("boardUpdate")) {
             VirtualSlot vSlot = (VirtualSlot) evt.getNewValue();
-            messagePlayerSettingWorkers();
             // UPDATE BOARD
             boardOfButtons[vSlot.getCoordinate().getRow()][vSlot.getCoordinate().getCol()].updateView(vSlot);
         } else if (evt.getPropertyName().equalsIgnoreCase("firstPlayer")) {
             firstPlayerSelected = true;
             messagePlayerSettingWorkers();
-        } else if(evt.getPropertyName().equalsIgnoreCase("workerConfirm")){
-            WorkerMessage message = (WorkerMessage)evt.getNewValue();
-            if(message.getWorkerNumber() == 1
-                    && modelView.getFirstPlayerId() == modelView.getActualPlayerId()){
+        } else if (evt.getPropertyName().equalsIgnoreCase("workerConfirm")) {
+            WorkerMessage message = (WorkerMessage) evt.getNewValue();
+            if (message.getWorkerNumber() == 1
+                    && modelView.getFirstPlayerId() == modelView.getActualPlayerId()) {
                 play = true;
-                if(playerID == modelView.getActualPlayerId()){
+                if (playerID == modelView.getActualPlayerId()) {
                     //richiedi mosse disponibili
-                    playPanelListener.firePropertyChange("actionRequest", false , true);
-                }else {
-                    String playing = modelView.getPlayer(modelView.getActualPlayerId()).getNickname();
-                    messageCenter.setText(playing+"'s turn... please wait");
+                    playPanelListener.firePropertyChange("actionRequest", false, true);
                 }
-            } else if(message.getWorkerNumber() == 1){
+            } else if (message.getWorkerNumber() == 1) {
                 messagePlayerSettingWorkers();
             }
-        } else if(evt.getPropertyName().equalsIgnoreCase("actionsReceived")){
-            if(playerID == modelView.getActualPlayerId()){
-                messageCenter.setText("This is your turn!");
+        } else if (evt.getPropertyName().equalsIgnoreCase("actionsReceived")) {
+            if (playerID == modelView.getActualPlayerId()) {
                 myTurn = true;
             }
-        } else if(evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")){
-            if(playerID != modelView.getActualPlayerId()){
-                String playing = modelView.getPlayer(modelView.getActualPlayerId()).getNickname();
-                messageCenter.setText(playing+"'s turn... please wait");
-            }else {
-                playPanelListener.firePropertyChange("actionRequest", false , true);
+            messageCenterTurn();
+
+        } else if (evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")) {
+            if (playerID != modelView.getActualPlayerId()) {
+                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait 253");
+            } else {
+                playPanelListener.firePropertyChange("actionRequest", false, true);
             }
         }
 
         repaint();
+    }
+
+    private void messageCenterTurn() {
+        if (modelView.getWinnerId() == -1) {
+            if (playerID == modelView.getActualPlayerId()) {
+                //show options
+                List<String> choices = modelView.getActionChoices();
+                if (choices.size() == 1)
+                    messageCenter.setText("It's your turn, make your " + choices.get(0)); //prob da poter togliere
+                else {
+                    if (choices.contains("end turn")) {
+                        submitButton.setText("End turn");
+                        submitButton.setName("End turn");
+                        submitButton.setEnabled(true);
+                    } else if (choices.contains("Build a dome")) {
+                        submitButton.setText("Build a dome");
+                        submitButton.setName("Build a dome");
+                        submitButton.setForeground(Color.BLACK);
+                        buildDome = false;
+                        submitButton.setEnabled(true);
+                    }
+                    StringBuilder message = new StringBuilder("It's your turn, make your");
+                    for (int i = 0; i < choices.size() - 1; i++) {
+                        message.append(" " + choices.get(i));
+                        message.append("or");
+                    }
+                    message.append(choices.get(choices.size() - 1));
+                    messageCenter.setText(message.toString());
+                }
+            } else {
+                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
+            }
+        }
     }
 
     private void messagePlayerSettingWorkers() {
@@ -286,7 +328,7 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                 //boardOfButtons[i][j].repaint();
             }
         }
-        if(!workerPlaced){
+        if (!workerPlaced) {
             //east.repaint();
             //west.repaint();
         }
@@ -330,9 +372,9 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                         else tSource.setTransferHandler(null);
                         submitButton.setEnabled(workerPositions.size() == 2);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
-                    } else if(play){
+                    } else if (play) {
                         //PLAY
-                        if(myTurn){
+                        if (myTurn) {
 
                         }
                     }
@@ -380,20 +422,20 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
                             if (!((TransferableImage) val).getCoordinate().equals(new Coordinate(-1, -1))) {
                                 tDest.setWorker(((TransferableImage) val).getImage());
                             } else {
-                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(90,90,Image.SCALE_SMOOTH));
+                                tDest.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(90, 90, Image.SCALE_SMOOTH));
                             }
 
                             System.out.println(workerPlaced);
                             dragAndDropResult = true;
 
-                        } else if(play) {
+                        } else if (play) {
                             // PLAY
-                            if(myTurn){
-                                Move attemptedMove=new Move(sourceCoord,tDest.getCoordinate());
+                            if (myTurn) {
+                                Move attemptedMove = new Move(sourceCoord, tDest.getCoordinate());
                                 List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
-                                for(Action a : actions){
-                                    if(a.equals(attemptedMove)){
-                                        dragAndDropResult=true;
+                                for (Action a : actions) {
+                                    if (a.equals(attemptedMove)) {
+                                        dragAndDropResult = true;
                                         sendAction(attemptedMove);
                                     }
                                 }
@@ -412,10 +454,10 @@ private Image banner =  new ImageIcon(this.getClass().getResource("/Gameplay/mes
     }
 
     private void sendAction(Action attemptedAction) {
-        playPanelListener.firePropertyChange("actionReceived",false,attemptedAction);
+        playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
         myTurn = false;
         modelView.getActionsAvailable().clear();
-        playPanelListener.firePropertyChange("actionRequest",false,true);
+        playPanelListener.firePropertyChange("actionRequest", false, true);
 
     }
 
