@@ -164,7 +164,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         messageCenter.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
 
 
-
         endTurnButton.setName("End turn");
         endTurnButton.setVisible(false);
         endTurnButton.addActionListener(this);
@@ -233,7 +232,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     buildDome = false;
                     //TODO rendi cliccato il bottone
                     domeButton.setForeground(Color.BLACK);
-                } else{
+                } else {
                     buildDome = true;
                     submitButton.setForeground(Color.RED);
                 }
@@ -250,24 +249,21 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (a.getEnd().equals(t.getCoordinate())) {
                 if (a.getActionName().equalsIgnoreCase("BUILD") || a instanceof Build) {
                     if (buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME")) {
-                        sendAction(new BuildDome(a.getStart(), a.getEnd()));
-                        MainPanel.playSound("/Sounds/domeBuild.wav",0);
+                        sendAction(a);
+                        MainPanel.playSound("/Sounds/domeBuild.wav", 0);
                     } else if (!buildDome) {
-                        sendAction(new Build(a.getStart(), a.getEnd()));
-                        if(modelView.getBoard().getSlot(a.getEnd()).getLevel()==3)
-                            MainPanel.playSound("/Sounds/domeBuild.wav",0);
+                        sendAction(a);
+                        if (modelView.getBoard().getSlot(a.getEnd()).getLevel() == 3)
+                            MainPanel.playSound("/Sounds/domeBuild.wav", 0);
                         else
-                            MainPanel.playSound("/Sounds/normalBuild.wav",0);
+                            MainPanel.playSound("/Sounds/normalBuild.wav", 0);
+
                     }
                 }
             }
         }
     }
 
-    private void turnHandler(Coordinate coordinate) {
-
-
-    }
 
     private void sendWorkers() {
         for (int i = 0; i < 2; i++) {
@@ -376,7 +372,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private void sendAction(Action attemptedAction) {
         playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
         myTurn = false;
-        if(buildDome){
+        if (buildDome) {
             buildDome = false;
             domeButton.setForeground(Color.BLACK); //meh
         }
@@ -440,7 +436,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             workerPositions.remove(tSource.getCoordinate());
                         submitButton.setEnabled(workerPositions.size() == 2);
                         submitButton.setVisible(workerPositions.size() == 2);
-                        if(workerPositions.size() == 2)layeredPane.remove(workerToSet);
+                        if (workerPositions.size() == 2) layeredPane.remove(workerToSet);
                         System.out.println("WORKERS SETTED = " + workerPositions.size());
                     } else if (play) {
                         //PLAY
@@ -507,8 +503,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                     if (a.equals(attemptedMove)) {
                                         dragAndDropResult = true;
                                         sendAction(attemptedMove);
-                                        Random r=new Random();
-                                        MainPanel.playSound("/Sounds/move"+r.nextInt(3)+".wav",0);
+                                        Random r = new Random();
+                                        MainPanel.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0);
                                     }
                                 }
                             }
@@ -524,8 +520,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             return dragAndDropResult;
         }
     }
-
-
 
 
     class TransferableImage implements Transferable {
@@ -564,12 +558,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
-    public void startAnimation(){
+    public void startAnimation() {
 
-        Thread seaAnimation = new Thread(()->{
-            int counter=216;
+        Thread seaAnimation = new Thread(() -> {
+            int counter = 216;
             try {
-                while (true){
+                while (true) {
                     while (counter < 320) {
                         Thread.sleep(50);
                         this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
@@ -594,10 +588,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
-    public void startSounds(){
-        Thread backgroundSounds = new Thread(()->{
-            Random r= new Random();
-            while (modelView.getWinnerId()==-1) {
+    public void startSounds() {
+        Thread backgroundSounds = new Thread(() -> {
+            Random r = new Random();
+            while (modelView.getWinnerId() == -1) {
                 try {
                     Thread.sleep(r.nextInt(180000)); //tra 0 e 3 min
                     MainPanel.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", 0);
