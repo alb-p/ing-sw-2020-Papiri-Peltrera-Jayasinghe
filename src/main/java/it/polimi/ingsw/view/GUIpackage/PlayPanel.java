@@ -593,7 +593,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             Random r = new Random();
             while (modelView.getWinnerId() == -1) {
                 try {
-                    Thread.sleep(r.nextInt(180000)); //tra 0 e 3 min
+                    Thread.sleep(r.nextInt(60000)+120000); //tra 2 e 3 min
                     MainPanel.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", 0);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
