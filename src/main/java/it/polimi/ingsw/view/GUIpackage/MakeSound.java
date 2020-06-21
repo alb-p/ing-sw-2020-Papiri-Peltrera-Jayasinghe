@@ -9,12 +9,13 @@ public class MakeSound {
 
     private Clip clip;
     String settings;
+    int generalVolume;
 
     public MakeSound (){
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Sounds/settings.txt"), Charset.forName("UTF-8")))) {
             this.settings = br.readLine();
-
+            this.generalVolume= Integer.parseInt(br.readLine());
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -27,8 +28,9 @@ public class MakeSound {
     public void playSound(String path, Float volume, Boolean loop) {
 
 
-
         if(settings.equalsIgnoreCase("on")){
+            volume=volume+this.generalVolume;
+
             //read audio data from whatever source (path)
             InputStream audioSrc = getClass().getResourceAsStream(path);
 
