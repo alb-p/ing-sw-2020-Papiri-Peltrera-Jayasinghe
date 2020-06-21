@@ -11,19 +11,14 @@ public class PanTest {
     BasicGodCard card = new Pan();
     IslandBoard board = new IslandBoard();
 
-
     @Before
     public void init() throws Exception {
-
-
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.FLOOR);
 
         board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
-
-
     }
 
     @Test
@@ -33,8 +28,6 @@ public class PanTest {
         player.selectWorker(new Coordinate(2, 0));
         board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(2, 0));
-
-
         VirtualBoard virtualBoard= new VirtualBoard();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
@@ -49,11 +42,8 @@ public class PanTest {
             }
         }
 
-
         player.selectWorker(new Coordinate(2, 0));
-
         assertTrue(card.turnHandler(player,board,new Move(new Coordinate(2,0),new Coordinate(2,1))));
-
         assertTrue(card.winningCondition(player.getWorker(0),board,virtualBoard));
     }
 
@@ -64,9 +54,6 @@ public class PanTest {
         player.selectWorker(new Coordinate(2, 0));
         board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(2, 0));
-
-
-
         VirtualBoard virtualBoard= new VirtualBoard();
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
@@ -83,9 +70,7 @@ public class PanTest {
 
 
         player.selectWorker(new Coordinate(2, 0));
-
         assertTrue(card.turnHandler(player,board,new Move(new Coordinate(2,0),new Coordinate(1,0))));
-
         assertTrue(card.winningCondition(player.getWorker(0),board,virtualBoard));
     }
 }
