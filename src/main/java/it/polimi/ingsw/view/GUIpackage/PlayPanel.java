@@ -251,8 +251,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 if (a.getActionName().equalsIgnoreCase("BUILD") || a instanceof Build) {
                     if (buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME")) {
                         sendAction(new BuildDome(a.getStart(), a.getEnd()));
+                        MainPanel.playSound("/Sounds/domeBuild.wav",0);
                     } else if (!buildDome) {
                         sendAction(new Build(a.getStart(), a.getEnd()));
+                        if(modelView.getBoard().getSlot(a.getEnd()).getLevel()==3)
+                            MainPanel.playSound("/Sounds/domeBuild.wav",0);
+                        else
+                            MainPanel.playSound("/Sounds/normalBuild.wav",0);
                     }
                 }
             }

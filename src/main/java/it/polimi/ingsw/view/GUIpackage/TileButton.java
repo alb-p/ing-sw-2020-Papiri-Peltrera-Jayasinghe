@@ -70,16 +70,12 @@ public class TileButton extends JButton {
     public void rebaseFloor(){
         if(vSlot.getLevel()==1){
             floor=uno;
-            MainPanel.playSound("/Sounds/normalBuild.wav",0);
         }else if(vSlot.getLevel()==2){
             floor=due;
-            MainPanel.playSound("/Sounds/normalBuild.wav",0);
         }else if(vSlot.getLevel()==3){
             floor=tre;
-            MainPanel.playSound("/Sounds/normalBuild.wav",0);
         } if(vSlot.hasDome()){
             floor=dome;
-            MainPanel.playSound("/Sounds/domeBuild.wav",0);
         }
 
     }
