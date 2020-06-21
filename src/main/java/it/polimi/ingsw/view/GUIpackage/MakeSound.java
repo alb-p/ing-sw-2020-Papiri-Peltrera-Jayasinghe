@@ -1,8 +1,10 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import javax.sound.sampled.*;
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 public class MakeSound {
@@ -17,12 +19,14 @@ public class MakeSound {
     public void playSound(String path) throws Exception {
 
 
-        URL url = getClass().getResource(path);
+
         int nBytesRead = 0;
         byte[] abData = new byte[BUFFER_SIZE];
 
-        soundFile = new File(url.getPath());
-        audioStream = AudioSystem.getAudioInputStream(soundFile);
+
+        InputStream audioSrc = getClass().getResourceAsStream(path);
+        InputStream bufferedIn = new BufferedInputStream(audioSrc);
+        audioStream = AudioSystem.getAudioInputStream(bufferedIn);
         audioFormat = audioStream.getFormat();
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
         sourceLine = (SourceDataLine) AudioSystem.getLine(info);
