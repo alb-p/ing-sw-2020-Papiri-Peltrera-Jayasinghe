@@ -16,6 +16,10 @@ public class GenericMessage implements Message , Serializable {
         this.id=i;
     }
 
+    public GenericMessage(int id) {
+        this.id = id;
+    }
+
 
     public int getId(){
         return this.id;
