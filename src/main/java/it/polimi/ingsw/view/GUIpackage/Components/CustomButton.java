@@ -1,6 +1,7 @@
 package it.polimi.ingsw.view.GUIpackage.Components;
 
 import it.polimi.ingsw.view.GUIpackage.MainPanel;
+import it.polimi.ingsw.view.GUIpackage.MakeSound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +13,11 @@ public class CustomButton extends JButton implements MouseListener{
     ImageIcon normal;
     ImageIcon onMouse;
     ImageIcon pressed;
-
+    MakeSound music;
 
     public CustomButton(String name){
 
+        this.music= new MakeSound();
         this.setBorder(null);
         this.setContentAreaFilled(false);//trasparenza
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -37,8 +39,9 @@ public class CustomButton extends JButton implements MouseListener{
 
     @Override
     public void mousePressed(MouseEvent mouseEvent) {
-        this.setIcon(this.pressed);
-        MainPanel.playSound("/Sounds/click.wav",0);
+
+        music.playSound("/Sounds/click.wav",-5f,false);
+
 
     }
 

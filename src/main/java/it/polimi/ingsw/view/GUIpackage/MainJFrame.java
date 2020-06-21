@@ -17,6 +17,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     private LogoPanel logo;
     private IslandAnimationPanel islandAnimationPanel;
     private PlayPanel playPanel;
+    private MakeSound music= new MakeSound();
 
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
@@ -83,6 +84,9 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         layout.show(getContentPane(),"IslandAnimationPanel");
         this.islandAnimationPanel.addPropertyChangeListener(this);
         this.islandAnimationPanel.startTransition();
+        music.stopSound();
+        music.playSound("/Sounds/environment.wav",-20f,true);
+
 
     }
 
@@ -90,6 +94,11 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("logoTransitionEnded")){
             layout.show(getContentPane(),"HomePanel");
+            music.playSound("/Sounds/track1.wav",-20f,true);
+
+
+
+
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("islandTransitionEnded")){
             layout.show(getContentPane(),"PlayPanel");
             playPanel.startSounds();
