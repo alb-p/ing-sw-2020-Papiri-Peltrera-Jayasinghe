@@ -4,15 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 public class WorkerIcon extends JLabel implements ActionListener {
 
 
-    ImageIcon frames;
+    private ImageIcon frames;
     private Timer timer;
-    int currentFrame = 1;
-    String color;
+    private int currentFrame = 1;
+    private final String color;
+    private final PropertyChangeSupport workerIconListeners = new PropertyChangeSupport(this);
 
     int x,y,xfinale,yfinale;
 
@@ -30,16 +33,22 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
 
 
-    public void startTransition(Point start,Point end) {
-
+    public synchronized void startTransition(Point start,Point end) {
         x=start.x;
-        y=start.y;
+        y=start.y-50;
 
         xfinale=end.x;
-        yfinale=end.y;
-
-        timer = new Timer(70, this);
+        yfinale=end.y-50;
+        setLocation(x,y);
+        timer = new Timer(70, this){
+            @Override
+            public void start() {
+                super.start();
+                WorkerIcon.this.setVisible(true);
+            }
+        };
         timer.start();
+
 
     }
 
@@ -48,9 +57,11 @@ public class WorkerIcon extends JLabel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 23) {
+
             currentFrame=1;
             timer.stop();
             frames=null;
+            workerIconListeners.firePropertyChange("movementTransitionEnded", false, true);
             System.gc();//consiglia di far partire il garbage collector
 
         } else {
@@ -65,7 +76,9 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
     }
 
-
+    public void addWorkerIconListener(PropertyChangeListener listener){
+        workerIconListeners.addPropertyChangeListener(listener);
+    }
 
 }
 

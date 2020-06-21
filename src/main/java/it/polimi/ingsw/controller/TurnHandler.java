@@ -40,6 +40,10 @@ public class TurnHandler implements PropertyChangeListener {
                 model.turnHandler(id, message.getAction());
                 if (model.getPlayer(id).hasDone()) {
                     endTurnManager(id);
+                } else if(model.getPlayer(id).essentialDone()){
+                    if(model.checkWinner(id)){
+                        model.endGame(id);
+                    }
                 }
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("endTurn")) {

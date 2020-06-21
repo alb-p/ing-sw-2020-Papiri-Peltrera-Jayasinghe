@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
+import it.polimi.ingsw.view.GUIpackage.Components.WorkerIcon;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
@@ -41,6 +42,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private ModelView modelView;
     private int playerID;
     private String color;
+    private Action attemptedAction;
+    private JPanel movementPanel;
     private JPanel boardPanel;
     private JPanel workerToSet = new JPanel();
     private JLabel messageCenter;
@@ -183,7 +186,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         buttons.add(submitButton, BorderLayout.SOUTH);
         buttons.add(messageCenter, BorderLayout.NORTH);
         layeredPane.add(buttons, JLayeredPane.PALETTE_LAYER);
-
+        movementPanel = new JPanel(null);
+        movementPanel.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+        movementPanel.setOpaque(false);
+        layeredPane.add(movementPanel, JLayeredPane.POPUP_LAYER);
         this.add(layeredPane);
 
         repaint();
@@ -312,6 +318,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
             messageCenter.setText("Game ended");
+        } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
+            if(attemptedAction!=null){
+                sendAction(attemptedAction);
+                movementPanel.removeAll();
+                attemptedAction = null;
+            }
         }
 
         repaint();
@@ -501,10 +513,22 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                 List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
                                 for (Action a : actions) {
                                     if (a.equals(attemptedMove)) {
-                                        dragAndDropResult = true;
-                                        sendAction(attemptedMove);
                                         Random r = new Random();
+                                        dragAndDropResult = true;
                                         MainPanel.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0);
+
+                                        /*
+                                         * MOVEMENT
+                                         * */
+                                        WorkerIcon icon = new WorkerIcon(modelView.getBoard().getSlot(sourceCoord).getColor().getName().toLowerCase());
+                                        icon.setVisible(false);
+                                        movementPanel.add(icon);
+                                        attemptedAction = attemptedMove;
+                                        icon.startTransition(boardOfButtons[sourceCoord.getRow()][sourceCoord.getCol()].getLocation(), tDest.getLocation());
+                                        icon.addWorkerIconListener(PlayPanel.this);
+                                        /*
+                                         * END OF MOVEMENT
+                                         * */
                                     }
                                 }
                             }
