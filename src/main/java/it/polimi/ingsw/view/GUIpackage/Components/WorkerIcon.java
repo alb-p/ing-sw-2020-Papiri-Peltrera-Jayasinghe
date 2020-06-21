@@ -21,8 +21,9 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
 
     public WorkerIcon(String color){
-
-        this.color=color;
+        if(color.equalsIgnoreCase("white")) {
+            this.color = "tan";
+        } else this.color=color;
         System.out.println("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png");
         ImageIcon frames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
         this.setIcon(frames);
@@ -72,7 +73,6 @@ public class WorkerIcon extends JLabel implements ActionListener {
             this.currentFrame++;
             frames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
         }
-
 
     }
 
