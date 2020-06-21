@@ -24,9 +24,13 @@ public class MakeSound {
         byte[] abData = new byte[BUFFER_SIZE];
 
 
+        //read audio data from whatever source (path)
         InputStream audioSrc = getClass().getResourceAsStream(path);
+
+        //add buffer for mark/reset support
         InputStream bufferedIn = new BufferedInputStream(audioSrc);
         audioStream = AudioSystem.getAudioInputStream(bufferedIn);
+
         audioFormat = audioStream.getFormat();
         DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
         sourceLine = (SourceDataLine) AudioSystem.getLine(info);
