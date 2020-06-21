@@ -6,7 +6,7 @@
 
   <groupId>it.polimi.ingsw</groupId>
   <artifactId>GC20</artifactId>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0-SNAPSHOT_Client</version>
 
   <name>GC20</name>
   <!-- FIXME change it to the project's website -->
