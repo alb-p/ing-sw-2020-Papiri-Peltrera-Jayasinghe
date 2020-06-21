@@ -14,7 +14,6 @@ public class PrometheusTest {
 
     @Before
     public void init() throws Exception {
-        board = new IslandBoard();
         board.infoSlot(new Coordinate(0, 1)).occupy(new Worker(new Coordinate(0, 1), Color.WHITE));
         board.infoSlot(new Coordinate(0, 0)).construct(Construction.DOME);
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.DOME);
@@ -27,7 +26,6 @@ public class PrometheusTest {
 
     @Test
     public void cardTreeSetupTest() {
-
         TreeActionNode root = card.cardTreeSetup(board.infoSlot(new Coordinate(1, 0)).getWorker(), board);
         assertEquals(2, root.getChildrenActions().size());
         assertTrue(root.getChildren().get(0).getChildren().get(0).isLeaf());

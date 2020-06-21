@@ -15,8 +15,6 @@ public class ZeusTest {
 
     @Before
     public void init() throws Exception {
-        board = new IslandBoard();
-
         board.infoSlot(new Coordinate(1, 0)).occupy(new Worker(new Coordinate(1, 0), Color.RED));
         board.infoSlot(new Coordinate(1, 3)).occupy(new Worker(new Coordinate(1, 3), Color.RED));
         board.infoSlot(new Coordinate(0, 1)).occupy(new Worker(new Coordinate(0, 1), Color.WHITE));
@@ -24,8 +22,6 @@ public class ZeusTest {
         board.infoSlot(new Coordinate(1,1)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1,1)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1,1)).construct(Construction.FLOOR);
-
-
     }
 
     @Test
@@ -35,7 +31,6 @@ public class ZeusTest {
         assertEquals(1, root.getChildren().get(0).getChildrenActions().size());
         assertEquals(3, root.getChildren().get(0).getChildren().size());
         assertTrue(root.getChildren().get(0).getChildren().get(0).isLeaf());
-
     }
 
     @Test
@@ -46,7 +41,6 @@ public class ZeusTest {
         player.getWorker(0).setPosition(new Coordinate(0,0));
         board.infoSlot(new Coordinate(3,0)).occupy(player.getWorker(1));
         player.getWorker(1).setPosition(new Coordinate(3,0));
-
         assertFalse(card.build(player.getWorker(0),new Coordinate(0,1),board));
         assertTrue(card.build(player.getWorker(0),new Coordinate(1,1),board));
         assertTrue(board.infoSlot(new Coordinate(1,1)).hasADome());
@@ -56,8 +50,6 @@ public class ZeusTest {
         assertFalse(card.build(player.getWorker(0),new Coordinate(0,0),board));
         assertEquals(3, board.infoSlot(new Coordinate(0,0)).getConstructionLevel());
         assertFalse(board.infoSlot(new Coordinate(0,0)).hasADome());
-
-
     }
 
     @Test
@@ -68,14 +60,11 @@ public class ZeusTest {
         player.getWorker(0).setPosition(new Coordinate(0,0));
         board.infoSlot(new Coordinate(3,0)).occupy(player.getWorker(1));
         player.getWorker(1).setPosition(new Coordinate(3,0));
-
         card.build(player.getWorker(0), new Coordinate(0,0), board);
         card.build(player.getWorker(0), new Coordinate(0,0), board);
-
         vBoard = model.cloneVBoard(board);
-
-        card.move(player.getWorker(0), new Coordinate(0,0), board);
-        //assertTrue(card.winningCondition(player.getWorker(0), board,vBoard));
-
+        assertFalse(card.move(player.getWorker(0), new Coordinate(0,0), board));
+        assertTrue(card.build(player.getWorker(0), new Coordinate(0,0), board));
+        assertFalse(card.winningCondition(player.getWorker(0), board,vBoard));
     }
 }
