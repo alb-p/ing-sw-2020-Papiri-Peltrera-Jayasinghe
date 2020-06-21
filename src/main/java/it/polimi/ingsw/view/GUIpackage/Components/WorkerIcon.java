@@ -20,7 +20,8 @@ public class WorkerIcon extends JLabel implements ActionListener {
     public WorkerIcon(String color){
 
         this.color=color;
-        ImageIcon frames= new ImageIcon(this.getClass().getResource("/WorkerAnimaton/"+this.color+"/"+this.color+(currentFrame) + ".png"));
+        System.out.println("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png");
+        ImageIcon frames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
         this.setIcon(frames);
         setBounds(0, 0, 67, 192);
 
@@ -58,7 +59,7 @@ public class WorkerIcon extends JLabel implements ActionListener {
             y=y+((yfinale-y)/(24-currentFrame));
             setLocation(x,y);
             this.currentFrame++;
-            frames= new ImageIcon(this.getClass().getResource("/WorkerAnimaton/"+this.color+"/"+this.color+(currentFrame) + ".png"));
+            frames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
         }
 
 
@@ -67,3 +68,17 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
 
 }
+
+/*
+
+ESEMPIO DI UTILIZZO
+
+JPanel test= new JPanel();
+        test.setLayout(null);
+        test.setBounds(0, 0, GUI.getDimension().width,GUI.getDimension().height);
+        test.setOpaque(false);
+        layeredPane.add(test,JLayeredPane.DEFAULT_LAYER);
+        WorkerIcon icon= new WorkerIcon("blue");
+        test.add(icon);
+        icon.startTransition(e.getPoint(),new Point(133,133));
+ */
