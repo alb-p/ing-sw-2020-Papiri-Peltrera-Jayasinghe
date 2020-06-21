@@ -36,7 +36,7 @@ public class WorkerIcon extends JLabel implements ActionListener {
         y=start.y;
 
         xfinale=end.x;
-        yfinale=end.y+107;
+        yfinale=end.y;
 
         timer = new Timer(70, this);
         timer.start();
