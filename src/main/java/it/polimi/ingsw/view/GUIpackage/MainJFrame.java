@@ -83,6 +83,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         layout.show(getContentPane(),"IslandAnimationPanel");
         this.islandAnimationPanel.addPropertyChangeListener(this);
         this.islandAnimationPanel.startTransition();
+
     }
 
     @Override
@@ -91,6 +92,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
             layout.show(getContentPane(),"HomePanel");
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("islandTransitionEnded")){
             layout.show(getContentPane(),"PlayPanel");
+            playPanel.startSounds();
             playPanel.startAnimation();
         }
     }

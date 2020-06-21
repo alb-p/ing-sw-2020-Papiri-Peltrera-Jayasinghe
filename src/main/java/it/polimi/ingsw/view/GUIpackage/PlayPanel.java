@@ -372,34 +372,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         playPanelListener.addPropertyChangeListener(listener);
     }
 
-    public void startAnimation(){
-
-        Thread seaAnimation = new Thread(()->{
-            int counter=216;
-            try {
-                while (true){
-                    while (counter < 320) {
-                        Thread.sleep(50);
-                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
-                        counter++;
-                        repaint();
-                    }
-                    while (counter > 216) {
-                        Thread.sleep(50);
-                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
-                        counter--;
-                        repaint();
-                    }
-                }
-
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
-
-        });
-        seaAnimation.start();
-    }
 
     private void sendAction(Action attemptedAction) {
         playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
@@ -590,4 +562,51 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     }
+
+
+    public void startAnimation(){
+
+        Thread seaAnimation = new Thread(()->{
+            int counter=216;
+            try {
+                while (true){
+                    while (counter < 320) {
+                        Thread.sleep(50);
+                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
+                        counter++;
+                        repaint();
+                    }
+                    while (counter > 216) {
+                        Thread.sleep(50);
+                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
+                        counter--;
+                        repaint();
+                    }
+                }
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+
+        });
+        seaAnimation.start();
+    }
+
+
+    public void startSounds(){
+        Thread backgroundSounds = new Thread(()->{
+            Random r= new Random();
+            while (modelView.getWinnerId()==-1) {
+                try {
+                    Thread.sleep(r.nextInt(180000)); //tra 0 e 3 min
+                    MainPanel.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", 0);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        backgroundSounds.start();
+    }
+
 }
