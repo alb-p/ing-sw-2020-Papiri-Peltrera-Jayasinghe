@@ -23,16 +23,17 @@ public class Hypnus extends BasicGodCard {
                 w2 = board.infoSlot(node.getData().getStart()).getWorker();
             }
         }
-
-        if(w1 != null && w2 != null) {
+        if (w1 != null && w2 != null) {
             if (board.infoSlot(w1.getPosition()).getConstructionLevel() >
-                    board.infoSlot(w2.getPosition()).getConstructionLevel()) higher = w1;
-
-            else if (board.infoSlot(w2.getPosition()).getConstructionLevel() >
-                    board.infoSlot(w1.getPosition()).getConstructionLevel()) higher = w2;
+                    board.infoSlot(w2.getPosition()).getConstructionLevel()) {
+                higher = w1;
+            } else if (board.infoSlot(w2.getPosition()).getConstructionLevel() >
+                    board.infoSlot(w1.getPosition()).getConstructionLevel()) {
+                higher = w2;
+            }
         }
         if (higher != null) {
-            for(int i= 0; i<root.getChildren().size(); i++){
+            for (int i = 0; i < root.getChildren().size(); i++) {
                 if (root.getChild(i).getData().getStart().equals(higher.getPosition())) {
                     root.getChildren().remove(root.getChild(i));
                     i--;

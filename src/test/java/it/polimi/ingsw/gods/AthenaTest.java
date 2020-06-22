@@ -17,22 +17,15 @@ public class AthenaTest {
 
     @Before
     public void init() throws Exception {
-
-
         board.infoSlot(new Coordinate(2, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(0, 0)).construct(Construction.FLOOR);
 
-
         board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1, 0)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1, 1)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(1, 1)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(0, 1)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(0, 1)).construct(Construction.FLOOR);
-
-
-
-
     }
 
 
