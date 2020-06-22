@@ -4,91 +4,99 @@ import it.polimi.ingsw.model.*;
 
 public class Poseidon extends BasicGodCard {
 
-    /**End of Your Turn: If your
-     unmoved Worker is on the
-     ground level, it may build up to
-     three times.**/
+    /**
+     * End of Your Turn: If your
+     * unmoved Worker is on the
+     * ground level, it may build up to
+     * three times.
+     **/
+
 
     @Override
+
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
-        Worker otherWorker;
+        Worker otherWorker = getOtherWorker(w, board);
+        Coordinate otherCoordinate = otherWorker.getPosition();
 
+        if (board.infoSlot(otherWorker.getPosition()).getConstructionLevel() == 0) {
+            for (TreeActionNode moveNode : root.getChildren()) {
+                if (moveNode.getData().getActionName().equalsIgnoreCase("move")) {
+                    Move move = (Move) moveNode.getData();
+                    for (TreeActionNode buildNode : moveNode.getChildren()) {
+                        if (buildNode.getData().getActionName().equalsIgnoreCase("build")) {
+                            Build build = (Build) buildNode.getData();
+                            int standardBuildLevel = board.infoSlot(build.getEnd()).getConstructionLevel() + 1;
+                            for (Coordinate extraBuild1 : otherCoordinate.getAdjacentCoords()) {
+                                if ((board.infoSlot(extraBuild1).isFree() && !extraBuild1.equals(move.getEnd())) ||
+                                        extraBuild1.equals(move.getStart())) {
+                                    //coordinate extraBuild1 is free
+                                    if (board.infoSlot(extraBuild1).getConstructionLevel() < 4) {
+                                        int standardTemp1Level = standardBuildLevel;
+                                        int extraBuild1Level = board.infoSlot(extraBuild1).getConstructionLevel() + 1;
+                                        if (extraBuild1.equals(build.getEnd())) {
+                                            standardTemp1Level += 1;
+                                            extraBuild1Level = standardTemp1Level;
+                                        }
+                                        if (extraBuild1Level <= 4) {
+                                            //standardBuildLevel = standardTemp1Level;
+                                            TreeActionNode build1 = new TreeActionNode(new Build(otherCoordinate, extraBuild1));
+                                            buildNode.addChild(build1);
+                                            for (Coordinate extraBuild2 : otherCoordinate.getAdjacentCoords()) {
+                                                if ((board.infoSlot(extraBuild2).isFree() && !extraBuild2.equals(move.getEnd())) ||
+                                                        (extraBuild2.equals(move.getStart()))) {
+                                                    if (board.infoSlot(extraBuild2).getConstructionLevel() < 4) {
+                                                        int standardTemp2Level = standardTemp1Level;
+                                                        int extra1Temp2Level = extraBuild1Level;
+                                                        int extraBuild2Level = board.infoSlot(extraBuild2).getConstructionLevel() + 1;
 
-        for (TreeActionNode moveNode : root.getChildren()) {
-            if (moveNode.getData() instanceof Move) {
-                otherWorker = getOtherWorker(board.infoSlot(moveNode.getData().getStart()).getWorker(), board);
-                for (TreeActionNode buildNode : moveNode.getChildren()) {
-                    Coordinate endBuild = buildNode.getData().getEnd();
-                    int buildLevel = board.infoSlot(endBuild).getConstructionLevel() + 1;
-                    if (board.infoSlot(otherWorker.getPosition()).getConstructionLevel() == 0) {
-                        for (Coordinate c1 : otherWorker.getPosition().getAdjacentCoords()) {
-                            boolean bE1 = c1.equals(buildNode.getData().getEnd());
-                            if (extraBuildConditions(c1, moveNode.getData().getStart(), moveNode.getData().getEnd(),
-                                    buildNode.getData().getEnd(), board)) {
-                                TreeActionNode extraBuild1 = new TreeActionNode(new Build(otherWorker.getPosition(), c1));
-                                int levelE1 = board.infoSlot(c1).getConstructionLevel() + 1;
-                                if (bE1) {
-                                    levelE1++;
-                                    buildLevel++;
-                                }
-                                buildNode.addChild(extraBuild1);
-                                for (Coordinate c2 : otherWorker.getPosition().getAdjacentCoords()) {
-                                    boolean secondBuildAdd = true;
-                                    boolean bE2 = c2.equals(buildNode.getData().getEnd());
-                                    int levelE2 = board.infoSlot(c2).getConstructionLevel();
-                                    if (bE1 && bE2) { //c1 == c2
-                                        if (levelE1 == 3) {
-                                            secondBuildAdd = false;
-                                        } else {
-                                            levelE1++;
-                                            levelE2 = levelE1;
-                                            buildLevel++;
-                                        }
-                                    } else if (bE2) {
-                                        if (buildLevel > 3) secondBuildAdd = false;
-                                        else {
-                                            buildLevel++;
-                                            levelE2 = buildLevel;
-                                        }
-                                    } else if (c1.equals(c2)) {
-                                        if (levelE1 > 3) secondBuildAdd = false;
-                                        else {
-                                            levelE1++;
-                                            levelE2 = levelE1;
-                                        }
-                                    } else {
-                                        if (!(extraBuildConditions(c2, moveNode.getData().getStart(),
-                                                moveNode.getData().getEnd(), buildNode.getData().getEnd(), board))) {
-                                            secondBuildAdd = false;
-                                        } else {
-                                            levelE2++;
-                                        }
-                                    }
-                                    if (secondBuildAdd) {
+                                                        if (extraBuild2.equals(build.getEnd())) {
+                                                            standardTemp2Level += 1;
+                                                            extraBuild2Level = standardTemp2Level;
+                                                        }
+                                                        if (extraBuild2.equals(extraBuild1)) {
+                                                            extra1Temp2Level += 1;
+                                                            extraBuild2Level = extra1Temp2Level;
+                                                        }
+                                                        if (extraBuild2Level <= 4) {
+                                                            //standardBuildLevel = standardTemp2Level;
+                                                            //extraBuild1Level = extra1Temp2Level;
+                                                            TreeActionNode build2 = new TreeActionNode(new Build(otherCoordinate, extraBuild2));
+                                                            build1.addChild(build2);
+                                                            for (Coordinate extraBuild3 : otherCoordinate.getAdjacentCoords()) {
+                                                                if ((board.infoSlot(extraBuild3).isFree() && !extraBuild3.equals(move.getEnd())) || (extraBuild3.equals(move.getStart()))) {
+                                                                    if (board.infoSlot(extraBuild3).getConstructionLevel() < 4) {
+                                                                        int standardTemp3Level = standardTemp2Level;
+                                                                        int extra1Temp3Level = extra1Temp2Level;
+                                                                        int extra2Temp3Level = extraBuild2Level;
+                                                                        int extraBuild3Level = board.infoSlot(extraBuild3).getConstructionLevel() + 1;
 
-                                        TreeActionNode extraBuild2 = new TreeActionNode(new Build(otherWorker.getPosition(), c2));
-                                        extraBuild1.addChild(extraBuild2);
-                                        for (Coordinate c3 : otherWorker.getPosition().getAdjacentCoords()) {
-                                            boolean thirdBuildAdd = true;
-                                            boolean bE3 = c3.equals(buildNode.getData().getEnd());
-                                            if (bE3) {
-                                                if (buildLevel > 3) thirdBuildAdd = false;
-                                            } else if (c3.equals(c2) && c3.equals(c1)) {
-                                                if (levelE1 > 3) thirdBuildAdd = false;
-                                            } else if (c3.equals(c2)) {
-                                                if (levelE2 > 3) thirdBuildAdd = false;
-                                            } else if (c3.equals(c1)) {
-                                                if (levelE1 > 3) thirdBuildAdd = false;
-                                            } else {
-                                                if (!(extraBuildConditions(c3, moveNode.getData().getStart(),
-                                                        moveNode.getData().getEnd(), buildNode.getData().getEnd(), board))) {
-                                                    thirdBuildAdd = false;
+                                                                        if (extraBuild3.equals(build.getEnd())) {
+                                                                            standardTemp3Level += 1;
+                                                                            extraBuild3Level = standardTemp3Level;
+                                                                        }
+                                                                        if (extraBuild3.equals(extraBuild1)) {
+                                                                            extra1Temp3Level += 1;
+                                                                            extraBuild3Level = extra1Temp3Level;
+                                                                        }
+                                                                        if (extraBuild3.equals(extraBuild2)) {
+                                                                            extra2Temp3Level += 1;
+                                                                            extraBuild3Level = extra2Temp3Level;
+                                                                        }
+                                                                        if (extraBuild3Level <= 4) {
+                                                                            System.out.printf("%d",standardTemp3Level);
+                                                                            //standardBuildLevel = standardTemp3Level;
+                                                                            //extraBuild1Level = extra1Temp3Level;
+                                                                            //extraBuild2Level = extra2Temp3Level;
+                                                                            TreeActionNode build3 = new TreeActionNode(new Build(otherCoordinate, extraBuild3));
+                                                                            build2.addChild(build3);
+                                                                        }
+                                                                    }
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                 }
-                                            }
-                                            if (thirdBuildAdd) {
-                                                TreeActionNode extraBuild3 = new TreeActionNode(new Build(otherWorker.getPosition(), c3));
-                                                extraBuild2.addChild(extraBuild3);
                                             }
                                         }
                                     }
@@ -102,12 +110,6 @@ public class Poseidon extends BasicGodCard {
         return root;
     }
 
-    private boolean extraBuildConditions(Coordinate c, Coordinate startMove, Coordinate endMove, Coordinate endBuild, IslandBoard board) {
-        return (!c.equals(endMove) && (board.infoSlot(c).isFree() || c.equals(startMove)) && (!c.equals(endBuild) || (c.equals(endBuild)
-                && board.infoSlot(endBuild).getConstructionLevel() < 3)));
-    }
-
-
     private Worker getOtherWorker(Worker actual, IslandBoard board) {
         Worker selected = null;
         for (int i = 0; i < 5; i++) {
@@ -118,6 +120,5 @@ public class Poseidon extends BasicGodCard {
         }
         return selected;
     }
-
 
 }
