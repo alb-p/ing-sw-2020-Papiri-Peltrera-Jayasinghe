@@ -39,7 +39,7 @@ public class TileButton extends JButton {
         uno = new ImageIcon(GUI.class.getResource("/Buildings/1.jpg")).getImage();
         due = new ImageIcon(GUI.class.getResource("/Buildings/2.jpg")).getImage();
         tre = new ImageIcon(GUI.class.getResource("/Buildings/3.jpg")).getImage();
-        dome = new ImageIcon(GUI.class.getResource("/Buildings/4.jpg")).getImage();
+        dome = new ImageIcon(GUI.class.getResource("/Buildings/DomeMEDIA.png")).getImage().getScaledInstance(75,75,Image.SCALE_SMOOTH);
 
         if (!coordinate.equals(new Coordinate(-1, -1))) {
             //this.setText("      "); //debug
@@ -74,8 +74,6 @@ public class TileButton extends JButton {
             floor=due;
         }else if(vSlot.getLevel()==3){
             floor=tre;
-        } if(vSlot.hasDome()){
-            floor=dome;
         }
 
     }
@@ -119,6 +117,7 @@ public class TileButton extends JButton {
         //super.paintComponent(g);
         g.drawImage(this.getFloor(), 3, 3, panel);
         g.drawImage(this.getWorker(), 17, 17, panel);
+        if(vSlot.hasDome()) g.drawImage(this.dome, 3,3, panel);
     }
 
 
