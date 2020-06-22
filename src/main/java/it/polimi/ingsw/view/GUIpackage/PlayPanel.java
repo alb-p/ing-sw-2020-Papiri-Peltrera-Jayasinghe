@@ -37,6 +37,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private ArrayList<Coordinate> workerPositions = new ArrayList<>();
     JLayeredPane layeredPane = new JLayeredPane();
     private Timer timer;
+    private MakeSound music= new MakeSound();
 
 
     private ModelView modelView;
@@ -256,13 +257,14 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 if (a.getActionName().equalsIgnoreCase("BUILD") || a instanceof Build) {
                     if (buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME")) {
                         sendAction(a);
-                        MainPanel.playSound("/Sounds/domeBuild.wav", 0);
+                        music.playSound("/Sounds/domeBuild.wav", 0f,false);
+
                     } else if (!buildDome) {
                         sendAction(a);
                         if (modelView.getBoard().getSlot(a.getEnd()).getLevel() == 3)
-                            MainPanel.playSound("/Sounds/domeBuild.wav", 0);
+                            music.playSound("/Sounds/domeBuild.wav", 0f,false);
                         else
-                            MainPanel.playSound("/Sounds/normalBuild.wav", 0);
+                            music.playSound("/Sounds/normalBuild.wav", 0f,false);
 
                     }
                 }
@@ -515,7 +517,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                     if (a.equals(attemptedMove)) {
                                         Random r = new Random();
                                         dragAndDropResult = true;
-                                        MainPanel.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0);
+                                        music.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0f,false);
+
 
                                         /*
                                          * MOVEMENT
@@ -613,12 +616,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     public void startSounds() {
+
         Thread backgroundSounds = new Thread(() -> {
             Random r = new Random();
             while (modelView.getWinnerId() == -1) {
                 try {
                     Thread.sleep(r.nextInt(60000)+120000); //tra 2 e 3 min
-                    MainPanel.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", 0);
+                    music.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", -5f,false);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

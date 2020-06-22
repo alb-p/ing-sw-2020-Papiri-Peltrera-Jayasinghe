@@ -105,7 +105,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
                 attemptedNick = nickToFill.getText();
             } else {
                 nickToFill.setText("");
-                MainPanel.playSound("/Sounds/warn.wav",0);
+                new MakeSound().playSound("/Sounds/warn.wav",-10f,false);
                 invalidNickLabel.setText("nickname already assigned!");
                 invalidNickLabel.setVisible(true);
             }

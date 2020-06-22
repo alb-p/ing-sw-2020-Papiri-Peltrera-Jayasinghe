@@ -1,49 +1,74 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import javax.sound.sampled.*;
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
+import java.nio.charset.Charset;
 
 public class MakeSound {
 
-    private final int BUFFER_SIZE = 128000;
-    private File soundFile;
-    private AudioInputStream audioStream;
-    private AudioFormat audioFormat;
-    private SourceDataLine sourceLine;
+    private Clip clip;
+    String settings;
+    int generalVolume;
 
+    public MakeSound (){
 
-    public void playSound(String path) throws Exception {
-
-
-
-        int nBytesRead = 0;
-        byte[] abData = new byte[BUFFER_SIZE];
-
-
-        //read audio data from whatever source (path)
-        InputStream audioSrc = getClass().getResourceAsStream(path);
-
-        //add buffer for mark/reset support
-        InputStream bufferedIn = new BufferedInputStream(audioSrc);
-        audioStream = AudioSystem.getAudioInputStream(bufferedIn);
-
-        audioFormat = audioStream.getFormat();
-        DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-        sourceLine = (SourceDataLine) AudioSystem.getLine(info);
-        sourceLine.open(audioFormat);
-        sourceLine.start();
-
-
-        while (nBytesRead != -1) {
-            nBytesRead = audioStream.read(abData, 0, abData.length);
-            if (nBytesRead >= 0) sourceLine.write(abData, 0, nBytesRead);
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Sounds/settings.txt"), Charset.forName("UTF-8")))) {
+            this.settings = br.readLine();
+            this.generalVolume= Integer.parseInt(br.readLine());
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
-        sourceLine.drain();
-        sourceLine.close();
+
     }
+
+
+
+    public void playSound(String path, Float volume, Boolean loop) {
+
+
+        if(settings.equalsIgnoreCase("on")){
+            volume=volume+this.generalVolume;
+
+            //read audio data from whatever source (path)
+            InputStream audioSrc = getClass().getResourceAsStream(path);
+
+            //add buffer for mark/reset support (così funziona anche nel jar)
+            InputStream bufferedIn = new BufferedInputStream(audioSrc);
+
+            AudioInputStream audioInputStream = null;
+            try {
+                audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
+                this.clip = AudioSystem.getClip();
+                this.clip.open(audioInputStream);
+            } catch (UnsupportedAudioFileException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (LineUnavailableException e) {
+                e.printStackTrace();
+            }
+
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);//per controllare il volume
+            gainControl.setValue(volume); // Reduce volume by "volume" decibels.
+
+            if (loop) clip.loop(Clip.LOOP_CONTINUOUSLY);
+            this.clip.start();
+        }
+
+
+
+
+
+    }
+
+
+    public void stopSound(){
+        if(this.settings.equalsIgnoreCase("on")){
+            this.clip.stop();
+        }
+    }
+
+
 }
