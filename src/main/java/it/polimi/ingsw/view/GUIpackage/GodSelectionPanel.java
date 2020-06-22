@@ -30,6 +30,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
     private ImageIcon imagedx;
     private ImageIcon imagesx;
+    private ImageIcon imageInnerPanel;
     private Dimension frameDimension;
     private JPanel paneldx;
     Font font;
@@ -38,6 +39,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
         imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/paneldx.jpg"));
         imagesx=new ImageIcon(this.getClass().getResource("/GodSelection/panelsx.jpg"));
+        imageInnerPanel=new ImageIcon(this.getClass().getResource("/GodSelection/innerpanel.png"));
 
         JPanel panelsx = new JPanel(){
             @Override
@@ -55,44 +57,65 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
             }
         };
 
+        buttonPanel = new JPanel(){
+            @Override
+            protected void paintComponent(Graphics g) {
+                imageInnerPanel.paintIcon(this,g,0,0);
+            }
+
+        };
+
+        JPanel innerPanel=new JPanel(new FlowLayout());
+        JPanel innerPanel2=new JPanel(new FlowLayout());
+        JPanel innerPanel3=new JPanel(new FlowLayout());
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         panelsx.setLayout(new BoxLayout(panelsx, BoxLayout.Y_AXIS));
         frameDimension=GUI.getDimension();
         paneldx.setPreferredSize(new Dimension((int)(frameDimension.width/2.823),frameDimension.height));
         panelsx.setPreferredSize(new Dimension((int)(frameDimension.width/1.548),frameDimension.height));
+        buttonPanel.setLayout(new GridBagLayout());
 
 
 
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 40); //carica font
+            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf"));
         }catch(IOException | FontFormatException e){
             font = label.getFont();
         }
 
 
 
-
-
-        label = new JLabel("<html>Opponent player<br>&thinsp &thinsp is selecting...</html>");
+        innerPanel.setOpaque(false);
+        innerPanel2.setOpaque(false);
+        innerPanel3.setOpaque(false);
+        label = new JLabel("Wait, opponent player is selecting...");
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         label.setForeground(new Color(255, 235, 140));
-        label.setFont(font.deriveFont(Font.PLAIN,60));
-        buttonPanel = new JPanel(new FlowLayout());
+        label.setFont(font.deriveFont(Font.PLAIN,40));
         buttonPanel.setOpaque(false);
         submit = new CustomButton("/GodSelection/next/next");
         submit.addActionListener(this);
+
         updates = new JLabel("");
-        panelsx.add(Box.createVerticalStrut(70));
-        panelsx.add(label);
-        panelsx.add(Box.createVerticalStrut(140));
+        updates.setFont(font.deriveFont(Font.PLAIN,20));
+        panelsx.add(Box.createRigidArea(new Dimension(50,50)));
+        innerPanel3.add(label);
+        panelsx.add(innerPanel3);
+        panelsx.add(Box.createRigidArea(new Dimension(50,50)));
         panelsx.add(buttonPanel);
-        panelsx.add(Box.createVerticalStrut(40));
-        panelsx.add(submit);
-        panelsx.add(Box.createVerticalStrut(40));
-        panelsx.add(updates);
-;
+        panelsx.add(Box.createRigidArea(new Dimension(50,50)));
+        innerPanel2.add(updates);
+        panelsx.add(Box.createRigidArea(new Dimension(50,20)));
+        panelsx.add(innerPanel2);
+        innerPanel.add(submit);
+        panelsx.add(innerPanel);
+        panelsx.add(Box.createRigidArea(new Dimension(50,70)));
+
+
         this.add(panelsx);
         this.add(paneldx);
         submit.setEnabled(false);
+
 
     }
 
@@ -140,13 +163,13 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
                     String text = updates.getText();
                     String toAppend = evt.get(0) + " selected " + evt.get(1);
-                    updates.setText(text + "\n" + toAppend);
+                    updates.setText(text + toAppend+"  ");
                 }
             }
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("myTurn")){
             myTurn =true;
             label.setText("Select your god!");
-            label.setFont(font.deriveFont(Font.PLAIN,80));
+            label.setFont(font.deriveFont(Font.PLAIN,50));
 
         }
 
@@ -163,6 +186,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
             button.addMouseListener(this);
             button.setName(godName);
             buttonPanel.add(button);
+            buttonPanel.add(Box.createHorizontalStrut(50));
             button.setEnabled(true);
         }
 
