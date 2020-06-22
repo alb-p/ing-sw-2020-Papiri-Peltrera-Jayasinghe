@@ -2,10 +2,12 @@ package it.polimi.ingsw.model;
 
 import java.io.Serializable;
 
-public class FirstBuild extends Build implements Serializable {
+public class FirstBuild extends Action implements Serializable {
+
+    private static final long serialVersionUID = 8864784887990391217L;
 
     public FirstBuild(Coordinate start, Coordinate end) {
-        super( start, end);
+        super("build", start, end);
     }
 
 
@@ -22,8 +24,7 @@ public class FirstBuild extends Build implements Serializable {
     }
 
     @Override
-    public Action clone() {
-        return new FirstBuild(null, null);
+    public int hashCode() {
+        return super.hashCode();
     }
-
 }

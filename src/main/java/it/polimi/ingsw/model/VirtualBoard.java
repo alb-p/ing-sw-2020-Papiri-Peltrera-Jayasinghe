@@ -32,10 +32,6 @@ public class VirtualBoard {
         return (total.toString());
     }
 
-    public VirtualSlot getSlot(int i, int j) {
-        return board[i][j];
-    }
-
     public VirtualSlot getSlot(Coordinate c) {
         return board[c.getRow()][c.getCol()];
     }

@@ -5,18 +5,18 @@ import it.polimi.ingsw.utils.messages.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class Model {
 
 
-    private ArrayList<Player> players = new ArrayList<Player>();
-    private IslandBoard board = new IslandBoard();
+    private final ArrayList<Player> players = new ArrayList<>();
+    private final IslandBoard board = new IslandBoard();
     private VirtualBoard oldBoard = new VirtualBoard();
-    private VirtualSlot vSlot;
-
-    private PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
-
+    private final PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
     private boolean winnerDetected = false;
+    Logger logger = Logger.getLogger("model");
 
     public void addModelListener(PropertyChangeListener listener) {
         modelListeners.addPropertyChangeListener(listener);
@@ -69,11 +69,12 @@ public class Model {
     public void turnHandler(int idPlayerPlaying, Action message) {
         oldBoard = cloneVBoard(board);
         try {
-            boolean turnhan;
-            turnhan = this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
+            boolean turnHandler;
+            turnHandler = this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
+            if(!turnHandler) logger.log(Level.WARNING, "Invalid Action");
             System.out.println(board);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
         notifyChanges();
     }
@@ -99,12 +100,12 @@ public class Model {
         VirtualSlot oldVSlot;
         for (int i = 0; i < board.board.length; i++) {
             for (int j = 0; j < board.board.length; j++) {
-                oldVSlot = oldBoard.getSlot(i, j);
+                oldVSlot = oldBoard.getSlot(new Coordinate(i, j));
                 Color color = null;
                 if (board.infoSlot(new Coordinate(i, j)).getWorker() != null) {
                     color = board.infoSlot(new Coordinate(i, j)).getWorker().getColor();
                 }
-                vSlot = new VirtualSlot(color, board.infoSlot(new Coordinate(i, j)).getConstructionLevel(),
+                VirtualSlot vSlot = new VirtualSlot(color, board.infoSlot(new Coordinate(i, j)).getConstructionLevel(),
                         board.infoSlot(new Coordinate(i, j)).hasADome(), new Coordinate(i, j));
 
                 modelListeners.firePropertyChange("deltaUpdate", oldVSlot, vSlot);

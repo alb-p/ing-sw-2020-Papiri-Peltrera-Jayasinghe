@@ -112,7 +112,7 @@ public class TurnHandlerTest {
         PropertyChangeEvent evt;
         //message.setAction(new Move(new Coordinate(0,0),new Coordinate(0,1)));
         turnHandler.propertyChange(new PropertyChangeEvent(this, "actionsRequest", false, new GenericMessage(0)));
-
+        assertFalse(model.addWorker(0,new Coordinate(0,4),0));
         assertFalse(model.getBoard().infoSlot(new Coordinate(0, 0)).isFree());
         assertTrue(model.getBoard().infoSlot(new Coordinate(0, 1)).isFree());
 
@@ -232,6 +232,7 @@ public class TurnHandlerTest {
         message.setAction(new Build(new Coordinate(0,1),new Coordinate(0,0)));
 
         turnHandler4.propertyChange(new PropertyChangeEvent(this, "notifyAction",false ,message));
+        System.out.println(model4.getBoard());
         turnHandler4.propertyChange(new PropertyChangeEvent(this,"actionsRequest",null, new GenericMessage(0)));
 
         assertTrue(model4.isWinnerDetected());
@@ -272,6 +273,38 @@ public class TurnHandlerTest {
     }
 
     @Test
+    public void normalTurnFirstBuild(){
+        assertEquals(0, turnHandler4.actualPlayerID());
+        model4.setCard(0,"PROMETHEUS");
+        System.out.println(model4.getBoard());
+        turnHandler4.propertyChange(new PropertyChangeEvent(this,"actionsRequest",null, new GenericMessage(0)));
+        ActionMessage message = new ActionMessage();
+        message.setId(0);
+        message.setAction(new FirstBuild(new Coordinate(0,0),new Coordinate(0,1)));
+        turnHandler4.propertyChange(new PropertyChangeEvent(this, "notifyAction",false ,message));
+
+        turnHandler4.propertyChange(new PropertyChangeEvent(this,"actionsRequest",null, new GenericMessage(0)));
+        message = new ActionMessage();
+        message.setId(0);
+        message.setAction(new Move(new Coordinate(0,0),new Coordinate(1,1)));
+        turnHandler4.propertyChange(new PropertyChangeEvent(this, "notifyAction",false ,message));
+
+        turnHandler4.propertyChange(new PropertyChangeEvent(this,"actionsRequest",null, new GenericMessage(0)));
+
+
+        message = new ActionMessage();
+        message.setId(0);
+        message.setAction(new Build(new Coordinate(1,1),new Coordinate(0,0)));
+
+        turnHandler4.propertyChange(new PropertyChangeEvent(this, "notifyAction",false ,message));
+        turnHandler4.propertyChange(new PropertyChangeEvent(this,"actionsRequest",null, new GenericMessage(1)));
+        assertEquals(1, turnHandler4.actualPlayerID());
+
+        assertFalse(model4.isWinnerDetected());
+
+    }
+
+    @Test
     public void normalWinTurn(){
         assertEquals(0, turnHandler4.actualPlayerID());
         model4.setCard(0,"Atlas");
@@ -293,9 +326,10 @@ public class TurnHandlerTest {
 
         message = new ActionMessage();
         message.setId(0);
-        message.setAction(new Build(new Coordinate(0,1),new Coordinate(0,0)));
+        message.setAction(new BuildDome(new Coordinate(0,1),new Coordinate(0,0)));
 
         turnHandler4.propertyChange(new PropertyChangeEvent(this, "notifyAction",false ,message));
+        System.out.println(model4.getBoard());
         turnHandler4.propertyChange(new PropertyChangeEvent(this,"actionsRequest",null, new GenericMessage(1)));
 
         assertTrue(model4.isWinnerDetected());

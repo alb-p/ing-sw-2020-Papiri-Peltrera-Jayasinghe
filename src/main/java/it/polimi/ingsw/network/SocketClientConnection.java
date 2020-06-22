@@ -159,7 +159,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 System.out.println(evt.getPropertyName());
                 for (Action a: ((ActionMessage) evt.getNewValue()).getChoices()){
                     System.out.println("| "+a.getActionName()+a.getStart() + a.getEnd());
-                    System.out.println("| OPTIONAL : "+a.isOption());
                 }
                 System.out.println("| MESSAGE ID : "+((ActionMessage) evt.getNewValue()).getId());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");

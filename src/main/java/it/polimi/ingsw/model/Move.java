@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Move extends Action implements Serializable {
 
+    private static final long serialVersionUID = -2330388965632492463L;
+
     public Move(Coordinate start, Coordinate end){
         super("move",start, end);
     }
@@ -16,8 +18,8 @@ public class Move extends Action implements Serializable {
     }
 
     @Override
-    public Action clone() {
-        return new Move(null,null);
+    public int hashCode() {
+        return super.hashCode();
     }
 }
 

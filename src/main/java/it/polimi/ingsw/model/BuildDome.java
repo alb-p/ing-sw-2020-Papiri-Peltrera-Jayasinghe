@@ -5,7 +5,9 @@ import java.io.Serializable;
 
 public class BuildDome extends Build implements Serializable {
 
-    public BuildDome( Coordinate start, Coordinate end) {
+    private static final long serialVersionUID = -7456987556548235970L;
+
+    public BuildDome(Coordinate start, Coordinate end) {
         super( start, end);
     }
 
@@ -22,9 +24,8 @@ public class BuildDome extends Build implements Serializable {
     }
 
     @Override
-    public Action clone() {
-        return new BuildDome(null, null);
+    public int hashCode() {
+        return super.hashCode();
     }
-
 }
 

@@ -118,7 +118,6 @@ public class SocketServerConnection {
                 System.out.println(evt.getPropertyName());
                 Action a = ((ActionMessage) evt.getNewValue()).getAction();
                 System.out.println(a.getActionName() + a.getStart() + a.getEnd());
-                System.out.println("OPTIONAL : " + a.isOption());
             }
             System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
         } else if (evt.getNewValue() instanceof GenericMessage) {

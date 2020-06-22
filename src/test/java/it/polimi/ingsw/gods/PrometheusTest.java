@@ -32,7 +32,6 @@ public class PrometheusTest {
         assertTrue(root.getChildren().get(2).getChildren().get(0).getChildren().get(0).isLeaf());
         TreeActionNode root2 = card.cardTreeSetup(board.infoSlot(new Coordinate(4, 4)).getWorker(), board);
         assertEquals(2, root2.getChildren().size());
-
     }
 
     @Test

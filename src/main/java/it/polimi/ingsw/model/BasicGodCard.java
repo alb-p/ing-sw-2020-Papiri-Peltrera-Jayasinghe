@@ -46,6 +46,7 @@ public class BasicGodCard {
 
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode tree = new TreeActionNode(null);
+        if(w == null) System.out.println("worker nulll");
         for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {  //check around worker position to perform a Move
 
             if (board.infoSlot(c1).isFree() &&
@@ -71,7 +72,7 @@ public class BasicGodCard {
 
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
-        if (virtualBoard.getSlot(w.getOldPosition().getRow(), w.getOldPosition().getCol()).getLevel() == 2 &&
+        if (virtualBoard.getSlot(new Coordinate(w.getOldPosition().getRow(), w.getOldPosition().getCol())).getLevel() == 2 &&
                 board.infoSlot(w.getPosition()).getConstructionLevel() == 3) {
             return true;
         }

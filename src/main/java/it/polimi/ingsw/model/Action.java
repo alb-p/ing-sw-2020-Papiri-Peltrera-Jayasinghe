@@ -1,14 +1,13 @@
 package it.polimi.ingsw.model;
 
 import java.io.Serializable;
-import java.util.Objects;
 
 public abstract class Action implements Serializable {
 
+    private static final long serialVersionUID = 7260812342692728917L;
     private Coordinate start;
-    private String actionName;
+    private final String actionName;
     private Coordinate end;
-    private boolean option = false; //da usare come yesno
 
     public Action(String actionName, Coordinate start, Coordinate end){
         this.start = start;
@@ -30,27 +29,10 @@ public abstract class Action implements Serializable {
         return this.end;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Action action = (Action) o;
-        return Objects.equals(start, action.start) &&
-                Objects.equals(end, action.end);
-    }
+    public abstract boolean equals(Object o);
 
     @Override
     public int hashCode() {
-        return Objects.hash(start, end);
+        return super.hashCode();
     }
-
-    public boolean isOption() {
-        return option;
-    }
-
-    public void setOption(boolean option) {
-        this.option = option;
-    }
-
-    public abstract Action clone();
 }
