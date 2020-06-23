@@ -238,6 +238,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         ArrayList<Point> tabPosition;
         boolean showing = false;
         int idShowing = 0;
+        JButton exit=new JButton();
 
         protected InfoPanel() {
             super();
@@ -254,6 +255,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             godsTabs = new ArrayList<>();
             godsInfos = new ArrayList<>();
             tabPosition = new ArrayList<>();
+
+            this.add(exit);
+            exit.setIcon(new ImageIcon(this.getClass().getResource("/Gameplay/exit.png")));
+            exit.setBounds(0,0,21,20);
+            exit.setContentAreaFilled(false);
+            exit.setOpaque(false);
+            exit.setLocation(new Point(940,0));
+            exit.setBorder(null);
+            exit.setName("exit");
+            exit.addActionListener(this);
 
             int y = GUI.getDimension().height - 150;
 
@@ -286,6 +297,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 button.setName(Integer.toString(p.getId()));
                 button.setBounds(tabPosition.get(i).x, tabPosition.get(i).y, 45, 110);
                 godsTabs.add(button);
+
+
+
                 button.setOpaque(true);
                 this.add(button);
             }
@@ -294,6 +308,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton) {
+                if(((JButton) e.getSource()).getName().equalsIgnoreCase("exit")){
+                    System.exit(0);
+                }
                 int id = Integer.parseInt(((JButton) e.getSource()).getName());
                 if (showing && id == idShowing) {
                     showing = false;
@@ -374,7 +391,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     domeButton.setIcon(buildDomeClicked);
                 }
             }
-
         }
         repaint();
 
