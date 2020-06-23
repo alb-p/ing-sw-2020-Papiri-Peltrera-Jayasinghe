@@ -241,7 +241,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         protected InfoPanel() {
             super();
-            this.setOpaque(true);
+            this.setOpaque(false);
             this.setVisible(true);
             this.setLayout(null);
         }
