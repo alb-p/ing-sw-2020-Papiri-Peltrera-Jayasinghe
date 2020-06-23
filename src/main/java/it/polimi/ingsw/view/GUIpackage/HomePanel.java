@@ -27,7 +27,7 @@ public class HomePanel extends JPanel implements ActionListener {
 
         frameDimension=d;
 
-        this.image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
+        this.image = new ImageIcon(this.getClass().getResource("/Home/Home_title.jpg")).getImage();
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 

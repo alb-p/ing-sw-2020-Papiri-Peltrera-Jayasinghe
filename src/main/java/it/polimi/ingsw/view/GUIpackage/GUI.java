@@ -170,8 +170,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("play")) {
-            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
-            getConnection().start();
+           ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
+            new Thread(getConnection()).start();
         } else if (evt.getPropertyName().equalsIgnoreCase("numberOfPlayers")) {
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
             synchronized (this) {

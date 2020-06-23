@@ -96,9 +96,6 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
             layout.show(getContentPane(),"HomePanel");
             music.playSound("/Sounds/track1.wav",-20f,true);
 
-
-
-
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("islandTransitionEnded")){
             layout.show(getContentPane(),"PlayPanel");
             playPanel.startSounds();

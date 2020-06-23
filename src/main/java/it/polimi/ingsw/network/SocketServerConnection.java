@@ -13,7 +13,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SocketServerConnection {
+public class SocketServerConnection implements Runnable{
 
     private Socket socket;
     private final String ip;
@@ -39,8 +39,8 @@ public class SocketServerConnection {
         }
     }
 
-
-    public void start() {
+    @Override
+    public void run() {
         try {
             this.socket = new Socket(ip, port);
 
@@ -52,23 +52,17 @@ public class SocketServerConnection {
             inputStream = new ObjectInputStream(socket.getInputStream());
             printStream = new ObjectOutputStream(socket.getOutputStream());
 
-            new Thread(() -> {
-                try {
-                    while (true) {
-                        final Object inputObject = inputStream.readObject();
+            while (true) {
+                final Object inputObject = inputStream.readObject();
 
-                        if (inputObject instanceof PropertyChangeEvent) {
-                            view.notifyEvent((PropertyChangeEvent) inputObject);
-                        } else if (inputObject instanceof SetupMessage) {
-                            view.askNumOfPlayers();
-                        }
-
-                    }
-                } catch (IOException | ClassNotFoundException e) {
-                    logger.log(Level.SEVERE, e.getMessage());
+                if (inputObject instanceof PropertyChangeEvent) {
+                    view.notifyEvent((PropertyChangeEvent) inputObject);
+                } else if (inputObject instanceof SetupMessage) {
+                    view.askNumOfPlayers();
                 }
-            }).start();
-        } catch (IOException e) {
+
+            }
+        } catch (IOException | ClassNotFoundException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
     }

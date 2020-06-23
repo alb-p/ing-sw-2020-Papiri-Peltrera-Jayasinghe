@@ -1,12 +1,13 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -77,6 +78,17 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equalsIgnoreCase("notifyGodSelected")){
             JButton choosePlayer = new JButton(((ArrayList<String>) evt.getNewValue()).get(0));
+            choosePlayer.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseEntered(MouseEvent e) {
+                    choosePlayer.setForeground(new Color(255, 235, 140)); //yellow? new Color(223, 202, 181)
+                }
+
+                @Override
+                public void mouseExited(MouseEvent e) {
+                    choosePlayer.setForeground(Color.BLACK);
+                }
+            });
             choosePlayer.setName(((ArrayList<String>) evt.getNewValue()).get(0));
             choosePlayer.addActionListener(this);
             choosePlayer.setAlignmentX(Component.CENTER_ALIGNMENT);

@@ -47,7 +47,7 @@ public class CLI extends RemoteView implements Runnable {
                 "░░░░░║══╬═╗╔═╦╣╚╦═╦╦╬╬═╦╬╣░░░░░░░░░░░\n" +
                 "░░░░░╠══║╬╚╣║║║╔╣╬║╔╣║║║║║░░░░░░░░░░░\n" +
                 "░░░░░╚══╩══╩╩═╩═╩═╩╝╚╩╩═╩╝░░░░░░░░░░░\n" +
-                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n");
+                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n"+ANSIColor.RESET);
     }
 
     @Override
@@ -72,12 +72,12 @@ public class CLI extends RemoteView implements Runnable {
     public NicknameMessage askNickPlayer() {
         NicknameMessage message = new NicknameMessage();
         do {
-            printer.println(message.getMessage() + "\n");
+            printer.println("Enter your nickname:\n");
             startingBrackets();
             playerChoice = scanner.nextLine();
             message.setNickname(playerChoice);
             this.nickname = playerChoice;
-        } while (!modelView.checkNickname(nickname));
+        } while (!modelView.checkNickname(nickname) || nickname.equals(""));
         return message;
     }
 
@@ -495,7 +495,7 @@ public class CLI extends RemoteView implements Runnable {
                 printer.println("HELPFAKE");
             }
         } while (choiceMenu!=0);
-        connection.start();
+        new Thread(getConnection()).start();
         this.wait();
     }
 

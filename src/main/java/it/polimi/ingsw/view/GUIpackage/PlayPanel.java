@@ -5,6 +5,7 @@ import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
+import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
 import it.polimi.ingsw.view.GUIpackage.Components.WorkerIcon;
 import it.polimi.ingsw.view.ModelView;
 
@@ -39,7 +40,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private Timer timer;
     private MakeSound music= new MakeSound();
 
-
+    private ImageIcon buildDomeIcon;
+    private ImageIcon buildDomeClicked;
+    private ImageIcon endTurnIcon;
+    private ImageIcon endTurnIconClicked;
     private ModelView modelView;
     private int playerID;
     private String color;
@@ -48,9 +52,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private JPanel boardPanel;
     private JPanel workerToSet = new JPanel();
     private JLabel messageCenter;
-    private JButton submitButton = new JButton("Submit");
-    private final JButton domeButton = new JButton("Build a dome");
-    private final JButton endTurnButton = new JButton("End turn");
+    private final JButton submitButton = new CustomButton("/Gameplay/submit_workers");
+    private final JButton domeButton = new JButton(){
+        @Override
+        public void repaint() {
+        }
+    };
+    private final JButton endTurnButton = new CustomButton("/Gameplay/endturn");
     private TileButton west;
     private TileButton east;
     private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
@@ -168,23 +176,70 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         messageCenter.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
 
 
+/*
+        endTurnIcon = new ImageIcon(this.getClass().getResource("/Gameplay/end_turn.png"));
+        endTurnIconClicked = new ImageIcon(this.getClass().getResource("/Gameplay/end_turn_clicked.png"));
+        endTurnButton.setIcon(endTurnIcon);
         endTurnButton.setName("End turn");
         endTurnButton.setVisible(false);
         endTurnButton.addActionListener(this);
+        endTurnButton.setOpaque(false);
+        endTurnButton.setContentAreaFilled(false);
+        endTurnButton.setBorder(null);
+        endTurnButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                endTurnButton.setIcon(endTurnIconClicked);
+            }
+
+            @Override
+            public void mouseExited(MouseEvent e) {
+                endTurnButton.setIcon(endTurnIcon);
+            }
+        });
+
+ */
+        endTurnButton.setName("End turn");
+        endTurnButton.addActionListener(this);
+        endTurnButton.setVisible(false);
+        submitButton.setName("submit");
+        submitButton.addActionListener(this);
+        submitButton.setVisible(false);
+        JPanel eastButtons = new JPanel();
+        eastButtons.setLayout(new BoxLayout(eastButtons, BoxLayout.Y_AXIS));
+        eastButtons.add(Box.createVerticalStrut(500));
+        eastButtons.add(endTurnButton);
+        eastButtons.add(submitButton);
+        eastButtons.add(Box.createVerticalStrut(50));
+        eastButtons.setOpaque(false);
+
+
+        buildDomeIcon = new ImageIcon(this.getClass().getResource("/Gameplay/build_dome.png"));
+        buildDomeClicked = new ImageIcon(this.getClass().getResource("/Gameplay/build_dome_clicked.png"));
         domeButton.setName("Build a dome");
         domeButton.setVisible(false);
+        domeButton.setOpaque(false);
+        domeButton.setContentAreaFilled(false);
+        domeButton.setBorder(null);
         domeButton.addActionListener(this);
-        submitButton.setName("submit");
-        submitButton.setFont(submitFont);
-        submitButton.setEnabled(false);
-        submitButton.setVisible(false);
-        submitButton.addActionListener(this);
+        domeButton.setIcon(buildDomeIcon);
+        JPanel westButtons = new JPanel();
+        westButtons.setLayout(new BoxLayout(westButtons, BoxLayout.Y_AXIS));
+        westButtons.add(Box.createVerticalStrut(50));
+        westButtons.add(domeButton);
+        westButtons.add(Box.createVerticalStrut(600));
+        westButtons.setOpaque(false);
+
+
+
+
+
         JPanel buttons = new JPanel(new BorderLayout());
         buttons.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
         buttons.setOpaque(false);
-        buttons.add(domeButton, BorderLayout.WEST);
-        buttons.add(endTurnButton, BorderLayout.EAST);
-        buttons.add(submitButton, BorderLayout.SOUTH);
+        buttons.add(westButtons, BorderLayout.WEST);
+        buttons.add(eastButtons, BorderLayout.EAST);
+        //buttons.add(submitButton, BorderLayout.SOUTH);
         buttons.add(messageCenter, BorderLayout.NORTH);
         layeredPane.add(buttons, JLayeredPane.PALETTE_LAYER);
         movementPanel = new JPanel(null);
@@ -234,14 +289,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 endTurnButton.setVisible(false);
                 playPanelListener.firePropertyChange("end turn", null, new GenericMessage());
             } else if (button.getName().equalsIgnoreCase("Build a dome")) {
-                System.out.println("PREMUTO DOMEEEE");
                 if (buildDome) {
                     buildDome = false;
-                    //TODO rendi cliccato il bottone
-                    domeButton.setForeground(Color.BLACK);
+                    domeButton.setIcon(buildDomeIcon);
                 } else {
                     buildDome = true;
-                    submitButton.setForeground(Color.RED);
+                    domeButton.setIcon(buildDomeClicked);
                 }
             }
 
@@ -344,14 +397,14 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         endTurnButton.setEnabled(true);
                         endTurnButton.setVisible(true);
                     } else if (choices.contains("Build a dome")) {
-                        domeButton.setForeground(Color.BLACK);
+                        domeButton.setIcon(buildDomeIcon);
                         buildDome = false;
                         domeButton.setEnabled(true);
                         domeButton.setVisible(true);
                     }
                     StringBuilder message = new StringBuilder("It's your turn, make your");
                     for (int i = 0; i < choices.size() - 1; i++) {
-                        message.append(" " + choices.get(i));
+                        message.append(" " + choices.get(i).toLowerCase());
                         message.append(" or ");
                     }
                     message.append(choices.get(choices.size() - 1));
@@ -388,7 +441,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         myTurn = false;
         if (buildDome) {
             buildDome = false;
-            domeButton.setForeground(Color.BLACK); //meh
+            //domeButton.setForeground(Color.BLACK); //meh
+            domeButton.setIcon(buildDomeIcon);
         }
         domeButton.setVisible(false);
         endTurnButton.setVisible(false);
@@ -396,7 +450,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         playPanelListener.firePropertyChange("actionRequest", false, true);
 
     }
+    /*
+    private void domeButtonUpdate(){
 
+    }*/
 
     @Override
     protected void paintComponent(Graphics g) {
