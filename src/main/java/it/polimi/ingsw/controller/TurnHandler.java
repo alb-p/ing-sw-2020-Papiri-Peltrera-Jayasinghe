@@ -23,6 +23,7 @@ public class TurnHandler implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
+
         System.out.println("ACTUAL PLAYER  __"+actualPlayerID());
         if (evt.getPropertyName().equalsIgnoreCase("actionsRequest")) {
             gameStarted = true;

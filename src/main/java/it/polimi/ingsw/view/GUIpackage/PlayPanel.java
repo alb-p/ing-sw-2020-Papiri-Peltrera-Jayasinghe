@@ -176,7 +176,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         messageCenter.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
 
 
-
         /*************** BUTTONS*********************/
         endTurnButton.setName("End turn");
         endTurnButton.addActionListener(this);
@@ -193,8 +192,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         eastButtons.setOpaque(false);
 
         infoPanel = new InfoPanel();
-        infoPanel.setBounds(0,0,GUI.getDimension().width, GUI.getDimension().height);
-        layeredPane.add(infoPanel, 700);
+        infoPanel.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+        layeredPane.add(infoPanel, JLayeredPane.POPUP_LAYER);
 
 
         buildDomeIcon = new ImageIcon(this.getClass().getResource("/Gameplay/build_dome.png"));
@@ -226,8 +225,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         movementPanel.setOpaque(false);
         layeredPane.add(movementPanel, JLayeredPane.POPUP_LAYER);
         this.add(layeredPane);
-
+        System.out.println("THIIIIIIIIIIIIIIIISSSs" + this);
         repaint();
+
+
     }
 
 
@@ -247,61 +248,68 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         public void infoCreate() {
             this.setVisible(true);
-            this.setOpaque(true);
+            this.setOpaque(false);
 
-            this.setPreferredSize(GUI.getDimension());
+            this.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
             godsTabs = new ArrayList<>();
             godsInfos = new ArrayList<>();
             tabPosition = new ArrayList<>();
 
-            int y = GUI.getDimension().height-20;
+            int y = GUI.getDimension().height - 150;
 
             System.out.println(modelView.getPlayers().size());
 
-            for(int i = 0; i<modelView.getPlayers().size(); i++){
+            for (int i = 0; i < modelView.getPlayers().size(); i++) {
                 ModelView.PlayerView p = modelView.getPlayer(i);
                 godsInfos.add(new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + " info.jpg")).getImage().getScaledInstance(212, 450, Image.SCALE_SMOOTH));
 
-                JButton button = new JButton(p.getGod()[0].toLowerCase()) {
+                JButton button = new JButton() {
                     Image godMiniature = new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + ".png")).getImage().getScaledInstance(32, 46, Image.SCALE_SMOOTH);
                     Image tab = new ImageIcon(getClass().getResource("/Gameplay/tab.png")).getImage();
+
                     @Override
                     public void repaint() {
                     }
 
                     @Override
                     protected void paintComponent(Graphics g) {
-                        //super.paintComponent(g);
+                        super.paintComponent(g);
                         g.drawImage(godMiniature, 4, 33, PlayPanel.this);
                         g.drawImage(tab, 0, 0, PlayPanel.this);
                     }
                 };
 
-                tabPosition.add(new Point(0,y));
-                y -= 130;
+                tabPosition.add(new Point(0, y));
+                y -= 150;
                 button.addActionListener(this);
+                button.setBackground(new Color(0, 0, 0, 0));
                 button.setName(Integer.toString(p.getId()));
-                button.setText("");
-
+                button.setBounds(tabPosition.get(i).x, tabPosition.get(i).y, 45, 110);
                 godsTabs.add(button);
+                button.setOpaque(true);
                 this.add(button);
             }
         }
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            if(e.getSource() instanceof JButton){
+            if (e.getSource() instanceof JButton) {
                 int id = Integer.parseInt(((JButton) e.getSource()).getName());
-                if(showing){
+                if (showing && id == idShowing) {
                     showing = false;
                     tabPosition.get(id).x -= 212;
                     godsTabs.get(id).setLocation(tabPosition.get(id));
 
-                }else{
+                } else {
+                    if (showing) {
+                        tabPosition.get(idShowing).x -= 212;
+                        godsTabs.get(idShowing).setLocation(tabPosition.get(idShowing));
+                    }
                     idShowing = id;
                     showing = true;
                     tabPosition.get(id).x += 212;
                     godsTabs.get(id).setLocation(tabPosition.get(id));
+
                 }
             }
             PlayPanel.this.repaint();
@@ -309,15 +317,14 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         @Override
         protected void paintComponent(Graphics g) {
-            //super.paintComponent(g);
-            if(showing){
-                g.drawImage(godsInfos.get(idShowing), 0, 270,PlayPanel.this);
+            super.paintComponent(g);
+            if (showing) {
+                g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
             }
         }
 
         @Override
         public void repaint() {
-            super.repaint();
         }
     }
 
@@ -369,7 +376,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
 
         }
-
         repaint();
 
     }
