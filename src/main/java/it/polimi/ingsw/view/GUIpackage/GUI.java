@@ -45,6 +45,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void playerHasLost(GenericMessage message) {
         super.playerHasLost(message);
+        guiListeners.firePropertyChange("playerHasLost", null , message);
     }
 
     @Override

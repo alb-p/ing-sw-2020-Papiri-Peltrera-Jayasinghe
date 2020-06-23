@@ -472,6 +472,15 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 movementPanel.removeAll();
                 attemptedAction = null;
             }
+        } else if(evt.getPropertyName().equalsIgnoreCase("playerHasLost")){
+            modelView.getActionsAvailable().clear();
+            if (playerID != modelView.getActualPlayerId() && playerID!=modelView.getDeletedPlayerId()) {
+                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait 253");
+            } else if(playerID != modelView.getDeletedPlayerId()){
+                playPanelListener.firePropertyChange("actionRequest", false, true);
+            } else {
+                messageCenter.setText("You have lost");
+            }
         }
 
         repaint();
@@ -507,6 +516,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             } else {
                 messageCenter.setForeground(Color.WHITE);
                 messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
+            }
+            if(playerID==modelView.getDeletedPlayerId()){
+                messageCenter.setText("You have lost");
             }
         }
         repaint();
