@@ -80,7 +80,6 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void assignedGod(GodMessage message) {
         super.assignedGod(message);
-
         if (modelView.getChosenGods().isEmpty()) {
             if (modelView.getGodlyId() == getPlayerId()) {
                 ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "FirstPlayerSelectionPanel");
@@ -93,7 +92,6 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     protected void chosenGods(InitialCardsMessage newValue) {
         super.chosenGods(newValue);
-        System.out.println("RECEIVED GODS");
         if (modelView.getActualPlayerId() == getPlayerId()) {
             guiListeners.firePropertyChange("myTurn", false, true);
         }
@@ -108,7 +106,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GeneralGodsSelectionPanel");
 
         } else {
-            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GodlySelectingWaitingPanel");
 
         }
     }
@@ -117,7 +115,6 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     protected void colorReceived(ColorMessage message) {
         super.colorReceived(message);
         if (message.getId() == getPlayerId()) {
-            System.out.println("RICEVUTO MIO COLORE");
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
         }
     }
@@ -187,7 +184,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         } else if (evt.getPropertyName().equalsIgnoreCase("colorReceived")) {
             ColorMessage message = new ColorMessage(getPlayerId());
             message.setColor((Color) evt.getNewValue());
-            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GodlySelectingWaitingPanel");
             connection.sendEvent(new PropertyChangeEvent(this, "notifyColor", null, message));
 
         } else if (evt.getPropertyName().equalsIgnoreCase("godsSelected")) {
@@ -201,7 +198,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         } else if (evt.getPropertyName().equalsIgnoreCase("godSelected")) {
             GodMessage message = new GodMessage();
             message.setGod((String) (evt.getNewValue()));
-            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
+            ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "GodSelectionWaitingPanel");
             getConnection().sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
         } else if (evt.getPropertyName().equalsIgnoreCase("firstPlayerSelected")) {
             NicknameMessage nicknameMessage;

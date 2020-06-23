@@ -38,7 +38,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private ArrayList<Coordinate> workerPositions = new ArrayList<>();
     JLayeredPane layeredPane = new JLayeredPane();
     private Timer timer;
-    private MakeSound music= new MakeSound();
+    private MakeSound music = new MakeSound();
 
     private ImageIcon buildDomeIcon;
     private ImageIcon buildDomeClicked;
@@ -53,7 +53,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private JPanel workerToSet = new JPanel();
     private JLabel messageCenter;
     private final JButton submitButton = new CustomButton("/Gameplay/submit_workers");
-    private final JButton domeButton = new JButton(){
+    private final JButton domeButton = new JButton() {
         @Override
         public void repaint() {
         }
@@ -66,7 +66,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private boolean buildDome = false;
     private TileButton[][] boardOfButtons = new TileButton[5][5];
     private Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
-
+    private InfoPanel infoPanel;
 
     public PlayPanel(ModelView modelView) {
         messageCenter = new JLabel();
@@ -176,29 +176,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         messageCenter.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
 
 
-/*
-        endTurnIcon = new ImageIcon(this.getClass().getResource("/Gameplay/end_turn.png"));
-        endTurnIconClicked = new ImageIcon(this.getClass().getResource("/Gameplay/end_turn_clicked.png"));
-        endTurnButton.setIcon(endTurnIcon);
-        endTurnButton.setName("End turn");
-        endTurnButton.setVisible(false);
-        endTurnButton.addActionListener(this);
-        endTurnButton.setOpaque(false);
-        endTurnButton.setContentAreaFilled(false);
-        endTurnButton.setBorder(null);
-        endTurnButton.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseEntered(MouseEvent e) {
-                endTurnButton.setIcon(endTurnIconClicked);
-            }
 
-            @Override
-            public void mouseExited(MouseEvent e) {
-                endTurnButton.setIcon(endTurnIcon);
-            }
-        });
-
- */
+        /*************** BUTTONS*********************/
         endTurnButton.setName("End turn");
         endTurnButton.addActionListener(this);
         endTurnButton.setVisible(false);
@@ -212,6 +191,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         eastButtons.add(submitButton);
         eastButtons.add(Box.createVerticalStrut(50));
         eastButtons.setOpaque(false);
+
+        infoPanel = new InfoPanel();
+        infoPanel.setBounds(0,0,GUI.getDimension().width, GUI.getDimension().height);
+        layeredPane.add(infoPanel, 700);
 
 
         buildDomeIcon = new ImageIcon(this.getClass().getResource("/Gameplay/build_dome.png"));
@@ -230,10 +213,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         westButtons.add(Box.createVerticalStrut(600));
         westButtons.setOpaque(false);
 
-
-
-
-
         JPanel buttons = new JPanel(new BorderLayout());
         buttons.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
         buttons.setOpaque(false);
@@ -249,6 +228,97 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         this.add(layeredPane);
 
         repaint();
+    }
+
+
+    public class InfoPanel extends JPanel implements ActionListener {
+        ArrayList<JButton> godsTabs;
+        List<Image> godsInfos;
+        ArrayList<Point> tabPosition;
+        boolean showing = false;
+        int idShowing = 0;
+
+        protected InfoPanel() {
+            super();
+            this.setOpaque(true);
+            this.setVisible(true);
+            this.setLayout(null);
+        }
+
+        public void infoCreate() {
+            this.setVisible(true);
+            this.setOpaque(true);
+
+            this.setPreferredSize(GUI.getDimension());
+            godsTabs = new ArrayList<>();
+            godsInfos = new ArrayList<>();
+            tabPosition = new ArrayList<>();
+
+            int y = GUI.getDimension().height-20;
+
+            System.out.println(modelView.getPlayers().size());
+
+            for(int i = 0; i<modelView.getPlayers().size(); i++){
+                ModelView.PlayerView p = modelView.getPlayer(i);
+                godsInfos.add(new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + " info.jpg")).getImage().getScaledInstance(212, 450, Image.SCALE_SMOOTH));
+
+                JButton button = new JButton(p.getGod()[0].toLowerCase()) {
+                    Image godMiniature = new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + ".png")).getImage().getScaledInstance(32, 46, Image.SCALE_SMOOTH);
+                    Image tab = new ImageIcon(getClass().getResource("/Gameplay/tab.png")).getImage();
+                    @Override
+                    public void repaint() {
+                    }
+
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        //super.paintComponent(g);
+                        g.drawImage(godMiniature, 4, 33, PlayPanel.this);
+                        g.drawImage(tab, 0, 0, PlayPanel.this);
+                    }
+                };
+
+                tabPosition.add(new Point(0,y));
+                y -= 130;
+                button.addActionListener(this);
+                button.setName(Integer.toString(p.getId()));
+                button.setText("");
+
+                godsTabs.add(button);
+                this.add(button);
+            }
+        }
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            if(e.getSource() instanceof JButton){
+                int id = Integer.parseInt(((JButton) e.getSource()).getName());
+                if(showing){
+                    showing = false;
+                    tabPosition.get(id).x -= 212;
+                    godsTabs.get(id).setLocation(tabPosition.get(id));
+
+                }else{
+                    idShowing = id;
+                    showing = true;
+                    tabPosition.get(id).x += 212;
+                    godsTabs.get(id).setLocation(tabPosition.get(id));
+                }
+            }
+            PlayPanel.this.repaint();
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            //super.paintComponent(g);
+            if(showing){
+                g.drawImage(godsInfos.get(idShowing), 0, 270,PlayPanel.this);
+            }
+        }
+
+        @Override
+        public void repaint() {
+            super.repaint();
+        }
     }
 
 
@@ -310,14 +380,14 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 if (a.getActionName().equalsIgnoreCase("BUILD") || a instanceof Build) {
                     if (buildDome && a.getActionName().equalsIgnoreCase("BUILD A DOME")) {
                         sendAction(a);
-                        music.playSound("/Sounds/domeBuild.wav", 0f,false);
+                        music.playSound("/Sounds/domeBuild.wav", 0f, false);
 
                     } else if (!buildDome) {
                         sendAction(a);
                         if (modelView.getBoard().getSlot(a.getEnd()).getLevel() == 3)
-                            music.playSound("/Sounds/domeBuild.wav", 0f,false);
+                            music.playSound("/Sounds/domeBuild.wav", 0f, false);
                         else
-                            music.playSound("/Sounds/normalBuild.wav", 0f,false);
+                            music.playSound("/Sounds/normalBuild.wav", 0f, false);
 
                     }
                 }
@@ -347,6 +417,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         } else if (evt.getPropertyName().equalsIgnoreCase("firstPlayer")) {
             firstPlayerSelected = true;
             messagePlayerSettingWorkers();
+            infoPanel.infoCreate();
         } else if (evt.getPropertyName().equalsIgnoreCase("workerConfirm")) {
             WorkerMessage message = (WorkerMessage) evt.getNewValue();
             if (message.getWorkerNumber() == 1
@@ -374,7 +445,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
             messageCenter.setText("Game ended");
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
-            if(attemptedAction!=null){
+            if (attemptedAction != null) {
                 sendAction(attemptedAction);
                 movementPanel.removeAll();
                 attemptedAction = null;
@@ -574,7 +645,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                     if (a.equals(attemptedMove)) {
                                         Random r = new Random();
                                         dragAndDropResult = true;
-                                        music.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0f,false);
+                                        music.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0f, false);
 
 
                                         /*
@@ -678,8 +749,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             Random r = new Random();
             while (modelView.getWinnerId() == -1) {
                 try {
-                    Thread.sleep(r.nextInt(60000)+120000); //tra 2 e 3 min
-                    music.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", -5f,false);
+                    Thread.sleep(r.nextInt(60000) + 120000); //tra 2 e 3 min
+                    music.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", -5f, false);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }

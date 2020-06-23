@@ -33,7 +33,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         this.setContentPane(contentPane);
         logo = new LogoPanel();
         contentPane.add("LogoPanel", logo);
-        contentPane.add( "InitialWaitingPanel", new InitialWaitingPanel(this.getSize()));
+        contentPane.add( "InitialWaitingPanel", new WaitingPanel("Waiting for players..."));
         HomePanel homePanel =  new HomePanel(this.getSize());
         homePanel.addHomePanelListener(gui);
         contentPane.add( "HomePanel",homePanel);
@@ -50,6 +50,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         contentPane.add("ColorPanel", colorPanel);
         GeneralGodsSelectionPanel generalGodsSelectionPanel = new GeneralGodsSelectionPanel(modelView);
         generalGodsSelectionPanel.addGeneralGodSelectionListener(gui);
+        contentPane.add( "GodlySelectingWaitingPanel", new WaitingPanel("Godly is selecting gods..."));
         contentPane.add("GeneralGodsSelectionPanel", generalGodsSelectionPanel);
         modelView.addNicknameListener(generalGodsSelectionPanel); //to know how many players in the game
         GodSelectionPanel godSelectionPanel = new GodSelectionPanel();
@@ -59,6 +60,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         modelView.addSelectedSingleGodListener(godSelectionPanel);
         godSelectionPanel.addGodSelectionListener(gui);
         contentPane.add("GodSelectionPanel", godSelectionPanel);
+        contentPane.add( "GodSelectionWaitingPanel", new WaitingPanel("Opponent is selecting gods..."));
         FirstPlayerSelectionPanel firstPlayerSelectionPanel = new FirstPlayerSelectionPanel();
         gui.addGuiListener(firstPlayerSelectionPanel);
         modelView.addSelectedSingleGodListener(firstPlayerSelectionPanel);

@@ -32,7 +32,6 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int)(0.82*GUI.getDimension().height),(int)(0.625*GUI.getDimension().height),Image.SCALE_SMOOTH);
 
         this.image = new ImageIcon(this.getClass().getResource("/Name/setupBG.jpg")).getImage();
-        //this.imageNick = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage();
         Font font;
         Font labelFont;
         Font errorFont;

@@ -2,11 +2,9 @@ package it.polimi.ingsw.view.GUIpackage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 
-public class InitialWaitingPanel extends JPanel {
+public class WaitingPanel extends JPanel {
 
 
     Image background;
@@ -14,8 +12,8 @@ public class InitialWaitingPanel extends JPanel {
     JLabel animation;
     private Dimension frameDimension;
 
-    public InitialWaitingPanel(Dimension d) throws IOException, FontFormatException{
-        frameDimension=d;
+    public WaitingPanel(String message) throws IOException, FontFormatException{
+        frameDimension=GUI.getDimension();
 
         JPanel innerPanel =new JPanel(){
             Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95),Image.SCALE_SMOOTH);
@@ -29,7 +27,7 @@ public class InitialWaitingPanel extends JPanel {
 
         animation=new JLabel();
         this.background=new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
-        label=new JLabel("Waiting for players...");
+        label=new JLabel(message);
         Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
 
@@ -54,9 +52,6 @@ public class InitialWaitingPanel extends JPanel {
         innerPanel.add(animation);
 
         this.add(innerPanel);
-
-
-
     }
 
 
@@ -66,12 +61,5 @@ public class InitialWaitingPanel extends JPanel {
         super.paintComponent(g);
         g.drawImage(this.background, 0, 0, this);
     }
-
-
-
-
-
-
-
 
 }
