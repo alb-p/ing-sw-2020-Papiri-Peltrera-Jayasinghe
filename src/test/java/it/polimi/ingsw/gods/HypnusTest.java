@@ -52,4 +52,5 @@ public class HypnusTest {
         assertEquals(4, rootplayer.getChildren().size());
         assertEquals(1, root.getChildren().size());
     }
+
 }

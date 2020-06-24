@@ -388,9 +388,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     private void sendWorkers() {
-        for (int j = 0; i < 2; i++) {
+        for (int j = 0; j < 2; j++) {
             WorkerMessage mess = new WorkerMessage(playerID, j);
-            mess.setCoordinate(workerPositions.get(i));
+            mess.setCoordinate(workerPositions.get(j));
             playPanelListener.firePropertyChange("workerReceived", null, mess);
         }
         submitButton.setEnabled(false);
