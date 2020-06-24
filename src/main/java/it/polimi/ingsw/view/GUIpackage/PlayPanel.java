@@ -3,7 +3,6 @@ package it.polimi.ingsw.view.GUIpackage;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.utils.messages.GenericMessage;
-import it.polimi.ingsw.utils.messages.NicknameMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
 import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
 import it.polimi.ingsw.view.GUIpackage.Components.WorkerIcon;
@@ -21,14 +20,13 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
-import java.nio.file.DirectoryNotEmptyException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
     private Image bgIsland = new ImageIcon(this.getClass().getResource("/IslandAnimation/island120.jpg")).getImage();
     int i = 0;
     boolean workerPlaced = false;
@@ -36,22 +34,18 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     boolean myTurn = false;
     boolean firstPlayerSelected = false;
     private ArrayList<Coordinate> workerPositions = new ArrayList<>();
-    JLayeredPane layeredPane = new JLayeredPane();
-    private Timer timer;
+    private JLayeredPane layeredPane = new JLayeredPane();
     private MakeSound music = new MakeSound();
 
-    private ImageIcon buildDomeIcon;
-    private ImageIcon buildDomeClicked;
-    private ImageIcon endTurnIcon;
-    private ImageIcon endTurnIconClicked;
-    private ModelView modelView;
+    private final ImageIcon buildDomeIcon;
+    private final ImageIcon buildDomeClicked;
+    private final ModelView modelView;
     private int playerID;
-    private String color;
     private Action attemptedAction;
-    private JPanel movementPanel;
+    private final JPanel movementPanel;
     private JPanel boardPanel;
-    private JPanel workerToSet = new JPanel();
-    private JLabel messageCenter;
+    private final JPanel workerToSet = new JPanel();
+    private final JLabel messageCenter;
     private final JButton submitButton = new CustomButton("/Gameplay/submit_workers");
     private final JButton domeButton = new JButton() {
         @Override
@@ -71,13 +65,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     public PlayPanel(ModelView modelView) {
         messageCenter = new JLabel();
         Font messageFont;
-        Font submitFont;
         try {
             messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 35); //carica font
-            submitFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 25); //carica font
         } catch (IOException | FontFormatException e) {
             messageFont = messageCenter.getFont();
-            submitFont = messageCenter.getFont();
         }
 
         layeredPane.setPreferredSize(GUI.getDimension());
@@ -90,7 +81,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         east = new TileButton(-1, -1, this);
         //east.setPreferredSize(new Dimension(130,200));
         TransferHandler dragAndDrop = new DragAndDrop();
-        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
+        east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/worker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         east.setTransferHandler(dragAndDrop);
         east.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -102,7 +93,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         });
 
         west = new TileButton(-1, -1, this);
-        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/woker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
+        west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/worker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         west.setTransferHandler(dragAndDrop);
         west.addMouseMotionListener(new MouseAdapter() {
             @Override
@@ -225,7 +216,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         movementPanel.setOpaque(false);
         layeredPane.add(movementPanel, JLayeredPane.POPUP_LAYER);
         this.add(layeredPane);
-        System.out.println("THIIIIIIIIIIIIIIIISSSs" + this);
         repaint();
 
 
@@ -238,19 +228,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         ArrayList<Point> tabPosition;
         boolean showing = false;
         int idShowing = 0;
-        JButton exit=new JButton();
+        JButton exit = new JButton();
 
         protected InfoPanel() {
             super();
             this.setOpaque(false);
-            this.setVisible(true);
             this.setLayout(null);
         }
 
         public void infoCreate() {
-            this.setVisible(true);
-            this.setOpaque(false);
-
+            this.setVisible(false);
             this.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
             godsTabs = new ArrayList<>();
             godsInfos = new ArrayList<>();
@@ -258,17 +245,15 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
             this.add(exit);
             exit.setIcon(new ImageIcon(this.getClass().getResource("/Gameplay/exit.png")));
-            exit.setBounds(0,0,21,20);
+            exit.setBounds(0, 0, 21, 20);
             exit.setContentAreaFilled(false);
             exit.setOpaque(false);
-            exit.setLocation(new Point(940,0));
+            exit.setLocation(new Point(940, 0));
             exit.setBorder(null);
             exit.setName("exit");
             exit.addActionListener(this);
 
             int y = GUI.getDimension().height - 150;
-
-            System.out.println(modelView.getPlayers().size());
 
             for (int i = 0; i < modelView.getPlayers().size(); i++) {
                 ModelView.PlayerView p = modelView.getPlayer(i);
@@ -296,8 +281,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 button.setBackground(new Color(0, 0, 0, 0));
                 button.setName(Integer.toString(p.getId()));
                 button.setBounds(tabPosition.get(i).x, tabPosition.get(i).y, 45, 110);
+                button.setBorder(null);
                 godsTabs.add(button);
-
 
 
                 button.setOpaque(true);
@@ -308,14 +293,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton) {
-                if(((JButton) e.getSource()).getName().equalsIgnoreCase("exit")){
+                if (((JButton) e.getSource()).getName().equalsIgnoreCase("exit")) {
                     System.exit(0);
                 }
                 int id = Integer.parseInt(((JButton) e.getSource()).getName());
                 if (showing && id == idShowing) {
                     showing = false;
                     tabPosition.get(id).x -= 212;
-                    godsTabs.get(id).setLocation(tabPosition.get(id));
 
                 } else {
                     if (showing) {
@@ -325,9 +309,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     idShowing = id;
                     showing = true;
                     tabPosition.get(id).x += 212;
-                    godsTabs.get(id).setLocation(tabPosition.get(id));
 
                 }
+                godsTabs.get(id).setLocation(tabPosition.get(id));
             }
             PlayPanel.this.repaint();
         }
@@ -434,7 +418,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             playerID = (int) evt.getNewValue();
         } else if (evt.getPropertyName().equalsIgnoreCase("boardUpdate")) {
             VirtualSlot vSlot = (VirtualSlot) evt.getNewValue();
-            // UPDATE BOARD
             boardOfButtons[vSlot.getCoordinate().getRow()][vSlot.getCoordinate().getCol()].updateView(vSlot);
         } else if (evt.getPropertyName().equalsIgnoreCase("firstPlayer")) {
             firstPlayerSelected = true;
@@ -456,12 +439,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (playerID == modelView.getActualPlayerId()) {
                 myTurn = true;
             }
-            messageCenterTurn();
+            if (playerID != modelView.getDeletedPlayerId()) messageCenterTurn();
         } else if (evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")) {
             modelView.getActionsAvailable().clear();
-            if (playerID != modelView.getActualPlayerId()) {
-                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait 253");
-            } else {
+            if (playerID == modelView.getActualPlayerId()) {
                 playPanelListener.firePropertyChange("actionRequest", false, true);
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
@@ -472,13 +453,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 movementPanel.removeAll();
                 attemptedAction = null;
             }
-        } else if(evt.getPropertyName().equalsIgnoreCase("playerHasLost")){
+        } else if (evt.getPropertyName().equalsIgnoreCase("playerHasLost")) {
             modelView.getActionsAvailable().clear();
-            if (playerID != modelView.getActualPlayerId() && playerID!=modelView.getDeletedPlayerId()) {
-                messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait 253");
-            } else if(playerID != modelView.getDeletedPlayerId()){
+            if (playerID == modelView.getActualPlayerId()) {
                 playPanelListener.firePropertyChange("actionRequest", false, true);
-            } else {
+            } else if (playerID == modelView.getDeletedPlayerId()) {
                 messageCenter.setText("You have lost");
             }
         }
@@ -517,7 +496,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 messageCenter.setForeground(Color.WHITE);
                 messageCenter.setText(modelView.getPlayer(modelView.getActualPlayerId()).getNickname() + " is playing, please wait");
             }
-            if(playerID==modelView.getDeletedPlayerId()){
+            if (playerID == modelView.getDeletedPlayerId()) {
                 messageCenter.setText("You have lost");
             }
         }
@@ -592,10 +571,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         @Override
         protected Transferable createTransferable(JComponent c) {
-            Transferable t;
-            if (c instanceof TileButton)
+            Transferable t =null;
+            if (c instanceof TileButton) {
                 System.out.println("CREO TRANSFERABLE");
-            t = new TransferableImage(((TileButton) c).getWorker(), ((TileButton) c).getCoordinate());
+                t = new TransferableImage(((TileButton) c).getWorker(), ((TileButton) c).getCoordinate());
+            }
             return t;
         }
 
@@ -608,16 +588,14 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     tSource.setWorker(null);
                     tSource.setOpaque(false);
                     if (!workerPlaced) {
-                        if (!tSource.getCoordinate().equals(new Coordinate(-1, -1)))
+                        if (!tSource.getCoordinate().equals(new Coordinate(-1, -1))) {
                             workerPositions.remove(tSource.getCoordinate());
-                        submitButton.setEnabled(workerPositions.size() == 2);
-                        submitButton.setVisible(workerPositions.size() == 2);
-                        if (workerPositions.size() == 2) layeredPane.remove(workerToSet);
-                        System.out.println("WORKERS SETTED = " + workerPositions.size());
-                    } else if (play) {
-                        //PLAY
-                        if (myTurn) {
-
+                        }
+                        if (workerPositions.size() == 2 && tSource.getCoordinate().equals(new Coordinate(-1, -1))) {
+                            submitButton.setEnabled(true);
+                            submitButton.setVisible(true);
+                            layeredPane.remove(workerToSet);
+                            infoPanel.setVisible(true);
                         }
                     }
                 }
@@ -640,6 +618,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (canImport(support)) {
                 try {
                     Transferable t = support.getTransferable();
+                    if(t == null)return false;
                     Object val = t.getTransferData(DataFlavor.imageFlavor);
                     Component dest = support.getComponent();
                     if (val instanceof TransferableImage && dest instanceof TileButton && playerID == modelView.getActualPlayerId()) {
@@ -667,7 +646,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                 tDest.setWorker(new ImageIcon(this.getClass().getResource("/WorkersAnimation/inactive.png")).getImage());
                             }
 
-                            System.out.println(workerPlaced);
                             dragAndDropResult = true;
 
                         } else if (play) {
