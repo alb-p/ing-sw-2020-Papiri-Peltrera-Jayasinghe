@@ -13,7 +13,6 @@ public class Poseidon extends BasicGodCard {
 
 
     @Override
-
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
         Worker otherWorker = getOtherWorker(w, board);
@@ -84,10 +83,6 @@ public class Poseidon extends BasicGodCard {
                                                                             extraBuild3Level = extra2Temp3Level;
                                                                         }
                                                                         if (extraBuild3Level <= 4) {
-                                                                            System.out.printf("%d",standardTemp3Level);
-                                                                            //standardBuildLevel = standardTemp3Level;
-                                                                            //extraBuild1Level = extra1Temp3Level;
-                                                                            //extraBuild2Level = extra2Temp3Level;
                                                                             TreeActionNode build3 = new TreeActionNode(new Build(otherCoordinate, extraBuild3));
                                                                             build2.addChild(build3);
                                                                         }
