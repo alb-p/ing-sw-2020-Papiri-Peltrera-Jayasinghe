@@ -3,11 +3,17 @@ package it.polimi.ingsw.model;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Island board.
+ */
 public class IslandBoard implements Cloneable{
 
     private Logger logger = Logger.getLogger("model.board");
     Slot[][] board = new Slot[5][5];
 
+    /**
+     * Instantiates a new Island board.
+     */
     public IslandBoard(){
         for(int i=0; i<5; i++){
             for(int j=0 ; j<5; j++){
@@ -16,6 +22,12 @@ public class IslandBoard implements Cloneable{
         }
     }
 
+    /**
+     * Info slot slot.
+     *
+     * @param coordinate the coordinate
+     * @return the slot
+     */
     public Slot infoSlot(Coordinate coordinate) {
         if(coordinate.getCol()>=0 && coordinate.getCol()<5 &&
                 coordinate.getRow()>=0 && coordinate.getRow()<5){
@@ -28,13 +40,24 @@ public class IslandBoard implements Cloneable{
         }
     }
 
-    //TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
+    /**
+     * Is perimeter boolean.
+     *
+     * @param coordinate the coordinate
+     * @return the boolean
+     */
+//TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
     public boolean isPerimeter(Coordinate coordinate) {
         int row = coordinate.getRow();
         int col = coordinate.getCol();
         return row == 0 || row == 4 || col == 0 || col == 4;
     }
 
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     public String toString (){
         StringBuilder total = new StringBuilder(5*5*2);
 

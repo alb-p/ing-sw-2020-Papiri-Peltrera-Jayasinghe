@@ -5,6 +5,9 @@ import it.polimi.ingsw.model.*;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+/**
+ * The type Atlas.
+ */
 public class Atlas extends BasicGodCard {
 
 
@@ -13,6 +16,15 @@ public class Atlas extends BasicGodCard {
     //a dome at any level.
 
 
+    /**
+     * Turn handler boolean.
+     *
+     * @param player the player
+     * @param board  the board
+     * @param action the action
+     * @return the boolean
+     * @throws Exception the exception
+     */
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
 
@@ -23,6 +35,15 @@ public class Atlas extends BasicGodCard {
 
     }
 
+    /**
+     * Build dome boolean.
+     *
+     * @param player the player
+     * @param board  the board
+     * @param action the action
+     * @return the boolean
+     * @throws Exception the exception
+     */
     private boolean buildDome(Player player, IslandBoard board, Action action) throws Exception {
         if(board.infoSlot(action.getEnd()).isFree()){
             board.infoSlot(action.getEnd()).construct(Construction.DOME);
@@ -31,6 +52,13 @@ public class Atlas extends BasicGodCard {
         return false;
     }
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);

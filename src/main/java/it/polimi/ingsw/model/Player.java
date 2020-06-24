@@ -5,6 +5,9 @@ import it.polimi.ingsw.utils.messages.ActionMessage;
 
 import java.util.ArrayList;
 
+/**
+ * The type Player.
+ */
 public class Player {
 
 
@@ -23,6 +26,12 @@ public class Player {
     private Worker actualWorker;
 
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param nickName the nick name
+     * @param color    the color
+     */
     public Player(String nickName, String color) {
         this.nickName = nickName;
         this.actualWorker = null;
@@ -33,6 +42,13 @@ public class Player {
         workers.add(new Worker(0, 0, color));
     }
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param id       the id
+     * @param nickName the nick name
+     * @param color    the color
+     */
     public Player(int id, String nickName, Color color) {
         this.nickName = nickName;
         this.id = id;
@@ -44,6 +60,13 @@ public class Player {
         workers.add(new Worker(new Coordinate(0, 0), color));
     }
 
+    /**
+     * Instantiates a new Player.
+     *
+     * @param id       the id
+     * @param nickName the nick name
+     * @param color    the color
+     */
     public Player(int id, String nickName, String color) {
         this.nickName = nickName;
         this.id = id;
@@ -51,6 +74,11 @@ public class Player {
         workers.add(new Worker(0, 0, color));
     }
 
+    /**
+     * Sets card.
+     *
+     * @param card the card
+     */
     public void setCard(String card) {
 
         if (card.equals("APOLLO")) {
@@ -84,38 +112,82 @@ public class Player {
         }
     }
 
+    /**
+     * Gets card.
+     *
+     * @return the card
+     */
     public BasicGodCard getCard() {
         return this.card;
     }
 
+    /**
+     * Gets nick name.
+     *
+     * @return the nick name
+     */
     public String getNickName() {
         return this.nickName;
     }
 
+    /**
+     * Gets worker.
+     *
+     * @param i the
+     * @return the worker
+     */
     public Worker getWorker(int i) {
         return this.workers.get(i);
     }
 
+    /**
+     * Gets actual worker.
+     *
+     * @return the actual worker
+     */
     public Worker getActualWorker() {
         return this.actualWorker;
     }
 
+    /**
+     * Has done boolean.
+     *
+     * @return the boolean
+     */
     public boolean hasDone() {
         return this.done;
     }
 
+    /**
+     * Sets not build done.
+     */
     public void setNotBuildDone() {
         buildDone = false;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     * Gets tree.
+     *
+     * @return the tree
+     */
     public TreeActionNode getTree() {
         return this.tree;
     }
 
+    /**
+     * Player tree setup.
+     *
+     * @param board the board
+     */
     public void playerTreeSetup(IslandBoard board) {
         TreeActionNode tree = this.card.cardTreeSetup(this.getWorker(0), board);
         TreeActionNode temp = this.card.cardTreeSetup(this.getWorker(1), board);
@@ -124,6 +196,14 @@ public class Player {
         this.tree = tree;
     }
 
+    /**
+     * Turn handler boolean.
+     *
+     * @param board   the board
+     * @param message the message
+     * @return the boolean
+     * @throws Exception the exception
+     */
     public boolean turnHandler(IslandBoard board, Action message) throws Exception {
         TreeActionNode attemptedActionNode;
         attemptedActionNode = tree.search(message);
@@ -149,6 +229,9 @@ public class Player {
         return true;
     }
 
+    /**
+     * Sets end turn.
+     */
     public void setEndTurn() {
         this.done = false;
         this.moveDone = false;
@@ -157,7 +240,13 @@ public class Player {
         actualWorker = null;
     }
 
-    //It set actual worker
+    /**
+     * Select worker boolean.
+     *
+     * @param coord the coord
+     * @return the boolean
+     */
+//It set actual worker
     public boolean selectWorker(Coordinate coord) {
         for (Worker worker : workers) {
             if (worker.getPosition().equals(coord)) {
@@ -167,6 +256,11 @@ public class Player {
         return (actualWorker != null);
     }
 
+    /**
+     * Gets next actions.
+     *
+     * @return the next actions
+     */
     public ActionMessage getNextActions() {
         ArrayList<Action> actions = new ArrayList<>();
         boolean isOption = false;
@@ -178,12 +272,22 @@ public class Player {
         return new ActionMessage(actions, isOption, this.id);
     }
 
+    /**
+     * Check loser boolean.
+     *
+     * @return the boolean
+     */
     public boolean checkLoser() {
         if (this.tree.isLeaf())
             this.hasLost = true;
         return this.hasLost;
     }
 
+    /**
+     * Essential done boolean.
+     *
+     * @return the boolean
+     */
     public boolean essentialDone() {
         return moveDone && buildDone;
     }

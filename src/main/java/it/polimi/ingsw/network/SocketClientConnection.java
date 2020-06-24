@@ -15,7 +15,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
-
+/**
+ * The type Socket client connection.
+ */
 public class SocketClientConnection implements Runnable, PropertyChangeListener {
 
     private Socket socket;
@@ -29,6 +31,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
 
     private boolean active = true;
 
+    /**
+     * Instantiates a new Socket client connection.
+     *
+     * @param newSocket the new socket
+     */
     public SocketClientConnection(Socket newSocket) {
         try {
             socket = newSocket;
@@ -40,11 +47,21 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Is active boolean.
+     *
+     * @return the boolean
+     */
     private synchronized boolean isActive() {
         return active;
     }
 
 
+    /**
+     * Send.
+     *
+     * @param message the message
+     */
     public synchronized void send(Object message) {
         try {
             outSocket.reset();
@@ -57,6 +74,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
 
     }
 
+    /**
+     * Ask num of players int.
+     *
+     * @return the int
+     */
     public int askNumOfPlayers() {
         int read = 0;
         try {
@@ -73,19 +95,35 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         return read;
     }
 
+    /**
+     * Notify game playing.
+     */
     public void notifyGamePlaying() {
         send("The Lobby is full! Please Wait");
     }
 
+    /**
+     * Sets id.
+     *
+     * @param i the
+     */
     public void setId(int i) {
         this.id = i;
     }
 
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     public int getId() {
         return id;
     }
 
 
+    /**
+     * Run.
+     */
     @Override
     public void run() {
         try {
@@ -110,6 +148,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Receive debug.
+     *
+     * @param inputObject the input object
+     */
     private void receiveDebug(PropertyChangeEvent inputObject) {
         System.out.println("\n\n\t\t |RECEIVED EVENT");
         System.out.println("\t\t |"+inputObject.getPropertyName());
@@ -117,6 +160,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         System.out.println("\t\t | ______________________________");
     }
 
+    /**
+     * Property change.
+     *
+     * @param evt the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         sendEvent(evt);
@@ -130,6 +178,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Send event.
+     *
+     * @param evt the evt
+     */
     public void sendEvent(PropertyChangeEvent evt) {
         debug(evt);
         try {
@@ -151,6 +204,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
 
     }
 
+    /**
+     * Debug.
+     *
+     * @param evt the evt
+     */
     private void debug(PropertyChangeEvent evt) {
         System.out.println("| "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+"\n|\n|\n|");
         if(evt.getNewValue() instanceof Message){
@@ -183,6 +241,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
 
     }
 
+    /**
+     * Add scc listener.
+     *
+     * @param listener the listener
+     */
     public void addSccListener(PropertyChangeListener listener) {
         sccListeners.addPropertyChangeListener(listener);
     }

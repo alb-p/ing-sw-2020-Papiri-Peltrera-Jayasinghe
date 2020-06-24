@@ -2,6 +2,9 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Apollo.
+ */
 public class Apollo extends BasicGodCard {
 
     //Your Move: Your Worker may
@@ -9,6 +12,13 @@ public class Apollo extends BasicGodCard {
     //space by forcing their Worker to
     //the space yours just vacated
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
@@ -28,6 +38,15 @@ public class Apollo extends BasicGodCard {
         return root;
     }
 
+    /**
+     * Turn handler boolean.
+     *
+     * @param player the player
+     * @param board  the board
+     * @param action the action
+     * @return the boolean
+     * @throws Exception the exception
+     */
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action.getActionName().equalsIgnoreCase("move")) {
@@ -41,6 +60,15 @@ public class Apollo extends BasicGodCard {
         return false;
     }
 
+    /**
+     * Mod move boolean.
+     *
+     * @param w     the w
+     * @param start the start
+     * @param end   the end
+     * @param board the board
+     * @return the boolean
+     */
     private boolean modMove(Worker w, Coordinate start, Coordinate end, IslandBoard board){
         Worker oppWorker;
 

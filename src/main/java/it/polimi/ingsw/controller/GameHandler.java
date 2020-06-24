@@ -8,6 +8,9 @@ import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Random;
 
+/**
+ * The type Game handler.
+ */
 public class GameHandler implements PropertyChangeListener {
 
     private InitSetup data;
@@ -20,12 +23,24 @@ public class GameHandler implements PropertyChangeListener {
     private boolean atLeastOneGod = false;
     private boolean workerPlaced = false;
 
+    /**
+     * Instantiates a new Game handler.
+     *
+     * @param initSetup      the init setup
+     * @param m              the m
+     * @param playersPerGame the players per game
+     */
     public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
         data = initSetup;
         model = m;
         this.playersPerGame = playersPerGame;
     }
 
+    /**
+     * Property change.
+     *
+     * @param evt the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
@@ -98,6 +113,11 @@ public class GameHandler implements PropertyChangeListener {
     }
 
 
+    /**
+     * Player creation queue.
+     *
+     * @param value the value
+     */
     private void playerCreationQueue(Object value) {
         if (value instanceof NicknameMessage) {
             playersMap.put(((NicknameMessage) value).getId(), ((NicknameMessage) value).getNickname());
@@ -114,10 +134,20 @@ public class GameHandler implements PropertyChangeListener {
     }
 
 
+    /**
+     * Sets turn handler.
+     *
+     * @param turnHandler the turn handler
+     */
     public void setTurnHandler(TurnHandler turnHandler) {
         this.turnHandler = turnHandler;
     }
 
+    /**
+     * Get current player id int.
+     *
+     * @return the int
+     */
     public int getCurrentPlayerID(){ //usato solamente per i test
         return this.currentPlayerID;
     }

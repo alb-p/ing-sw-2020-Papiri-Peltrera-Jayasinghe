@@ -4,12 +4,22 @@ import it.polimi.ingsw.model.*;
 
 import java.util.Scanner;
 
+/**
+ * The type Demeter.
+ */
 public class Demeter extends BasicGodCard {
 
     //Your Worker may
     //build one additional time, but not
     //on the same space.
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);

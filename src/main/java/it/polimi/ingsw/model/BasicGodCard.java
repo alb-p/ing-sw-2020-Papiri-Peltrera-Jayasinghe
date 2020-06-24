@@ -1,7 +1,18 @@
 package it.polimi.ingsw.model;
 
+/**
+ * The type Basic god card.
+ */
 public class BasicGodCard {
 
+    /**
+     * Move boolean.
+     *
+     * @param w     the w
+     * @param coord the coord
+     * @param board the board
+     * @return the boolean
+     */
     public boolean move(Worker w, Coordinate coord, IslandBoard board) {
         Slot workerSlot = board.infoSlot(w.getPosition());
         Slot destSlot = board.infoSlot(coord);
@@ -15,6 +26,15 @@ public class BasicGodCard {
         return false;
     }
 
+    /**
+     * Build boolean.
+     *
+     * @param w     the w
+     * @param coord the coord
+     * @param board the board
+     * @return the boolean
+     * @throws Exception the exception
+     */
     public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         if (w.getPosition().isAdjacent(coord) && board.infoSlot(coord).isFree()) {
             Slot slot = board.infoSlot(coord);
@@ -29,11 +49,26 @@ public class BasicGodCard {
         return true;
     }
 
+    /**
+     * Special rule.
+     *
+     * @param root  the root
+     * @param board the board
+     */
     public void specialRule(TreeActionNode root, IslandBoard board) {
         return;
     }
 
 
+    /**
+     * Turn handler boolean.
+     *
+     * @param player the player
+     * @param board  the board
+     * @param action the action
+     * @return the boolean
+     * @throws Exception the exception
+     */
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action instanceof Move) {
             return (this.move(player.getActualWorker(), action.getEnd(), board));
@@ -44,6 +79,13 @@ public class BasicGodCard {
     }
 
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode tree = new TreeActionNode(null);
         if(w == null) System.out.println("worker nulll");
@@ -70,6 +112,14 @@ public class BasicGodCard {
 
     }
 
+    /**
+     * Winning condition boolean.
+     *
+     * @param w            the w
+     * @param board        the board
+     * @param virtualBoard the virtual board
+     * @return the boolean
+     */
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
         if (virtualBoard.getSlot(new Coordinate(w.getOldPosition().getRow(), w.getOldPosition().getCol())).getLevel() == 2 &&

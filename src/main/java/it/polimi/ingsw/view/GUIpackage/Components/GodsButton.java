@@ -3,6 +3,9 @@ package it.polimi.ingsw.view.GUIpackage.Components;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Gods button.
+ */
 public class GodsButton extends JButton {
 
     ImageIcon glow;
@@ -11,6 +14,11 @@ public class GodsButton extends JButton {
     String name;
 
 
+    /**
+     * Instantiates a new Gods button.
+     *
+     * @param god the god
+     */
     public GodsButton(String god){
         this.name=god;
         this.setBorder(null);
@@ -24,19 +32,29 @@ public class GodsButton extends JButton {
     }
 
 
-
+    /**
+     * Set selected.
+     */
     public void setSelected(){
         selected = true;
         repaint();
 
     }
 
+    /**
+     * Set unselected.
+     */
     public void setUnselected(){
         selected = false;
         repaint();
     }
 
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);

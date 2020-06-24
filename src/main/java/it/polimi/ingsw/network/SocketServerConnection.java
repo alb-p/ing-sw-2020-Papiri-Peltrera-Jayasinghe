@@ -13,6 +13,9 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Socket server connection.
+ */
 public class SocketServerConnection implements Runnable{
 
     private Socket socket;
@@ -27,6 +30,13 @@ public class SocketServerConnection implements Runnable{
     //è strettamente necessario avere il nickname?
     String nickname;
 
+    /**
+     * Instantiates a new Socket server connection.
+     *
+     * @param ip       the ip
+     * @param port     the port
+     * @param chosenUI the chosen ui
+     */
     public SocketServerConnection(String ip, int port, int chosenUI) {
         this.ip = ip;
         this.port = port;
@@ -39,6 +49,9 @@ public class SocketServerConnection implements Runnable{
         }
     }
 
+    /**
+     * Run.
+     */
     @Override
     public void run() {
         try {
@@ -67,6 +80,11 @@ public class SocketServerConnection implements Runnable{
         }
     }
 
+    /**
+     * Send.
+     *
+     * @param message the message
+     */
     public void send(Object message) {
         synchronized (printStream) {
             try {
@@ -79,6 +97,11 @@ public class SocketServerConnection implements Runnable{
         }
     }
 
+    /**
+     * Send event.
+     *
+     * @param evt the evt
+     */
     public void sendEvent(PropertyChangeEvent evt) {
         debug(evt);
         try {
@@ -95,6 +118,9 @@ public class SocketServerConnection implements Runnable{
         }
     }
 
+    /**
+     * Close connection.
+     */
     public void closeConnection() {
         try {
             socket.close();
@@ -104,6 +130,11 @@ public class SocketServerConnection implements Runnable{
     }
 
 
+    /**
+     * Debug.
+     *
+     * @param evt the evt
+     */
     private void debug(PropertyChangeEvent evt) {
         System.out.println("---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " ");
         if (evt.getNewValue() instanceof Message) {

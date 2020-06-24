@@ -5,15 +5,18 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 
 
+/**
+ * The type Prometheus.
+ */
 public class Prometheus extends BasicGodCard {
-    /**
-     * Your Turn: If your Worker does
-     * not move up, it may build both
-     * before and after moving
-     * MOVE 0,0 IN 0,1 & BUILD IN 1,1 ok
-     * BUILD 0,1 IN 0,2 & MOVE IN 1,1 & BUILD IN 1,2
-     */
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode moveNode;
@@ -68,6 +71,15 @@ public class Prometheus extends BasicGodCard {
 
     }
 
+    /**
+     * Turn handler boolean.
+     *
+     * @param player the player
+     * @param board  the board
+     * @param action the action
+     * @return the boolean
+     * @throws Exception the exception
+     */
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action instanceof Move) {

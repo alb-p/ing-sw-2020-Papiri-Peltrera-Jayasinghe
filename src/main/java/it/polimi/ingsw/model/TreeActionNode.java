@@ -2,6 +2,9 @@ package it.polimi.ingsw.model;
 
 import java.util.ArrayList;
 
+/**
+ * The type Tree action node.
+ */
 public class TreeActionNode {
 
 
@@ -9,38 +12,80 @@ public class TreeActionNode {
     private TreeActionNode parent;
     private final ArrayList<TreeActionNode> children;
 
+    /**
+     * Instantiates a new Tree action node.
+     *
+     * @param data the data
+     */
     public TreeActionNode(Action data){
         this.data = data;
         this.children = new ArrayList<>();
     }
 
+    /**
+     * Set parent.
+     *
+     * @param parent the parent
+     */
     private void setParent(TreeActionNode parent){
         this.parent  = parent;
     }
 
+    /**
+     * Add child.
+     *
+     * @param child the child
+     */
     public void addChild(TreeActionNode child){
         this.children.add(child);
         child.setParent(this);
     }
 
+    /**
+     * Get children array list.
+     *
+     * @return the array list
+     */
     public ArrayList<TreeActionNode> getChildren(){
         return this.children;
     }
 
+    /**
+     * Get parent tree action node.
+     *
+     * @return the tree action node
+     */
     public TreeActionNode getParent(){
         return this.parent;
     }
 
+    /**
+     * Is leaf boolean.
+     *
+     * @return the boolean
+     */
     public boolean isLeaf(){
         return this.children.isEmpty();
     }
 
+    /**
+     * Search tree action node.
+     *
+     * @param action the action
+     * @return the tree action node
+     */
     public TreeActionNode search(Action action){
         for(TreeActionNode t: children){
             if(t.data.equals(action)) return t;
         }
         return null;
     }
+
+    /**
+     * Get children actions array list.
+     *
+     * @return the array list
+     */
     public ArrayList<Action> getChildrenActions(){
         ArrayList<Action> choices = new ArrayList<>();
         boolean found;
@@ -62,14 +107,30 @@ public class TreeActionNode {
     }
 
 
+    /**
+     * Gets data.
+     *
+     * @return the data
+     */
     public Action getData() {
         return data;
     }
 
+    /**
+     * Gets child.
+     *
+     * @param i the
+     * @return the child
+     */
     public TreeActionNode getChild(int i) {
         return this.children.get(i);
     }
 
+    /**
+     * Remove child.
+     *
+     * @param i the
+     */
     public void removeChild(int i) {
         this.children.remove(i);
     }

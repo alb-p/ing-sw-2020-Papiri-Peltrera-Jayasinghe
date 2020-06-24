@@ -4,9 +4,29 @@ import it.polimi.ingsw.network.SocketClientConnection;
 
 import java.io.Serializable;
 
+/**
+ * The interface Message.
+ */
 public interface Message{
 
+    /**
+     * Gets message.
+     *
+     * @return the message
+     */
     String getMessage();
+
+    /**
+     * Sets id.
+     *
+     * @param id the id
+     */
     void setId(int id);
+
+    /**
+     * Gets id.
+     *
+     * @return the id
+     */
     int getId();
 }

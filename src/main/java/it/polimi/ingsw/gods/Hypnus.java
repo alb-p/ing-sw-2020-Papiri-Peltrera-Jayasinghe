@@ -4,6 +4,9 @@ import it.polimi.ingsw.model.*;
 
 import java.util.stream.Collectors;
 
+/**
+ * The type Hypnus.
+ */
 public class Hypnus extends BasicGodCard {
 
     //Start of Opponent’s Turn: If one
@@ -11,6 +14,12 @@ public class Hypnus extends BasicGodCard {
     //higher than all of their others, it
     //cannot move
 
+    /**
+     * Special rule.
+     *
+     * @param root  the root
+     * @param board the board
+     */
     @Override
     public void specialRule(TreeActionNode root, IslandBoard board) {
         Coordinate higher = searchHigherWorker(root, board);
@@ -26,8 +35,11 @@ public class Hypnus extends BasicGodCard {
     }
 
     /**
-     * @param root
-     * @param board
+     * Search higher worker coordinate.
+     *
+     * @param root  the root
+     * @param board the board
+     * @return the coordinate
      */
     private Coordinate searchHigherWorker(TreeActionNode root, IslandBoard board) {
         Coordinate firstWorkerCoordinate = null;

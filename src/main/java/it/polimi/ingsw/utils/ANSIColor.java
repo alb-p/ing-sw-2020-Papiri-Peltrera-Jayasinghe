@@ -2,6 +2,9 @@ package it.polimi.ingsw.utils;
 
 import it.polimi.ingsw.network.ClientMain;
 
+/**
+ * The enum Ansi color.
+ */
 public enum ANSIColor {
     BLACK ("\u001B[30m"),
     RED ("\u001B[31m"),
@@ -28,6 +31,11 @@ public enum ANSIColor {
     //public final String RESET;
     private String escape;
 
+    /**
+     * Instantiates a new Ansi color.
+     *
+     * @param escape the escape
+     */
     ANSIColor(String escape)
     {
 
@@ -42,11 +50,22 @@ public enum ANSIColor {
 
     }
 
+
+    /**
+     * Gets escape.
+     *
+     * @return the escape
+     */
     public String getEscape()
     {
         return escape;
     }
 
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     @Override
     public String toString()
     {

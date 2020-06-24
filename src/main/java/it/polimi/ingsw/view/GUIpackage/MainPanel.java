@@ -7,8 +7,17 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
 
+/**
+ * The type Main panel.
+ */
 public class MainPanel extends JPanel {
     private Point initialClick;
+
+    /**
+     * Instantiates a new Main panel.
+     *
+     * @param parent the parent
+     */
     public MainPanel(final JFrame parent){
 
 

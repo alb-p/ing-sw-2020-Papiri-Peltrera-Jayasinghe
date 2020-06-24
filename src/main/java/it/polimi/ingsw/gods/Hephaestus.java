@@ -2,6 +2,9 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Hephaestus.
+ */
 public class Hephaestus extends BasicGodCard {
 
     //Your Build:
@@ -11,6 +14,13 @@ public class Hephaestus extends BasicGodCard {
     //your first block.
 
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root =  super.cardTreeSetup(w, board);

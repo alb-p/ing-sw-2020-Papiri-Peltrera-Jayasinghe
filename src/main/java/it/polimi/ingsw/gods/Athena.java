@@ -2,6 +2,9 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Athena.
+ */
 public class Athena extends BasicGodCard {
 
     //Opponent’s Turn: If one of your
@@ -12,6 +15,12 @@ public class Athena extends BasicGodCard {
     private boolean specialRuleActivated = false;
 
 
+    /**
+     * Special rule.
+     *
+     * @param tree  the tree
+     * @param board the board
+     */
     @Override
     public void specialRule(TreeActionNode tree, IslandBoard board) {
         if (specialRuleActivated) {
@@ -19,6 +28,13 @@ public class Athena extends BasicGodCard {
         }
     }
 
+    /**
+     * Elaboration.
+     *
+     * @param node  the node
+     * @param board the board
+     * @param index the index
+     */
     private void elaboration(TreeActionNode node, IslandBoard board, int index) {
         if (!node.isLeaf()) {
             for (int i = 0; i < node.getChildren().size(); i++) {
@@ -46,6 +62,14 @@ public class Athena extends BasicGodCard {
 
     }
 
+    /**
+     * Move boolean.
+     *
+     * @param w     the w
+     * @param coord the coord
+     * @param board the board
+     * @return the boolean
+     */
     @Override
     public boolean move(Worker w, Coordinate coord, IslandBoard board){
         specialRuleActivated = false;

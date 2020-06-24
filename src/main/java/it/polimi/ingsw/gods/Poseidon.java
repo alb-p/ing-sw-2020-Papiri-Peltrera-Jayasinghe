@@ -2,16 +2,19 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Poseidon.
+ */
 public class Poseidon extends BasicGodCard {
 
+
     /**
-     * End of Your Turn: If your
-     * unmoved Worker is on the
-     * ground level, it may build up to
-     * three times.
-     **/
-
-
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
@@ -105,6 +108,13 @@ public class Poseidon extends BasicGodCard {
         return root;
     }
 
+    /**
+     * Gets other worker.
+     *
+     * @param actual the actual
+     * @param board  the board
+     * @return the other worker
+     */
     private Worker getOtherWorker(Worker actual, IslandBoard board) {
         Worker selected = null;
         for (int i = 0; i < 5; i++) {

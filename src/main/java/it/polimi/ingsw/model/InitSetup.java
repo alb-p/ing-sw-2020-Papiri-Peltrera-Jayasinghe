@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 
+/**
+ * The type Init setup.
+ */
 public class InitSetup {
 
     private ArrayList<Color> colors;
@@ -17,6 +20,9 @@ public class InitSetup {
     private ArrayList<String> chosenGods;
     private PropertyChangeSupport initSetupListeners = new PropertyChangeSupport(this);
 
+    /**
+     * Instantiates a new Init setup.
+     */
     public InitSetup() {
         colors = new ArrayList<>();
         nicknames = new ArrayList<>();
@@ -42,13 +48,21 @@ public class InitSetup {
         gods.add("ZEUS");
     }
 
+    /**
+     * Add init setup listener.
+     *
+     * @param listener the listener
+     */
     public void addInitSetupListener(PropertyChangeListener listener) {
         initSetupListeners.addPropertyChangeListener(listener);
     }
 
-/**********************************************************************************************************************/
-    /***NICKNAME***/
-
+    /**
+     * Is in user boolean.
+     *
+     * @param name the name
+     * @return the boolean
+     */
     public boolean isInUser(String name) {
 
         for (String s : nicknames) {
@@ -59,22 +73,34 @@ public class InitSetup {
         return false;
     }
 
+    /**
+     * Sets nicknames.
+     *
+     * @param message the message
+     */
     public void setNicknames(NicknameMessage message) {
         nicknames.add(message.getNickname());
         initSetupListeners.firePropertyChange("nicknameConfirm", null, message);
     }
 
 
-/**********************************************************************************************************************/
-    /***COLORS***/
-
-
+    /**
+     * Is in color boolean.
+     *
+     * @param color the color
+     * @return the boolean
+     */
     public boolean isInColor(Color color) {
 
         return colors.contains(color);
     }
 
 
+    /**
+     * Del color.
+     *
+     * @param mess the mess
+     */
     public void delColor(ColorMessage mess) {
 
         for (int i = 0; i < this.colors.size(); i++)
@@ -85,10 +111,12 @@ public class InitSetup {
 
     }
 
-/**********************************************************************************************************************/
-    /***GODS***/
-
-    //avvisa chi è il godly
+    /**
+     * Notify godly.
+     *
+     * @param godlyID the godly id
+     */
+//avvisa chi è il godly
     public void notifyGodly(int godlyID) {
         GodlyMessage message = new GodlyMessage(godlyID);
         initSetupListeners.firePropertyChange("godlySelected", false, message);
@@ -96,6 +124,12 @@ public class InitSetup {
     }
 
 
+    /**
+     * Add chosen god.
+     *
+     * @param chosenGod the chosen god
+     * @param mess      the mess
+     */
     public void addChosenGod(String chosenGod, InitialCardsMessage mess) {
         this.chosenGods.add(chosenGod);
         System.out.println("GODS SIZE:: " + gods.size() + "HO AGGIUNTO:: " + chosenGod);
@@ -116,11 +150,22 @@ public class InitSetup {
 
     }
 
+    /**
+     * Chosen gods size int.
+     *
+     * @return the int
+     */
     public int chosenGodsSize() {
         return this.chosenGods.size();
     }
 
 
+    /**
+     * Is in list god boolean.
+     *
+     * @param god the god
+     * @return the boolean
+     */
     public boolean isInListGod(String god) {
 
         for (String s : gods) {
@@ -131,6 +176,12 @@ public class InitSetup {
         return false;
     }
 
+    /**
+     * Is in god boolean.
+     *
+     * @param god the god
+     * @return the boolean
+     */
     public boolean isInGod(String god) {
 
         for (String s : chosenGods) {
@@ -142,6 +193,11 @@ public class InitSetup {
     }
 
 
+    /**
+     * Del god.
+     *
+     * @param mess the mess
+     */
     public void delGod(GodMessage mess) {
         for (int i = 0; i < chosenGods.size(); i++) {
             if (chosenGods.get(i).equals(mess.getGod())) {
@@ -154,13 +210,21 @@ public class InitSetup {
     }
 
 
-/**********************************************************************************************************************/
-    /***ALTRO***/
+    /**
+     * Worker placed.
+     *
+     * @param mess the mess
+     */
     public void workerPlaced(WorkerMessage mess) {
         initSetupListeners.firePropertyChange("workerConfirm", null, mess);
     }
 
 
+    /**
+     * First player.
+     *
+     * @param mess the mess
+     */
     public void FirstPlayer(NicknameMessage mess) {
         initSetupListeners.firePropertyChange("firstPlayerConfirmed", null, mess);
     }

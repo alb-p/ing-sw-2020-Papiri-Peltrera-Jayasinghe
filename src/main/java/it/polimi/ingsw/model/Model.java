@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Model.
+ */
 public class Model {
 
 
@@ -18,27 +21,61 @@ public class Model {
     private boolean winnerDetected = false;
     Logger logger = Logger.getLogger("model");
 
+    /**
+     * Add model listener.
+     *
+     * @param listener the listener
+     */
     public void addModelListener(PropertyChangeListener listener) {
         modelListeners.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Add player.
+     *
+     * @param p the p
+     */
     public void addPlayer(Player p) {
         players.add(p);
     }
 
+    /**
+     * Gets board.
+     *
+     * @return the board
+     */
     public IslandBoard getBoard() {
         return this.board;
     }
 
+    /**
+     * Gets num of players.
+     *
+     * @return the num of players
+     */
     public int getNumOfPlayers() {
         return this.players.size();
     }
 
+    /**
+     * Sets card.
+     *
+     * @param playerID the player id
+     * @param card     the card
+     */
     public void setCard(int playerID, String card) {
         this.getPlayer(playerID).setCard(card.toUpperCase());
     }
 
 
+    /**
+     * Add worker boolean.
+     *
+     * @param playerIndex the player index
+     * @param c           the c
+     * @param workerIndex the worker index
+     * @return the boolean
+     */
     public boolean addWorker(int playerIndex, Coordinate c, int workerIndex) {
         oldBoard = cloneVBoard(board);
         try {
@@ -58,6 +95,12 @@ public class Model {
     }
 
 
+    /**
+     * Gets player.
+     *
+     * @param id the id
+     * @return the player
+     */
     public Player getPlayer(int id) {
         for (Player p : players) {
             if (p.getId() == id) return p;
@@ -66,6 +109,12 @@ public class Model {
     }
 
 
+    /**
+     * Turn handler.
+     *
+     * @param idPlayerPlaying the id player playing
+     * @param message         the message
+     */
     public void turnHandler(int idPlayerPlaying, Action message) {
         oldBoard = cloneVBoard(board);
         try {
@@ -79,6 +128,12 @@ public class Model {
         notifyChanges();
     }
 
+    /**
+     * Clone v board virtual board.
+     *
+     * @param board the board
+     * @return the virtual board
+     */
     public VirtualBoard cloneVBoard(IslandBoard board) {
         VirtualBoard newBoard = new VirtualBoard();
         for (int row = 0; row < 5; row++) {
@@ -96,6 +151,9 @@ public class Model {
         return newBoard;
     }
 
+    /**
+     * Notify changes.
+     */
     public void notifyChanges() {
         VirtualSlot oldVSlot;
         for (int i = 0; i < board.board.length; i++) {
@@ -115,7 +173,12 @@ public class Model {
     }
 
 
-    //It invokes specialRule on opponent gods'
+    /**
+     * Tree editor by special rule.
+     *
+     * @param currPlayer the curr player
+     */
+//It invokes specialRule on opponent gods'
     public void treeEditorBySpecialRule(int currPlayer) {
         for (Player p : players) {
             if (p.getId() != currPlayer) {
@@ -124,6 +187,12 @@ public class Model {
         }
 
     }
+
+    /**
+     * Send actions.
+     *
+     * @param id the id
+     */
     public void sendActions(int id){
         if(getPlayer(id).getTree()==null){
             buildTree(id);
@@ -137,7 +206,12 @@ public class Model {
     }
 
 
-    //crea l'albero e lo fa correggere dagli altri dei.
+    /**
+     * Build tree.
+     *
+     * @param ID the id
+     */
+//crea l'albero e lo fa correggere dagli altri dei.
     public void buildTree(int ID) {
         try {
             getPlayer(ID).playerTreeSetup(board);
@@ -150,6 +224,12 @@ public class Model {
     }
 
 
+    /**
+     * Check winner boolean.
+     *
+     * @param id the id
+     * @return the boolean
+     */
     public boolean checkWinner(int id) {
         if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
             winnerDetected = true;
@@ -160,6 +240,11 @@ public class Model {
         return false;
     }
 
+    /**
+     * Remove player.
+     *
+     * @param id the id
+     */
     public void removePlayer(int id) {
         for (int i = 0; i < 2; i++) {
             board.infoSlot(getPlayer(id).getWorker(i).getPosition()).free();
@@ -170,10 +255,20 @@ public class Model {
         notifyChanges();
     }
 
+    /**
+     * Remove model listener.
+     *
+     * @param listener the listener
+     */
     public void removeModelListener(PropertyChangeListener listener){
         modelListeners.removePropertyChangeListener(listener);
     }
 
+    /**
+     * End game for no available moves.
+     *
+     * @param id the id
+     */
     public void endGameForNoAvailableMoves(int id) {
         int winnerID = -1;
         for (Player player : players) {
@@ -184,12 +279,22 @@ public class Model {
 
     }
 
+    /**
+     * Notify player has lost.
+     *
+     * @param id the id
+     */
     public void notifyPlayerHasLost(int id) {
         modelListeners.firePropertyChange("playerLostDetected", null,
                 new GenericMessage(id,"", " has no more available actions!"));
     }
 
 
+    /**
+     * End turn.
+     *
+     * @param id the id
+     */
     public void endTurn(int id) {
         getPlayer(id).setEndTurn();
         modelListeners.firePropertyChange("endTurnConfirm", null,
@@ -197,6 +302,11 @@ public class Model {
         //notifyChanges();
     }
 
+    /**
+     * End game.
+     *
+     * @param id the id
+     */
     public void endGame(int id) {
         if(id<0){
             modelListeners.firePropertyChange("endGame", false, true);
@@ -208,6 +318,11 @@ public class Model {
         }
     }
 
+    /**
+     * Is winner detected boolean.
+     *
+     * @return the boolean
+     */
     public boolean isWinnerDetected() {
         return winnerDetected;
     }

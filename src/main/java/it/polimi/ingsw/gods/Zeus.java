@@ -2,12 +2,22 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Zeus.
+ */
 public class Zeus extends BasicGodCard {
     //Your Build: Your Worker may
     //build a block under itself.
 
     boolean specialBuild = false;
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
@@ -19,6 +29,15 @@ public class Zeus extends BasicGodCard {
         return root;
     }
 
+    /**
+     * Build boolean.
+     *
+     * @param w     the w
+     * @param coord the coord
+     * @param board the board
+     * @return the boolean
+     * @throws Exception the exception
+     */
     @Override
     public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
         if (!super.build(w, coord, board)) {
@@ -34,6 +53,14 @@ public class Zeus extends BasicGodCard {
     }
 
 
+    /**
+     * Winning condition boolean.
+     *
+     * @param w            the w
+     * @param board        the board
+     * @param virtualBoard the virtual board
+     * @return the boolean
+     */
     @Override
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
         boolean won = super.winningCondition(w, board, virtualBoard) && !specialBuild;
