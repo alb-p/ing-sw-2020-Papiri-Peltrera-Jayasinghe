@@ -2,12 +2,14 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
-import java.util.ArrayList;
-
-
 /**
- * The type Prometheus.
+ * Your Turn: If your Worker does
+ * not move up, it may build both
+ * before and after moving
+ * MOVE 0,0 IN 0,1 & BUILD IN 1,1 ok
+ * BUILD 0,1 IN 0,2 & MOVE IN 1,1 & BUILD IN 1,2
  */
+
 public class Prometheus extends BasicGodCard {
 
     /**

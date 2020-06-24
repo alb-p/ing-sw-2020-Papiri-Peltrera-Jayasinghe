@@ -1,6 +1,7 @@
 package it.polimi.ingsw.network;
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.VirtualSlot;
+import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -39,6 +40,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     public SocketClientConnection(Socket newSocket) {
         try {
             socket = newSocket;
+            socket.setKeepAlive(true);
             outSocket = new ObjectOutputStream(newSocket.getOutputStream());
             inSocket = new ObjectInputStream(newSocket.getInputStream());
             logger.log(Level.INFO, "Connection created");
@@ -219,6 +221,13 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                     System.out.println("| "+a.getActionName()+a.getStart() + a.getEnd());
                 }
                 System.out.println("| MESSAGE ID : "+((ActionMessage) evt.getNewValue()).getId());
+                System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            } if (evt.getNewValue() instanceof WorkerMessage){
+                System.out.println("| worker SENDING");
+                System.out.println(evt.getPropertyName());
+                WorkerMessage message =(WorkerMessage)evt.getNewValue();
+                System.out.println("| MESSAGE ID : "+message.getId());
+                System.out.println("| worker ID : "+message.getWorkerNumber());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
             } else if (evt.getNewValue() instanceof GenericMessage){
                 System.out.println("| GENERIC MESSAGE SENDING");

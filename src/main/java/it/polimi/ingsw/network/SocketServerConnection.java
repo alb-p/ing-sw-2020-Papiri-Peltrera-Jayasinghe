@@ -56,6 +56,7 @@ public class SocketServerConnection implements Runnable{
     public void run() {
         try {
             this.socket = new Socket(ip, port);
+            socket.setKeepAlive(true);
 
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());

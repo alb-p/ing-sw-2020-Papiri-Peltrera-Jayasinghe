@@ -17,15 +17,12 @@ public class ClientMain {
      */
     public static void main(String[] args){
 
-        //String ip = "gc20.ddns.net"; // per giocare online
         //String ip = "127.0.0.1";
-        String ip = "192.168.1.17";
-        //String ip = "DESKTOP-TPVMQ50";
         //String ip = "87.18.127.100";
+        String ip = "localhost";
         int port = 4566;
         int chosenUI = 0;
         int cli;
-        //java -jar sagrada-client.jar [cli/gui] [unicode/ascii] [ip-address]
 
         //0:b/n cli   1:colors cli
 /*
