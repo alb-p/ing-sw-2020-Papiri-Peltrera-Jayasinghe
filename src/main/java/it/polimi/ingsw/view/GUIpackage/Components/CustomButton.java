@@ -19,6 +19,7 @@ public class CustomButton extends JButton implements MouseListener{
         this.music= new MakeSound();
         this.setBorder(null);
         this.setContentAreaFilled(false);//trasparenza
+        this.setOpaque(false);
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 

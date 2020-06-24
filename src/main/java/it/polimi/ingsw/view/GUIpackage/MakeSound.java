@@ -12,7 +12,7 @@ public class MakeSound {
 
     public MakeSound (){
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Sounds/settings.txt"), StandardCharsets.UTF_8))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/settings.txt"), StandardCharsets.UTF_8))) {
             this.settings = br.readLine();
             this.generalVolume= Integer.parseInt(br.readLine());
         } catch (IOException e) {
