@@ -24,6 +24,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The type Play panel.
+ */
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private final PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
@@ -59,6 +62,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
     private final InfoPanel infoPanel;
 
+    /**
+     * Instantiates a new Play panel.
+     *
+     * @param modelView the model view
+     */
     public PlayPanel(ModelView modelView) {
         messageCenter = new JLabel();
         Font messageFont;
@@ -207,6 +215,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
+    /**
+     * The type Info panel.
+     */
     public class InfoPanel extends JPanel implements ActionListener {
         ArrayList<JButton> godsTabs;
         List<Image> godsInfos;
@@ -215,12 +226,18 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         int idShowing = 0;
         JButton exit = new JButton();
 
+        /**
+         * Instantiates a new Info panel.
+         */
         protected InfoPanel() {
             super();
             this.setOpaque(false);
             this.setLayout(null);
         }
 
+        /**
+         * Info create.
+         */
         public void infoCreate() {
             this.setVisible(false);
             this.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
@@ -275,6 +292,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
         }
 
+        /**
+         * Action performed.
+         *
+         * @param e the e
+         */
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton) {
@@ -301,6 +323,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             PlayPanel.this.repaint();
         }
 
+        /**
+         * Paint component.
+         *
+         * @param g the g
+         */
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
@@ -309,12 +336,20 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
         }
 
+        /**
+         * Repaint.
+         */
         @Override
         public void repaint() {
         }
     }
 
 
+    /**
+     * Action performed.
+     *
+     * @param e the e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() instanceof TileButton) {
@@ -365,6 +400,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     }
 
+    /**
+     * Try build.
+     *
+     * @param t       the t
+     * @param actions the actions
+     */
     private void tryBuild(TileButton t, List<Action> actions) {
         for (Action a : actions) {
             if (a.getEnd().equals(t.getCoordinate())) {
@@ -387,6 +428,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
+    /**
+     * Send workers.
+     */
     private void sendWorkers() {
         for (int j = 0; j < 2; j++) {
             WorkerMessage mess = new WorkerMessage(playerID, j);
@@ -397,6 +441,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         workerPlaced = true;
     }
 
+    /**
+     * Property change.
+     *
+     * @param evt the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("playerID")) {
@@ -450,6 +499,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         repaint();
     }
 
+    /**
+     * Message center turn.
+     */
     private void messageCenterTurn() {
         if (modelView.getWinnerId() == -1) {
             if (playerID == modelView.getActualPlayerId()) {
@@ -488,6 +540,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         repaint();
     }
 
+    /**
+     * Message player setting workers.
+     */
     private void messagePlayerSettingWorkers() {
         if (modelView.getActualPlayerId() == playerID) {
             messageCenter.setForeground(new Color(255, 235, 140));
@@ -500,11 +555,21 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
     }
 
+    /**
+     * Add play panel listener.
+     *
+     * @param listener the listener
+     */
     public void addPlayPanelListener(PropertyChangeListener listener) {
         playPanelListener.addPropertyChangeListener(listener);
     }
 
 
+    /**
+     * Send action.
+     *
+     * @param attemptedAction the attempted action
+     */
     private void sendAction(Action attemptedAction) {
         playPanelListener.firePropertyChange("actionReceived", false, attemptedAction);
         myTurn = false;
@@ -520,6 +585,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -529,17 +599,32 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
-    //this class extends transfer handler and enables components to drag and drop elements
+    /**
+     * The type Drag and drop.
+     */
+//this class extends transfer handler and enables components to drag and drop elements
     protected class DragAndDrop extends TransferHandler {
         /*
             EXPORT
          */
 
+        /**
+         * Gets source actions.
+         *
+         * @param c the c
+         * @return the source actions
+         */
         @Override
         public int getSourceActions(JComponent c) {
             return DnDConstants.ACTION_MOVE;
         }
 
+        /**
+         * Create transferable transferable.
+         *
+         * @param c the c
+         * @return the transferable
+         */
         @Override
         protected Transferable createTransferable(JComponent c) {
             Transferable t = null;
@@ -550,6 +635,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             return t;
         }
 
+        /**
+         * Export done.
+         *
+         * @param source the source
+         * @param data   the data
+         * @param action the action
+         */
         @Override
         protected void exportDone(JComponent source, Transferable data, int action) {
             if (action != NONE) {
@@ -577,11 +669,23 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             IMPORT
          */
 
+        /**
+         * Can import boolean.
+         *
+         * @param support the support
+         * @return the boolean
+         */
         @Override
         public boolean canImport(TransferSupport support) {
             return support.isDataFlavorSupported(DataFlavor.imageFlavor);
         }
 
+        /**
+         * Import data boolean.
+         *
+         * @param support the support
+         * @return the boolean
+         */
         @Override
         public boolean importData(TransferSupport support) {
             boolean dragAndDropResult = false;
@@ -656,23 +760,50 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
+    /**
+     * The type Transferable image.
+     */
     class TransferableImage implements Transferable {
         private final Image image;
         private final Coordinate coordinate;
 
+        /**
+         * Instantiates a new Transferable image.
+         *
+         * @param image the image
+         * @param coord the coord
+         */
         public TransferableImage(Image image, Coordinate coord) {
             this.image = image;
             this.coordinate = coord;
         }
 
+        /**
+         * Get transfer data flavors data flavor [ ].
+         *
+         * @return the data flavor [ ]
+         */
         public DataFlavor[] getTransferDataFlavors() {
             return new DataFlavor[]{DataFlavor.imageFlavor};
         }
 
+        /**
+         * Is data flavor supported boolean.
+         *
+         * @param flavor the flavor
+         * @return the boolean
+         */
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             return DataFlavor.imageFlavor.equals(flavor);
         }
 
+        /**
+         * Gets transfer data.
+         *
+         * @param flavor the flavor
+         * @return the transfer data
+         * @throws UnsupportedFlavorException the unsupported flavor exception
+         */
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
             if (!DataFlavor.imageFlavor.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);
@@ -680,10 +811,20 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             return this;
         }
 
+        /**
+         * Gets coordinate.
+         *
+         * @return the coordinate
+         */
         public Coordinate getCoordinate() {
             return coordinate;
         }
 
+        /**
+         * Gets image.
+         *
+         * @return the image
+         */
         public Image getImage() {
             return image;
         }
@@ -692,6 +833,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
+    /**
+     * Start animation.
+     */
     public void startAnimation() {
 
         Thread seaAnimation = new Thread(() -> {
@@ -722,6 +866,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
 
+    /**
+     * Start sounds.
+     */
     public void startSounds() {
 
         Thread backgroundSounds = new Thread(() -> {

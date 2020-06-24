@@ -17,6 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Scanner;
 
+/**
+ * The type Home panel.
+ */
 public class HomePanel extends JPanel implements ActionListener {
     private PropertyChangeSupport homePanelListeners = new PropertyChangeSupport(this);
     private Image image;
@@ -30,7 +33,11 @@ public class HomePanel extends JPanel implements ActionListener {
     Dimension frameDimension;
 
 
-
+    /**
+     * Instantiates a new Home panel.
+     *
+     * @param d the d
+     */
     public HomePanel(Dimension d) {
         this.setLayout(new BorderLayout());
         layeredPane=new JLayeredPane();
@@ -72,6 +79,11 @@ public class HomePanel extends JPanel implements ActionListener {
         this.add(layeredPane);
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -79,6 +91,11 @@ public class HomePanel extends JPanel implements ActionListener {
     }
 
 
+    /**
+     * Action performed.
+     *
+     * @param actionEvent the action event
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(playButton)){
@@ -101,6 +118,11 @@ public class HomePanel extends JPanel implements ActionListener {
         }
         }
 
+    /**
+     * Add home panel listener.
+     *
+     * @param listener the listener
+     */
     public void addHomePanelListener(PropertyChangeListener listener) {
         homePanelListeners.addPropertyChangeListener(listener);
     }

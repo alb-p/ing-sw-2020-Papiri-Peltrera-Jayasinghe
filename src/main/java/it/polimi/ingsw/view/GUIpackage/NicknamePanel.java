@@ -13,6 +13,9 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The type Nickname panel.
+ */
 public class NicknamePanel extends JPanel implements ActionListener , PropertyChangeListener{
 
     private final Image image;
@@ -27,6 +30,11 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
     private final PropertyChangeSupport nickPanelListener = new PropertyChangeSupport(this);
     private final ArrayList<String> invalidNicknames = new ArrayList<>();
 
+    /**
+     * Instantiates a new Nickname panel.
+     *
+     * @param id the id
+     */
     public NicknamePanel(int id) {
         imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int)(0.82*GUI.getDimension().height),(int)(0.625*GUI.getDimension().height),Image.SCALE_SMOOTH);
 
@@ -77,6 +85,11 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         invalidNickLabel.setText(" ");
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -87,6 +100,11 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
     }
 
 
+    /**
+     * Action performed.
+     *
+     * @param actionEvent the action event
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(submitButton)) {
@@ -113,10 +131,20 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         }
     }
 
+    /**
+     * Add nickname panel listener.
+     *
+     * @param listener the listener
+     */
     public void addNicknamePanelListener(PropertyChangeListener listener) {
         nickPanelListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Property change.
+     *
+     * @param propertyChangeEvent the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("nicknameConfirm")){

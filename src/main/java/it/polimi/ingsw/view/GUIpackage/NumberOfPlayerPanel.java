@@ -10,6 +10,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 
+/**
+ * The type Number of player panel.
+ */
 public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private final PropertyChangeSupport numberOfPlayerPanelListeners = new PropertyChangeSupport(this);
     private final Image image;
@@ -18,6 +21,13 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private final Dimension frameDimension;
 
 
+    /**
+     * Instantiates a new Number of player panel.
+     *
+     * @param d the d
+     * @throws IOException         the io exception
+     * @throws FontFormatException the font format exception
+     */
     public NumberOfPlayerPanel(Dimension d) throws IOException, FontFormatException {
         frameDimension=d;
 
@@ -77,6 +87,11 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -84,6 +99,11 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     }
 
 
+    /**
+     * Action performed.
+     *
+     * @param actionEvent the action event
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if(actionEvent.getSource().equals(twoPlayers)){
@@ -94,6 +114,11 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Add home panel listener.
+     *
+     * @param listener the listener
+     */
     public void addHomePanelListener(PropertyChangeListener listener) {
         numberOfPlayerPanelListeners.addPropertyChangeListener(listener);
     }

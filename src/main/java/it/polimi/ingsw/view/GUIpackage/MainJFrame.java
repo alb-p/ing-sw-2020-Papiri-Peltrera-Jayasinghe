@@ -10,6 +10,9 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
+/**
+ * The type Main j frame.
+ */
 public class MainJFrame extends JFrame implements PropertyChangeListener {
 
     private final MainPanel contentPane;
@@ -19,6 +22,14 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     private final PlayPanel playPanel;
     private final MakeSound music= new MakeSound();
 
+    /**
+     * Instantiates a new Main j frame.
+     *
+     * @param gui       the gui
+     * @param modelView the model view
+     * @throws IOException         the io exception
+     * @throws FontFormatException the font format exception
+     */
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
         this.setDefaultCloseOperation(MainJFrame.EXIT_ON_CLOSE);
@@ -77,11 +88,19 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         contentPane.add("IslandAnimationPanel", islandAnimationPanel);
 
     }
+
+    /**
+     * Start logo.
+     */
     public void startLogo(){
         layout.show(getContentPane(),"LogoPanel");
         this.logo.addPropertyChangeListener(this);
         this.logo.startTransition();
     }
+
+    /**
+     * Start island animation.
+     */
     public void startIslandAnimation(){
         layout.show(getContentPane(),"IslandAnimationPanel");
         this.islandAnimationPanel.addPropertyChangeListener(this);
@@ -90,6 +109,11 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         music.playSound("/Sounds/environment.wav",-20f,true);
     }
 
+    /**
+     * Property change.
+     *
+     * @param propertyChangeEvent the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("logoTransitionEnded")){

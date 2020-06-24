@@ -4,6 +4,9 @@ import it.polimi.ingsw.utils.ANSIColor;
 
 import java.io.Serializable;
 
+/**
+ * The type Virtual slot.
+ */
 public class VirtualSlot implements Serializable {
 
     private static final long serialVersionUID = -2883461245726706010L;
@@ -12,6 +15,14 @@ public class VirtualSlot implements Serializable {
     private final boolean dome;
     private final Coordinate coordinate;
 
+    /**
+     * Instantiates a new Virtual slot.
+     *
+     * @param color the color
+     * @param level the level
+     * @param dome  the dome
+     * @param c     the c
+     */
     public VirtualSlot(Color color, int level, boolean dome, Coordinate c) {
         this.color = color;
         this.level = level;
@@ -19,6 +30,11 @@ public class VirtualSlot implements Serializable {
         this.coordinate = c;
     }
 
+    /**
+     * Instantiates a new Virtual slot.
+     *
+     * @param c the c
+     */
     public VirtualSlot(Coordinate c){
         this.color = null;
         this.level = 0;
@@ -27,30 +43,66 @@ public class VirtualSlot implements Serializable {
     }
 
 
+    /**
+     * Gets coordinate.
+     *
+     * @return the coordinate
+     */
     public Coordinate getCoordinate() {
         return this.coordinate;
     }
 
+    /**
+     * Gets level.
+     *
+     * @return the level
+     */
     public int getLevel() {
         return level;
     }
 
+    /**
+     * Gets color.
+     *
+     * @return the color
+     */
     public Color getColor() {
         return color;
     }
 
+    /**
+     * Has worker boolean.
+     *
+     * @return the boolean
+     */
     public boolean hasWorker() {
         return color != null;
     }
 
+    /**
+     * Is free boolean.
+     *
+     * @return the boolean
+     */
     public boolean isFree(){
         return color == null && !dome;
     }
 
+    /**
+     * Has dome boolean.
+     *
+     * @return the boolean
+     */
     public boolean hasDome(){
         return dome;
     }
 
+    /**
+     * Equals boolean.
+     *
+     * @param that the that
+     * @return the boolean
+     */
     @Override
     public boolean equals(Object that) {
         if (that instanceof VirtualSlot)
@@ -59,7 +111,11 @@ public class VirtualSlot implements Serializable {
     }
 
 
-
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         String colorString;

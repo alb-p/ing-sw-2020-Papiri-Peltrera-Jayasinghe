@@ -9,6 +9,9 @@ import it.polimi.ingsw.utils.messages.Message;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+/**
+ * The type Turn handler.
+ */
 public class TurnHandler implements PropertyChangeListener {
     private Model model;
     private int playersPerGame;
@@ -16,11 +19,22 @@ public class TurnHandler implements PropertyChangeListener {
     private int totalTurnCounter = 0;
     private boolean gameStarted = false;
 
+    /**
+     * Instantiates a new Turn handler.
+     *
+     * @param model          the model
+     * @param playersPerGame the players per game
+     */
     public TurnHandler(Model model, int playersPerGame) {
         this.model = model;
         this.playersPerGame = playersPerGame;
     }
 
+    /**
+     * Property change.
+     *
+     * @param evt the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
@@ -69,7 +83,12 @@ public class TurnHandler implements PropertyChangeListener {
 
     }
 
-    //fa finire il turno
+    /**
+     * End turn manager.
+     *
+     * @param id the id
+     */
+//fa finire il turno
     private void endTurnManager(int id) {
         System.out.println("\t\t\t\tEND TURN MANAGER CALLED BY ID: "+id);
         if (!model.checkWinner(id)) {
@@ -79,7 +98,12 @@ public class TurnHandler implements PropertyChangeListener {
 
     }
 
-    //fa quello che deve fare se si è rilevato che un player ha perso
+    /**
+     * Player has lost.
+     *
+     * @param id the id
+     */
+//fa quello che deve fare se si è rilevato che un player ha perso
     public void playerHasLost(int id) {
         if (model.getNumOfPlayers() == 2) {
             model.endGameForNoAvailableMoves(id);
@@ -92,7 +116,12 @@ public class TurnHandler implements PropertyChangeListener {
         }
     }
 
-    //restituisce l'id del giocatore in questo turno
+    /**
+     * Actual player id int.
+     *
+     * @return the int
+     */
+//restituisce l'id del giocatore in questo turno
     public int actualPlayerID() {
         if (playerDefeatedID == totalTurnCounter % playersPerGame) {
             totalTurnCounter++;
@@ -101,7 +130,12 @@ public class TurnHandler implements PropertyChangeListener {
         return totalTurnCounter % playersPerGame;
     }
 
-    //imposta il primo giocatore
+    /**
+     * Sets total turn counter.
+     *
+     * @param id the id
+     */
+//imposta il primo giocatore
     public void setTotalTurnCounter(int id) {
         this.totalTurnCounter = id;
         System.out.println(model.getPlayer(0).getNickName() + " ID"+0);

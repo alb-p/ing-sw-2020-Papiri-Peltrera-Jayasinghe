@@ -5,17 +5,20 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 
 /**
- * Your Move: Your Worker may
- * move into an opponent Worker’s
- * space, if their Worker can be
- * forced one space straight backwards to an
- * unoccupied space at any level
+ * The type Minotaur.
  */
-
 public class Minotaur extends BasicGodCard {
 
 
-
+    /**
+     * Turn handler boolean.
+     *
+     * @param player the player
+     * @param board  the board
+     * @param action the action
+     * @return the boolean
+     * @throws Exception the exception
+     */
     @Override
     public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
         if (action.getActionName().equalsIgnoreCase("move")) {
@@ -30,6 +33,14 @@ public class Minotaur extends BasicGodCard {
     }
 
 
+    /**
+     * Mod move boolean.
+     *
+     * @param w     the w
+     * @param coord the coord
+     * @param board the board
+     * @return the boolean
+     */
     private boolean modMove(Worker w, Coordinate coord, IslandBoard board) {
         String relPos = relativePosition(w.getPosition(), coord);
         Coordinate next = nextRelCoord(coord, relPos);
@@ -55,6 +66,13 @@ public class Minotaur extends BasicGodCard {
             return true;
     }
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
         TreeActionNode root = super.cardTreeSetup(w, board);
@@ -91,6 +109,13 @@ public class Minotaur extends BasicGodCard {
         return root;
     }
 
+    /**
+     * Relative position string.
+     *
+     * @param baseCoord the base coord
+     * @param relCoord  the rel coord
+     * @return the string
+     */
     public String relativePosition(Coordinate baseCoord, Coordinate relCoord) {
         if (baseCoord.getRow() == relCoord.getRow()) {
             if (baseCoord.getCol() + 1 == relCoord.getCol()) {
@@ -118,6 +143,13 @@ public class Minotaur extends BasicGodCard {
         return "ERR";
     }
 
+    /**
+     * Next rel coord coordinate.
+     *
+     * @param baseCoord the base coord
+     * @param relPos    the rel pos
+     * @return the coordinate
+     */
     public Coordinate nextRelCoord(Coordinate baseCoord, String relPos) {
         int diffRow = 0;
         int diffCol = 0;

@@ -14,6 +14,9 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The type First player selection panel.
+ */
 public class FirstPlayerSelectionPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private JPanel panel = new JPanel();
@@ -26,6 +29,12 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     Font font;
 
 
+    /**
+     * Instantiates a new First player selection panel.
+     *
+     * @throws IOException         the io exception
+     * @throws FontFormatException the font format exception
+     */
     public FirstPlayerSelectionPanel() throws IOException, FontFormatException {
         frameDimension=GUI.getDimension();
 
@@ -66,6 +75,11 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     }
 
 
+    /**
+     * Action performed.
+     *
+     * @param e the e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getSource() instanceof JButton){
@@ -74,6 +88,11 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
         }
     }
 
+    /**
+     * Property change.
+     *
+     * @param evt the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if(evt.getPropertyName().equalsIgnoreCase("notifyGodSelected")){
@@ -100,10 +119,20 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
         }
     }
 
+    /**
+     * Add first player selection listener.
+     *
+     * @param listener the listener
+     */
     public void addFirstPlayerSelectionListener (PropertyChangeListener listener){
         firstPlayerSelectionListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

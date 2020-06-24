@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * The type Waiting panel.
+ */
 public class WaitingPanel extends JPanel {
 
 
@@ -12,6 +15,13 @@ public class WaitingPanel extends JPanel {
     JLabel animation;
     private final Dimension frameDimension;
 
+    /**
+     * Instantiates a new Waiting panel.
+     *
+     * @param message the message
+     * @throws IOException         the io exception
+     * @throws FontFormatException the font format exception
+     */
     public WaitingPanel(String message) throws IOException, FontFormatException{
         frameDimension=GUI.getDimension();
 
@@ -55,7 +65,11 @@ public class WaitingPanel extends JPanel {
     }
 
 
-
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

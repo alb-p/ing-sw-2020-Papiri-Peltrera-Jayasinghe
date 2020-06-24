@@ -10,6 +10,9 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Server.
+ */
 public class Server {
 
     private static final int PORT = 4566;
@@ -18,10 +21,18 @@ public class Server {
     private Room room = new Room(executor);
     private Logger logger = Logger.getLogger("server");
 
+    /**
+     * Instantiates a new Server.
+     *
+     * @throws IOException the io exception
+     */
     public Server() throws IOException {
     }
 
 
+    /**
+     * Run.
+     */
     public void run() {
         while (true) {
             try {

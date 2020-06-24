@@ -9,6 +9,9 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Collections;
 
+/**
+ * The type Model view.
+ */
 public class ModelView {
 
     private VirtualBoard board = new VirtualBoard();
@@ -31,6 +34,9 @@ public class ModelView {
     private PropertyChangeSupport firstPlayerListener = new PropertyChangeSupport(this);
     private PropertyChangeSupport actionListener = new PropertyChangeSupport(this);
 
+    /**
+     * Instantiates a new Model view.
+     */
     public ModelView() {
         Collections.addAll(colors, Color.values());
         gods.add(new String[]{"APOLLO", "Your Move: Your Worker may\n" +
@@ -81,18 +87,39 @@ public class ModelView {
                 "build a block under itself."});
     }
 
+    /**
+     * Gets gods.
+     *
+     * @return the gods
+     */
     public ArrayList<String[]> getGods() {
         return gods;
     }
 
+    /**
+     * Sets gods.
+     *
+     * @param gods the gods
+     */
     public void setGods(ArrayList<String[]> gods) {
         this.gods = gods;
     }
 
+    /**
+     * Gets board.
+     *
+     * @return the board
+     */
     public VirtualBoard getBoard() {
         return board;
     }
 
+    /**
+     * Gets player.
+     *
+     * @param id the id
+     * @return the player
+     */
     public PlayerView getPlayer(int id) {
         for (PlayerView p : players) {
             if (p.getId() == id) return p;
@@ -100,6 +127,12 @@ public class ModelView {
         return null;
     }
 
+    /**
+     * Gets player.
+     *
+     * @param nickname the nickname
+     * @return the player
+     */
     public PlayerView getPlayer(String nickname) {
         for (PlayerView p : players) {
             if (p.getNickname().equals(nickname)) return p;
@@ -107,6 +140,11 @@ public class ModelView {
         return null;
     }
 
+    /**
+     * Sets actual player id.
+     *
+     * @param nickname the nickname
+     */
     public void setActualPlayerId(String nickname) {
         for (PlayerView p : players) {
             if (p.getNickname().equals(nickname)) {
@@ -115,6 +153,12 @@ public class ModelView {
         }
     }
 
+    /**
+     * Add player.
+     *
+     * @param id   the id
+     * @param nick the nick
+     */
     public void addPlayer(int id, String nick) {
         players.add(new PlayerView(id, nick));
         NicknameMessage message = new NicknameMessage();
@@ -123,6 +167,12 @@ public class ModelView {
         nickNameListener.firePropertyChange("nicknameConfirm", null, message);
     }
 
+    /**
+     * Check nickname boolean.
+     *
+     * @param nickname the nickname
+     * @return the boolean
+     */
     public boolean checkNickname(String nickname) {
         for (PlayerView p : players) {
             if (p.getNickname().equals(nickname)) return false;
@@ -130,6 +180,12 @@ public class ModelView {
         return true;
     }
 
+    /**
+     * Sets color.
+     *
+     * @param id    the id
+     * @param color the color
+     */
     public void setColor(int id, Color color) {
         getPlayer(id).setColor(color);
         colors.remove(color);
@@ -138,6 +194,12 @@ public class ModelView {
         colorListener.firePropertyChange("colorConfirm", null, message);
     }
 
+    /**
+     * Is in color boolean.
+     *
+     * @param color the color
+     * @return the boolean
+     */
     public boolean isInColor(Color color) {
         for (Color c : colors) {
             if (c.equals(color)) return true;
@@ -145,22 +207,45 @@ public class ModelView {
         return false;
     }
 
+    /**
+     * Gets colors.
+     *
+     * @return the colors
+     */
     public ArrayList<Color> getColors() {
         return colors;
     }
 
+    /**
+     * Gets players.
+     *
+     * @return the players
+     */
     public ArrayList<PlayerView> getPlayers() {
         return players;
     }
 
+    /**
+     * Gets actual player id.
+     *
+     * @return the actual player id
+     */
     public int getActualPlayerId() {
         return actualPlayerId;
     }
 
+    /**
+     * Sets actual player id.
+     *
+     * @param actualPlayerId the actual player id
+     */
     public void setActualPlayerId(int actualPlayerId) {
         this.actualPlayerId = actualPlayerId;
     }
 
+    /**
+     * Sets next player id.
+     */
     public void setNextPlayerId() {
         actualPlayerId = (actualPlayerId + 1) % players.size();
         if (actualPlayerId == deletedPlayerId) {
@@ -168,33 +253,68 @@ public class ModelView {
         }
     }
 
+    /**
+     * Sets deleted player id.
+     *
+     * @param deletedPlayerId the deleted player id
+     */
     public void setDeletedPlayerId(int deletedPlayerId) {
         this.deletedPlayerId = deletedPlayerId;
     }
 
+    /**
+     * Sets godly id.
+     *
+     * @param godlyId the godly id
+     */
     public void setGodlyId(int godlyId) {
         this.godlyId = godlyId;
         actualPlayerId = godlyId;
         setNextPlayerId();
     }
 
+    /**
+     * Gets godly id.
+     *
+     * @return the godly id
+     */
     public int getGodlyId() {
         return godlyId;
     }
 
+    /**
+     * Gets first player id.
+     *
+     * @return the first player id
+     */
     public int getFirstPlayerId() {
         return firstPlayerId;
     }
 
+    /**
+     * Sets first player id.
+     *
+     * @param firstPlayerId the first player id
+     */
     public void setFirstPlayerId(int firstPlayerId) {
         this.firstPlayerId = firstPlayerId;
         firstPlayerListener.firePropertyChange("firstPlayer", null, true);
     }
 
+    /**
+     * Gets chosen gods.
+     *
+     * @return the chosen gods
+     */
     public ArrayList<String[]> getChosenGods() {
         return chosenGods;
     }
 
+    /**
+     * Add chosen gods.
+     *
+     * @param chosenGods the chosen gods
+     */
     public void addChosenGods(ArrayList<String> chosenGods) {
         for (String s : chosenGods) {
             for (String[] g : gods) {
@@ -207,6 +327,12 @@ public class ModelView {
 
     }
 
+    /**
+     * Sets god.
+     *
+     * @param id  the id
+     * @param god the god
+     */
     public void setGod(int id, String god) {
         String[] toRemove = new String[2];
         for (String[] s : chosenGods) {
@@ -223,32 +349,70 @@ public class ModelView {
 
     }
 
+    /**
+     * Update board.
+     *
+     * @param vSlot the v slot
+     */
     public void updateBoard(VirtualSlot vSlot) {
         board.setSlot(vSlot);
         boardListener.firePropertyChange("boardUpdate", null, vSlot);
     }
 
+    /**
+     * Gets actions available.
+     *
+     * @return the actions available
+     */
     public ArrayList<Action> getActionsAvailable() {
         return this.actionsAvailable;
     }
 
+    /**
+     * Sets actions available.
+     *
+     * @param actions the actions
+     */
     public void setActionsAvailable(ArrayList<Action> actions) {
         this.actionsAvailable = actions;
         actionListener.firePropertyChange("actionsReceived", false , true);
     }
 
+    /**
+     * Gets winner id.
+     *
+     * @return the winner id
+     */
     public int getWinnerId() {
         return this.winnerId;
     }
 
+    /**
+     * Gets deleted player id.
+     *
+     * @return the deleted player id
+     */
     public int getDeletedPlayerId() {
         return this.deletedPlayerId;
     }
 
+    /**
+     * Sets winner id.
+     *
+     * @param id the id
+     */
     public void setWinnerId(int id) {
         this.winnerId = id;
     }
 
+    /**
+     * Search action action.
+     *
+     * @param s     the s
+     * @param start the start
+     * @param end   the end
+     * @return the action
+     */
     public Action searchAction(String s, Coordinate start, Coordinate end) {
         for (Action a : actionsAvailable) {
             if (a.getActionName().equalsIgnoreCase(s) &&
@@ -260,6 +424,11 @@ public class ModelView {
         return null;
     }
 
+    /**
+     * Gets action choices.
+     *
+     * @return the action choices
+     */
     public ArrayList<String> getActionChoices() {
         ArrayList<String> choices = new ArrayList<>();
         Boolean found = false;
@@ -281,84 +450,185 @@ public class ModelView {
         return choices;
     }
 
+    /**
+     * Is optional boolean.
+     *
+     * @return the boolean
+     */
     public boolean isOptional() {
         return optional;
     }
 
+    /**
+     * Sets optional.
+     *
+     * @param optional the optional
+     */
     public void setOptional(boolean optional) {
         this.optional = optional;
     }
 
+    /**
+     * Player lost.
+     *
+     * @param id the id
+     */
     public void playerLost(int id) {
         this.deletedPlayerId = id;
     }
 
+    /**
+     * Add nickname listener.
+     *
+     * @param listener the listener
+     */
     public void addNicknameListener(PropertyChangeListener listener) {
         this.nickNameListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Add color listener.
+     *
+     * @param listener the listener
+     */
     public void addColorListener(PropertyChangeListener listener) {
         this.colorListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Add selected gods listener.
+     *
+     * @param listener the listener
+     */
     public void addSelectedGodsListener(PropertyChangeListener listener) {
         this.selectedGodsListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Add selected single god listener.
+     *
+     * @param listener the listener
+     */
     public void addSelectedSingleGodListener(PropertyChangeListener listener) {
         selectedSingleGodListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Add first player listener.
+     *
+     * @param listener the listener
+     */
     public void addFirstPlayerListener(PropertyChangeListener listener) {
         firstPlayerListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Add board listener.
+     *
+     * @param listener the listener
+     */
     public void addBoardListener(PropertyChangeListener listener) {
         boardListener.addPropertyChangeListener(listener);
 
-    } public void addActionListener(PropertyChangeListener listener) {
+    }
+
+    /**
+     * Add action listener.
+     *
+     * @param listener the listener
+     */
+    public void addActionListener(PropertyChangeListener listener) {
         actionListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * The type Player view.
+     */
     public class PlayerView {
         private int id;
         private String nickname;
         private String[] god;
         private Color color;
 
+        /**
+         * Instantiates a new Player view.
+         *
+         * @param id       the id
+         * @param nickname the nickname
+         */
         public PlayerView(int id, String nickname) {
             this.id = id;
             this.nickname = nickname;
         }
 
+        /**
+         * Gets id.
+         *
+         * @return the id
+         */
         public int getId() {
             return id;
         }
 
+        /**
+         * Sets id.
+         *
+         * @param id the id
+         */
         public void setId(int id) {
             this.id = id;
         }
 
+        /**
+         * Gets nickname.
+         *
+         * @return the nickname
+         */
         public String getNickname() {
             return nickname;
         }
 
+        /**
+         * Sets nickname.
+         *
+         * @param nickname the nickname
+         */
         public void setNickname(String nickname) {
             this.nickname = nickname;
         }
 
+        /**
+         * Get god string [ ].
+         *
+         * @return the string [ ]
+         */
         public String[] getGod() {
             return god;
         }
 
+        /**
+         * Sets god.
+         *
+         * @param god the god
+         */
         public void setGod(String[] god) {
             this.god = god;
         }
 
+        /**
+         * Gets color.
+         *
+         * @return the color
+         */
         public Color getColor() {
             return color;
         }
 
+        /**
+         * Sets color.
+         *
+         * @param color the color
+         */
         public void setColor(Color color) {
             this.color = color;
         }

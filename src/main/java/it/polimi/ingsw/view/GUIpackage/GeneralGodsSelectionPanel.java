@@ -16,6 +16,9 @@ import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 
+/**
+ * The type General gods selection panel.
+ */
 public class GeneralGodsSelectionPanel extends JPanel implements ActionListener, MouseListener, PropertyChangeListener {
 
     private PropertyChangeSupport generalGodSelectionListener = new PropertyChangeSupport(this);
@@ -31,6 +34,11 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     private JPanel paneldx;
 
 
+    /**
+     * Instantiates a new General gods selection panel.
+     *
+     * @param model the model
+     */
     public GeneralGodsSelectionPanel(ModelView model) {
 
         imagedx=new ImageIcon(this.getClass().getResource("/GodSelection/paneldx.jpg"));
@@ -106,6 +114,11 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         this.add(paneldx);
     }
 
+    /**
+     * Action performed.
+     *
+     * @param actionEvent the action event
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(submit)){
@@ -142,6 +155,11 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         System.out.println(selectedGods);
     }
 
+    /**
+     * Property change.
+     *
+     * @param propertyChangeEvent the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("nicknameConfirm")) {
@@ -151,25 +169,50 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     }
 
 
+    /**
+     * Add general god selection listener.
+     *
+     * @param listener the listener
+     */
     public void addGeneralGodSelectionListener(PropertyChangeListener listener) {
         generalGodSelectionListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Mouse clicked.
+     *
+     * @param e the e
+     */
     @Override
     public void mouseClicked(MouseEvent e) {
 
     }
 
+    /**
+     * Mouse pressed.
+     *
+     * @param e the e
+     */
     @Override
     public void mousePressed(MouseEvent e) {
 
     }
 
+    /**
+     * Mouse released.
+     *
+     * @param e the e
+     */
     @Override
     public void mouseReleased(MouseEvent e) {
 
     }
 
+    /**
+     * Mouse entered.
+     *
+     * @param e the e
+     */
     @Override
     public void mouseEntered(MouseEvent e) {
         if(e.getSource() instanceof GodsButton) {
@@ -179,6 +222,11 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         }
     }
 
+    /**
+     * Mouse exited.
+     *
+     * @param e the e
+     */
     @Override
     public void mouseExited(MouseEvent e) {
 

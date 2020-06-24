@@ -7,6 +7,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * The type Island animation panel.
+ */
 public class IslandAnimationPanel extends JPanel implements ActionListener {
 
 
@@ -17,6 +20,9 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     private PropertyChangeSupport lista;
 
 
+    /**
+     * Instantiates a new Island animation panel.
+     */
     public IslandAnimationPanel() {
 
         lista = new PropertyChangeSupport(this);
@@ -25,6 +31,9 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Start transition.
+     */
     public void startTransition() {
 
         timer = new Timer(30, this);
@@ -33,6 +42,11 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     }
 
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -45,6 +59,11 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Action performed.
+     *
+     * @param e the e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 120) {
@@ -60,6 +79,11 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Add property change listener.
+     *
+     * @param listener the listener
+     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) { //aggiunge listener alla lista
         lista.addPropertyChangeListener(listener);

@@ -9,6 +9,9 @@ import java.beans.PropertyChangeSupport;
 
 import static java.lang.Thread.sleep;
 
+/**
+ * The type Logo panel.
+ */
 public class LogoPanel extends JPanel implements ActionListener {
 
 
@@ -19,6 +22,9 @@ public class LogoPanel extends JPanel implements ActionListener {
     private PropertyChangeSupport lista;
 
 
+    /**
+     * Instantiates a new Logo panel.
+     */
     public LogoPanel() {
 
         lista = new PropertyChangeSupport(this);
@@ -27,6 +33,9 @@ public class LogoPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Start transition.
+     */
     public void startTransition() {
 
         timer = new Timer(30, this);
@@ -35,6 +44,11 @@ public class LogoPanel extends JPanel implements ActionListener {
     }
 
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -46,6 +60,11 @@ public class LogoPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Action performed.
+     *
+     * @param e the e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 90) {
@@ -61,6 +80,11 @@ public class LogoPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * Add property change listener.
+     *
+     * @param listener the listener
+     */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) { //aggiunge listener alla lista
         lista.addPropertyChangeListener(listener);

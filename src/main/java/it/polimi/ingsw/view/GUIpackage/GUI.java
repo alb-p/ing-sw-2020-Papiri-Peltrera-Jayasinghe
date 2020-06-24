@@ -19,18 +19,31 @@ import static java.lang.Thread.interrupted;
 import static java.lang.Thread.sleep;
 
 
+/**
+ * The type Gui.
+ */
 public class GUI extends RemoteView implements Runnable, PropertyChangeListener {
     private ModelView modelView;
     private SocketServerConnection connection;
     private MainJFrame window;
     private Integer numOfPlayers = 1;
 
+    /**
+     * Gets dimension.
+     *
+     * @return the dimension
+     */
     public static Dimension getDimension() {
         return new Dimension(960, 720);
     }
 
     private PropertyChangeSupport guiListeners = new PropertyChangeSupport(this);
 
+    /**
+     * Instantiates a new Gui.
+     *
+     * @param connection the connection
+     */
     public GUI(SocketServerConnection connection) {
         super(connection);
         this.connection = connection;
@@ -38,33 +51,63 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
 
     }
 
+    /**
+     * Add gui listener.
+     *
+     * @param listener the listener
+     */
     public void addGuiListener(PropertyChangeListener listener) {
         guiListeners.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Player has lost.
+     *
+     * @param message the message
+     */
     @Override
     protected void playerHasLost(GenericMessage message) {
         super.playerHasLost(message);
         guiListeners.firePropertyChange("playerHasLost", null , message);
     }
 
+    /**
+     * Winner detected.
+     *
+     * @param message the message
+     */
     @Override
     protected void winnerDetected(WinnerMessage message) {
         guiListeners.firePropertyChange("winnerDetected", false, message);
     }
 
+    /**
+     * End turn.
+     *
+     * @param message the message
+     */
     @Override
     protected void endTurn(NicknameMessage message) {
         super.endTurn(message);
         guiListeners.firePropertyChange("endTurnConfirm", false, true);
     }
 
+    /**
+     * Sets worker.
+     *
+     * @param message the message
+     */
     @Override
     protected void setWorker(WorkerMessage message) {
         super.setWorker(message);
         guiListeners.firePropertyChange("workerConfirm", null, message);
     }
 
+    /**
+     * Sets first player.
+     *
+     * @param message the message
+     */
     @Override
     protected void setFirstPlayer(NicknameMessage message) {
         super.setFirstPlayer(message);
@@ -73,11 +116,21 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Actions available.
+     *
+     * @param message the message
+     */
     @Override
     protected void actionsAvailable(ActionMessage message) {
         super.actionsAvailable(message);
     }
 
+    /**
+     * Assigned god.
+     *
+     * @param message the message
+     */
     @Override
     protected void assignedGod(GodMessage message) {
         super.assignedGod(message);
@@ -90,6 +143,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Chosen gods.
+     *
+     * @param newValue the new value
+     */
     @Override
     protected void chosenGods(InitialCardsMessage newValue) {
         super.chosenGods(newValue);
@@ -100,6 +158,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
 
     }
 
+    /**
+     * Sets godly.
+     *
+     * @param message the message
+     */
     @Override
     protected void setGodly(GodlyMessage message) {
         super.setGodly(message);
@@ -112,6 +175,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Color received.
+     *
+     * @param message the message
+     */
     @Override
     protected void colorReceived(ColorMessage message) {
         super.colorReceived(message);
@@ -120,6 +188,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         }
     }
 
+    /**
+     * Nickname received.
+     *
+     * @param message the message
+     */
     @Override
     protected void nicknameReceived(NicknameMessage message) {
         super.nicknameReceived(message);
@@ -131,12 +204,20 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 //GODLY RECEIVED
 
+    /**
+     * Game ready.
+     */
     @Override
     protected void gameReady() {
         ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "NicknamePanel");
         guiListeners.firePropertyChange("playerID", null, getPlayerId());
     }
 
+    /**
+     * Choose number of players setup message.
+     *
+     * @return the setup message
+     */
     @Override
     protected synchronized SetupMessage chooseNumberOfPlayers() {
         SetupMessage message = new SetupMessage();
@@ -151,6 +232,9 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         return message;
     }
 
+    /**
+     * Run.
+     */
     @Override
     public void run() {
         //create and show gui
@@ -165,6 +249,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         window.startLogo();
     }
 
+    /**
+     * Property change.
+     *
+     * @param evt the evt
+     */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("play")) {

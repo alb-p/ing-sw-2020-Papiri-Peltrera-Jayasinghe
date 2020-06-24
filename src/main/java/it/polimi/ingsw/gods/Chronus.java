@@ -2,6 +2,9 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Chronus.
+ */
 public class Chronus extends BasicGodCard {
 
     //Win Condition: You also win
@@ -9,11 +12,25 @@ public class Chronus extends BasicGodCard {
     //Complete Towers on the board
 
 
+    /**
+     * Winning condition boolean.
+     *
+     * @param w            the w
+     * @param board        the board
+     * @param virtualBoard the virtual board
+     * @return the boolean
+     */
     @Override
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
         return (super.winningCondition(w,board,virtualBoard) || fiveTower(board));
     }
 
+    /**
+     * Five tower boolean.
+     *
+     * @param board the board
+     * @return the boolean
+     */
     private boolean fiveTower(IslandBoard board) {
         int completeTowersNumber = 0;
         for (int i = 0; i < 5; i++) {

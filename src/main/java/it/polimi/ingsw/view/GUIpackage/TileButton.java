@@ -7,6 +7,9 @@ import it.polimi.ingsw.model.VirtualSlot;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * The type Tile button.
+ */
 public class TileButton extends JButton {
 
     private final Coordinate coordinate;
@@ -26,7 +29,13 @@ public class TileButton extends JButton {
     private Image floor;
 
 
-
+    /**
+     * Instantiates a new Tile button.
+     *
+     * @param row   the row
+     * @param col   the col
+     * @param panel the panel
+     */
     public TileButton(int row, int col, JPanel panel) {
         coordinate = new Coordinate(row, col);
         vSlot = new VirtualSlot(coordinate);
@@ -49,10 +58,18 @@ public class TileButton extends JButton {
         this.panel = panel;
     }
 
+    /**
+     * Sets worker.
+     *
+     * @param worker the worker
+     */
     public void setWorker(Image worker) {
         this.worker = worker;
     }
 
+    /**
+     * Rebase worker.
+     */
     public void rebaseWorker() {
         if (vSlot.getColor() == null) {
             worker = null;
@@ -65,6 +82,9 @@ public class TileButton extends JButton {
         }
     }
 
+    /**
+     * Rebase floor.
+     */
     public void rebaseFloor(){
         if(vSlot.getLevel()==1){
             floor= first;
@@ -76,40 +96,78 @@ public class TileButton extends JButton {
 
     }
 
+    /**
+     * Get floor image.
+     *
+     * @return the image
+     */
     public Image getFloor(){
         return floor;
     }
 
+    /**
+     * Gets worker.
+     *
+     * @return the worker
+     */
     public Image getWorker() {
         return worker;
     }
 
 
+    /**
+     * Gets coordinate.
+     *
+     * @return the coordinate
+     */
     public Coordinate getCoordinate() {
         return this.coordinate;
     }
 
+    /**
+     * Sets color.
+     *
+     * @param c the c
+     */
     public void setColor(String c) {
         this.color = c;
         if (level == 0) this.setText(color);
         else this.setText(color + level);
     }
 
+    /**
+     * Sets level.
+     *
+     * @param level the level
+     */
     public void setLevel(int level) {
         this.level = level;
         if (level == 0) this.setText(color);
         else this.setText(color + level);
     }
 
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     @Override
     public String toString() {
         return "tilebutton";
     }
 
+    /**
+     * Repaint.
+     */
     @Override
     public void repaint() {
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         g.drawImage(this.getFloor(), 3, 3, panel);
@@ -118,6 +176,11 @@ public class TileButton extends JButton {
     }
 
 
+    /**
+     * Update view.
+     *
+     * @param vSlot the v slot
+     */
     public void updateView(VirtualSlot vSlot) {
         // rebase the image on vSlot
         this.vSlot = vSlot;

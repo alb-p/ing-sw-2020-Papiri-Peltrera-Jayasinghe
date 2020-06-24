@@ -4,12 +4,18 @@ import javax.sound.sampled.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * The type Make sound.
+ */
 public class MakeSound {
 
     private Clip clip;
     String settings;
     int generalVolume;
 
+    /**
+     * Instantiates a new Make sound.
+     */
     public MakeSound (){
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/settings.txt"), StandardCharsets.UTF_8))) {
@@ -23,7 +29,13 @@ public class MakeSound {
     }
 
 
-
+    /**
+     * Play sound.
+     *
+     * @param path   the path
+     * @param volume the volume
+     * @param loop   the loop
+     */
     public void playSound(String path, Float volume, boolean loop) {
 
 
@@ -59,6 +71,9 @@ public class MakeSound {
     }
 
 
+    /**
+     * Stop sound.
+     */
     public void stopSound(){
         if(this.settings.equalsIgnoreCase("on")){
             this.clip.stop();

@@ -8,6 +8,9 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
+/**
+ * The type Worker icon.
+ */
 public class WorkerIcon extends JLabel implements ActionListener {
 
 
@@ -17,12 +20,22 @@ public class WorkerIcon extends JLabel implements ActionListener {
     private final String color;
     private final PropertyChangeSupport workerIconListeners = new PropertyChangeSupport(this);
 
-    int x,y,xfinale,yfinale;
-    float deltax, deltay;
+    int x,
+    y,
+    xfinale,
+    yfinale;
+    float deltax,
+    deltay;
 
-    float exactX,exactY;
+    float exactX,
+    exactY;
 
 
+    /**
+     * Instantiates a new Worker icon.
+     *
+     * @param color the color
+     */
     public WorkerIcon(String color){
         if(color.equalsIgnoreCase("white")) {
             this.color = "tan";
@@ -35,8 +48,12 @@ public class WorkerIcon extends JLabel implements ActionListener {
     }
 
 
-
-
+    /**
+     * Start transition.
+     *
+     * @param start the start
+     * @param end   the end
+     */
     public synchronized void startTransition(Point start,Point end) {
         x=start.x+7;
         exactX=x;
@@ -63,7 +80,11 @@ public class WorkerIcon extends JLabel implements ActionListener {
     }
 
 
-
+    /**
+     * Action performed.
+     *
+     * @param e the e
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 23) {
@@ -89,6 +110,11 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
     }
 
+    /**
+     * Add worker icon listener.
+     *
+     * @param listener the listener
+     */
     public void addWorkerIconListener(PropertyChangeListener listener){
         workerIconListeners.addPropertyChangeListener(listener);
     }

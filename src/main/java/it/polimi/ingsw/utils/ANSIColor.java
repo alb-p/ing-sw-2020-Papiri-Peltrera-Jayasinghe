@@ -1,5 +1,10 @@
 package it.polimi.ingsw.utils;
 
+import it.polimi.ingsw.network.ClientMain;
+
+/**
+ * The enum Ansi color.
+ */
 public enum ANSIColor {
     BLACK ("\u001B[30m"),
     RED ("\u001B[31m"),
@@ -17,24 +22,50 @@ public enum ANSIColor {
     BACK_MAGENTA ("\u001B[45m"),
     BACK_CYAN ("\u001B[46m"),
     BACK_WHITE ("\u001B[47m"),
-    BOLD("\u001b[1m"),
-    UNDERLINE("\u001b[4m"),
-    REVERSED("\u001b[7m");
+    BOLD("\u001B[1m"),
+    UNDERLINE("\u001B[4m"),
+    REVERSED("\u001B[7m"),
+    RESET("\u001B[0m");
 
-
-    public static final String RESET = "\u001B[0m";
+    //public static final String RESET = "\u001B[0m";
+    //public final String RESET;
     private String escape;
 
+    /**
+     * Instantiates a new Ansi color.
+     *
+     * @param escape the escape
+     */
     ANSIColor(String escape)
     {
-        this.escape = escape;
+
+        if(System.getProperty("os.name").startsWith("Windows")){
+            this.escape = "";
+            //RESET = "";
+        }
+        else{
+            this.escape = escape;
+            //RESET = "\u001B[0m";
+        }
+
     }
 
+
+    /**
+     * Gets escape.
+     *
+     * @return the escape
+     */
     public String getEscape()
     {
         return escape;
     }
 
+    /**
+     * To string string.
+     *
+     * @return the string
+     */
     @Override
     public String toString()
     {

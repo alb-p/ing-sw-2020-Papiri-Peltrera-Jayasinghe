@@ -4,11 +4,19 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * The type Server main.
+ */
 public class ServerMain {
 
     private static Logger logger = Logger.getLogger("serverMain");
 
 
+    /**
+     * Main.
+     *
+     * @param args the args
+     */
     public static void main(String[] args){
 
         Server server;

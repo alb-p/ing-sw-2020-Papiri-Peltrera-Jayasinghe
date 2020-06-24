@@ -2,12 +2,22 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Hestia.
+ */
 public class Hestia extends BasicGodCard {
 
     //Your Build: Your Worker may
     //build one additional time, but this
     //cannot be on a perimeter space
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
 

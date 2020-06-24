@@ -2,12 +2,22 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
+/**
+ * The type Artemis.
+ */
 public class Artemis extends BasicGodCard {
 
     //Your Move: Your Worker may
     //move one additional time, but not
     //back to its initial space.
 
+    /**
+     * Card tree setup tree action node.
+     *
+     * @param w     the w
+     * @param board the board
+     * @return the tree action node
+     */
     @Override
     public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
 

@@ -11,6 +11,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+/**
+ * The type Cli.
+ */
 public class CLI extends RemoteView implements Runnable {
 
     private final Scanner scanner;
@@ -27,6 +30,11 @@ public class CLI extends RemoteView implements Runnable {
     private ModelView modelView;
     private static final String arrangeList = "%d- %-20s";
 
+    /**
+     * Instantiates a new Cli.
+     *
+     * @param connection the connection
+     */
     public CLI(SocketServerConnection connection) {
         super(connection);
         this.connection = connection;
@@ -36,6 +44,9 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    /**
+     * Welcome message.
+     */
     public void welcomeMessage() {
         printer.println("\n" +
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
@@ -50,6 +61,11 @@ public class CLI extends RemoteView implements Runnable {
                 ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n"+ANSIColor.RESET);
     }
 
+    /**
+     * Choose number of players setup message.
+     *
+     * @return the setup message
+     */
     @Override
     protected SetupMessage chooseNumberOfPlayers() {
         printer.println("How Many Players for the game? 2/3");
@@ -69,6 +85,11 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
+    /**
+     * Ask nick player nickname message.
+     *
+     * @return the nickname message
+     */
     public NicknameMessage askNickPlayer() {
         NicknameMessage message = new NicknameMessage();
         do {
@@ -82,6 +103,11 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    /**
+     * Ask color color message.
+     *
+     * @return the color message
+     */
     public ColorMessage askColor() {
         ColorMessage message = new ColorMessage(getPlayerId());
         String isNumber;
@@ -103,6 +129,9 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
+    /**
+     * Print available colors.
+     */
     public void printAvailableColors() {
         printBreakers();
         printer.println("\n");
@@ -120,6 +149,11 @@ public class CLI extends RemoteView implements Runnable {
         startingBrackets();
     }
 
+    /**
+     * Ask god list initial cards message.
+     *
+     * @return the initial cards message
+     */
     public InitialCardsMessage askGodList() {
 
         String s;
@@ -157,6 +191,11 @@ public class CLI extends RemoteView implements Runnable {
         return message;
     }
 
+    /**
+     * Print gods list.
+     *
+     * @param message the message
+     */
     public void printGodsList(InitialCardsMessage message) {
         printer.println("Select " + (modelView.getPlayers().size() - message.getSelectedList().size()) +
                 " gods from the list below: \ninfo or man + #god");
@@ -170,6 +209,11 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
+    /**
+     * Ask god god message.
+     *
+     * @return the god message
+     */
     public GodMessage askGod() {
         GodMessage message = new GodMessage();
         message.setId(getPlayerId());
@@ -214,6 +258,11 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    /**
+     * First player.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     public synchronized void firstPlayer() throws InterruptedException {
         int indexNickname = -2;
 
@@ -253,6 +302,11 @@ public class CLI extends RemoteView implements Runnable {
         wait();
     }
 
+    /**
+     * Sets workers.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     public synchronized void setupWorkers() throws InterruptedException {
         while (getPlayerId() != modelView.getActualPlayerId()) {
             wait();
@@ -292,6 +346,11 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    /**
+     * Play.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     private synchronized void play() throws InterruptedException {
         while (!winnerDetected || getPlayerId() == modelView.getDeletedPlayerId()) {
             modelView.getActionsAvailable().clear();
@@ -368,6 +427,11 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    /**
+     * Winner mess.
+     *
+     * @param inputObject the input object
+     */
     public void winnerMess(WinnerMessage inputObject) {
         printBreakers();
         printBreakers();
@@ -379,6 +443,11 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
+    /**
+     * Generic mess.
+     *
+     * @param inputObject the input object
+     */
     public void genericMess(GenericMessage inputObject) {
         printBreakers();
         printBreakers();
@@ -388,6 +457,12 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    /**
+     * Parse coordinate action array list.
+     *
+     * @param input the input
+     * @return the array list
+     */
     public ArrayList<Coordinate> parseCoordinateAction(String input) {
         ArrayList<Coordinate> coordinates = new ArrayList<>();
         String[] coords;
@@ -412,20 +487,32 @@ public class CLI extends RemoteView implements Runnable {
         return coordinates;
     }
 
+    /**
+     * Print board.
+     */
     public void printBoard() {
         if(!winnerDetected)printer.println(this.modelView.getBoard());
         printBreakers();
     }
 
+    /**
+     * Starting brackets.
+     */
     public void startingBrackets() {
         printer.print(">>>");
     }
 
+    /**
+     * Print breakers.
+     */
     public void printBreakers() {
         printer.println("░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░");
     }
 
 
+    /**
+     * Run.
+     */
     @Override
     public void run() {
         try {
@@ -461,18 +548,33 @@ public class CLI extends RemoteView implements Runnable {
 
     }
 
+    /**
+     * All worker placed.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     private synchronized void allWorkerPlaced() throws InterruptedException {
         while (modelView.getFirstPlayerId() != modelView.getActualPlayerId()) {
             wait();
         }
     }
 
+    /**
+     * All god selected.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     private synchronized void allGodSelected() throws InterruptedException {
         while (!modelView.getChosenGods().isEmpty()) {
             wait();
         }
     }
 
+    /**
+     * God choice.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     private synchronized void godChoice() throws InterruptedException {
         while (modelView.getActualPlayerId() != getPlayerId()) {
             wait();
@@ -481,6 +583,11 @@ public class CLI extends RemoteView implements Runnable {
         connection.sendEvent(new PropertyChangeEvent(this, "notifyGod", null, message));
     }
 
+    /**
+     * Starting game.
+     *
+     * @throws InterruptedException the interrupted exception
+     */
     private synchronized void startingGame() throws InterruptedException {
         welcomeMessage();
         int choiceMenu;
@@ -499,6 +606,9 @@ public class CLI extends RemoteView implements Runnable {
         this.wait();
     }
 
+    /**
+     * Color choice.
+     */
     private synchronized void colorChoice() {
         while (!colorValidate) {
             ColorMessage message = askColor();
@@ -506,6 +616,9 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    /**
+     * Nick choice.
+     */
     private synchronized void nickChoice() {
         while (!nickValidate) {
             NicknameMessage message = askNickPlayer();
@@ -514,6 +627,11 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    /**
+     * Waiting validation.
+     *
+     * @param evt the evt
+     */
     public void waitingValidation(PropertyChangeEvent evt) {
         getConnection().sendEvent(evt);
         try {
@@ -524,11 +642,19 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    /**
+     * Game ready.
+     */
     @Override
     protected synchronized void gameReady() {
         notify();
     }
 
+    /**
+     * Nickname received.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void nicknameReceived(NicknameMessage message) {
         super.nicknameReceived(message);
@@ -543,6 +669,11 @@ public class CLI extends RemoteView implements Runnable {
         this.notify();
     }
 
+    /**
+     * Color received.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void colorReceived(ColorMessage message) {
         super.colorReceived(message);
@@ -559,6 +690,11 @@ public class CLI extends RemoteView implements Runnable {
         this.notify();
     }
 
+    /**
+     * Sets godly.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void setGodly(GodlyMessage message) {
         super.setGodly(message);
@@ -571,6 +707,11 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    /**
+     * Chosen gods.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void chosenGods(InitialCardsMessage message) {
         super.chosenGods(message);
@@ -583,6 +724,11 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    /**
+     * Assigned god.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void assignedGod(GodMessage message) {
         super.assignedGod(message);
@@ -594,6 +740,11 @@ public class CLI extends RemoteView implements Runnable {
         this.notify();
     }
 
+    /**
+     * Sets first player.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void setFirstPlayer(NicknameMessage message) {
         super.setFirstPlayer(message);
@@ -604,6 +755,11 @@ public class CLI extends RemoteView implements Runnable {
         notify();
     }
 
+    /**
+     * Actions available.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void actionsAvailable(ActionMessage message) {
         super.actionsAvailable(message);
@@ -611,6 +767,11 @@ public class CLI extends RemoteView implements Runnable {
         notify();
     }
 
+    /**
+     * Sets worker.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void setWorker(WorkerMessage message) {
         super.setWorker(message);
@@ -618,6 +779,11 @@ public class CLI extends RemoteView implements Runnable {
         notify();
     }
 
+    /**
+     * End turn.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void endTurn(NicknameMessage message) {
         super.endTurn(message);
@@ -625,6 +791,11 @@ public class CLI extends RemoteView implements Runnable {
         notify();
     }
 
+    /**
+     * Winner detected.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
@@ -632,6 +803,11 @@ public class CLI extends RemoteView implements Runnable {
         notify();
     }
 
+    /**
+     * Player has lost.
+     *
+     * @param message the message
+     */
     @Override
     protected synchronized void playerHasLost(GenericMessage message) {
         super.playerHasLost(message);

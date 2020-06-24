@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * The type Choose color panel.
+ */
 public class ChooseColorPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
     private int playerId;
@@ -26,6 +29,12 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     private Dimension frameDimension;
     Image background;
 
+    /**
+     * Instantiates a new Choose color panel.
+     *
+     * @param id the id
+     * @param d  the d
+     */
     public ChooseColorPanel(int id, Dimension d) {
         frameDimension=d;
 
@@ -52,6 +61,11 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
 
     }
 
+    /**
+     * Action performed.
+     *
+     * @param actionEvent the action event
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         Color c = null;
@@ -67,6 +81,11 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
 
     }
 
+    /**
+     * Property change.
+     *
+     * @param propertyChangeEvent the property change event
+     */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if (propertyChangeEvent.getPropertyName().equalsIgnoreCase("colorConfirm")) {
@@ -79,6 +98,12 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
         }
     }
 
+    /**
+     * Pick button j button.
+     *
+     * @param c the c
+     * @return the j button
+     */
     private JButton pickButton(Color c) {
         if (c.equals(Color.BLUE)) {
             return colorButton1;
@@ -90,10 +115,20 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     }
 
 
+    /**
+     * Add color panel listener.
+     *
+     * @param listener the listener
+     */
     public void addColorPanelListener(PropertyChangeListener listener) {
         colorPanelListener.addPropertyChangeListener(listener);
     }
 
+    /**
+     * Paint component.
+     *
+     * @param g the g
+     */
     @Override
     protected void paintComponent(Graphics g) {
         g.drawImage(this.background, 0, 0, this);
