@@ -2,8 +2,7 @@ package it.polimi.ingsw.view.GUIpackage;
 
 import javax.sound.sampled.*;
 import java.io.*;
-import java.net.URL;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class MakeSound {
 
@@ -13,7 +12,7 @@ public class MakeSound {
 
     public MakeSound (){
 
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Sounds/settings.txt"), Charset.forName("UTF-8")))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/Sounds/settings.txt"), StandardCharsets.UTF_8))) {
             this.settings = br.readLine();
             this.generalVolume= Integer.parseInt(br.readLine());
         } catch (IOException e) {
@@ -25,7 +24,7 @@ public class MakeSound {
 
 
 
-    public void playSound(String path, Float volume, Boolean loop) {
+    public void playSound(String path, Float volume, boolean loop) {
 
 
         if(settings.equalsIgnoreCase("on")){
@@ -42,11 +41,7 @@ public class MakeSound {
                 audioInputStream = AudioSystem.getAudioInputStream(bufferedIn);
                 this.clip = AudioSystem.getClip();
                 this.clip.open(audioInputStream);
-            } catch (UnsupportedAudioFileException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (LineUnavailableException e) {
+            } catch (UnsupportedAudioFileException | IOException | LineUnavailableException e) {
                 e.printStackTrace();
             }
 

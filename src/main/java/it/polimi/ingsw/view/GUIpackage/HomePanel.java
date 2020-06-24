@@ -39,9 +39,9 @@ public class HomePanel extends JPanel implements ActionListener {
         exitButton.addActionListener(this);
         this.add(Box.createVerticalStrut((int) (frameDimension.height/1.875)));
         this.add(playButton);
-        this.add(Box.createVerticalStrut((int) (frameDimension.height/24)));
+        this.add(Box.createVerticalStrut(frameDimension.height/24));
         this.add(helpButton);
-        this.add(Box.createVerticalStrut((int) (frameDimension.height/24)));
+        this.add(Box.createVerticalStrut(frameDimension.height/24));
         this.add(exitButton);
     }
 

@@ -61,6 +61,7 @@ public class LogoPanel extends JPanel implements ActionListener {
 
     }
 
+    @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) { //aggiunge listener alla lista
         lista.addPropertyChangeListener(listener);
     }

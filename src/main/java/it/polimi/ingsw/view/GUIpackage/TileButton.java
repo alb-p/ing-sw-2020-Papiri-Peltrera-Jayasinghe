@@ -9,22 +9,20 @@ import java.awt.*;
 
 public class TileButton extends JButton {
 
-    private Coordinate coordinate;
+    private final Coordinate coordinate;
     private String color;
     private int level = 0;
     private Image worker;
-    private Image moment;
-    private Image blue;
-    private Image red;
-    private Image white;
+    private final Image blue;
+    private final Image red;
+    private final Image white;
     private VirtualSlot vSlot;
-    private JPanel panel;
-    int i = 0;
+    private final JPanel panel;
 
-    private Image uno ;
-    private Image due;
-    private Image tre;
-    private Image dome;
+    private final Image first;
+    private final Image second;
+    private final Image third;
+    private final Image dome;
     private Image floor;
 
 
@@ -36,9 +34,9 @@ public class TileButton extends JButton {
         red = new ImageIcon(GUI.class.getResource("/WorkersAnimation/red.png")).getImage();
         blue = new ImageIcon(GUI.class.getResource("/WorkersAnimation/blue.png")).getImage();
         white = new ImageIcon(GUI.class.getResource("/WorkersAnimation/tan.png")).getImage();
-        uno = new ImageIcon(GUI.class.getResource("/Buildings/1.jpg")).getImage();
-        due = new ImageIcon(GUI.class.getResource("/Buildings/2.jpg")).getImage();
-        tre = new ImageIcon(GUI.class.getResource("/Buildings/3.jpg")).getImage();
+        first = new ImageIcon(GUI.class.getResource("/Buildings/1.jpg")).getImage();
+        second = new ImageIcon(GUI.class.getResource("/Buildings/2.jpg")).getImage();
+        third = new ImageIcon(GUI.class.getResource("/Buildings/3.jpg")).getImage();
         dome = new ImageIcon(GUI.class.getResource("/Buildings/DomeMEDIA.png")).getImage().getScaledInstance(75,75,Image.SCALE_SMOOTH);
 
         if (!coordinate.equals(new Coordinate(-1, -1))) {
@@ -69,11 +67,11 @@ public class TileButton extends JButton {
 
     public void rebaseFloor(){
         if(vSlot.getLevel()==1){
-            floor=uno;
+            floor= first;
         }else if(vSlot.getLevel()==2){
-            floor=due;
+            floor= second;
         }else if(vSlot.getLevel()==3){
-            floor=tre;
+            floor= third;
         }
 
     }
@@ -114,7 +112,6 @@ public class TileButton extends JButton {
 
     @Override
     protected void paintComponent(Graphics g) {
-        //super.paintComponent(g);
         g.drawImage(this.getFloor(), 3, 3, panel);
         g.drawImage(this.getWorker(), 17, 17, panel);
         if(vSlot.hasDome()) g.drawImage(this.dome, 3,3, panel);

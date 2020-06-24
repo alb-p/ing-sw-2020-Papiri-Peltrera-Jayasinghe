@@ -7,10 +7,10 @@ import java.io.IOException;
 public class WaitingPanel extends JPanel {
 
 
-    Image background;
-    private JLabel label;
+    Image homeBackground;
+    private final JLabel label;
     JLabel animation;
-    private Dimension frameDimension;
+    private final Dimension frameDimension;
 
     public WaitingPanel(String message) throws IOException, FontFormatException{
         frameDimension=GUI.getDimension();
@@ -26,7 +26,7 @@ public class WaitingPanel extends JPanel {
 
 
         animation=new JLabel();
-        this.background=new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
+        this.homeBackground =new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
         label=new JLabel(message);
         Font font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
@@ -45,9 +45,9 @@ public class WaitingPanel extends JPanel {
 
 
 
-        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/15))));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,frameDimension.height/15)));
         innerPanel.add(label);
-        innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
+        innerPanel.add(Box.createRigidArea(new Dimension(0,frameDimension.height/20)));
 
         innerPanel.add(animation);
 
@@ -59,7 +59,7 @@ public class WaitingPanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(this.background, 0, 0, this);
+        g.drawImage(this.homeBackground, 0, 0, this);
     }
 
 }

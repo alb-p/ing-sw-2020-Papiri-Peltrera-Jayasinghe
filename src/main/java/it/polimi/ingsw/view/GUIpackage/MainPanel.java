@@ -12,7 +12,6 @@ public class MainPanel extends JPanel {
     public MainPanel(final JFrame parent){
 
 
-
         addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();

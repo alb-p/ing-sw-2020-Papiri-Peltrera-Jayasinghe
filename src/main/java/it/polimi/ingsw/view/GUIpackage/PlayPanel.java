@@ -33,9 +33,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     boolean play = false;
     boolean myTurn = false;
     boolean firstPlayerSelected = false;
-    private ArrayList<Coordinate> workerPositions = new ArrayList<>();
-    private JLayeredPane layeredPane = new JLayeredPane();
-    private MakeSound music = new MakeSound();
+    private final ArrayList<Coordinate> workerPositions = new ArrayList<>();
+    private final JLayeredPane layeredPane = new JLayeredPane();
+    private final MakeSound music = new MakeSound();
 
     private final ImageIcon buildDomeIcon;
     private final ImageIcon buildDomeClicked;
@@ -43,7 +43,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private int playerID;
     private Action attemptedAction;
     private final JPanel movementPanel;
-    private JPanel boardPanel;
+    private final JPanel boardPanel;
     private final JPanel workerToSet = new JPanel();
     private final JLabel messageCenter;
     private final JButton submitButton = new CustomButton("/Gameplay/submit_workers");
@@ -53,14 +53,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
     };
     private final JButton endTurnButton = new CustomButton("/Gameplay/endturn");
-    private TileButton west;
-    private TileButton east;
-    private Coordinate toBeSendedWorker = new Coordinate(-1, -1);
     private Coordinate selected;
     private boolean buildDome = false;
-    private TileButton[][] boardOfButtons = new TileButton[5][5];
-    private Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
-    private InfoPanel infoPanel;
+    private final TileButton[][] boardOfButtons = new TileButton[5][5];
+    private final Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
+    private final InfoPanel infoPanel;
 
     public PlayPanel(ModelView modelView) {
         messageCenter = new JLabel();
@@ -78,8 +75,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
         this.modelView = modelView;
         this.setLayout(new BorderLayout());
-        east = new TileButton(-1, -1, this);
-        //east.setPreferredSize(new Dimension(130,200));
+        TileButton east = new TileButton(-1, -1, this);
         TransferHandler dragAndDrop = new DragAndDrop();
         east.setWorker(new ImageIcon(this.getClass().getResource("/Colors/worker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         east.setTransferHandler(dragAndDrop);
@@ -92,7 +88,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
         });
 
-        west = new TileButton(-1, -1, this);
+        TileButton west = new TileButton(-1, -1, this);
         west.setWorker(new ImageIcon(this.getClass().getResource("/Colors/worker_inactive.png")).getImage().getScaledInstance(130, 200, Image.SCALE_SMOOTH));
         west.setTransferHandler(dragAndDrop);
         west.addMouseMotionListener(new MouseAdapter() {
@@ -115,20 +111,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
                     @Override
                     public void mouseDragged(MouseEvent e) {
-                        //((JComponent)e.getSource()).repaint();
                         JButton button = (JButton) e.getSource();
                         TransferHandler handle = button.getTransferHandler();
                         handle.exportAsDrag(button, e, TransferHandler.MOVE);
                     }
-
-                    /*@Override
-                    public void mouseMoved(MouseEvent e) {
-                        super.mouseMoved(e);
-                        repaint();
-                    }*/
                 });
 
-                //boardOfButtons[row][col].setBackground(new Color(0, 0, 0, 0));
                 boardPanel.add(boardOfButtons[row][col]);
             }
         }
@@ -143,8 +131,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         workerToSet.setLayout(new BoxLayout(workerToSet, BoxLayout.X_AXIS));
 
-        //west.setBorder(BorderFactory.createEmptyBorder(300, 0, 0, 0));
-        //east.setBorder(BorderFactory.createEmptyBorder(300, 0, 100, 0));
         workerToSet.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
         west.setBorder(BorderFactory.createEmptyBorder(150, 150, 150, 150));
         east.setBorder(BorderFactory.createEmptyBorder(150, 150, 150, 150));
@@ -208,7 +194,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         buttons.setOpaque(false);
         buttons.add(westButtons, BorderLayout.WEST);
         buttons.add(eastButtons, BorderLayout.EAST);
-        //buttons.add(submitButton, BorderLayout.SOUTH);
         buttons.add(messageCenter, BorderLayout.NORTH);
         layeredPane.add(buttons, JLayeredPane.PALETTE_LAYER);
         movementPanel = new JPanel(null);
@@ -403,8 +388,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     private void sendWorkers() {
-        for (int i = 0; i < 2; i++) {
-            WorkerMessage mess = new WorkerMessage(playerID, i);
+        for (int j = 0; i < 2; i++) {
+            WorkerMessage mess = new WorkerMessage(playerID, j);
             mess.setCoordinate(workerPositions.get(i));
             playPanelListener.firePropertyChange("workerReceived", null, mess);
         }
@@ -484,8 +469,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         domeButton.setVisible(true);
                     }
                     StringBuilder message = new StringBuilder("It's your turn, make your");
-                    for (int i = 0; i < choices.size() - 1; i++) {
-                        message.append(" " + choices.get(i).toLowerCase());
+                    for (int k = 0; k < choices.size() - 1; k++) {
+                        message.append(" " + choices.get(k).toLowerCase());
                         message.append(" or ");
                     }
                     message.append(choices.get(choices.size() - 1));
@@ -534,27 +519,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         playPanelListener.firePropertyChange("actionRequest", false, true);
 
     }
-    /*
-    private void domeButtonUpdate(){
-
-    }*/
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(this.bgIsland, 0, 0, this);
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                //boardOfButtons[i][j].repaint();
-            }
-        }
-        if (!workerPlaced) {
-            //east.repaint();
-            //west.repaint();
-        }
         Toolkit.getDefaultToolkit().sync();
         g.drawImage(banner, 0, 0, this);
-
     }
 
 
@@ -571,7 +542,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         @Override
         protected Transferable createTransferable(JComponent c) {
-            Transferable t =null;
+            Transferable t = null;
             if (c instanceof TileButton) {
                 System.out.println("CREO TRANSFERABLE");
                 t = new TransferableImage(((TileButton) c).getWorker(), ((TileButton) c).getCoordinate());
@@ -618,7 +589,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (canImport(support)) {
                 try {
                     Transferable t = support.getTransferable();
-                    if(t == null)return false;
+                    if (t == null) return false;
                     Object val = t.getTransferData(DataFlavor.imageFlavor);
                     Component dest = support.getComponent();
                     if (val instanceof TransferableImage && dest instanceof TileButton && playerID == modelView.getActualPlayerId()) {
@@ -648,39 +619,35 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
                             dragAndDropResult = true;
 
-                        } else if (play) {
+                        } else if (play && myTurn) {
                             // PLAY
-                            if (myTurn) {
-                                Move attemptedMove = new Move(sourceCoord, tDest.getCoordinate());
-                                List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
-                                for (Action a : actions) {
-                                    if (a.equals(attemptedMove)) {
-                                        Random r = new Random();
-                                        dragAndDropResult = true;
-                                        music.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0f, false);
+                            Move attemptedMove = new Move(sourceCoord, tDest.getCoordinate());
+                            List<Action> actions = (List<Action>) modelView.getActionsAvailable().clone();
+                            for (Action a : actions) {
+                                if (a.equals(attemptedMove)) {
+                                    Random r = new Random();
+                                    dragAndDropResult = true;
+                                    music.playSound("/Sounds/move" + r.nextInt(3) + ".wav", 0f, false);
 
 
-                                        /*
-                                         * MOVEMENT
-                                         * */
-                                        WorkerIcon icon = new WorkerIcon(modelView.getBoard().getSlot(sourceCoord).getColor().getName().toLowerCase());
-                                        icon.setVisible(false);
-                                        movementPanel.add(icon);
-                                        attemptedAction = attemptedMove;
-                                        icon.startTransition(boardOfButtons[sourceCoord.getRow()][sourceCoord.getCol()].getLocation(), tDest.getLocation());
-                                        icon.addWorkerIconListener(PlayPanel.this);
-                                        /*
-                                         * END OF MOVEMENT
-                                         * */
-                                    }
+                                    /*
+                                     * MOVEMENT
+                                     * */
+                                    WorkerIcon icon = new WorkerIcon(modelView.getBoard().getSlot(sourceCoord).getColor().getName().toLowerCase());
+                                    icon.setVisible(false);
+                                    movementPanel.add(icon);
+                                    attemptedAction = attemptedMove;
+                                    icon.startTransition(boardOfButtons[sourceCoord.getRow()][sourceCoord.getCol()].getLocation(), tDest.getLocation());
+                                    icon.addWorkerIconListener(PlayPanel.this);
+                                    /*
+                                     * END OF MOVEMENT
+                                     * */
                                 }
                             }
                         }
                     }
                 } catch (
-                        UnsupportedFlavorException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
+                        UnsupportedFlavorException | IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -690,12 +657,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     class TransferableImage implements Transferable {
-        private Image image;
-        private Coordinate coord;
+        private final Image image;
+        private final Coordinate coordinate;
 
         public TransferableImage(Image image, Coordinate coord) {
             this.image = image;
-            this.coord = coord;
+            this.coordinate = coord;
         }
 
         public DataFlavor[] getTransferDataFlavors() {
@@ -714,7 +681,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         public Coordinate getCoordinate() {
-            return coord;
+            return coordinate;
         }
 
         public Image getImage() {

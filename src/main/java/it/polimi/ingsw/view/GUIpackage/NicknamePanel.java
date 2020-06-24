@@ -15,18 +15,17 @@ import java.util.ArrayList;
 
 public class NicknamePanel extends JPanel implements ActionListener , PropertyChangeListener{
 
-    private Image image;
-    private Image imageNick ;
-    private JPanel nicknamePanel;
-    private JTextField nickToFill;
-    private JButton submitButton;
-    // private CustomButton submitButton;
-    private JLabel textLabel;
-    private JLabel invalidNickLabel;
-    private int playerId;
+    private final Image image;
+    private final Image imageNick ;
+    private final JPanel nicknameJPanel;
+    private final JTextField nickToFill;
+    private final JButton submitButton;
+    private final JLabel textLabel;
+    private final JLabel invalidNickLabel;
+    private final int playerId;
     private String attemptedNick = "";
-    private PropertyChangeSupport nickPanelListener = new PropertyChangeSupport(this);
-    private ArrayList<String> invalidNicknames = new ArrayList<>();
+    private final PropertyChangeSupport nickPanelListener = new PropertyChangeSupport(this);
+    private final ArrayList<String> invalidNicknames = new ArrayList<>();
 
     public NicknamePanel(int id) {
         imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int)(0.82*GUI.getDimension().height),(int)(0.625*GUI.getDimension().height),Image.SCALE_SMOOTH);
@@ -58,11 +57,11 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         invalidNickLabel.setFont(errorFont);
         invalidNickLabel.setForeground(new Color(241, 204, 118, 255));
         nickToFill.setOpaque(false);
-        nicknamePanel = new JPanel(new BorderLayout());
-        nicknamePanel.setOpaque(false);
-        nicknamePanel.add(nickToFill, BorderLayout.NORTH);
-        nicknamePanel.add(invalidNickLabel, BorderLayout.CENTER);
-        nicknamePanel.setBorder(BorderFactory.createEmptyBorder((int)(GUI.getDimension().height/14.4),(int)(GUI.getDimension().width/4.8),(int)(GUI.getDimension().height/9),(int)(GUI.getDimension().width/4.8)));
+        nicknameJPanel = new JPanel(new BorderLayout());
+        nicknameJPanel.setOpaque(false);
+        nicknameJPanel.add(nickToFill, BorderLayout.NORTH);
+        nicknameJPanel.add(invalidNickLabel, BorderLayout.CENTER);
+        nicknameJPanel.setBorder(BorderFactory.createEmptyBorder((int)(GUI.getDimension().height/14.4),(int)(GUI.getDimension().width/4.8),(GUI.getDimension().height/9),(int)(GUI.getDimension().width/4.8)));
         submitButton = new CustomButton("/Name/submit");
         nickToFill.setBorder(null);
         invalidNickLabel.setHorizontalAlignment(0);
@@ -70,9 +69,9 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         this.add(Box.createVerticalStrut((GUI.getDimension().height)/4));
         this.add(textLabel);
         this.add(Box.createVerticalStrut(0));
-        this.add(nicknamePanel);
+        this.add(nicknameJPanel);
         this.add(Box.createVerticalStrut(0));
-        nicknamePanel.add(submitButton, BorderLayout.SOUTH);
+        nicknameJPanel.add(submitButton, BorderLayout.SOUTH);
         this.add(Box.createVerticalStrut(80));
         submitButton.addActionListener(this);
         invalidNickLabel.setText(" ");

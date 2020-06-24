@@ -12,12 +12,12 @@ import java.io.IOException;
 
 public class MainJFrame extends JFrame implements PropertyChangeListener {
 
-    private MainPanel contentPane;
-    private CardLayout layout;
-    private LogoPanel logo;
-    private IslandAnimationPanel islandAnimationPanel;
-    private PlayPanel playPanel;
-    private MakeSound music= new MakeSound();
+    private final MainPanel contentPane;
+    private final CardLayout layout;
+    private final LogoPanel logo;
+    private final IslandAnimationPanel islandAnimationPanel;
+    private final PlayPanel playPanel;
+    private final MakeSound music= new MakeSound();
 
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
 
@@ -88,8 +88,6 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         this.islandAnimationPanel.startTransition();
         music.stopSound();
         music.playSound("/Sounds/environment.wav",-20f,true);
-
-
     }
 
     @Override
