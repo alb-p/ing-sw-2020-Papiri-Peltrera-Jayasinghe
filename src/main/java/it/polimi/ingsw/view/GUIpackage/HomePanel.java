@@ -14,7 +14,9 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Scanner;
 
 /**
@@ -108,10 +110,14 @@ public class HomePanel extends JPanel implements ActionListener {
         }else if (actionEvent.getSource().equals(helpButton)){
             if (Desktop.isDesktopSupported()) {
                 try {
-                    URL resource = this.getClass().getResource("/Home/rules.pdf");
-                    Desktop.getDesktop().browse(new URI(String.valueOf(resource)));
+                    Path tempOutput = Files.createTempFile("rules_tempFile", ".pdf");
+                    tempOutput.toFile().deleteOnExit();
+                    try (InputStream file = getClass().getResourceAsStream("/Home/rules.pdf")) {
+                        Files.copy(file, tempOutput, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    Desktop.getDesktop().open(tempOutput.toFile());
 
-                } catch (IOException | URISyntaxException ex) {
+                } catch (IOException ex) {
                     // no application registered for PDFs
                 }
             }
