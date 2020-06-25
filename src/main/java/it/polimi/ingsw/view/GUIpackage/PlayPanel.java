@@ -284,6 +284,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 button.setName(Integer.toString(p.getId()));
                 button.setBounds(tabPosition.get(i).x, tabPosition.get(i).y, 45, 110);
                 button.setBorder(null);
+                button.setContentAreaFilled(false);
                 godsTabs.add(button);
 
 
@@ -473,6 +474,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (playerID == modelView.getActualPlayerId()) {
                 myTurn = true;
             }
+            movementPanel.removeAll();
             if (playerID != modelView.getDeletedPlayerId()) messageCenterTurn();
         } else if (evt.getPropertyName().equalsIgnoreCase("endTurnConfirm")) {
             modelView.getActionsAvailable().clear();
@@ -484,7 +486,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
             if (attemptedAction != null) {
                 sendAction(attemptedAction);
-                movementPanel.removeAll();
                 attemptedAction = null;
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("playerHasLost")) {
