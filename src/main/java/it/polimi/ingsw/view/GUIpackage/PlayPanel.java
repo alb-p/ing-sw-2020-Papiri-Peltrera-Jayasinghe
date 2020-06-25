@@ -491,7 +491,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
             if(modelView.getWinnerId() == playerID){
                 messageCenter.setForeground(new Color(255, 235, 140));
-                //TODO add you win
+                WinningPanel p=new WinningPanel();
+                layeredPane.add(p,JLayeredPane.POPUP_LAYER);
+                p.startTransition();
             }else  messageCenter.setForeground(new Color(255,255,255));
             messageCenter.setText("Game ended");
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {

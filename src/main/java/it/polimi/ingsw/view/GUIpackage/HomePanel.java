@@ -165,13 +165,15 @@ public class HomePanel extends JPanel implements ActionListener {
             }
 
 
-            musicButton =new JButton(new ImageIcon(this.getClass().getResource("/Home/On.png")));
+            musicButton =new JButton(new ImageIcon(this.getClass().getResource("/Home/OnSounds.png")));
             musicButton.setContentAreaFilled(false);//trasparenza
             musicButton.setOpaque(false);
+            musicButton.setBorder(null);
             musicButton.setName("music on");
-            animationButton =new JButton(new ImageIcon(this.getClass().getResource("/Home/On.png")));
+            animationButton =new JButton(new ImageIcon(this.getClass().getResource("/Home/OnAnimation.png")));
             animationButton.setContentAreaFilled(false);//trasparenza
             animationButton.setOpaque(false);
+            animationButton.setBorder(null);
             animationButton.setName("animation on");
             confirm=new CustomButton("/GodSelection/next/next");
 
@@ -210,26 +212,26 @@ public class HomePanel extends JPanel implements ActionListener {
             } else if (e.getSource().equals(musicButton)){
                 if(musicButton.getName().equalsIgnoreCase("music on")){
                     musicButton.setName("music off");
-                    musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/Off.png")));
+                    musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/OffSounds.png")));
                     music.stopSound();
                     homePanelListeners.firePropertyChange("SoundsOff", null,true);
                 }else
                 {
                     musicButton.setName("music on");
-                    musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/On.png")));
+                    musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/OnSounds.png")));
                     music.playSound("/Sounds/track1.wav",-20f,true);
                     homePanelListeners.firePropertyChange("SoundsOn", null,true);
                 }
             }else if (e.getSource().equals(animationButton)){
                 if(animationButton.getName().equalsIgnoreCase("animation on")){
                     animationButton.setName("animation off");
-                    animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/Off.png")));
+                    animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/OffAnimation.png")));
                     homePanelListeners.firePropertyChange("SeaAnimation", null,false);
 
                 }else
                 {
                     animationButton.setName("animation on");
-                    animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/On.png")));
+                    animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/OnAnimation.png")));
                     homePanelListeners.firePropertyChange("SeaAnimation", null,true);
 
                 }
