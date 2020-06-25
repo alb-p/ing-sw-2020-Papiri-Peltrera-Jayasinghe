@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * The type First build.
+ * A special build that is made before the move.
  */
 public class FirstBuild extends Action implements Serializable {
 

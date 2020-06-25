@@ -3,7 +3,8 @@ package it.polimi.ingsw.model;
 import java.util.ArrayList;
 
 /**
- * The type Tree action node.
+ * The type Tree action node represent a node
+ * of the tree of the available actions
  */
 public class TreeActionNode {
 
@@ -60,9 +61,9 @@ public class TreeActionNode {
     }
 
     /**
-     * Is leaf boolean.
+     * Is leaf.
      *
-     * @return the boolean
+     * @return true if the node has no child
      */
     public boolean isLeaf(){
         return this.children.isEmpty();
@@ -71,8 +72,8 @@ public class TreeActionNode {
     /**
      * Search tree action node.
      *
-     * @param action the action
-     * @return the tree action node
+     * @param action the action wanted to be found
+     * @return the tree action node if found, else null
      */
     public TreeActionNode search(Action action){
         for(TreeActionNode t: children){
@@ -82,9 +83,9 @@ public class TreeActionNode {
     }
 
     /**
-     * Get children actions array list.
+     * Get the actions of the children.
      *
-     * @return the array list
+     * @return the array list of the names of the actions available
      */
     public ArrayList<Action> getChildrenActions(){
         ArrayList<Action> choices = new ArrayList<>();
@@ -108,7 +109,7 @@ public class TreeActionNode {
 
 
     /**
-     * Gets data.
+     * Gets the action.
      *
      * @return the data
      */

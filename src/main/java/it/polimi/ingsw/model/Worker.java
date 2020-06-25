@@ -93,7 +93,7 @@ public class Worker {
     }
 
     /**
-     * Gets color.
+     * Gets the worker's color.
      *
      * @return the color
      */

@@ -58,7 +58,7 @@ public class InitSetup {
     }
 
     /**
-     * Is in user boolean.
+     * Validate a nickname sent by the players.
      *
      * @param name the name
      * @return the boolean
@@ -85,7 +85,8 @@ public class InitSetup {
 
 
     /**
-     * Is in color boolean.
+     * Check if the selected color
+     * is still available.
      *
      * @param color the color
      * @return the boolean
@@ -97,7 +98,7 @@ public class InitSetup {
 
 
     /**
-     * Del color.
+     *  Removes the color from the available ones.
      *
      * @param mess the mess
      */
@@ -112,7 +113,8 @@ public class InitSetup {
     }
 
     /**
-     * Notify godly.
+     * Notifies the view that the godly
+     * player has been selected (randomly).
      *
      * @param godlyID the godly id
      */
@@ -125,7 +127,7 @@ public class InitSetup {
 
 
     /**
-     * Add chosen god.
+     * Add selected god to the list of the selected gods.
      *
      * @param chosenGod the chosen god
      * @param mess      the mess
@@ -140,12 +142,8 @@ public class InitSetup {
                     break;
                 }
                 return;
-                /*if(chosenGods.size()==nicknames.size()){
-                    initSetupListeners.firePropertyChange("god1ofNConfirmed",false,mess);
-                }else return;*/
             }
         }
-        System.out.println("\nMESS e FIRE:: " + mess.getSelectedList());
         initSetupListeners.firePropertyChange("god1ofNConfirmed", false, mess);
 
     }
@@ -194,7 +192,8 @@ public class InitSetup {
 
 
     /**
-     * Del god.
+     * A player chose his god.
+     * The god needs to be removed from the list.
      *
      * @param mess the mess
      */
@@ -205,13 +204,13 @@ public class InitSetup {
                 break;
             }
         }
-        System.out.println("GOD CONFIRM SERVER");
         initSetupListeners.firePropertyChange("godConfirm", null, mess);
     }
 
 
     /**
-     * Worker placed.
+     * Notify the view that a
+     * worker has been placed
      *
      * @param mess the mess
      */
@@ -221,7 +220,7 @@ public class InitSetup {
 
 
     /**
-     * First player.
+     * First player choosen by godly.
      *
      * @param mess the mess
      */

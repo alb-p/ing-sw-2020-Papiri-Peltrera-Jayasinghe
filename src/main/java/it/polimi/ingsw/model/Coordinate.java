@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 /**
  * The type Coordinate.
+ * Represents the position of a slot on the board
  */
 public class Coordinate implements Serializable {
     private int row;
@@ -14,7 +15,7 @@ public class Coordinate implements Serializable {
      * Instantiates a new Coordinate.
      *
      * @param row the row
-     * @param col the col
+     * @param col the column
      */
     public Coordinate(int row, int col) {
         this.row = row;
@@ -52,7 +53,7 @@ public class Coordinate implements Serializable {
      * Is adjacent boolean.
      *
      * @param that the that
-     * @return the boolean
+     * @return true if two coordinates are adjacent
      */
     public boolean isAdjacent(Coordinate that) {
         return (this.getCol() == that.getCol() || this.getCol() == that.getCol() + 1 || this.getCol() == that.getCol() - 1)
@@ -86,7 +87,8 @@ public class Coordinate implements Serializable {
 
 
     /**
-     * Gets adjacent coords.
+     * Gets the list of the adjacent
+     * coords.
      *
      * @return the adjacent coords
      */
@@ -108,7 +110,7 @@ public class Coordinate implements Serializable {
 
 
     /**
-     * Is valid boolean.
+     * Is valid boolean (values 0-4).
      *
      * @return the boolean
      */

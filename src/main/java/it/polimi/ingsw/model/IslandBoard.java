@@ -4,9 +4,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The type Island board.
+ * The type Island board represent the
+ * board of the game.
  */
-public class IslandBoard implements Cloneable{
+public class IslandBoard{
 
     private Logger logger = Logger.getLogger("model.board");
     Slot[][] board = new Slot[5][5];
@@ -23,7 +24,8 @@ public class IslandBoard implements Cloneable{
     }
 
     /**
-     * Info slot slot.
+     * Returns the slot
+     * int the parameter position.
      *
      * @param coordinate the coordinate
      * @return the slot
@@ -44,7 +46,7 @@ public class IslandBoard implements Cloneable{
      * Is perimeter boolean.
      *
      * @param coordinate the coordinate
-     * @return the boolean
+     * @return true if coordinate is in the perimeter
      */
 //TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
     public boolean isPerimeter(Coordinate coordinate) {

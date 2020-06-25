@@ -3,7 +3,8 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 
 /**
- * The type Build.
+ * The type Build represent the
+ * action of building.
  */
 public class Build extends Action implements Serializable {
 
@@ -12,8 +13,8 @@ public class Build extends Action implements Serializable {
     /**
      * Instantiates a new Build.
      *
-     * @param start the start
-     * @param end   the end
+     * @param start the start coordinate
+     * @param end   the end coordinate
      */
     public Build(Coordinate start, Coordinate end){
         super("build",start, end);
@@ -21,7 +22,7 @@ public class Build extends Action implements Serializable {
     }
 
     /**
-     * Equals boolean.
+     * Equals.
      *
      * @param that the that
      * @return the boolean

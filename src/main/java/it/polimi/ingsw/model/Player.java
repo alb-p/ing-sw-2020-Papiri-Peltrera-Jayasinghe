@@ -6,7 +6,8 @@ import it.polimi.ingsw.utils.messages.ActionMessage;
 import java.util.ArrayList;
 
 /**
- * The type Player.
+ * The type Player represent one
+ * of the contestants of the game
  */
 public class Player {
 
@@ -75,7 +76,7 @@ public class Player {
     }
 
     /**
-     * Sets card.
+     * Sets the god card.
      *
      * @param card the card
      */
@@ -113,7 +114,7 @@ public class Player {
     }
 
     /**
-     * Gets card.
+     * Gets god card.
      *
      * @return the card
      */
@@ -134,7 +135,7 @@ public class Player {
      * Gets worker.
      *
      * @param i the
-     * @return the worker
+     * @return the worker of index i
      */
     public Worker getWorker(int i) {
         return this.workers.get(i);
@@ -150,7 +151,7 @@ public class Player {
     }
 
     /**
-     * Has done boolean.
+     * Has ended his turn.
      *
      * @return the boolean
      */
@@ -159,7 +160,7 @@ public class Player {
     }
 
     /**
-     * Sets not build done.
+     * Reset build done.
      */
     public void setNotBuildDone() {
         buildDone = false;
@@ -185,7 +186,7 @@ public class Player {
 
     /**
      * Player tree setup.
-     *
+     * create the tree for his possible actions.
      * @param board the board
      */
     public void playerTreeSetup(IslandBoard board) {
@@ -197,14 +198,14 @@ public class Player {
     }
 
     /**
-     * Turn handler boolean.
+     * Tries to do the move requested from the
+     * player.
      *
      * @param board   the board
      * @param message the message
      * @return the boolean
-     * @throws Exception the exception
      */
-    public boolean turnHandler(IslandBoard board, Action message) throws Exception {
+    public boolean turnHandler(IslandBoard board, Action message){
         TreeActionNode attemptedActionNode;
         attemptedActionNode = tree.search(message);
         if(attemptedActionNode == null) {
@@ -241,12 +242,11 @@ public class Player {
     }
 
     /**
-     * Select worker boolean.
+     * Select actual worker boolean.
      *
      * @param coord the coord
      * @return the boolean
      */
-//It set actual worker
     public boolean selectWorker(Coordinate coord) {
         for (Worker worker : workers) {
             if (worker.getPosition().equals(coord)) {
@@ -257,7 +257,8 @@ public class Player {
     }
 
     /**
-     * Gets next actions.
+     * Gets next actions available
+     * for the player.
      *
      * @return the next actions
      */
@@ -284,7 +285,7 @@ public class Player {
     }
 
     /**
-     * Essential done boolean.
+     * The player has done at least a move and a build.
      *
      * @return the boolean
      */

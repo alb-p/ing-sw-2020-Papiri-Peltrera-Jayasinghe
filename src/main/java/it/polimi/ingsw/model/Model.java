@@ -9,7 +9,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The type Model.
+ * The main Model of the project.
+ * Contains all the information of the game
  */
 public class Model {
 
@@ -31,9 +32,9 @@ public class Model {
     }
 
     /**
-     * Add player.
+     * Add  a player to the list of the players.
      *
-     * @param p the p
+     * @param p the player
      */
     public void addPlayer(Player p) {
         players.add(p);
@@ -110,7 +111,8 @@ public class Model {
 
 
     /**
-     * Turn handler.
+     * Turn handler
+     * calls the turnhandler of the specific player
      *
      * @param idPlayerPlaying the id player playing
      * @param message         the message
@@ -120,7 +122,7 @@ public class Model {
         try {
             boolean turnHandler;
             turnHandler = this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
-            if(!turnHandler) logger.log(Level.WARNING, "Invalid Action");
+            if (!turnHandler) logger.log(Level.WARNING, "Invalid Action");
             System.out.println(board);
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -129,7 +131,7 @@ public class Model {
     }
 
     /**
-     * Clone v board virtual board.
+     * Clone virtualboard from a real board.
      *
      * @param board the board
      * @return the virtual board
@@ -174,11 +176,11 @@ public class Model {
 
 
     /**
-     * Tree editor by special rule.
+     * It invokes specialRule on opponent gods'
+     * to remove the invalid actions from the tree
      *
      * @param currPlayer the curr player
      */
-//It invokes specialRule on opponent gods'
     public void treeEditorBySpecialRule(int currPlayer) {
         for (Player p : players) {
             if (p.getId() != currPlayer) {
@@ -189,20 +191,20 @@ public class Model {
     }
 
     /**
-     * Send actions.
+     * Notifies the actions
+     * to the view.
      *
-     * @param id the id
+     * @param id the actual player id
      */
-    public void sendActions(int id){
-        if(getPlayer(id).getTree()==null){
+    public void sendActions(int id) {
+        if (getPlayer(id).getTree() == null) {
             buildTree(id);
         }
         ActionMessage message = getPlayer(id).getNextActions();
         message.setOptional(getPlayer(id).essentialDone());
         if (!message.getChoices().isEmpty()) {
             modelListeners.firePropertyChange("actionsAvailable", null, message);
-        }
-        else notifyPlayerHasLost(id);
+        } else notifyPlayerHasLost(id);
     }
 
 
@@ -211,24 +213,17 @@ public class Model {
      *
      * @param ID the id
      */
-//crea l'albero e lo fa correggere dagli altri dei.
     public void buildTree(int ID) {
-        try {
-            getPlayer(ID).playerTreeSetup(board);
-            treeEditorBySpecialRule(ID);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+        getPlayer(ID).playerTreeSetup(board);
+        treeEditorBySpecialRule(ID);
     }
 
 
     /**
-     * Check winner boolean.
+     * Checks winner.
      *
-     * @param id the id
-     * @return the boolean
+     * @param id the id of the actual player and possible winner
+     * @return true if a winner has been found
      */
     public boolean checkWinner(int id) {
         if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
@@ -241,9 +236,10 @@ public class Model {
     }
 
     /**
-     * Remove player.
+     * Remove the player
+     * from the list.
      *
-     * @param id the id
+     * @param id the id of the pplayer to be removed
      */
     public void removePlayer(int id) {
         for (int i = 0; i < 2; i++) {
@@ -260,14 +256,14 @@ public class Model {
      *
      * @param listener the listener
      */
-    public void removeModelListener(PropertyChangeListener listener){
+    public void removeModelListener(PropertyChangeListener listener) {
         modelListeners.removePropertyChangeListener(listener);
     }
 
     /**
      * End game for no available moves.
      *
-     * @param id the id
+     * @param id the id of the winner
      */
     public void endGameForNoAvailableMoves(int id) {
         int winnerID = -1;
@@ -285,12 +281,12 @@ public class Model {
      */
     public void notifyPlayerHasLost(int id) {
         modelListeners.firePropertyChange("playerLostDetected", null,
-                new GenericMessage(id,"", " has no more available actions!"));
+                new GenericMessage(id, "", " has no more available actions!"));
     }
 
 
     /**
-     * End turn.
+     *  A player has chose to end his turn.
      *
      * @param id the id
      */
@@ -303,14 +299,15 @@ public class Model {
 
     /**
      * End game.
+     * All listeners are removed.
      *
      * @param id the id
      */
     public void endGame(int id) {
-        if(id<0){
+        if (id < 0) {
             modelListeners.firePropertyChange("endGame", false, true);
             int n = modelListeners.getPropertyChangeListeners().length;
-            for (int i = 0 ; i<n; i++){
+            for (int i = 0; i < n; i++) {
                 modelListeners.removePropertyChangeListener(modelListeners.getPropertyChangeListeners()[0]);
 
             }
@@ -320,7 +317,7 @@ public class Model {
     /**
      * Is winner detected boolean.
      *
-     * @return the boolean
+     * @return true if a winner has been found
      */
     public boolean isWinnerDetected() {
         return winnerDetected;

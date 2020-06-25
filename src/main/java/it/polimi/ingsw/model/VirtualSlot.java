@@ -5,7 +5,7 @@ import it.polimi.ingsw.utils.ANSIColor;
 import java.io.Serializable;
 
 /**
- * The type Virtual slot.
+ * The type Virtual slot represent a slot for the view
  */
 public class VirtualSlot implements Serializable {
 
@@ -21,7 +21,7 @@ public class VirtualSlot implements Serializable {
      * @param color the color
      * @param level the level
      * @param dome  the dome
-     * @param c     the c
+     * @param c     the coordinate
      */
     public VirtualSlot(Color color, int level, boolean dome, Coordinate c) {
         this.color = color;
@@ -64,7 +64,7 @@ public class VirtualSlot implements Serializable {
     /**
      * Gets color.
      *
-     * @return the color
+     * @return the color of the worker
      */
     public Color getColor() {
         return color;
@@ -73,7 +73,7 @@ public class VirtualSlot implements Serializable {
     /**
      * Has worker boolean.
      *
-     * @return the boolean
+     * @return true if a worker occupies the vslot
      */
     public boolean hasWorker() {
         return color != null;
@@ -82,7 +82,7 @@ public class VirtualSlot implements Serializable {
     /**
      * Is free boolean.
      *
-     * @return the boolean
+     * @return true if there's no worker neither a dome
      */
     public boolean isFree(){
         return color == null && !dome;
@@ -91,7 +91,7 @@ public class VirtualSlot implements Serializable {
     /**
      * Has dome boolean.
      *
-     * @return the boolean
+     * @return true if the vslot has a dome
      */
     public boolean hasDome(){
         return dome;

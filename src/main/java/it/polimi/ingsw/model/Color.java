@@ -59,7 +59,7 @@ public enum Color{
      * Colorized text string.
      *
      * @param text the text
-     * @return the string
+     * @return the string painted
      */
     public String colorizedText(String text){
         return (this.solidColor + text + ANSIColor.RESET);

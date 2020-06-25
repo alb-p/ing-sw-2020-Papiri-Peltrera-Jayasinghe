@@ -2,6 +2,7 @@ package it.polimi.ingsw.model;
 
 /**
  * The enum Construction.
+ * Represent the buildings on the board
  */
 public enum Construction {
     FLOOR("F"),

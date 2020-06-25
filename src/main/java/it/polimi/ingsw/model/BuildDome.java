@@ -4,7 +4,8 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 
 /**
- * The type Build dome.
+ * The type Build dome represent the
+ * building of a dome at any level.
  */
 public class BuildDome extends Build implements Serializable {
 
@@ -13,8 +14,8 @@ public class BuildDome extends Build implements Serializable {
     /**
      * Instantiates a new Build dome.
      *
-     * @param start the start
-     * @param end   the end
+     * @param start the start coordinate
+     * @param end   the end coordinate
      */
     public BuildDome(Coordinate start, Coordinate end) {
         super( start, end);
@@ -23,7 +24,7 @@ public class BuildDome extends Build implements Serializable {
     /**
      * Gets action name.
      *
-     * @return the action name
+     * @return "Build a dome"
      */
     @Override
     public String getActionName() {

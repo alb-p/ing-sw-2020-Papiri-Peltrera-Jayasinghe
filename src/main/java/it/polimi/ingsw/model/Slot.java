@@ -5,7 +5,8 @@ import it.polimi.ingsw.utils.ANSIColor;
 import java.io.IOException;
 
 /**
- * The type Slot.
+ * The type Slot represent a box
+ * on the board.
  */
 public class Slot {
 
@@ -22,7 +23,8 @@ public class Slot {
     }
 
     /**
-     * Is free boolean.
+     * Return true if the slot has not a
+     * player or a dome in itself.
      *
      * @return the boolean
      */
@@ -55,9 +57,9 @@ public class Slot {
     }
 
     /**
-     * Get construction level int.
+     * Get construction level
      *
-     * @return the int
+     * @return the construction level
      */
     public int getConstructionLevel() {
         int level = 0;
@@ -80,7 +82,7 @@ public class Slot {
     }
 
     /**
-     * Occupy.
+     * A worker occupies the slot.
      *
      * @param w the w
      */
@@ -104,7 +106,7 @@ public class Slot {
     }
 
     /**
-     * Free.
+     * Frees the slot;
      */
     public void free() {
         this.worker = null;
@@ -132,7 +134,7 @@ public class Slot {
     /**
      * Gets worker.
      *
-     * @return the worker
+     * @return the worker in the slot.
      */
     public Worker getWorker() {
         return this.worker;

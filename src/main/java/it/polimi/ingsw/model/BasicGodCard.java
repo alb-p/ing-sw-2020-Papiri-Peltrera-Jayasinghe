@@ -6,28 +6,32 @@ package it.polimi.ingsw.model;
 public class BasicGodCard {
 
     /**
-     * Move boolean.
+     * The worker is moved in the adjacent
+     * coords chosen by the player
      *
-     * @param w     the w
-     * @param coord the coord
+     * @param worker     the worker
+     * @param coord the destination coord
      * @param board the board
-     * @return the boolean
+     * @return the outcome of the move
      */
-    public boolean move(Worker w, Coordinate coord, IslandBoard board) {
-        Slot workerSlot = board.infoSlot(w.getPosition());
+    public boolean move(Worker worker, Coordinate coord, IslandBoard board) {
+        Slot workerSlot = board.infoSlot(worker.getPosition());
         Slot destSlot = board.infoSlot(coord);
-        if (w.getPosition().isAdjacent(coord) &&
+        if (worker.getPosition().isAdjacent(coord) &&
                 (workerSlot.getConstructionLevel() - destSlot.getConstructionLevel() >= -1) && destSlot.isFree()) {
             workerSlot.free();
-            destSlot.occupy(w);
-            w.setPosition(coord);
+            destSlot.occupy(worker);
+            worker.setPosition(coord);
             return true;
         }
         return false;
     }
 
     /**
-     * Build boolean.
+     The worker is
+     * able to build in one of the
+     * adjacent slots of his actual position
+     * if the slot is free
      *
      * @param w     the w
      * @param coord the coordinate where the
@@ -49,7 +53,9 @@ public class BasicGodCard {
     }
 
     /**
-     * Special rule.
+     * If the god has the power of modify the tree
+     * of an opponent player, this method will
+     * be overridden.
      *
      * @param root  the root
      * @param board the board
@@ -80,21 +86,23 @@ public class BasicGodCard {
 
 
     /**
-     * Card tree setup tree action node.
+     * Create the basic tree of the available
+     * actions of a worker
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
         TreeActionNode tree = new TreeActionNode(null);
-        if(w == null) System.out.println("worker nulll");
-        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {  //check around worker position to perform a Move
+        if(worker == null) System.out.println("worker nulll");
+        for (Coordinate c1 : worker.getPosition().getAdjacentCoords()) {  //check around worker position to perform a Move
 
             if (board.infoSlot(c1).isFree() &&
-                    (board.infoSlot(w.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1)) {
+                    (board.infoSlot(worker.getPosition()).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1)) {
 
-                TreeActionNode moveNode = new TreeActionNode(new Move(w.getPosition(), c1));
+                TreeActionNode moveNode = new TreeActionNode(new Move(worker.getPosition(), c1));
                 for (Coordinate c2 : c1.getAdjacentCoords()) {                       //check around every position to perform a Build
                     if (board.infoSlot(c2).isFree()) {
                         TreeActionNode buildNode = new TreeActionNode(new Build(c1, c2));
@@ -102,7 +110,7 @@ public class BasicGodCard {
                     }
                 }
                 //adding the initial worker position as a possible Build position
-                TreeActionNode buildNode = new TreeActionNode(new Build(c1, w.getPosition()));
+                TreeActionNode buildNode = new TreeActionNode(new Build(c1, worker.getPosition()));
                 moveNode.addChild(buildNode);
                 tree.addChild(moveNode);
 
@@ -113,12 +121,12 @@ public class BasicGodCard {
     }
 
     /**
-     * Winning condition boolean.
+     * Winning condition check.
      *
      * @param w            the w
      * @param board        the board
      * @param virtualBoard the virtual board
-     * @return the boolean
+     * @return true if the player wins
      */
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 

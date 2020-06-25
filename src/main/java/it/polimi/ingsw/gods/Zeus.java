@@ -38,7 +38,7 @@ public class Zeus extends BasicGodCard {
      * @param worker     the worker
      * @param coord the destination coord
      * @param board the board
-     * @return the boolean
+     * @return the outcome of the build
      */
     @Override
     public boolean build(Worker worker, Coordinate coord, IslandBoard board){
@@ -63,7 +63,7 @@ public class Zeus extends BasicGodCard {
      * @param worker            the worker
      * @param board        the board
      * @param virtualBoard the virtual board
-     * @return the boolean
+     * @return true if the player has won
      */
     @Override
     public boolean winningCondition(Worker worker, IslandBoard board, VirtualBoard virtualBoard) {

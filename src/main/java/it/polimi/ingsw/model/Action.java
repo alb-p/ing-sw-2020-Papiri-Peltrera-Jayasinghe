@@ -3,7 +3,10 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 
 /**
- * The type Action.
+ * The type Action represent
+ * the step operation the player
+ * need to perform to play
+ * the game
  */
 public abstract class Action implements Serializable {
 
@@ -16,8 +19,8 @@ public abstract class Action implements Serializable {
      * Instantiates a new Action.
      *
      * @param actionName the action name
-     * @param start      the start
-     * @param end        the end
+     * @param start      the start coordinate
+     * @param end        the final coordinate
      */
     public Action(String actionName, Coordinate start, Coordinate end){
         this.start = start;
@@ -26,16 +29,16 @@ public abstract class Action implements Serializable {
     }
 
     /**
-     * Sets start.
+     * Sets start coordinate.
      *
-     * @param start the start
+     * @param start  start
      */
     public void setStart(Coordinate start) {
         this.start = start;
     }
 
     /**
-     * Set end.
+     * Set final coordinate.
      *
      * @param end the end
      */
@@ -46,14 +49,14 @@ public abstract class Action implements Serializable {
     /**
      * Get action name string.
      *
-     * @return the string
+     * @return the name of the action in a string
      */
     public String getActionName(){return this.actionName;}
 
     /**
      * Get start coordinate.
      *
-     * @return the coordinate
+     * @return the start coordinate
      */
     public Coordinate getStart(){
         return this.start;
@@ -62,7 +65,7 @@ public abstract class Action implements Serializable {
     /**
      * Get end coordinate.
      *
-     * @return the coordinate
+     * @return the end coordinate
      */
     public Coordinate getEnd(){
         return this.end;
@@ -71,8 +74,8 @@ public abstract class Action implements Serializable {
     /**
      * Equals boolean.
      *
-     * @param o the o
-     * @return the boolean
+     * @param o the other object
+     * @return true if the actions represent the same operation
      */
     public abstract boolean equals(Object o);
 

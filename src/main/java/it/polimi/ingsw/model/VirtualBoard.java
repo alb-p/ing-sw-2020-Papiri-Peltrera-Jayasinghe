@@ -1,7 +1,7 @@
 package it.polimi.ingsw.model;
 
 /**
- * The type Virtual board.
+ * The type Virtual board represent the board for the view.
  */
 public class VirtualBoard {
 

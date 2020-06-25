@@ -3,7 +3,8 @@ package it.polimi.ingsw.model;
 import java.io.Serializable;
 
 /**
- * The type Move.
+ * The type Move represent the action of
+ * the move on the board.
  */
 public class Move extends Action implements Serializable {
 
