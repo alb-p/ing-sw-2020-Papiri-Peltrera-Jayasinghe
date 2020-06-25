@@ -397,7 +397,12 @@ public class CLI extends RemoteView implements Runnable {
                             if(inputAction.contains("info") || inputAction.contains("man")){
                                 printer.println(modelView.getPlayer(getPlayerId()).getGod()[0]);
                                 printer.println(modelView.getPlayer(getPlayerId()).getGod()[1]);
-                            }else {
+                            }else if(inputAction.contains("exit") || inputAction.contains("quit")){
+                                connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
+                                connection.closeConnection();
+                                System.exit(0);
+                            }
+                            else {
                                 coords = parseCoordinateAction(inputAction);
                                 if (coords.size() == 2) {
                                     action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
@@ -427,34 +432,7 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
-    /**
-     * Winner mess.
-     *
-     * @param inputObject the input object
-     */
-    public void winnerMess(WinnerMessage inputObject) {
-        printBreakers();
-        printBreakers();
-        printer.println("\n\n");
-        printer.println(inputObject.getMessage());
-        printer.println("\n\n");
-        printBreakers();
-        printBreakers();
 
-    }
-
-    /**
-     * Generic mess.
-     *
-     * @param inputObject the input object
-     */
-    public void genericMess(GenericMessage inputObject) {
-        printBreakers();
-        printBreakers();
-        printer.println("\n\n" + ANSIColor.BOLD + ANSIColor.RED + inputObject.getMessage() + ANSIColor.RESET + "\n\n");
-        printBreakers();
-        printBreakers();
-    }
 
 
     /**
@@ -592,14 +570,38 @@ public class CLI extends RemoteView implements Runnable {
         welcomeMessage();
         int choiceMenu;
         do{
-            printer.println("\t0- play\t1- help");
+            //printer.println("\t0- play\t1- help");
+            printer.println("+-------------------------+\n" +
+                    "|    Select an option     |\n" +
+                    "+-------------------------+\n" +
+                    "|                         |\n" +
+                    "|    0- play  1- help     |\n" +
+                    "|                         |\n" +
+                    "+-------------------------+\n");
+            startingBrackets();
             String input = scanner.nextLine();
             String nums =input.replaceAll("[^0-9]", "");
             if(!nums.equalsIgnoreCase("")){
                 choiceMenu = Integer.parseInt(nums);
             }else choiceMenu=-1;
             if (choiceMenu == 1){
-                printer.println("HELPFAKE");
+                printer.println("Santorini is an accessible strategy game.\n\n" +
+                        " The rules are simple. Each turn consists of 2 steps:\n" +
+                        "\t1. Move - move one of your workers into a neighboring space.\n" +
+                        "You may move your worker on the same level,\n" +
+                        "step-up one level, or step down any number of levels.\n" +
+                        "\t2. Build - Then construct a building level adjacent\n" +
+                        "to the worker you moved. When building on top of the third level,\n" +
+                        "will be placed a dome instead, removing that space from play.\n" +
+                        "Winning the game - If one of your Workers moves up on top of level 3\n" +
+                        " during your turn, you instantly win!\n\n" +
+                        "You must always perform a move then build on your turn.\n" +
+                        "If you are unable to, you lose.\n"+
+                        "God Powers provide you with a powerful ability\n" +
+                        "that can be used throughout the game. Many God Powers change the way\n" +
+                        "Workers move and build.\n" +
+                        "TYPE MAN OR INFO DURING THE GAME TO SHOW THE POWER OF YOUR GOD\n\n" +
+                        "Developers: Alberto Papiri, Giole Peltrera, Sandro Shamal Jajasynghe\n\n");
             }
         } while (choiceMenu!=0);
         new Thread(getConnection()).start();
@@ -659,8 +661,6 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void nicknameReceived(NicknameMessage message) {
         super.nicknameReceived(message);
         if (!message.getNickname().equals(nickname)) {
-            //printer.println("\n" + message.getNick() + " joined the game!");
-            //if (!nickValidate) startingBrackets();
             return;
         }
         if (message.getId() == this.getPlayerId()) {
@@ -799,7 +799,19 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
-        winnerMess(message);
+        printer.println(modelView.getPlayer(message.getId()).getNickname()+"\n" +
+                "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
+                "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
+                "$$ |  $$ |$$ /  $$ |$$ /  \\__|      $$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |\n" +
+                "$$$$$$$$ |$$$$$$$$ |\\$$$$$$\\        $$ $$ $$\\$$ |$$ |  $$ |$$ $$\\$$ |\n" +
+                "$$  __$$ |$$  __$$ | \\____$$\\       $$$$  _$$$$ |$$ |  $$ |$$ \\$$$$ |\n" +
+                "$$ |  $$ |$$ |  $$ |$$\\   $$ |      $$$  / \\$$$ |$$ |  $$ |$$ |\\$$$ |\n" +
+                "$$ |  $$ |$$ |  $$ |\\$$$$$$  |      $$  /   \\$$ | $$$$$$  |$$ | \\$$ |\n" +
+                "\\__|  \\__|\\__|  \\__| \\______/       \\__/     \\__| \\______/ \\__|  \\__|\n" +
+                "                                                                     \n" +
+                "                                                                     \n" +
+                "                                                                     ");
+
         notify();
     }
 

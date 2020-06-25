@@ -276,7 +276,6 @@ public class Model {
         }
         modelListeners.firePropertyChange("winnerDetected", null,
                 new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
-
     }
 
     /**

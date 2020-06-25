@@ -106,6 +106,7 @@ public class TurnHandler implements PropertyChangeListener {
 //fa quello che deve fare se si è rilevato che un player ha perso
     public void playerHasLost(int id) {
         if (model.getNumOfPlayers() == 2) {
+            if(id == actualPlayerID()) totalTurnCounter++;
             model.endGameForNoAvailableMoves(id);
         } else {
             playerDefeatedID = id;

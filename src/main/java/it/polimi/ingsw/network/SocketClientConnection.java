@@ -137,6 +137,10 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                         && ((Message) ((PropertyChangeEvent) inputObject).getNewValue()).getId() == id) {
                     receiveDebug((PropertyChangeEvent)inputObject);
                     sccListeners.firePropertyChange((PropertyChangeEvent) inputObject);
+                } else if(inputObject instanceof  PropertyChangeEvent &&
+                        ((PropertyChangeEvent) inputObject).getPropertyName().equalsIgnoreCase("playerDisconnected")){
+                    sccListeners.firePropertyChange("playerDisconnected", this, id);
+                    socket.close();
                 }
             }
 
@@ -238,12 +242,16 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 System.out.println("| "+evt.getPropertyName());
                 System.out.println("| NICK : "+((NicknameMessage) evt.getNewValue()).getNickname());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            }else if (evt.getNewValue() instanceof WinnerMessage) {
+                System.out.println("| WINNER MESSAGE SENDING");
+                System.out.println("| " + evt.getPropertyName());
+                System.out.println("| NICK WINNER: " + ((WinnerMessage) evt.getNewValue()).getMessage());
+                System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
             }
         } else if(evt.getNewValue() instanceof VirtualSlot){
             System.out.println("| "+"VIRTUALSLOT SENDING");
             System.out.println("| "+((VirtualSlot) evt.getNewValue()).getCoordinate());
             System.out.println("| "+"_*_*_*_*_*_*_*_*_*_*_*_*_*_");
-
         }
         System.out.println("| "+evt.getPropertyName());
         System.out.println("| "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+"\n\n\n ");
