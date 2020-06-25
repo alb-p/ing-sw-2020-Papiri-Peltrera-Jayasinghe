@@ -31,6 +31,7 @@ public class HomePanel extends JPanel implements ActionListener {
     private JPanel home;
     private JPanel settings;
     Dimension frameDimension;
+    MakeSound music;
 
 
     /**
@@ -45,6 +46,7 @@ public class HomePanel extends JPanel implements ActionListener {
         home.setLayout(new BoxLayout(home, BoxLayout.Y_AXIS));
         home.setBounds(0,0,GUI.getDimension().width,GUI.getDimension().height);
         home.setOpaque(false);
+        music=new MakeSound();
 
 
 
@@ -91,6 +93,7 @@ public class HomePanel extends JPanel implements ActionListener {
     }
 
 
+
     /**
      * Action performed.
      *
@@ -127,6 +130,13 @@ public class HomePanel extends JPanel implements ActionListener {
         homePanelListeners.addPropertyChangeListener(listener);
     }
 
+    public void startMusic(){
+        music.playSound("/Sounds/track1.wav",-20f,true);
+    }
+
+    public void stopMusic() {
+        music.stopSound();
+    }
 
 
     public class Settings extends JPanel implements ActionListener{
@@ -138,8 +148,6 @@ public class HomePanel extends JPanel implements ActionListener {
         JButton animationButton;
         CustomButton confirm;
 
-        Boolean musicSettings=true;
-        Boolean animationSettings=true;
 
         public Settings(){
             this.setBounds(200,300,559,371);
@@ -157,30 +165,25 @@ public class HomePanel extends JPanel implements ActionListener {
             }
 
 
-            musicButton =new JButton();
+            musicButton =new JButton(new ImageIcon(this.getClass().getResource("/Home/On.png")));
             musicButton.setContentAreaFilled(false);//trasparenza
             musicButton.setOpaque(false);
-            animationButton =new JButton();
+            musicButton.setName("music on");
+            animationButton =new JButton(new ImageIcon(this.getClass().getResource("/Home/On.png")));
             animationButton.setContentAreaFilled(false);//trasparenza
             animationButton.setOpaque(false);
+            animationButton.setName("animation on");
             confirm=new CustomButton("/GodSelection/next/next");
 
             confirm.addActionListener(this);
+            musicButton.addActionListener(this);
+            animationButton.addActionListener(this);
 
             JLabel musicLabel=new JLabel("Music");
             musicLabel.setFont(font.deriveFont(Font.PLAIN,40));
             JLabel animationLabel=new JLabel("Sea animation");
             animationLabel.setFont(font.deriveFont(Font.PLAIN,40));
 
-            try {
-
-                BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/settings.txt"), StandardCharsets.UTF_8));
-                musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/"+br.readLine()+".png")));
-                br.readLine();
-                animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/"+br.readLine()+".png")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
 
             this.add(musicLabel);
@@ -205,14 +208,31 @@ public class HomePanel extends JPanel implements ActionListener {
                 layeredPane.remove(settings);
                 home.repaint();
             } else if (e.getSource().equals(musicButton)){
-                File myObj = new File("/settings.txt");
-                Scanner myReader = null;
-                try {
-                    myReader = new Scanner(myObj);
-                } catch (FileNotFoundException fileNotFoundException) {
-                    fileNotFoundException.printStackTrace();
+                if(musicButton.getName().equalsIgnoreCase("music on")){
+                    musicButton.setName("music off");
+                    musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/Off.png")));
+                    music.stopSound();
+                    homePanelListeners.firePropertyChange("SoundsOff", null,true);
+                }else
+                {
+                    musicButton.setName("music on");
+                    musicButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/On.png")));
+                    music.playSound("/Sounds/track1.wav",-20f,true);
+                    homePanelListeners.firePropertyChange("SoundsOn", null,true);
                 }
-                myReader.hasNextLine();
+            }else if (e.getSource().equals(animationButton)){
+                if(animationButton.getName().equalsIgnoreCase("animation on")){
+                    animationButton.setName("animation off");
+                    animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/Off.png")));
+                    homePanelListeners.firePropertyChange("SeaAnimation", null,false);
+
+                }else
+                {
+                    animationButton.setName("animation on");
+                    animationButton.setIcon(new ImageIcon(this.getClass().getResource("/Home/On.png")));
+                    homePanelListeners.firePropertyChange("SeaAnimation", null,true);
+
+                }
             }
 
 

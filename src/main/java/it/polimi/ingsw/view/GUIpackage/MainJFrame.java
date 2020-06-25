@@ -20,7 +20,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     private final LogoPanel logo;
     private final IslandAnimationPanel islandAnimationPanel;
     private final PlayPanel playPanel;
-    private final MakeSound music= new MakeSound();
+    private final HomePanel homePanel;
 
     /**
      * Instantiates a new Main j frame.
@@ -45,7 +45,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         logo = new LogoPanel();
         contentPane.add("LogoPanel", logo);
         contentPane.add( "InitialWaitingPanel", new WaitingPanel("Waiting for players..."));
-        HomePanel homePanel =  new HomePanel(this.getSize());
+        homePanel =  new HomePanel(this.getSize());
         homePanel.addHomePanelListener(gui);
         contentPane.add( "HomePanel",homePanel);
         NumberOfPlayerPanel numberOfPlayerPanel = new NumberOfPlayerPanel(this.getSize());
@@ -77,7 +77,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         modelView.addSelectedSingleGodListener(firstPlayerSelectionPanel);
         firstPlayerSelectionPanel.addFirstPlayerSelectionListener(gui);
         contentPane.add("FirstPlayerSelectionPanel", firstPlayerSelectionPanel);
-        playPanel = new PlayPanel(modelView);
+        playPanel = new PlayPanel(modelView,homePanel);
         modelView.addBoardListener(playPanel);
         modelView.addFirstPlayerListener(playPanel);
         modelView.addActionListener(playPanel);
@@ -105,8 +105,9 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         layout.show(getContentPane(),"IslandAnimationPanel");
         this.islandAnimationPanel.addPropertyChangeListener(this);
         this.islandAnimationPanel.startTransition();
-        music.stopSound();
-        music.playSound("/Sounds/environment.wav",-20f,true);
+        homePanel.stopMusic();
+        playPanel.startSounds();
+
     }
 
     /**
@@ -118,12 +119,12 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
         if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("logoTransitionEnded")){
             layout.show(getContentPane(),"HomePanel");
-            music.playSound("/Sounds/track1.wav",-20f,true);
+            homePanel.startMusic();
 
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("islandTransitionEnded")){
             layout.show(getContentPane(),"PlayPanel");
-            playPanel.startSounds();
             playPanel.startAnimation();
         }
     }
+
 }

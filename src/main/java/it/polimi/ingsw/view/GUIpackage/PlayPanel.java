@@ -39,6 +39,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final ArrayList<Coordinate> workerPositions = new ArrayList<>();
     private final JLayeredPane layeredPane = new JLayeredPane();
     private final MakeSound music = new MakeSound();
+    private final MakeSound music2 = new MakeSound();
+
 
     private final ImageIcon buildDomeIcon;
     private final ImageIcon buildDomeClicked;
@@ -61,13 +63,14 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final TileButton[][] boardOfButtons = new TileButton[5][5];
     private final Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
     private final InfoPanel infoPanel;
+    private Boolean seaAnimation=true;
 
     /**
      * Instantiates a new Play panel.
      *
      * @param modelView the model view
      */
-    public PlayPanel(ModelView modelView) {
+    public PlayPanel(ModelView modelView, HomePanel homePanel) {
         messageCenter = new JLabel();
         Font messageFont;
         try {
@@ -78,6 +81,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         layeredPane.setPreferredSize(GUI.getDimension());
 
+
+        homePanel.addHomePanelListener(music);
+        homePanel.addHomePanelListener(music2);
+        homePanel.addHomePanelListener(this);
 
         messageCenter.setFont(messageFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
@@ -499,6 +506,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             } else if (playerID == modelView.getDeletedPlayerId()) {
                 messageCenter.setText("You have lost");
             }
+        }else if (evt.getPropertyName().equalsIgnoreCase("SeaAnimation")) {
+            this.seaAnimation= (Boolean) evt.getNewValue();
         }
 
         repaint();
@@ -842,32 +851,33 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      * Start animation.
      */
     public void startAnimation() {
+       if(seaAnimation) {
+            Thread seaAnimation = new Thread(() -> {
+                int counter = 216;
+                try {
+                    while (true) {
+                        while (counter < 320) {
+                            Thread.sleep(50);
+                            this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
+                            counter++;
+                            repaint();
+                        }
+                        while (counter > 216) {
+                            Thread.sleep(50);
+                            this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
+                            counter--;
+                            repaint();
+                        }
+                    }
 
-        Thread seaAnimation = new Thread(() -> {
-            int counter = 216;
-            try {
-                while (true) {
-                    while (counter < 320) {
-                        Thread.sleep(50);
-                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
-                        counter++;
-                        repaint();
-                    }
-                    while (counter > 216) {
-                        Thread.sleep(50);
-                        this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
-                        counter--;
-                        repaint();
-                    }
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
 
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
 
-
-        });
-        seaAnimation.start();
+            });
+            seaAnimation.start();
+        }
     }
 
 
@@ -875,6 +885,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      * Start sounds.
      */
     public void startSounds() {
+
+        music2.playSound("/Sounds/environment.wav",-20f,true);
 
         Thread backgroundSounds = new Thread(() -> {
             Random r = new Random();

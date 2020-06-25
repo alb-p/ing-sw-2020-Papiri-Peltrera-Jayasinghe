@@ -1,32 +1,21 @@
 package it.polimi.ingsw.view.GUIpackage;
 
 import javax.sound.sampled.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
  * The type Make sound.
  */
-public class MakeSound {
+public class MakeSound implements PropertyChangeListener {
 
     private Clip clip;
-    String settings;
-    int generalVolume;
-
-    /**
-     * Instantiates a new Make sound.
-     */
-    public MakeSound (){
-
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/settings.txt"), StandardCharsets.UTF_8))) {
-            this.settings = br.readLine();
-            this.generalVolume= Integer.parseInt(br.readLine());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    String settings="On";
+    int generalVolume=0;
 
 
-    }
 
 
     /**
@@ -81,4 +70,13 @@ public class MakeSound {
     }
 
 
+    @Override
+    public void propertyChange(PropertyChangeEvent evt) {
+        if (evt.getPropertyName().equalsIgnoreCase("SoundsOn")) {
+           this.settings="On";
+        }if (evt.getPropertyName().equalsIgnoreCase("SoundsOff")) {
+            this.settings="Off";
+        }
+
+    }
 }
