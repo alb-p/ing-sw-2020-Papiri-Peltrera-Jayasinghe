@@ -302,7 +302,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() instanceof JButton) {
                 if (((JButton) e.getSource()).getName().equalsIgnoreCase("exit")) {
-                    System.exit(0);
+                    PlayPanel.this.playPanelListener.firePropertyChange("PlayerToDisconnect", false, true);
+                    //System.exit(0);
                 }
                 int id = Integer.parseInt(((JButton) e.getSource()).getName());
                 if (showing && id == idShowing) {
@@ -464,7 +465,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     && modelView.getFirstPlayerId() == modelView.getActualPlayerId()) {
                 play = true;
                 if (playerID == modelView.getActualPlayerId()) {
-                    //richiedi mosse disponibili
                     playPanelListener.firePropertyChange("actionRequest", false, true);
                 }
             } else if (message.getWorkerNumber() == 1) {
@@ -482,6 +482,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 playPanelListener.firePropertyChange("actionRequest", false, true);
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
+            if(modelView.getWinnerId() == playerID){
+                messageCenter.setForeground(new Color(255, 235, 140));
+                //TODO add you win
+            }else  messageCenter.setForeground(new Color(255,255,255));
             messageCenter.setText("Game ended");
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
             if (attemptedAction != null) {
