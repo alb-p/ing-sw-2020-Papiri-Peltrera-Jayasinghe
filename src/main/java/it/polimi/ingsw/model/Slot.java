@@ -16,9 +16,9 @@ public class Slot {
     /**
      * Instantiates a new Slot.
      */
-    public Slot(){
-        this.free= true;
-        this.worker=null;
+    public Slot() {
+        this.free = true;
+        this.worker = null;
     }
 
     /**
@@ -26,7 +26,7 @@ public class Slot {
      *
      * @return the boolean
      */
-    public boolean isFree(){
+    public boolean isFree() {
         return free;
     }
 
@@ -36,21 +36,22 @@ public class Slot {
      * @param c the c
      * @throws Exception the exception
      */
-    public void construct(Construction c) throws Exception {
-        for(int i = 0 ; i< buildings.length; i++){
-            if(buildings[i] == null && this.isFree() && !(c.equals(Construction.DOME))){
-                if(i==0 || !(buildings[i-1].equals(Construction.DOME))){
-                    buildings[i]= c;
-                    return;
+    public boolean construct(Construction c){
+        for (int i = 0; i < buildings.length; i++) {
+            if (buildings[i] == null && this.isFree() && !(c.equals(Construction.DOME))) {
+                if (i == 0 || !(buildings[i - 1].equals(Construction.DOME))) {
+                    buildings[i] = c;
+                    return true;
                 }
-            }if(buildings[i] == null && c.equals(Construction.DOME) && this.isFree()){
+            }
+            if (buildings[i] == null && c.equals(Construction.DOME) && this.isFree()) {
                 this.free = false;
-                buildings[i]= c;
-                return;
+                buildings[i] = c;
+                return true;
 
             }
         }
-        throw new Exception("Invalid construction error");
+        return false;
     }
 
     /**
@@ -58,10 +59,10 @@ public class Slot {
      *
      * @return the int
      */
-    public int getConstructionLevel(){
+    public int getConstructionLevel() {
         int level = 0;
-        for(int i = 0; i<buildings.length && buildings[i]!=null ; i++ ){
-            if(buildings[i].equals(Construction.FLOOR))level++;
+        for (int i = 0; i < buildings.length && buildings[i] != null; i++) {
+            if (buildings[i].equals(Construction.FLOOR)) level++;
         }
         return level;
     }
@@ -71,11 +72,11 @@ public class Slot {
      *
      * @return the boolean
      */
-    public boolean hasADome(){
-        for(int i = 0; i<buildings.length && buildings[i]!=null ; i++ ){
-            if(buildings[i].equals(Construction.DOME))return true;
+    public boolean hasADome() {
+        for (int i = 0; i < buildings.length && buildings[i] != null; i++) {
+            if (buildings[i].equals(Construction.DOME)) return true;
         }
-       return false;
+        return false;
     }
 
     /**
@@ -83,9 +84,10 @@ public class Slot {
      *
      * @param w the w
      */
-    public void occupy(Worker w){
-        if(this.isFree()){this.worker=w;}
-        else{
+    public void occupy(Worker w) {
+        if (this.isFree()) {
+            this.worker = w;
+        } else {
             return;
         }
         this.free = false;
@@ -96,17 +98,17 @@ public class Slot {
      *
      * @return the boolean
      */
-    public boolean workerOnSlot(){
-        if(worker == null) return false;
+    public boolean workerOnSlot() {
+        if (worker == null) return false;
         return true;
     }
 
     /**
      * Free.
      */
-    public void free(){
+    public void free() {
         this.worker = null;
-        this.free= true;
+        this.free = true;
     }
 
     /**
@@ -114,16 +116,17 @@ public class Slot {
      *
      * @return the string
      */
-    public String toString(){
-        String color,floor;
-        if(this.worker==null) color=" ";
-        else color=this.worker.toString();
-        if(hasADome()) floor="D";
-        else if(this.worker==null && getConstructionLevel()==0) {floor = " ";}
-        else{
-            floor= String.valueOf(getConstructionLevel());
+    public String toString() {
+        String color, floor;
+        if (this.worker == null) color = " ";
+        else color = this.worker.toString();
+        if (hasADome()) floor = "D";
+        else if (this.worker == null && getConstructionLevel() == 0) {
+            floor = " ";
+        } else {
+            floor = String.valueOf(getConstructionLevel());
         }
-        return (color+floor+ANSIColor.RESET);
+        return (color + floor + ANSIColor.RESET);
     }
 
     /**

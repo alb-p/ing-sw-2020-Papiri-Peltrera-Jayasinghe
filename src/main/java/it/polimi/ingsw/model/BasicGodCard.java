@@ -30,23 +30,22 @@ public class BasicGodCard {
      * Build boolean.
      *
      * @param w     the w
-     * @param coord the coord
+     * @param coord the coordinate where the
+     *              worker wants to build
      * @param board the board
-     * @return the boolean
-     * @throws Exception the exception
+     * @return the outcome of the build
      */
-    public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
+    public boolean build(Worker w, Coordinate coord, IslandBoard board){
         if (w.getPosition().isAdjacent(coord) && board.infoSlot(coord).isFree()) {
             Slot slot = board.infoSlot(coord);
             if (board.infoSlot(coord).getConstructionLevel() < 3) {
-                slot.construct(Construction.FLOOR);
+                return slot.construct(Construction.FLOOR);
             } else {
-                slot.construct(Construction.DOME);
+                return slot.construct(Construction.DOME);
             }
         } else {
             return false;
         }
-        return true;
     }
 
     /**
@@ -60,16 +59,17 @@ public class BasicGodCard {
     }
 
 
+
     /**
-     * Turn handler boolean.
+     * Handle the action chose from the player
+     * and calls the respective methods
      *
      * @param player the player
      * @param board  the board
-     * @param action the action
-     * @return the boolean
-     * @throws Exception the exception
+     * @param action the action wanted to be performed
+     * @return the outcome of the action wanted to be performed
      */
-    public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
+    public boolean turnHandler(Player player, IslandBoard board, Action action){
         if (action instanceof Move) {
             return (this.move(player.getActualWorker(), action.getEnd(), board));
         } else if (action instanceof Build) {

@@ -9,15 +9,16 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- * The type Game handler.
+ * The type Game handler is the controller used for
+ * the setup of the game.
  */
 public class GameHandler implements PropertyChangeListener {
 
-    private InitSetup data;
-    private HashMap<Integer, String> playersMap = new HashMap<>();      //associazione    ID -> nome
-    private Model model;
+    private final InitSetup data;
+    private final HashMap<Integer, String> playersMap = new HashMap<>();      //associazione    ID -> nome
+    private final Model model;
     private TurnHandler turnHandler;
-    private int playersPerGame;
+    private final int playersPerGame;
     private int firstPlayerChosenID = -1;
     private int currentPlayerID = -1;
     private boolean atLeastOneGod = false;
@@ -26,20 +27,21 @@ public class GameHandler implements PropertyChangeListener {
     /**
      * Instantiates a new Game handler.
      *
-     * @param initSetup      the init setup
-     * @param m              the m
+     * @param initSetup      the model used to set up the main model
+     * @param model          the model of the entire game
      * @param playersPerGame the players per game
      */
-    public GameHandler(InitSetup initSetup, Model m, int playersPerGame) {
+    public GameHandler(InitSetup initSetup, Model model, int playersPerGame) {
         data = initSetup;
-        model = m;
+        this.model = model;
         this.playersPerGame = playersPerGame;
     }
 
     /**
      * Property change.
+     * Handles the events coming from view
      *
-     * @param evt the evt
+     * @param evt the event come sent from a talker
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -114,9 +116,10 @@ public class GameHandler implements PropertyChangeListener {
 
 
     /**
-     * Player creation queue.
+     * This method modify the model
+     * and initialize the players
      *
-     * @param value the value
+     * @param value the value needed to initialize the model
      */
     private void playerCreationQueue(Object value) {
         if (value instanceof NicknameMessage) {
@@ -144,9 +147,9 @@ public class GameHandler implements PropertyChangeListener {
     }
 
     /**
-     * Get current player id int.
+     * Get current player id.
      *
-     * @return the int
+     * @return the id of the current player
      */
     public int getCurrentPlayerID(){ //usato solamente per i test
         return this.currentPlayerID;

@@ -4,49 +4,50 @@ import it.polimi.ingsw.model.*;
 
 /**
  * Your Turn: If your Worker does
- * not move up, it may build both
- * before and after moving
- * MOVE 0,0 IN 0,1 & BUILD IN 1,1 ok
- * BUILD 0,1 IN 0,2 & MOVE IN 1,1 & BUILD IN 1,2
+ *      not move up, it may build both
+ *      before and after
  */
 
 public class Prometheus extends BasicGodCard {
 
+
     /**
-     * Card tree setup tree action node.
+     * Create the tree of a worker based
+     * on the god's special power
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
     @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
         TreeActionNode moveNode;
         moveNode = null;
-        TreeActionNode root = super.cardTreeSetup(w, board);
-        for (Coordinate c1 : w.getPosition().getAdjacentCoords()) {     //first build
+        TreeActionNode root = super.cardTreeSetup(worker, board);
+        for (Coordinate c1 : worker.getPosition().getAdjacentCoords()) {     //first build
             if (board.infoSlot(c1).isFree()) {
-                TreeActionNode firstBuildNode = new TreeActionNode(new FirstBuild(w.getPosition(), c1));
-                for (Coordinate c2 : w.getPosition().getAdjacentCoords()) {     //move
+                TreeActionNode firstBuildNode = new TreeActionNode(new FirstBuild(worker.getPosition(), c1));
+                for (Coordinate c2 : worker.getPosition().getAdjacentCoords()) {     //move
                     moveNode = null; //initialization of the move node
                     if (board.infoSlot(c2).isFree()) {
                         if (c2.equals(c1)) {
-                            if (board.infoSlot(w.getPosition()).getConstructionLevel() >=
+                            if (board.infoSlot(worker.getPosition()).getConstructionLevel() >=
                                     (board.infoSlot(c1).getConstructionLevel() + 1)) { // increment of the constructionlevel bc firstbuilt there
-                                moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
+                                moveNode = new TreeActionNode(new Move(worker.getPosition(), c2));
                             }
                         } else {
-                            if (board.infoSlot(w.getPosition()).getConstructionLevel() >=
+                            if (board.infoSlot(worker.getPosition()).getConstructionLevel() >=
                                     board.infoSlot(c2).getConstructionLevel()) {
-                                moveNode = new TreeActionNode(new Move(w.getPosition(), c2));
+                                moveNode = new TreeActionNode(new Move(worker.getPosition(), c2));
                             }
                         }
                         if (moveNode != null) {
                             for (Coordinate c3 : c2.getAdjacentCoords()) {
-                                if (board.infoSlot(c3).isFree() && !c3.equals(w.getPosition()) && !c3.equals(c1)) { // normal care and i remove the tricky ones that may not be free
+                                if (board.infoSlot(c3).isFree() && !c3.equals(worker.getPosition()) && !c3.equals(c1)) { // normal care and i remove the tricky ones that may not be free
                                     TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
                                     moveNode.addChild(secondBuildNode);
-                                } else if (c3.equals(w.getPosition())) { //for sure i can build in my originary position bc can't have more than 3 floors
+                                } else if (c3.equals(worker.getPosition())) { //for sure i can build in my originary position bc can't have more than 3 floors
                                     TreeActionNode secondBuildNode = new TreeActionNode(new Build(c2, c3));
                                     moveNode.addChild(secondBuildNode);
                                 } else if (c3.equals(c1)) { // i need to verify that originally my first build was not a dome construction
@@ -74,16 +75,16 @@ public class Prometheus extends BasicGodCard {
     }
 
     /**
-     * Turn handler boolean.
+     * Handle the action chosen by the player
+     * and calls the respective methods
      *
      * @param player the player
      * @param board  the board
-     * @param action the action
-     * @return the boolean
-     * @throws Exception the exception
+     * @param action the action wanted to be performed
+     * @return the outcome of the action wanted to be performed
      */
     @Override
-    public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
+    public boolean turnHandler(Player player, IslandBoard board, Action action){
         if (action instanceof Move) {
             if (this.move(player.getActualWorker(), action.getEnd(), board)) {
                 player.setNotBuildDone();

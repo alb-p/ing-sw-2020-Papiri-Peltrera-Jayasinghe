@@ -9,16 +9,18 @@ public class Poseidon extends BasicGodCard {
 
 
     /**
-     * Card tree setup tree action node.
+     * Create the tree of a worker based
+     * on the god's special power
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
     @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-        TreeActionNode root = super.cardTreeSetup(w, board);
-        Worker otherWorker = getOtherWorker(w, board);
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
+        TreeActionNode root = super.cardTreeSetup(worker, board);
+        Worker otherWorker = getOtherWorker(worker, board);
         Coordinate otherCoordinate = otherWorker.getPosition();
 
         if (board.infoSlot(otherWorker.getPosition()).getConstructionLevel() == 0) {
@@ -111,9 +113,9 @@ public class Poseidon extends BasicGodCard {
     /**
      * Gets other worker.
      *
-     * @param actual the actual
+     * @param actual the actual worker
      * @param board  the board
-     * @return the other worker
+     * @return the non plaaying worker
      */
     private Worker getOtherWorker(Worker actual, IslandBoard board) {
         Worker selected = null;

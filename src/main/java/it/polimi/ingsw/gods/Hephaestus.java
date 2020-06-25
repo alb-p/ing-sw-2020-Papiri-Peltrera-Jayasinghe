@@ -3,27 +3,26 @@ package it.polimi.ingsw.gods;
 import it.polimi.ingsw.model.*;
 
 /**
- * The type Hephaestus.
+ * Your Build:
+ *     Your Worker may build
+ *     one additional block
+ *     (not dome) on top of
+ *     your first block.
  */
 public class Hephaestus extends BasicGodCard {
 
-    //Your Build:
-    //Your Worker may build
-    //one additional block
-    //(not dome) on top of
-    //your first block.
-
-
     /**
-     * Card tree setup tree action node.
+     * Create the tree of a worker based
+     * on the god's special power
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
     @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-        TreeActionNode root =  super.cardTreeSetup(w, board);
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
+        TreeActionNode root =  super.cardTreeSetup(worker, board);
 
         for (TreeActionNode m : root.getChildren()){
             for (TreeActionNode b : m.getChildren()){

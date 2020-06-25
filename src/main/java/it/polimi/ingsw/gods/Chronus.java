@@ -3,33 +3,37 @@ package it.polimi.ingsw.gods;
 import it.polimi.ingsw.model.*;
 
 /**
- * The type Chronus.
+ * Win Condition: You also win
+ *     when there are at least five
+ *     Complete Towers on the board
  */
 public class Chronus extends BasicGodCard {
 
-    //Win Condition: You also win
-    //when there are at least five
-    //Complete Towers on the board
 
 
     /**
-     * Winning condition boolean.
+     * Controls if the player
+     * has won after the actions of
+     * his turn.
      *
-     * @param w            the w
+     * @param worker       the worker
      * @param board        the board
-     * @param virtualBoard the virtual board
+     * @param virtualBoard the old board
      * @return the boolean
      */
     @Override
-    public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
-        return (super.winningCondition(w,board,virtualBoard) || fiveTower(board));
+    public boolean winningCondition(Worker worker, IslandBoard board, VirtualBoard virtualBoard) {
+        return (super.winningCondition(worker,board,virtualBoard) || fiveTower(board));
     }
 
     /**
-     * Five tower boolean.
+     * Check if 5 tower are built
+     * on the board.
      *
      * @param board the board
-     * @return the boolean
+     * @return true if there are 5 complete
+     *          towers in the board
+     *
      */
     private boolean fiveTower(IslandBoard board) {
         int completeTowersNumber = 0;

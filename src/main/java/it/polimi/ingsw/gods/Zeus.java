@@ -3,24 +3,25 @@ package it.polimi.ingsw.gods;
 import it.polimi.ingsw.model.*;
 
 /**
- * The type Zeus.
+ * Your Build: Your Worker may
+ *     build a block under itself.
  */
 public class Zeus extends BasicGodCard {
-    //Your Build: Your Worker may
-    //build a block under itself.
 
     boolean specialBuild = false;
 
     /**
-     * Card tree setup tree action node.
+     * Create the tree of a worker based
+     * on the god's special power
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
     @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-        TreeActionNode root = super.cardTreeSetup(w, board);
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
+        TreeActionNode root = super.cardTreeSetup(worker, board);
         for (TreeActionNode move : root.getChildren()) {
             if (board.infoSlot(move.getData().getEnd()).getConstructionLevel() < 3) {
                 move.addChild(new TreeActionNode(new Build(move.getData().getEnd(), move.getData().getEnd())));
@@ -30,21 +31,22 @@ public class Zeus extends BasicGodCard {
     }
 
     /**
-     * Build boolean.
+     * Override of the normal build.
+     * with this method the worker is
+     * able to build above his feet
      *
-     * @param w     the w
-     * @param coord the coord
+     * @param worker     the worker
+     * @param coord the destination coord
      * @param board the board
      * @return the boolean
-     * @throws Exception the exception
      */
     @Override
-    public boolean build(Worker w, Coordinate coord, IslandBoard board) throws Exception {
-        if (!super.build(w, coord, board)) {
-            if (w.getPosition().equals(coord) && board.infoSlot(coord).getConstructionLevel() < 3) {
+    public boolean build(Worker worker, Coordinate coord, IslandBoard board){
+        if (!super.build(worker, coord, board)) {
+            if (worker.getPosition().equals(coord) && board.infoSlot(coord).getConstructionLevel() < 3) {
                 board.infoSlot(coord).free();
                 board.infoSlot(coord).construct(Construction.FLOOR);
-                board.infoSlot(coord).occupy(w);
+                board.infoSlot(coord).occupy(worker);
                 specialBuild = true;
                 return true;
             }
@@ -54,16 +56,18 @@ public class Zeus extends BasicGodCard {
 
 
     /**
-     * Winning condition boolean.
+     * Player does not win if
+     * he moves up on the third level if
+     * he builted upon his feet
      *
-     * @param w            the w
+     * @param worker            the worker
      * @param board        the board
      * @param virtualBoard the virtual board
      * @return the boolean
      */
     @Override
-    public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
-        boolean won = super.winningCondition(w, board, virtualBoard) && !specialBuild;
+    public boolean winningCondition(Worker worker, IslandBoard board, VirtualBoard virtualBoard) {
+        boolean won = super.winningCondition(worker, board, virtualBoard) && !specialBuild;
         specialBuild = false;
         return won;
     }

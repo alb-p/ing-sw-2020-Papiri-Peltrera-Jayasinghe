@@ -3,25 +3,29 @@ package it.polimi.ingsw.gods;
 import it.polimi.ingsw.model.*;
 
 /**
- * The type Pan.
+ * Win Condition: You also win if
+ *      your Worker moves down two or
+ *      more levels.
  */
 public class Pan extends BasicGodCard {
 
 
     /**
-     * Winning condition boolean.
+     * Controls if the player
+     * has won after the actions of
+     * his turn.
      *
-     * @param w            the w
+     * @param worker       the worker
      * @param board        the board
-     * @param virtualBoard the virtual board
+     * @param virtualBoard the old board
      * @return the boolean
      */
     @Override
-    public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
-        if (virtualBoard.getSlot(new Coordinate(w.getOldPosition().getRow(),w.getOldPosition().getCol())).getLevel() == 2 &&
-                board.infoSlot(w.getPosition()).getConstructionLevel() == 0) {
+    public boolean winningCondition(Worker worker, IslandBoard board, VirtualBoard virtualBoard) {
+        if (virtualBoard.getSlot(new Coordinate(worker.getOldPosition().getRow(),worker.getOldPosition().getCol())).getLevel() == 2 &&
+                board.infoSlot(worker.getPosition()).getConstructionLevel() == 0) {
             return true;
         }
-        return super.winningCondition(w, board, virtualBoard);
+        return super.winningCondition(worker, board, virtualBoard);
     }
 }

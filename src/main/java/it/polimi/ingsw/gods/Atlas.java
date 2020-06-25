@@ -2,49 +2,44 @@ package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * The type Atlas.
+ *Your Build:
+ *Your Worker may build
+ *a dome at any level.
+ *
  */
 public class Atlas extends BasicGodCard {
 
-
-    //Your Build:
-    //Your Worker may build
-    //a dome at any level.
-
-
     /**
-     * Turn handler boolean.
+     * Handle the action chosen by the player
+     * and calls the respective methods
      *
      * @param player the player
      * @param board  the board
-     * @param action the action
-     * @return the boolean
-     * @throws Exception the exception
+     * @param action the action wanted to be performed
+     * @return the outcome of the action wanted to be performed
      */
     @Override
-    public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
+    public boolean turnHandler(Player player, IslandBoard board, Action action){
 
         if (action.getActionName().equals("Build a dome")) {
 
-            return buildDome(player, board, action);
+            return buildDome(board, action);
         }else return super.turnHandler(player, board, action);
 
     }
 
     /**
-     * Build dome boolean.
+     * Perform the built of a dome,
+     * power of the god.
      *
-     * @param player the player
      * @param board  the board
      * @param action the action
-     * @return the boolean
-     * @throws Exception the exception
+     * @return the outcome of the build
      */
-    private boolean buildDome(Player player, IslandBoard board, Action action) throws Exception {
+    private boolean buildDome(IslandBoard board, Action action){
         if(board.infoSlot(action.getEnd()).isFree()){
             board.infoSlot(action.getEnd()).construct(Construction.DOME);
             return true;
@@ -52,16 +47,19 @@ public class Atlas extends BasicGodCard {
         return false;
     }
 
+
     /**
-     * Card tree setup tree action node.
+     * Create the tree of a worker based
+     * on the god's special power
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
     @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-        TreeActionNode root = super.cardTreeSetup(w, board);
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
+        TreeActionNode root = super.cardTreeSetup(worker, board);
         ArrayList<TreeActionNode> toAdd = new ArrayList<>();
         for (TreeActionNode m : root.getChildren()) {
             for (TreeActionNode b : m.getChildren()) {

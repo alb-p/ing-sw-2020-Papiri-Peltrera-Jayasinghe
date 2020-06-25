@@ -5,19 +5,24 @@ import it.polimi.ingsw.model.*;
 import java.util.stream.Collectors;
 
 /**
- * The type Hypnus.
+ * Start of Opponent’s Turn: If one
+ *     of your opponent’s Workers is
+ *     higher than all of their others, it
+ *     cannot move.
+ *
  */
 public class Hypnus extends BasicGodCard {
 
-    //Start of Opponent’s Turn: If one
-    //of your opponent’s Workers is
-    //higher than all of their others, it
-    //cannot move
 
     /**
-     * Special rule.
+     * This method is called to verify
+     * if there are moves that the god
+     * can forbid based on her power.
+     * It calls elaboration method only
+     * if the previous turn the player
+     * moved up.
      *
-     * @param root  the root
+     * @param root  the root of the tree
      * @param board the board
      */
     @Override
@@ -35,11 +40,12 @@ public class Hypnus extends BasicGodCard {
     }
 
     /**
-     * Search higher worker coordinate.
+     * Search higher between the workers
+     * of the players and return is position.
      *
      * @param root  the root
      * @param board the board
-     * @return the coordinate
+     * @return the coordinate of the higher worker
      */
     private Coordinate searchHigherWorker(TreeActionNode root, IslandBoard board) {
         Coordinate firstWorkerCoordinate = null;

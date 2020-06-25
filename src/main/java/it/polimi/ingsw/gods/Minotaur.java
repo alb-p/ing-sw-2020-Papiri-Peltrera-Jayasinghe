@@ -5,22 +5,26 @@ import it.polimi.ingsw.model.*;
 import java.util.ArrayList;
 
 /**
- * The type Minotaur.
+ * Your Move: Your Worker may
+ *      move into an opponent Worker’s
+ *      space, if their Worker can be
+ *      forced one space straight backwards to an
+ *      unoccupied space at any level.
  */
 public class Minotaur extends BasicGodCard {
 
 
     /**
-     * Turn handler boolean.
+     * Handle the action chosen by the player
+     * and calls the respective methods
      *
      * @param player the player
      * @param board  the board
-     * @param action the action
-     * @return the boolean
-     * @throws Exception the exception
+     * @param action the action wanted to be performed
+     * @return the outcome of the action wanted to be performed
      */
     @Override
-    public boolean turnHandler(Player player, IslandBoard board, Action action) throws Exception {
+    public boolean turnHandler(Player player, IslandBoard board, Action action){
         if (action.getActionName().equalsIgnoreCase("move")) {
             if(!this.move(player.getActualWorker(), action.getEnd(), board)){
                 return this.modMove(player.getActualWorker(), action.getEnd(), board);
@@ -34,71 +38,70 @@ public class Minotaur extends BasicGodCard {
 
 
     /**
-     * Mod move boolean.
+     * The implementation of the
+     * special move, power of Apollo.
      *
-     * @param w     the w
-     * @param coord the coord
-     * @param board the board
-     * @return the boolean
+     * @param worker  the worker
+     * @param coord   the end of the move
+     * @param board   the board
+     * @return the outcome of the move
      */
-    private boolean modMove(Worker w, Coordinate coord, IslandBoard board) {
-        String relPos = relativePosition(w.getPosition(), coord);
+    private boolean modMove(Worker worker, Coordinate coord, IslandBoard board) {
+        String relPos = relativePosition(worker.getPosition(), coord);
         Coordinate next = nextRelCoord(coord, relPos);
         Worker oppWorker;
         if (relPos.equals("ERR") || !next.isValid()) {
             return false;
         }
         if (!board.infoSlot(coord).isFree() && !board.infoSlot(coord).hasADome() &&
-                board.infoSlot(coord).getWorker().getColor() != w.getColor() &&
+                board.infoSlot(coord).getWorker().getColor() != worker.getColor() &&
                 board.infoSlot(coord).getConstructionLevel() -
-                            board.infoSlot(w.getPosition()).getConstructionLevel() < 2){
+                            board.infoSlot(worker.getPosition()).getConstructionLevel() < 2){
             oppWorker= board.infoSlot(coord).getWorker();
             board.infoSlot(coord).free();
             board.infoSlot(next).occupy(oppWorker);
             oppWorker.setPosition(next);
-            board.infoSlot(w.getPosition()).free();
-            board.infoSlot(coord).occupy(w);
-            w.setPosition(coord);
+            board.infoSlot(worker.getPosition()).free();
+            board.infoSlot(coord).occupy(worker);
+            worker.setPosition(coord);
 
         }
-
-
             return true;
     }
 
     /**
-     * Card tree setup tree action node.
+     * Create the tree of a worker based
+     * on the god's special power
      *
-     * @param w     the w
-     * @param board the board
-     * @return the tree action node
+     * @param worker     the worker that will be able
+     *              to perform the actions in the tree
+     * @param board the board of the game
+     * @return the root of the tree
      */
     @Override
-    public TreeActionNode cardTreeSetup(Worker w, IslandBoard board) {
-        TreeActionNode root = super.cardTreeSetup(w, board);
+    public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
+        TreeActionNode root = super.cardTreeSetup(worker, board);
         ArrayList<TreeActionNode> toAdd = new ArrayList<>();
         TreeActionNode newMove;
         newMove = null;
-        for (Coordinate c : w.getPosition().getAdjacentCoords()) {
+        for (Coordinate c : worker.getPosition().getAdjacentCoords()) {
             if (!board.infoSlot(c).isFree() && !board.infoSlot(c).hasADome() &&
-                    board.infoSlot(c).getWorker().getColor() != w.getColor() &&
+                    board.infoSlot(c).getWorker().getColor() != worker.getColor() &&
                     board.infoSlot(c).getConstructionLevel() -
-                            board.infoSlot(w.getPosition()).getConstructionLevel() < 2) {
+                            board.infoSlot(worker.getPosition()).getConstructionLevel() < 2) {
 
-                String relPos = relativePosition(w.getPosition(), c);
+                String relPos = relativePosition(worker.getPosition(), c);
                 if (!relPos.equals("ERR")) {
                     Coordinate nextRel = nextRelCoord(c, relPos);
                     if (nextRel.isValid() && board.infoSlot(nextRel).isFree()) {
-                        newMove = new TreeActionNode(new Move(w.getPosition(), c));
+                        newMove = new TreeActionNode(new Move(worker.getPosition(), c));
                         for (Coordinate coord : c.getAdjacentCoords()) {
-                            if (coord.equals(w.getPosition()) || (board.infoSlot(coord).isFree() && !coord.equals(nextRel))) {
+                            if (coord.equals(worker.getPosition()) || (board.infoSlot(coord).isFree() && !coord.equals(nextRel))) {
                                 newMove.addChild(new TreeActionNode(new Build(c, coord)));
                             }
                         }
                     }
                 }
-
-
             }
             if (newMove != null && newMove.getChildren().size() > 0) {
                 toAdd.add(newMove);
@@ -110,11 +113,12 @@ public class Minotaur extends BasicGodCard {
     }
 
     /**
-     * Relative position string.
+     * Relative position between two coordinates.
      *
      * @param baseCoord the base coord
      * @param relCoord  the rel coord
-     * @return the string
+     * @return the value in a string with
+     *          the compass point
      */
     public String relativePosition(Coordinate baseCoord, Coordinate relCoord) {
         if (baseCoord.getRow() == relCoord.getRow()) {
@@ -144,11 +148,12 @@ public class Minotaur extends BasicGodCard {
     }
 
     /**
-     * Next rel coord coordinate.
+     * Next coordinate in the same directon.
      *
      * @param baseCoord the base coord
      * @param relPos    the rel pos
-     * @return the coordinate
+     * @return the the coordinate in the direction of
+     *          the relative position
      */
     public Coordinate nextRelCoord(Coordinate baseCoord, String relPos) {
         int diffRow = 0;
