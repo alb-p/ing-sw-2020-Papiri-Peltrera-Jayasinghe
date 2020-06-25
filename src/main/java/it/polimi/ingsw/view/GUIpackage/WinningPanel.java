@@ -17,7 +17,7 @@ public class WinningPanel extends JPanel implements ActionListener {
 
 
     public WinningPanel() {
-
+        setOpaque(false);
         setBounds(0,0,GUI.getDimension().width,GUI.getDimension().height);
         frames = new ImageIcon(this.getClass().getResource("/Win/Win" + (currentFrame) + ".png"));
 
