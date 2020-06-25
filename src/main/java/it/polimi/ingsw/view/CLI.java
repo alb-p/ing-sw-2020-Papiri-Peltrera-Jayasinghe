@@ -18,7 +18,8 @@ public class CLI extends RemoteView implements Runnable {
 
     private final Scanner scanner;
     private final PrintStream printer;
-    private String playerChoice;
+
+    private String playerInput;
     private SocketServerConnection connection;
     private String nickname;
     private Color color;
@@ -28,7 +29,8 @@ public class CLI extends RemoteView implements Runnable {
     private boolean winnerDetected = false;
     private boolean endTurn;
     private ModelView modelView;
-    private static final String arrangeList = "%d- %-20s";
+    private static final String arrangeGodList = "%d- %-20s";
+    private static final String arrangeColorList = "%d- %-15s";
 
     /**
      * Instantiates a new Cli.
@@ -39,7 +41,7 @@ public class CLI extends RemoteView implements Runnable {
         super(connection);
         this.connection = connection;
         this.scanner = ClientMain.scanner;
-        this.printer = System.out;
+        this.printer = new PrintStream(System.out, true);
         this.modelView = getModelView();
     }
 
@@ -58,7 +60,7 @@ public class CLI extends RemoteView implements Runnable {
                 "░░░░░║══╬═╗╔═╦╣╚╦═╦╦╬╬═╦╬╣░░░░░░░░░░░\n" +
                 "░░░░░╠══║╬╚╣║║║╔╣╬║╔╣║║║║║░░░░░░░░░░░\n" +
                 "░░░░░╚══╩══╩╩═╩═╩═╩╝╚╩╩═╩╝░░░░░░░░░░░\n" +
-                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n"+ANSIColor.RESET);
+                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" + ANSIColor.RESET);
     }
 
     /**
@@ -68,7 +70,9 @@ public class CLI extends RemoteView implements Runnable {
      */
     @Override
     protected SetupMessage chooseNumberOfPlayers() {
-        printer.println("How Many Players for the game? 2/3");
+        printer.println("+----------------------------------------+\n" +
+                "|   How Many Players for the game? 2/3   |\n" +
+                "+----------------------------------------+\n");
         String input;
         String val;
         int i;
@@ -79,6 +83,7 @@ public class CLI extends RemoteView implements Runnable {
             val = input.replaceAll("[^2-3]", "");
             if (!val.equals("")) i = Integer.parseInt(val);
         } while (!(i == 2 || i == 3));
+        printBreakers();
         SetupMessage message;
         message = new SetupMessage();
         message.setField(i);
@@ -86,25 +91,32 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Ask nick player nickname message.
+     * Ask nickname to player.
+     * Nickname have to be unique in each game, not empty and shorter than 20 chars
      *
      * @return the nickname message
      */
-    public NicknameMessage askNickPlayer() {
+    public NicknameMessage askNicknamePlayer() {
         NicknameMessage message = new NicknameMessage();
+        String checkSpaces;
+
+        printer.println("\n+-------------------------+\n" +
+                "|   Enter your nickname   |\n" +
+                "|     (max. 20 chars)     |\n" +
+                "+-------------------------+\n");
         do {
-            printer.println("Enter your nickname:\n");
             startingBrackets();
-            playerChoice = scanner.nextLine();
-            message.setNickname(playerChoice);
-            this.nickname = playerChoice;
-        } while (!modelView.checkNickname(nickname) || nickname.equals(""));
+            playerInput = scanner.nextLine();
+            checkSpaces = playerInput.replaceAll(" ","");
+        } while (checkSpaces.equals("") || !modelView.checkNickname(playerInput) || playerInput.length() > 20);
+        this.nickname = playerInput;
+        message.setNickname(playerInput);
         return message;
     }
 
 
     /**
-     * Ask color color message.
+     * Ask color to each player
      *
      * @return the color message
      */
@@ -114,8 +126,8 @@ public class CLI extends RemoteView implements Runnable {
         int indexColor = 9;
         do {
             printAvailableColors();
-            playerChoice = scanner.nextLine();
-            isNumber = playerChoice.replaceAll("[^1-9]", "");
+            playerInput = scanner.nextLine();
+            isNumber = playerInput.replaceAll("[^1-9]", "");
             if (!isNumber.equals("")) {
                 indexColor = Integer.parseInt(isNumber);
                 indexColor -= 1;
@@ -124,6 +136,7 @@ public class CLI extends RemoteView implements Runnable {
                 }
             }
             printBreakers();
+            printer.println();
         } while (!modelView.isInColor(message.getColor()) || (indexColor >= modelView.getColors().size()));
         this.color = message.getColor();
         return message;
@@ -134,11 +147,15 @@ public class CLI extends RemoteView implements Runnable {
      */
     public void printAvailableColors() {
         printBreakers();
-        printer.println("\n");
-        printer.println("\nHey " + nickname + "! Which colour you want to choose? Available: ");
+        printer.println("+-------------------------------------------------+");
+        printer.print("|   Hey ");
+        printer.printf("%-42s", (nickname + "!"));
+        printer.print("|\n");
+        printer.print("|   Which colour you want to choose? Available:   |\n" +
+                "+-------------------------------------------------+\n");
 
         for (int i = 0; i < modelView.getColors().size(); i++) {
-            printer.printf(arrangeList, i + 1, modelView.getColors().get(i).getName());
+            printer.printf(arrangeColorList, i + 1, modelView.getColors().get(i).getName());
         }
         printer.println();
         for (ModelView.PlayerView p : modelView.getPlayers()) {
@@ -150,9 +167,10 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Ask god list initial cards message.
+     * Ask godly to select many gods as number of players.
+     * Quit the game typing exit or quit
      *
-     * @return the initial cards message
+     * @return the message with the selected gods
      */
     public InitialCardsMessage askGodList() {
 
@@ -165,6 +183,7 @@ public class CLI extends RemoteView implements Runnable {
             printGodsList(message);
             startingBrackets();
             s = scanner.nextLine();
+            checkInputExit(s);
             isNumber = s.replaceAll("[^0-9]", "");
             if (!isNumber.equals("")) {
                 int indexGod = Integer.parseInt(isNumber);
@@ -197,20 +216,26 @@ public class CLI extends RemoteView implements Runnable {
      * @param message the message
      */
     public void printGodsList(InitialCardsMessage message) {
-        printer.println("Select " + (modelView.getPlayers().size() - message.getSelectedList().size()) +
-                " gods from the list below: \ninfo or man + #god");
+        int numberOfPlayers = (modelView.getPlayers().size() - message.getSelectedList().size());
+        printer.println("+-----------------------------------------+\n" +
+                "|    Select " + numberOfPlayers + " gods from the list below    |\n" +
+                "|           type info/man + #god          |\n" +
+                "|           to read more details          |\n" +
+                "|                 (info 6)                |\n" +
+                "+-----------------------------------------+");
         for (int i = 0; i < modelView.getGods().size(); i++) {
             if (i % 2 == 0) {
                 printer.println();
             }
-            printer.printf(arrangeList, i + 1, modelView.getGods().get(i)[0]);
+            printer.printf(arrangeGodList, i + 1, modelView.getGods().get(i)[0]);
         }
-        printer.println("\n");
-
+        printer.println();
     }
 
     /**
-     * Ask god god message.
+     * Ask player to select a god among those selected by godly.
+     * Godly's god get assigned automatically with the remaining one.
+     * Quit the game typing exit or quit
      *
      * @return the god message
      */
@@ -221,7 +246,7 @@ public class CLI extends RemoteView implements Runnable {
         String isNumber;
         //TODO deidere convenzione per inizializzazione dei controlli o 9 o -2
         int indexGod = 9;
-        printBreakers();
+        //printer.println();
         if (modelView.getChosenGods().size() == 1) {
             message.setGod(modelView.getChosenGods().get(0)[0]);
             modelView.getPlayer(getPlayerId()).setGod(modelView.getChosenGods().get(0));
@@ -231,11 +256,12 @@ public class CLI extends RemoteView implements Runnable {
             do {
                 printer.println("\nSelect God among the chosen gods:\n");
                 for (int i = 0; i < modelView.getChosenGods().size(); i++) {
-                    printer.printf(arrangeList, i + 1, modelView.getChosenGods().get(i)[0]);
+                    printer.printf(arrangeGodList, i + 1, modelView.getChosenGods().get(i)[0]);
                 }
                 printer.println();
                 startingBrackets();
                 s = scanner.nextLine();
+                checkInputExit(s);
                 isNumber = s.replaceAll("[^1-9]", "");
                 if (!isNumber.equals("")) {
                     indexGod = Integer.parseInt(isNumber);
@@ -251,15 +277,28 @@ public class CLI extends RemoteView implements Runnable {
                         }
                     }
                 }
-            } while (indexGod >= modelView.getChosenGods().size() );
+            } while (indexGod >= modelView.getChosenGods().size());
         }
-        printBreakers();
         return message;
     }
 
+    /**
+     * Quit the game if input string contains exit or quit.
+     * Support function
+     *
+     * @param input
+     */
+    private void checkInputExit(String input) {
+        if (input.contains("exit") || input.contains("quit")) {
+            connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
+            connection.closeConnection();
+            System.exit(0);
+        }
+    }
 
     /**
-     * First player.
+     * Godly chooses the first player
+     * Quit the game typing exit or quit
      *
      * @throws InterruptedException the interrupted exception
      */
@@ -273,11 +312,12 @@ public class CLI extends RemoteView implements Runnable {
             do {
                 printer.println("Choose first player: ");
                 for (int i = 0; i < modelView.getPlayers().size(); i++) {
-                    printer.printf(arrangeList, i + 1, modelView.getPlayer(i).getNickname());
+                    printer.printf(arrangeGodList, i + 1, modelView.getPlayer(i).getNickname());
                 }
                 printer.println();
                 startingBrackets();
                 s = scanner.nextLine();
+                checkInputExit(s);
                 isNumber = s.replaceAll("[^0-9]", "");
                 if (!isNumber.equals("")) {
                     indexNickname = Integer.parseInt(isNumber);
@@ -303,7 +343,8 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Sets workers.
+     * Player places the workers in the board
+     * Quit the game typing exit or quit
      *
      * @throws InterruptedException the interrupted exception
      */
@@ -315,7 +356,6 @@ public class CLI extends RemoteView implements Runnable {
         Coordinate c;
         for (int i = 0; i < 2; i++) {
             message = new WorkerMessage(getPlayerId(), i);
-            //printBoard();
             do {
                 int row;
                 row = 9;
@@ -323,12 +363,13 @@ public class CLI extends RemoteView implements Runnable {
                 col = 9;
                 String[] inputArray;
                 String inputParsed;
-                printer.println("Place your " + (i + 1) + "° worker:");
+                printer.println("Place your " + (i + 1) + "^ worker:");
                 String inputToParse;
                 do {
                     printer.println("Insert row,col : ");
                     startingBrackets();
                     inputToParse = scanner.nextLine();
+                    checkInputExit(inputToParse);
                     inputParsed = inputToParse.replaceAll("[^1-5]", "");
                     inputArray = inputParsed.split("");
                     if (inputArray.length == 2) {
@@ -347,7 +388,9 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Play.
+     * This method manage the entire game after the workers setup.
+     * <p>
+     * Quit the game typing exit or quit
      *
      * @throws InterruptedException the interrupted exception
      */
@@ -356,7 +399,6 @@ public class CLI extends RemoteView implements Runnable {
             modelView.getActionsAvailable().clear();
             while (getPlayerId() == modelView.getActualPlayerId() && !endTurn) {
                 if (winnerDetected) return;
-                System.out.println("RICHIESTA MOSSE");
                 connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                         null, new GenericMessage()));
                 wait();
@@ -369,17 +411,18 @@ public class CLI extends RemoteView implements Runnable {
                         if (choices.size() > 1) {
                             String inputChoice;
                             printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
-                                    +", which action do you want to perform?");
+                                    + ", which action do you want to perform?");
 
                             int i;
                             for (i = 0; i < choices.size(); i++) {
-                                printer.printf(arrangeList, i + 1, choices.get(i).toLowerCase());
+                                printer.printf(arrangeGodList, i + 1, choices.get(i).toLowerCase());
                             }
 
                             do {
                                 printer.println();
                                 startingBrackets();
                                 inputChoice = scanner.nextLine();
+                                checkInputExit(inputChoice);
                                 String numbers = inputChoice.replaceAll("[^0-9]", "");
                                 if (!numbers.equals("")) {
                                     choiceIndex = Integer.parseInt(numbers) - 1;
@@ -391,9 +434,34 @@ public class CLI extends RemoteView implements Runnable {
                             endTurn = true;
                         } else {
                             printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
+                                    + ", perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
+                            startingBrackets();
+                            String inputAction = scanner.nextLine();
+                            checkInputExit(inputAction);
+                            if (inputAction.contains("info") || inputAction.contains("man")) {
+                                printer.println(modelView.getPlayer(getPlayerId()).getGod()[0]);
+                                printer.println(modelView.getPlayer(getPlayerId()).getGod()[1]);
+                            } else if (inputAction.contains("exit") || inputAction.contains("quit")) {
+                                connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
+                                connection.closeConnection();
+                                System.exit(0);
+                            } else {
+                                coords = parseCoordinateAction(inputAction);
+                                if (coords.size() == 2) {
+                                    action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
+                                }
+                            }
+                        }
+/*
+                        }
+                        if (choices.get(choiceIndex).equals("end turn") && modelView.isOptional()) {
+                            endTurn = true;
+                        } else {
+                            printer.println(modelView.getPlayer(getPlayerId()).getColor().colorizedText(nickname)
                                     +", perform your " + choices.get(choiceIndex).toLowerCase() + ": (x,y in r,s)");
                             startingBrackets();
                             String inputAction = scanner.nextLine();
+
                             if(inputAction.contains("info") || inputAction.contains("man")){
                                 printer.println(modelView.getPlayer(getPlayerId()).getGod()[0]);
                                 printer.println(modelView.getPlayer(getPlayerId()).getGod()[1]);
@@ -402,14 +470,15 @@ public class CLI extends RemoteView implements Runnable {
                                 connection.closeConnection();
                                 System.exit(0);
                             }
-                            else {
+                            if(!checkInputInfoExitPlaying(inputAction)) {
                                 coords = parseCoordinateAction(inputAction);
                                 if (coords.size() == 2) {
                                     action = modelView.searchAction(choices.get(choiceIndex), coords.get(0), coords.get(1));
                                 }
                             }
 
-                        }
+                        }*/
+
                     } while (action == null && !endTurn);
 
                     if (endTurn) {
@@ -433,6 +502,19 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
+    private boolean checkInputInfoExitPlaying(String input) {
+        if (input.contains("info") || input.contains("man")) {
+            printer.println(modelView.getPlayer(getPlayerId()).getGod()[0]);
+            printer.println(modelView.getPlayer(getPlayerId()).getGod()[1]);
+            return true;
+        } else if (input.contains("exit") || input.contains("quit")) {
+            connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
+            connection.closeConnection();
+            System.exit(0);
+            return true;
+        }
+        return false;
+    }
 
 
     /**
@@ -469,7 +551,7 @@ public class CLI extends RemoteView implements Runnable {
      * Print board.
      */
     public void printBoard() {
-        if(!winnerDetected)printer.println(this.modelView.getBoard());
+        if (!winnerDetected) printer.println(this.modelView.getBoard());
         printBreakers();
     }
 
@@ -569,7 +651,7 @@ public class CLI extends RemoteView implements Runnable {
     private synchronized void startingGame() throws InterruptedException {
         welcomeMessage();
         int choiceMenu;
-        do{
+        do {
             //printer.println("\t0- play\t1- help");
             printer.println("+-------------------------+\n" +
                     "|    Select an option     |\n" +
@@ -580,11 +662,11 @@ public class CLI extends RemoteView implements Runnable {
                     "+-------------------------+\n");
             startingBrackets();
             String input = scanner.nextLine();
-            String nums =input.replaceAll("[^0-9]", "");
-            if(!nums.equalsIgnoreCase("")){
+            String nums = input.replaceAll("[^0-9]", "");
+            if (!nums.equalsIgnoreCase("")) {
                 choiceMenu = Integer.parseInt(nums);
-            }else choiceMenu=-1;
-            if (choiceMenu == 1){
+            } else choiceMenu = -1;
+            if (choiceMenu == 1) {
                 printer.println("Santorini is an accessible strategy game.\n\n" +
                         " The rules are simple. Each turn consists of 2 steps:\n" +
                         "\t1. Move - move one of your workers into a neighboring space.\n" +
@@ -596,14 +678,14 @@ public class CLI extends RemoteView implements Runnable {
                         "Winning the game - If one of your Workers moves up on top of level 3\n" +
                         " during your turn, you instantly win!\n\n" +
                         "You must always perform a move then build on your turn.\n" +
-                        "If you are unable to, you lose.\n"+
+                        "If you are unable to, you lose.\n" +
                         "God Powers provide you with a powerful ability\n" +
                         "that can be used throughout the game. Many God Powers change the way\n" +
                         "Workers move and build.\n" +
                         "TYPE MAN OR INFO DURING THE GAME TO SHOW THE POWER OF YOUR GOD\n\n" +
                         "Developers: Alberto Papiri, Giole Peltrera, Sandro Shamal Jajasynghe\n\n");
             }
-        } while (choiceMenu!=0);
+        } while (choiceMenu != 0);
         new Thread(getConnection()).start();
         this.wait();
     }
@@ -623,7 +705,7 @@ public class CLI extends RemoteView implements Runnable {
      */
     private synchronized void nickChoice() {
         while (!nickValidate) {
-            NicknameMessage message = askNickPlayer();
+            NicknameMessage message = askNicknamePlayer();
             waitingValidation(new PropertyChangeEvent(this, "notifyNickname", false, message));
         }
     }
@@ -699,7 +781,9 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void setGodly(GodlyMessage message) {
         super.setGodly(message);
         if (getPlayerId() != modelView.getGodlyId()) {
-            printer.println("\n" + modelView.getPlayer(modelView.getGodlyId()).getNickname() + " is choosing Gods\n");
+            printer.println("+----------------------------+\n" +
+                    "|   Godly is choosing Gods   |\n" +
+                    "+----------------------------+");
             printBreakers();
         }
         godlySelected = true;
@@ -720,6 +804,7 @@ public class CLI extends RemoteView implements Runnable {
             for (String[] g : modelView.getChosenGods()) {
                 printer.println("\n" + g[0] + "\n" + g[1]);
             }
+            printBreakers();
             this.notify();
         }
     }
@@ -737,6 +822,8 @@ public class CLI extends RemoteView implements Runnable {
                 printer.println(p.getNickname() + " chose " + p.getGod()[0]);
             }
         }
+        printBreakers();
+        printer.println();
         this.notify();
     }
 
@@ -799,7 +886,7 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
-        printer.println(modelView.getPlayer(message.getId()).getNickname()+"\n" +
+        printer.println(modelView.getPlayer(message.getId()).getNickname() + "\n" +
                 "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
                 "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
                 "$$ |  $$ |$$ /  $$ |$$ /  \\__|      $$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |\n" +

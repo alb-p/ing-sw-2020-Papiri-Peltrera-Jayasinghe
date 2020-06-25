@@ -104,7 +104,8 @@ public class SocketServerConnection implements Runnable{
      * @param evt the evt
      */
     public void sendEvent(PropertyChangeEvent evt) {
-        debug(evt);
+        //TODO funzione di debug per client
+        //debug(evt);
         try {
             if (evt.getNewValue() instanceof Message) {
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());

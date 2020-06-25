@@ -32,8 +32,9 @@ public class InitSetupTest {
         gods.add("PAN");
         gods.add("PROMETHEUS");
     }
+
     @Test
-    public void usernameTest(){
+    public void nicknameTest(){
         assertFalse(initSetup.isInUser("Pippo"));
         NicknameMessage message = new NicknameMessage();
         message.setNickname("Pippo");
