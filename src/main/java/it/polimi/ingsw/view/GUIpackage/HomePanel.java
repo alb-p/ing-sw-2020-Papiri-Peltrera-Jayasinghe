@@ -9,15 +9,9 @@ import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.*;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.util.Scanner;
 
 /**
  * The type Home panel.
@@ -58,7 +52,7 @@ public class HomePanel extends JPanel implements ActionListener {
 
         frameDimension=d;
 
-        this.image = new ImageIcon(this.getClass().getResource("/Home/Home_title.jpg")).getImage();
+        this.image = new ImageIcon(this.getClass().getResource("/Home/home_title.jpg")).getImage();
 
 
         playButton = new CustomButton("/Home/play");

@@ -1,8 +1,8 @@
-# Santorini
-###Prova Finale di Ingegneria del Software - a.a. 2019-2020 
+<h1> Santorini</h1>
+<h3>Prova Finale di Ingegneria del Software - a.a. 2019-2020 </h3>
 
-![alt text](src/main/resources/Home/Home_title.jpg?raw=true)
-##About the project
+![alt text](src/main/resources/Home/home_logo.jpg?raw=true)
+<h2>About the project</h2>
 <p> The aim of the project was to develop a software version of the board game <i>Santorini</i>.<br>
 Santorini is an abstract strategy board game designed and released in 2004 by Gordon Hamilton <br>
 and republished via Kickstarter in 2016 by Roxley Games. <br>
@@ -11,7 +11,7 @@ the game is played on a grid where each turn players build a town by placing bui
 To win the game, players must move one of their two characters to the third level of the town.
 </p>
 
-###Features
+<h3>Features</h3>
 <ul>
 <li>Complete rules</li>
 <li>CLI</li>
@@ -31,13 +31,13 @@ To win the game, players must move one of their two characters to the third leve
     
 </ul>
 
-### Prerequisites
+<h3> Prerequisites </h3>
 <p>The game requires Java 11 or later versions to run.<br>
 UTF-8 support is strongly recommended for a more enjoyable CLI gaming experience.</p>
 
-##How to run
+<h2>How to run</h2>
 
-#### Client
+<h4> Client </h4>
 
 <pre> $ java -jar SantoriniClient.jar -cli ip-address port </pre>
 <ul>
@@ -47,7 +47,7 @@ UTF-8 support is strongly recommended for a more enjoyable CLI gaming experience
 </ul>
 All flags are optional. With no flags will start GUI on localhost.
 
-#### Server
+<h4> Server </h4>
 
 <pre> $ java -jar SantoriniServer.jar port </pre>
 <ul>
@@ -56,7 +56,7 @@ All flags are optional. With no flags will start GUI on localhost.
 All flags are optional. With no flags will star on localhost.
 
 
-##Developers: Group GC20
+<h2>Developers: Group GC20</h2>
 <a href = "https://github.com/alb-p/"><b>10566115 Alberto Papiri</b> </a><br>
 <a href = "https://github.com/gioelepeltrera/"><b>10560633 Giole Peltrera</b> </a><br>
-<a href = "https://github.com/alb-p/"><b>10530600 Sandro Shamal Jajasynghe</b> </a>
+<a href = "https://github.com/sandroJaya/"><b>10530600 Sandro Shamal Jayasinghe</b> </a>
