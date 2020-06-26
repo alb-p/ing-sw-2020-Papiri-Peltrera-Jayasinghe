@@ -23,13 +23,18 @@ public class Hestia extends BasicGodCard {
     public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
 
         TreeActionNode root = super.cardTreeSetup(worker, board);
+        ;
         for (TreeActionNode move : root.getChildren()) {
             for (TreeActionNode firstBuild : move.getChildren()) {
                 for (Coordinate c : firstBuild.getData().getStart().getAdjacentCoords()) {
-                    if (!isPerimeter(c) && !c.equals(firstBuild.getData().getEnd()) ||
-                            (board.infoSlot(firstBuild.getData().getEnd()).getConstructionLevel() <= 2) &&
-                                    board.infoSlot(c).isFree() || c.equals(move.getData().getStart())) {
-                        firstBuild.addChild(new TreeActionNode(new Build(firstBuild.getData().getStart(), c)));
+                    if (!isPerimeter(c)) {
+                        if (!c.equals(firstBuild.getData().getEnd()) ||
+                                (board.infoSlot(firstBuild.getData().getEnd()).getConstructionLevel() <= 2)) {
+                            if (board.infoSlot(c).isFree() || c.equals(move.getData().getStart())) {
+                                firstBuild.addChild(new TreeActionNode(new Build(firstBuild.getData().getStart(), c)));
+                            }
+                        }
+
                     }
                 }
             }
