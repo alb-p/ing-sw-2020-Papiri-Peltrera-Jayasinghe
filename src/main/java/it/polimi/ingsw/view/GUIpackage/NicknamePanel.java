@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 /**
  * The type Nickname panel.
+ * is the screen that allows the
+ * nickname to be submitted
  */
 public class NicknamePanel extends JPanel implements ActionListener , PropertyChangeListener{
 
@@ -33,7 +35,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
     /**
      * Instantiates a new Nickname panel.
      *
-     * @param id the id
+     * @param id the id of the player
      */
     public NicknamePanel(int id) {
         imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int)(0.82*GUI.getDimension().height),(int)(0.625*GUI.getDimension().height),Image.SCALE_SMOOTH);
@@ -86,7 +88,8 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
     }
 
     /**
-     * Paint component.
+     * Paint component. set the background
+     * image of the panel
      *
      * @param g the g
      */
@@ -101,7 +104,8 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
 
 
     /**
-     * Action performed.
+     * manages interactions with clicks
+     * on the buttons on this panel
      *
      * @param actionEvent the action event
      */
@@ -141,7 +145,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
     }
 
     /**
-     * Property change.
+     * Handle event from ModelView
      *
      * @param propertyChangeEvent the property change event
      */

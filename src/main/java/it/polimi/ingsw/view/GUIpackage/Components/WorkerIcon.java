@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 /**
  * The type Worker icon.
+ * icon used to animate worker movement
  */
 public class WorkerIcon extends JLabel implements ActionListener {
 
@@ -49,7 +50,7 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
 
     /**
-     * Start transition.
+     * Start animation with timer.
      *
      * @param start the start
      * @param end   the end
@@ -82,6 +83,7 @@ public class WorkerIcon extends JLabel implements ActionListener {
 
     /**
      * Action performed.
+     * triggered by the timer. set the correct icon for the animation
      *
      * @param e the e
      */
@@ -120,17 +122,3 @@ public class WorkerIcon extends JLabel implements ActionListener {
     }
 
 }
-
-/*
-
-ESEMPIO DI UTILIZZO
-
-JPanel test= new JPanel();
-        test.setLayout(null);
-        test.setBounds(0, 0, GUI.getDimension().width,GUI.getDimension().height);
-        test.setOpaque(false);
-        layeredPane.add(test,JLayeredPane.DEFAULT_LAYER);
-        WorkerIcon icon= new WorkerIcon("blue");
-        test.add(icon);
-        icon.startTransition(e.getPoint(),new Point(133,133));
- */

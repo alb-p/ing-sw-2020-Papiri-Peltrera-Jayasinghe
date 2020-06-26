@@ -8,13 +8,14 @@ import java.awt.event.MouseMotionAdapter;
 
 
 /**
- * The type Main panel.
+ * it is the container for all the other main panels
  */
 public class MainPanel extends JPanel {
     private Point initialClick;
 
     /**
-     * Instantiates a new Main panel.
+     * Instantiates a MainPanel.
+     * allows you to move the application by dragging
      *
      * @param parent the parent
      */

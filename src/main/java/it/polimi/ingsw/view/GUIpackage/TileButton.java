@@ -9,6 +9,7 @@ import java.awt.*;
 
 /**
  * The type Tile button.
+ * is the tile that makes up the IslanBoard
  */
 public class TileButton extends JButton {
 
@@ -32,9 +33,9 @@ public class TileButton extends JButton {
     /**
      * Instantiates a new Tile button.
      *
-     * @param row   the row
-     * @param col   the col
-     * @param panel the panel
+     * @param row   the row of the table
+     * @param col   the col of the tabel
+     * @param panel the parent's panel
      */
     public TileButton(int row, int col, JPanel panel) {
         coordinate = new Coordinate(row, col);
@@ -68,7 +69,8 @@ public class TileButton extends JButton {
     }
 
     /**
-     * Rebase worker.
+     * assign the correct image
+     * of the worker present in the respective vslot
      */
     public void rebaseWorker() {
         if (vSlot.getColor() == null) {
@@ -83,7 +85,9 @@ public class TileButton extends JButton {
     }
 
     /**
-     * Rebase floor.
+     * assign the correct image
+     * of the building level present in
+     * the respective vslot
      */
     public void rebaseFloor(){
         if(vSlot.getLevel()==1){
@@ -165,6 +169,8 @@ public class TileButton extends JButton {
 
     /**
      * Paint component.
+     * paint the image of the building
+     * and worker in this specific tile
      *
      * @param g the g
      */
@@ -177,7 +183,7 @@ public class TileButton extends JButton {
 
 
     /**
-     * Update view.
+     * Update the information of this tile
      *
      * @param vSlot the v slot
      */

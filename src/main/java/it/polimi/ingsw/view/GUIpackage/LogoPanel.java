@@ -10,7 +10,7 @@ import java.beans.PropertyChangeSupport;
 import static java.lang.Thread.sleep;
 
 /**
- * The type Logo panel.
+ * is the initial screen where the logo is shown
  */
 public class LogoPanel extends JPanel implements ActionListener {
 
@@ -19,7 +19,7 @@ public class LogoPanel extends JPanel implements ActionListener {
     private Timer timer;
     int currentFrame = 1;
 
-    private PropertyChangeSupport lista;
+    private PropertyChangeSupport list;
 
 
     /**
@@ -27,14 +27,14 @@ public class LogoPanel extends JPanel implements ActionListener {
      */
     public LogoPanel() {
 
-        lista = new PropertyChangeSupport(this);
+        list = new PropertyChangeSupport(this);
 
         frames = new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg"));
 
     }
 
     /**
-     * Start transition.
+     * Start timer.
      */
     public void startTransition() {
 
@@ -45,8 +45,7 @@ public class LogoPanel extends JPanel implements ActionListener {
 
 
     /**
-     * Paint component.
-     *
+     * updates the background image
      * @param g the g
      */
     @Override
@@ -61,7 +60,9 @@ public class LogoPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Action performed.
+     * is triggered by the timer. if the
+     * transition is complete, a notification
+     * is sent to the gui class
      *
      * @param e the e
      */
@@ -69,9 +70,8 @@ public class LogoPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 90) {
             timer.stop();
-            lista.firePropertyChange("logoTransitionEnded",null,true);//attiva propertyChange dei listeners con passando in questo caso delle stringhe
+            list.firePropertyChange("logoTransitionEnded",null,true);//attiva propertyChange dei listeners con passando in questo caso delle stringhe
             frames=null;
-            System.gc();//consiglia di far partire il garbage collector
         } else {
             repaint();
             Toolkit.getDefaultToolkit().sync();
@@ -87,6 +87,6 @@ public class LogoPanel extends JPanel implements ActionListener {
      */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) { //aggiunge listener alla lista
-        lista.addPropertyChangeListener(listener);
+        list.addPropertyChangeListener(listener);
     }
 }

@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * The type Make sound.
+ * allows you to reproduce a sound
  */
 public class MakeSound implements PropertyChangeListener {
 
@@ -21,9 +22,9 @@ public class MakeSound implements PropertyChangeListener {
     /**
      * Play sound.
      *
-     * @param path   the path
-     * @param volume the volume
-     * @param loop   the loop
+     * @param path   the path of the sound file
+     * @param volume the volume level of the sound file. 0 is base value
+     * @param loop   boolean that allow to play sound in loop
      */
     public void playSound(String path, Float volume, boolean loop) {
 
@@ -69,6 +70,12 @@ public class MakeSound implements PropertyChangeListener {
         }
     }
 
+    /**
+     * Handle the events launched
+     * by the settings panel in homePanel class
+     *
+     * @param evt the property change event
+     */
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

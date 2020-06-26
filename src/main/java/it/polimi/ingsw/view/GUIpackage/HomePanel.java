@@ -15,6 +15,7 @@ import java.nio.file.StandardCopyOption;
 
 /**
  * The type Home panel.
+ * is the home screen after the logoPanel.
  */
 public class HomePanel extends JPanel implements ActionListener {
     private PropertyChangeSupport homePanelListeners = new PropertyChangeSupport(this);
@@ -78,8 +79,8 @@ public class HomePanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Paint component.
-     *
+     * Paint component. set the background
+     * image of the panel
      * @param g the g
      */
     @Override
@@ -91,9 +92,10 @@ public class HomePanel extends JPanel implements ActionListener {
 
 
     /**
-     * Action performed.
+     * manages interactions with clicks
+     * on the buttons on this screen
      *
-     * @param actionEvent the action event
+     * @param actionEvent the event
      */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
@@ -130,6 +132,7 @@ public class HomePanel extends JPanel implements ActionListener {
         homePanelListeners.addPropertyChangeListener(listener);
     }
 
+
     public void startMusic(){
         music.playSound("/Sounds/track1.wav",-20f,true);
     }
@@ -139,6 +142,13 @@ public class HomePanel extends JPanel implements ActionListener {
     }
 
 
+
+
+    /**
+     * it is the panel that appears when the
+     * settings button is pressed. Allows you
+     * to deactivate animations and sounds
+     */
     public class Settings extends JPanel implements ActionListener{
 
         Font font;
@@ -203,6 +213,12 @@ public class HomePanel extends JPanel implements ActionListener {
             super.paintComponent(g);
             g.drawImage(this.background, 0, 0, this);
         }
+
+
+        /**
+         * manages interactions with clicks
+         * on the buttons on this panel
+         */
 
         @Override
         public void actionPerformed(ActionEvent e) {

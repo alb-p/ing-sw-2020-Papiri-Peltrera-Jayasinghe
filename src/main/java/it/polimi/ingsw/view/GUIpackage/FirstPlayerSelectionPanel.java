@@ -16,6 +16,8 @@ import java.util.ArrayList;
 
 /**
  * The type First player selection panel.
+ * it is the screen where the godly chooses
+ * who is the player who starts the turn
  */
 public class FirstPlayerSelectionPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -30,7 +32,8 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
 
 
     /**
-     * Instantiates a new First player selection panel.
+     * Instantiates a new First player selection panel
+     * and all its components
      *
      * @throws IOException         the io exception
      * @throws FontFormatException the font format exception
@@ -76,9 +79,9 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
 
 
     /**
-     * Action performed.
-     *
-     * @param e the e
+     * when the button on which the fist player's
+     * name is written is pressed, a notify is
+     * sent to the GUI class
      */
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -89,9 +92,12 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     }
 
     /**
-     * Property change.
+     * Handles the events coming from ModelView.
+     * After your god god have been chosen,
+     * the first player can be chosen
      *
-     * @param evt the evt
+     * @param evt the property change event
+     *
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
@@ -129,7 +135,8 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     }
 
     /**
-     * Paint component.
+     * Paint component. set the background
+     * image of the panel
      *
      * @param g the g
      */

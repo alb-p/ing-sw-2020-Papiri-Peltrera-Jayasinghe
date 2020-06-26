@@ -66,7 +66,9 @@ public class WaitingPanel extends JPanel {
 
 
     /**
-     * Paint component.
+     *
+     * Paint component. set the background
+     * image of the panel
      *
      * @param g the g
      */

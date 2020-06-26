@@ -26,6 +26,7 @@ import java.util.Random;
 
 /**
  * The type Play panel.
+ * is the actual game screen
  */
 public class PlayPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -224,6 +225,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     /**
      * The type Info panel.
+     * it is the panel where there
+     * is the information of the gods
+     * selected by the godly and the exit button
      */
     public class InfoPanel extends JPanel implements ActionListener {
         ArrayList<JButton> godsTabs;
@@ -243,7 +247,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         /**
-         * Info create.
+         * create all the components
+         * inside the panel
          */
         public void infoCreate() {
             this.setVisible(false);
@@ -301,7 +306,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         /**
-         * Action performed.
+         * manages interactions with clicks
+         * on the buttons on this panel
          *
          * @param e the e
          */
@@ -310,7 +316,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (e.getSource() instanceof JButton) {
                 if (((JButton) e.getSource()).getName().equalsIgnoreCase("exit")) {
                     PlayPanel.this.playPanelListener.firePropertyChange("PlayerToDisconnect", false, true);
-                    //System.exit(0);
                 }
                 int id = Integer.parseInt(((JButton) e.getSource()).getName());
                 if (showing && id == idShowing) {
@@ -334,6 +339,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         /**
          * Paint component.
+         * paint the image of god's infos
          *
          * @param g the g
          */
@@ -355,8 +361,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     /**
-     * Action performed.
-     *
+     * manages interactions with clicks
+     * on the buttons on this panel
      * @param e the e
      */
     @Override

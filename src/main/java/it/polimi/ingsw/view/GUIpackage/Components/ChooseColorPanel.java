@@ -16,6 +16,8 @@ import java.util.Collections;
 
 /**
  * The type Choose color panel.
+ * the screen where each player
+ * chooses his own color
  */
 public class ChooseColorPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
@@ -62,7 +64,8 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     }
 
     /**
-     * Action performed.
+     * manages interactions with clicks
+     * on the buttons on this screen
      *
      * @param actionEvent the action event
      */
@@ -82,7 +85,7 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     }
 
     /**
-     * Property change.
+     * Handle events fire from ModelView.
      *
      * @param propertyChangeEvent the property change event
      */
@@ -99,7 +102,8 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     }
 
     /**
-     * Pick button j button.
+     * return the button associated
+     * with the respective color
      *
      * @param c the c
      * @return the j button
@@ -126,6 +130,7 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
 
     /**
      * Paint component.
+     * Set the background image
      *
      * @param g the g
      */
