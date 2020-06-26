@@ -1,11 +1,8 @@
 package it.polimi.ingsw.model;
 
 import it.polimi.ingsw.gods.Demeter;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.internal.runners.model.EachTestNotifier;
-import org.junit.jupiter.api.BeforeEach;
 import static org.junit.Assert.*;
 
 

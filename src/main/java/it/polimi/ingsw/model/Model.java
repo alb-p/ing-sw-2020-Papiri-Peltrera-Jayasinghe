@@ -123,7 +123,6 @@ public class Model {
             boolean turnHandler;
             turnHandler = this.getPlayer(idPlayerPlaying).turnHandler(this.board, message);
             if (!turnHandler) logger.log(Level.WARNING, "Invalid Action");
-            System.out.println(board);
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
         }

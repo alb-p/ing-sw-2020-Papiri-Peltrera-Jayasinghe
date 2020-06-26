@@ -19,8 +19,6 @@ public class ModelTest {
         model.addPlayer(player);
         model.setCard(1,"Prometheus");
 
-
-
     }
 
     @Test
@@ -44,6 +42,7 @@ public class ModelTest {
         assertFalse(model.checkWinner(0));
     }
 
+    //It will produce SEVERE: null
     @Test
     public void selectChoiceTest() {
         assertTrue(model.addWorker(0, new Coordinate(0,0),0));
@@ -52,8 +51,6 @@ public class ModelTest {
         model.turnHandler(0,new Move(new Coordinate(0,0), new Coordinate(0,1)));
         assertFalse(model.getPlayer(0).hasDone());
         model.getPlayer(0).selectWorker(new Coordinate(0,1));
-        //assertEquals(model.getPlayer(0).getTrees().get(model.getPlayer(0).getActualWorker()).getChildren().get(4).getData().getActionName(), "move");
-
     }
 
 
