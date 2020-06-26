@@ -1,7 +1,6 @@
 package it.polimi.ingsw.gods;
 
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.utils.ActionsEnum;
 import org.junit.Before;
 import org.junit.Test;
 

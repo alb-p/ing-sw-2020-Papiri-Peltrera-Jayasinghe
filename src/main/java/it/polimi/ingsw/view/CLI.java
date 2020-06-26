@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 /**
  * Command line interface implementation.
- * It includes ASCII extended chars but they will be convert for Windows OS
+ * It includes ASCII extended chars but they will be converted for Windows OS.
  * All the necessary data information for this class during the game is taken from the ModelView
  *
  */
@@ -149,7 +149,7 @@ public class CLI extends RemoteView implements Runnable {
 
 
     /**
-     * Ask color to each player
+     * Ask color to player
      *
      * @return the color message
      */

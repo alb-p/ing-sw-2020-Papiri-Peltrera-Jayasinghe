@@ -1,6 +1,5 @@
 package it.polimi.ingsw.controller;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.utils.ActionsEnum;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.Message;
