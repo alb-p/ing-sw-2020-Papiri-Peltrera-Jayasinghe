@@ -159,7 +159,6 @@ public abstract class RemoteView implements Runnable {
      * @param message the message
      */
     protected void actionsAvailable(ActionMessage message) {
-        //modelView.getActionsAvailable().addAll(message.getChoices());
         modelView.getActionsAvailable().clear();
         modelView.setOptional(message.isOptional());
         modelView.setActionsAvailable(message.getChoices());

@@ -13,14 +13,14 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- *
- * All the information during the game is taken from the ModelView Class
+ * Command line interface implementation.
+ * It includes ASCII extended chars but they will be convert for Windows OS
+ * All the necessary data information for this class during the game is taken from the ModelView
  *
  */
 public class CLI extends RemoteView implements Runnable {
 
     private final Scanner scanner;
-    //private final PrintStream printer;
     private final SantoriniPrintStream printer;
     private String playerInput;
     private SocketServerConnection connection;
@@ -38,13 +38,14 @@ public class CLI extends RemoteView implements Runnable {
     /**
      * Instantiates a new Cli.
      *
-     * @param connection the connection
+     * @param connection
+     * @param useAscii depending on OS
+     * @throws UnsupportedEncodingException
      */
     public CLI(SocketServerConnection connection, boolean useAscii) throws UnsupportedEncodingException {
         super(connection);
         this.connection = connection;
         this.scanner = ClientMain.scanner;
-        //this.printer = new PrintStream(System.out, true);
         this.printer = new SantoriniPrintStream(System.out, useAscii);
         this.modelView = getModelView();
     }
@@ -96,9 +97,9 @@ public class CLI extends RemoteView implements Runnable {
                 );
     }
     /**
-     * Choose number of players setup message.
+     * Ask to the first connected player the number of players for the game
      *
-     * @return the setup message
+     * @return a SetupMessage within the number of players chosen by first player
      */
     @Override
     protected SetupMessage chooseNumberOfPlayers() {
@@ -566,6 +567,7 @@ public class CLI extends RemoteView implements Runnable {
 
     /**
      * It calls all the specific method for ask input to the player and manage the entire game
+     *
      */
     @Override
     public void run() {
@@ -601,7 +603,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * All worker placed.
+     * Every player wait after he placed his workers until all players have placed their own.
      *
      * @throws InterruptedException the interrupted exception
      */
@@ -612,7 +614,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * All god selected.
+     * Every player wait after he chose his God until all players have chosen their own.
      *
      * @throws InterruptedException the interrupted exception
      */
@@ -623,7 +625,8 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * God choice.
+     * Invoke askGod when when it is the player's turn, otherwise player will wait.
+     * It prepares the God message and, after player choice, send it.
      *
      * @throws InterruptedException the interrupted exception
      */
@@ -718,7 +721,8 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * It notifies the player game is ready: all the players
+     * It notifies the player game is ready: all the players.
+     * //TODO da finire
      */
     @Override
     protected synchronized void gameReady() {
@@ -726,7 +730,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Nickname received.
+     * Nickname validate received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -743,7 +747,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Color received.
+     * Color validate received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -764,7 +768,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Sets godly.
+     * Godly received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -783,7 +787,7 @@ public class CLI extends RemoteView implements Runnable {
 
 
     /**
-     * Chosen gods.
+     * Chosen gods validate received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -801,7 +805,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Assigned god.
+     * Assigned god validate received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -819,7 +823,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Sets first player.
+     * Assigned god validate received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -834,7 +838,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Actions available.
+     * Actions available for the player's turn. Print the board and the game can go on.
      *
      * @param message the message
      */
@@ -846,7 +850,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Sets worker.
+     * Workers placed validate received from the server. Print the board and the game can go on.
      *
      * @param message the message
      */
@@ -858,7 +862,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * End turn.
+     * End turn received from the server. The game can go on.
      *
      * @param message the message
      */
@@ -870,7 +874,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Winner detected.
+     * Winner detected message from the server. Print the winning the message, the game is going to be stopped.
      *
      * @param message the message
      */
@@ -894,7 +898,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     /**
-     * Player has lost.
+     * Player has lost for no available moves, the message is received from the server.
      *
      * @param message the message
      */
