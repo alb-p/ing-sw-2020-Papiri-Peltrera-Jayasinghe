@@ -6,13 +6,16 @@ import java.nio.charset.Charset;
 import java.util.Scanner;
 
 /**
- * The type Client main.
+ * The type Client main is the launcher for the client.
  */
 public class ClientMain {
     public static final Scanner scanner = new Scanner(System.in);
 
     /**
-     * Main.
+     * Handles the parameters order and sets up
+     * the cli or the gui based on this.
+     * Also searches for ip and port to
+     * set up the connection
      *
      * @param args the args
      */
@@ -65,11 +68,8 @@ public class ClientMain {
         }
 
 
-        try {
-            new SocketServerConnection(ip, port, chosenUI);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        new SocketServerConnection(ip, port, chosenUI);
+
 
 
     }

@@ -1,7 +1,7 @@
 package it.polimi.ingsw.network;
+
 import it.polimi.ingsw.model.Action;
 import it.polimi.ingsw.model.VirtualSlot;
-import it.polimi.ingsw.model.Worker;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;
@@ -17,19 +17,19 @@ import java.util.logging.Logger;
 
 
 /**
- * The type Socket client connection.
+ * The type Socket client connection is the linker to the client
+ * for the server, if it cannot find the socket open,
+ * it notifies to the controller the disconnection of the player.
  */
 public class SocketClientConnection implements Runnable, PropertyChangeListener {
 
     private Socket socket;
-    private ObjectOutputStream outSocket;
+    private  ObjectOutputStream outSocket;
     private ObjectInputStream inSocket;
-    private PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
     private Logger logger = Logger.getLogger("network.scc");
 
     private int id;
-    private Server server;
-
     private boolean active = true;
 
     /**
@@ -48,16 +48,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
             logger.log(Level.SEVERE, e.getMessage());
         }
     }
-
-    /**
-     * Is active boolean.
-     *
-     * @return the boolean
-     */
-    private synchronized boolean isActive() {
-        return active;
-    }
-
 
     /**
      * Send.
@@ -84,7 +74,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     public int askNumOfPlayers() {
         int read = 0;
         try {
-            //outSocket = new ObjectOutputStream(socket.getOutputStream());
             send(new SetupMessage());
             read = ((SetupMessage) inSocket.readObject()).getField();
             while (!(read == 2 || read == 3)) {
@@ -97,17 +86,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         return read;
     }
 
-    /**
-     * Notify game playing.
-     */
-    public void notifyGamePlaying() {
-        send("The Lobby is full! Please Wait");
-    }
 
     /**
-     * Sets id.
+     * Sets id of the player
      *
-     * @param i the
+     * @param i the id
      */
     public void setId(int i) {
         this.id = i;
@@ -124,7 +107,9 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
 
 
     /**
-     * Run.
+     * Fires to the controller the events coming
+     * from the view.
+     *
      */
     @Override
     public void run() {
@@ -135,23 +120,20 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message
                         && ((Message) ((PropertyChangeEvent) inputObject).getNewValue()).getId() == id) {
-                    receiveDebug((PropertyChangeEvent)inputObject);
+                    receiveDebug((PropertyChangeEvent) inputObject);
                     sccListeners.firePropertyChange((PropertyChangeEvent) inputObject);
-                } else if(inputObject instanceof  PropertyChangeEvent &&
-                        ((PropertyChangeEvent) inputObject).getPropertyName().equalsIgnoreCase("playerDisconnected")){
+                } else if (inputObject instanceof PropertyChangeEvent &&
+                        ((PropertyChangeEvent) inputObject).getPropertyName().equalsIgnoreCase("playerDisconnected")) {
                     sccListeners.firePropertyChange("playerDisconnected", this, id);
                     socket.close();
                 }
             }
 
-        } catch (Exception e) {
-
-            try {
-                socket.close();
-            } catch (IOException ioException) {
-                logger.log(Level.SEVERE, e.getMessage());
-            }
+            socket.close();
+        } catch (IOException | ClassNotFoundException exception) {
+            logger.log(Level.SEVERE, exception.getMessage());
         }
+
     }
 
     /**
@@ -161,8 +143,8 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
      */
     private void receiveDebug(PropertyChangeEvent inputObject) {
         System.out.println("\n\n\t\t |RECEIVED EVENT");
-        System.out.println("\t\t |"+inputObject.getPropertyName());
-        System.out.println("\t\t |"+"ID SENDER "+id);
+        System.out.println("\t\t |" + inputObject.getPropertyName());
+        System.out.println("\t\t |" + "ID SENDER " + id);
         System.out.println("\t\t | ______________________________");
     }
 
@@ -174,10 +156,10 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         sendEvent(evt);
-        if (evt.getPropertyName().equalsIgnoreCase("endGame")){
+        if (evt.getPropertyName().equalsIgnoreCase("endGame")) {
             try {
                 socket.close();
-                System.out.println("DOPO ENDGAME CHIUDO CONNESSIONE "+id);
+                System.out.println("DOPO ENDGAME CHIUDO CONNESSIONE " + id);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage());
             }
@@ -185,9 +167,10 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Send event.
+     * Forward the events coming from
+     * the model to the view.
      *
-     * @param evt the evt
+     * @param evt the evt to forward
      */
     public void sendEvent(PropertyChangeEvent evt) {
         debug(evt);
@@ -200,10 +183,10 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         } catch (IOException e) {
             try {
                 socket.close();
-                System.out.println("Connection "+ id+ " SOCKET CLOSED");
+                logger.log(Level.INFO,"Connection " + id + " SOCKET CLOSED");
             } catch (IOException ioException) {
                 logger.log(Level.SEVERE, e.getMessage());
-            }finally {
+            } finally {
                 sccListeners.firePropertyChange("playerDisconnected", this, id);
             }
         }
@@ -216,52 +199,53 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
      * @param evt the evt
      */
     private void debug(PropertyChangeEvent evt) {
-        System.out.println("| "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+" "+"---DEBUG ID "+id+"\n|\n|\n|");
-        if(evt.getNewValue() instanceof Message){
-            if (evt.getNewValue() instanceof ActionMessage){
+        System.out.println("| " + "---DEBUG ID " + id + " " + "---DEBUG ID " + id + " " + "---DEBUG ID " + id + " " + "---DEBUG ID " + id + "\n|\n|\n|");
+        if (evt.getNewValue() instanceof Message) {
+            if (evt.getNewValue() instanceof ActionMessage) {
                 System.out.println("| ACTION MESSAGE SENDING");
                 System.out.println(evt.getPropertyName());
-                for (Action a: ((ActionMessage) evt.getNewValue()).getChoices()){
-                    System.out.println("| "+a.getActionName()+a.getStart() + a.getEnd());
+                for (Action a : ((ActionMessage) evt.getNewValue()).getChoices()) {
+                    System.out.println("| " + a.getActionName() + a.getStart() + a.getEnd());
                 }
-                System.out.println("| MESSAGE ID : "+((ActionMessage) evt.getNewValue()).getId());
+                System.out.println("| MESSAGE ID : " + ((ActionMessage) evt.getNewValue()).getId());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
-            } if (evt.getNewValue() instanceof WorkerMessage){
+            }
+            if (evt.getNewValue() instanceof WorkerMessage) {
                 System.out.println("| worker SENDING");
                 System.out.println(evt.getPropertyName());
-                WorkerMessage message =(WorkerMessage)evt.getNewValue();
-                System.out.println("| MESSAGE ID : "+message.getId());
-                System.out.println("| worker ID : "+message.getWorkerNumber());
+                WorkerMessage message = (WorkerMessage) evt.getNewValue();
+                System.out.println("| MESSAGE ID : " + message.getId());
+                System.out.println("| worker ID : " + message.getWorkerNumber());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
-            } else if (evt.getNewValue() instanceof GenericMessage){
+            } else if (evt.getNewValue() instanceof GenericMessage) {
                 System.out.println("| GENERIC MESSAGE SENDING");
-                System.out.println("| "+evt.getPropertyName());
+                System.out.println("| " + evt.getPropertyName());
                 System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
-            }else if (evt.getNewValue() instanceof NicknameMessage){
+            } else if (evt.getNewValue() instanceof NicknameMessage) {
                 System.out.println("| NICKNAME MESSAGE SENDING");
-                System.out.println("| "+evt.getPropertyName());
-                System.out.println("| NICK : "+((NicknameMessage) evt.getNewValue()).getNickname());
+                System.out.println("| " + evt.getPropertyName());
+                System.out.println("| NICK : " + ((NicknameMessage) evt.getNewValue()).getNickname());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
-            }else if (evt.getNewValue() instanceof WinnerMessage) {
+            } else if (evt.getNewValue() instanceof WinnerMessage) {
                 System.out.println("| WINNER MESSAGE SENDING");
                 System.out.println("| " + evt.getPropertyName());
                 System.out.println("| NICK WINNER: " + ((WinnerMessage) evt.getNewValue()).getMessage());
                 System.out.println("| _*_*_*_*_*_*_*_*_*_*_*_*_*_");
             }
-        } else if(evt.getNewValue() instanceof VirtualSlot){
-            System.out.println("| "+"VIRTUALSLOT SENDING");
-            System.out.println("| "+((VirtualSlot) evt.getNewValue()).getCoordinate());
-            System.out.println("| "+"_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+        } else if (evt.getNewValue() instanceof VirtualSlot) {
+            System.out.println("| " + "VIRTUALSLOT SENDING");
+            System.out.println("| " + ((VirtualSlot) evt.getNewValue()).getCoordinate());
+            System.out.println("| " + "_*_*_*_*_*_*_*_*_*_*_*_*_*_");
         }
-        System.out.println("| "+evt.getPropertyName());
-        System.out.println("| "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+" "+"END---DEBUG ID "+id+"\n\n\n ");
+        System.out.println("| " + evt.getPropertyName());
+        System.out.println("| " + "END---DEBUG ID " + id + " " + "END---DEBUG ID " + id + " " + "END---DEBUG ID " + id + " " + "END---DEBUG ID " + id + " " + "END---DEBUG ID " + id + "\n\n\n ");
 
     }
 
     /**
      * Add scc listener.
      *
-     * @param listener the listener
+     * @param listener the listener to add
      */
     public void addSccListener(PropertyChangeListener listener) {
         sccListeners.addPropertyChangeListener(listener);

@@ -5,7 +5,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The type Server main.
+ * The type Server main is the launcher for the server.
  */
 public class ServerMain {
 

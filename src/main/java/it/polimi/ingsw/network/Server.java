@@ -16,8 +16,8 @@ import java.util.logging.Logger;
 public class Server {
 
     private static final int PORT = 4566;
-    private ServerSocket serverSocket = new ServerSocket(PORT);
-    private ExecutorService executor = Executors.newFixedThreadPool(128);
+    private final ServerSocket serverSocket = new ServerSocket(PORT);
+    private final ExecutorService executor = Executors.newFixedThreadPool(128);
     private Room room = new Room(executor);
     private Logger logger = Logger.getLogger("server");
 
@@ -31,23 +31,19 @@ public class Server {
 
 
     /**
-     * Run.
+     * Handles all the connection requests from the clients.
+     * If the new room is empty asks the following client
+     * the number of players for the creating game.
+     *
+     * When the room will be full, it will start the game,
+     * and the server will instantiate a new room and new players.
      */
     public void run() {
         while (true) {
             try {
                 Socket newSocket = serverSocket.accept();
-                System.out.println("trewc");
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket);
-                /*
-                inserico i giocatori nella waiting list
-                if waiting list. length è 1 allora a quello chiedo il numero di giocatori
-                creo una stanza con quel parametro e aggiungo alla stanza i primi
-                n giocatori della lista
-                verifica che la stanza non sia vuota, se
-                è vuota chiede al socket il numero di giocatori
 
-                 */
                 synchronized (room) {
                     logger.log(Level.INFO,"Server synchronized on Room");
                     if (room.isUninitialized()) {

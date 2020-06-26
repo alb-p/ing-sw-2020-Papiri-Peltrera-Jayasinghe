@@ -14,8 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * The type Socket server connection.
- */
+ *  * The type Socket Server connection is the linker to the server
+ *  * for the client
+ *
+ *  .*/
 public class SocketServerConnection implements Runnable{
 
     private Socket socket;
@@ -25,13 +27,12 @@ public class SocketServerConnection implements Runnable{
     private RemoteView view;
     private ObjectInputStream inputStream;
     private ObjectOutputStream printStream;
-    private Logger logger = Logger.getLogger("network.ssc");
-    //oppure trovare soluzione più definitiva per associare id e nome player
-    //è strettamente necessario avere il nickname?
-    String nickname;
+    private final Logger logger = Logger.getLogger("network.ssc");
+
 
     /**
      * Instantiates a new Socket server connection.
+     *  Starts the thread for the view
      *
      * @param ip       the ip
      * @param port     the port
@@ -50,7 +51,8 @@ public class SocketServerConnection implements Runnable{
     }
 
     /**
-     * Run.
+     * Reads the objects coming from the server
+     * and forwards them to the remote view
      */
     @Override
     public void run() {
@@ -99,7 +101,9 @@ public class SocketServerConnection implements Runnable{
     }
 
     /**
-     * Send event.
+     * Forwards the events to
+     * the SCC that will be catch
+     * by the controller.
      *
      * @param evt the evt
      */
