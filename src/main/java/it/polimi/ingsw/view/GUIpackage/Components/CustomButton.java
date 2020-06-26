@@ -35,7 +35,7 @@ public class CustomButton extends JButton implements MouseListener{
         this.normal=new ImageIcon(this.getClass().getResource(name+"_normal.png"));
         this.onMouse=new ImageIcon(this.getClass().getResource(name+"_onmouse.png"));
         this.pressed=new ImageIcon(this.getClass().getResource(name+"_pressed.png"));
-
+        this.setBackground(new Color(0,0,0,0));
         this.setIcon(this.normal);
         this.addMouseListener(this);
 

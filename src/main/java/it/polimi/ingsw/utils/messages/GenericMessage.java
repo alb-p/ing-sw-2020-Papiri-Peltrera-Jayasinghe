@@ -3,7 +3,8 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * The type Generic message.
+ * The type Generic message is a message
+ *  * that vehicles generic information.
  */
 public class GenericMessage implements Message , Serializable {
 

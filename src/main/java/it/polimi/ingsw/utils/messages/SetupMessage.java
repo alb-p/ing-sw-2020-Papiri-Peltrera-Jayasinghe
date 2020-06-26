@@ -3,7 +3,9 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * The type Setup message.
+ * The type Setup message is used to vehicle
+ * the request of how many players will
+ * take part to the game.
  */
 public class SetupMessage implements Message, Serializable {
 

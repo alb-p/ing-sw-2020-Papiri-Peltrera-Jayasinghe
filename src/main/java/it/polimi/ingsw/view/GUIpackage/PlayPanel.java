@@ -775,7 +775,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
     }
 
-
     /**
      * The type Transferable image.
      */

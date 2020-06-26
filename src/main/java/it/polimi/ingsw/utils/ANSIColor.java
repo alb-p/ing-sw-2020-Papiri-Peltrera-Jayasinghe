@@ -33,19 +33,17 @@ public enum ANSIColor {
 
     /**
      * Instantiates a new Ansi color.
+     * If OS is Windows it will not use escapes.
      *
      * @param escape the escape
      */
-    ANSIColor(String escape)
-    {
-
+    ANSIColor(String escape) {
         if(System.getProperty("os.name").startsWith("Windows")){
             this.escape = "";
         }
         else{
             this.escape = escape;
         }
-
 
     }
 

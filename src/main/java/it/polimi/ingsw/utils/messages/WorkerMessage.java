@@ -5,7 +5,8 @@ import it.polimi.ingsw.model.Coordinate;
 import java.io.Serializable;
 
 /**
- * The type Worker message.
+ * The type Worker message is a message
+ *  * that vehicles worker information..
  */
 public class WorkerMessage implements Message, Serializable {
     private static final long serialVersionUID = 6592641812520811496L;

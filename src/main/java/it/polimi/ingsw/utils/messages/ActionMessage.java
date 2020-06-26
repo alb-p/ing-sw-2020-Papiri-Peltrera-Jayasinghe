@@ -6,7 +6,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * The type Action message.
+ * The type Action message is a message
+ *  * that vehicles actions information..
  */
 public class ActionMessage implements Message, Serializable {
 
@@ -20,9 +21,9 @@ public class ActionMessage implements Message, Serializable {
     /**
      * Instantiates a new Action message.
      *
-     * @param list the list
-     * @param b    the b
-     * @param id   the id
+     * @param list the list of the available actions
+     * @param b    the possibility of end turn without doing any action
+     * @param id   the id of the playing player
      */
     public ActionMessage(ArrayList<Action> list, boolean b, int id) {
         this.choices=list;
@@ -58,7 +59,7 @@ public class ActionMessage implements Message, Serializable {
     /**
      * Get choices array list.
      *
-     * @return the array list
+     * @return the array list of the available actions
      */
     public ArrayList<Action> getChoices(){
         return this.choices;
@@ -76,7 +77,7 @@ public class ActionMessage implements Message, Serializable {
     /**
      * Sets optional.
      *
-     * @param optional the optional
+     * @param optional true if the actions are optionals
      */
     public void setOptional(boolean optional) {
         isOptional = optional;

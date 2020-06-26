@@ -4,13 +4,14 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * The type Initial cards message.
+ * The type Initial cards message is a message
+ *  * that vehicles the list of the gods
+ *  selected by the godly player.
  */
 public class InitialCardsMessage implements Message, Serializable {
 
     private static final long serialVersionUID = -5566840779833893228L;
     private final ArrayList<String> selectedList;
-    private String message;
     private int id;
 
 
@@ -23,12 +24,10 @@ public class InitialCardsMessage implements Message, Serializable {
     }
 
     /**
-     * Gets message.
-     *
-     * @return the message
+     * @return null
      */
     public String getMessage() {
-        return message;
+        return null;
     }
 
     /**

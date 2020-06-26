@@ -3,7 +3,9 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * The type Winner message.
+ * The type Winner message is a message
+ * that vehicles  the infotmation of
+ * the winner player.
  */
 public class WinnerMessage implements Message, Serializable {
 

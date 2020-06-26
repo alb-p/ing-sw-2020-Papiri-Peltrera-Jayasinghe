@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 
 /**
- * The type Room.
+ * The type Room handles the creation of a match.
  */
 public class Room {
 
@@ -31,13 +31,10 @@ public class Room {
      * Add player.
      *
      * @param connection the connection
-     * @throws Exception the exception
      */
-    public void addPlayer(SocketClientConnection connection) throws Exception {
+    public void addPlayer(SocketClientConnection connection){
         if (this.playersPerGame > connections.size()) {
             this.connections.add(connection);
-        } else {
-            throw new Exception();
         }
     }
 

@@ -3,7 +3,8 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * The type Godly message.
+ * The type Godly message is a message
+ * that vehicles the godly id information.
  */
 public class GodlyMessage implements Message, Serializable {
 
@@ -13,16 +14,15 @@ public class GodlyMessage implements Message, Serializable {
     /**
      * Instantiates a new Godly message.
      *
-     * @param id the id
+     * @param id the id of the godly player
      */
     public GodlyMessage(int id){
         this.id=id;
     }
 
     /**
-     * Gets message.
      *
-     * @return the message
+     * @return null
      */
     @Override
     public String getMessage() {
@@ -32,7 +32,7 @@ public class GodlyMessage implements Message, Serializable {
     /**
      * Sets id.
      *
-     * @param id the id
+     * @param id the id of the godly player
      */
     @Override
     public void setId(int id) {
@@ -42,7 +42,7 @@ public class GodlyMessage implements Message, Serializable {
     /**
      * Gets id.
      *
-     * @return the id
+     * @return the id of the godly player
      */
     @Override
     public int getId() {
