@@ -1,7 +1,6 @@
 package it.polimi.ingsw.network;
 
 import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.VirtualSlot;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.CLI;
 import it.polimi.ingsw.view.GUIpackage.GUI;
@@ -108,8 +107,8 @@ public class SocketServerConnection implements Runnable{
      * @param evt the evt
      */
     public void sendEvent(PropertyChangeEvent evt) {
-        //TODO funzione di debug per client
-        //debug(evt);
+        //Client debug function
+        debug(evt);
         try {
             if (evt.getNewValue() instanceof Message) {
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());
@@ -142,31 +141,32 @@ public class SocketServerConnection implements Runnable{
      * @param evt the evt
      */
     private void debug(PropertyChangeEvent evt) {
-        System.out.println("---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " ");
+        String separator = "_*_*_*_*_*_*_*_*_*_*_*_*_*_";
+        logger.log(Level.FINE,"---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " ");
         if (evt.getNewValue() instanceof Message) {
             if (evt.getNewValue() instanceof ActionMessage) {
-                System.out.println("ACTION MESSAGE SENDING");
-                System.out.println(evt.getPropertyName());
+                logger.log(Level.FINE,"ACTION MESSAGE SENDING");
+                logger.log(Level.FINE,evt.getPropertyName());
                 Action a = ((ActionMessage) evt.getNewValue()).getAction();
-                System.out.println(a.getActionName() + a.getStart() + a.getEnd());
+                logger.log(Level.FINE,a.getActionName() + a.getStart() + a.getEnd());
             }
-            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            logger.log(Level.FINE,separator);
         } else if (evt.getNewValue() instanceof GenericMessage) {
-            System.out.println("GENERIC MESSAGE SENDING");
-            System.out.println(evt.getPropertyName());
-            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            logger.log(Level.FINE,"GENERIC MESSAGE SENDING");
+            logger.log(Level.FINE,evt.getPropertyName());
+            logger.log(Level.FINE,separator);
         } else if (evt.getNewValue() instanceof NicknameMessage) {
-            System.out.println("NICKNAME MESSAGE SENDING");
-            System.out.println(evt.getPropertyName());
-            System.out.println("NICK : " + ((NicknameMessage) evt.getNewValue()).getNickname());
-            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            logger.log(Level.FINE,"NICKNAME MESSAGE SENDING");
+            logger.log(Level.FINE,evt.getPropertyName());
+            logger.log(Level.FINE,"NICK : " + ((NicknameMessage) evt.getNewValue()).getNickname());
+            logger.log(Level.FINE,separator);
         } else {
-            System.out.println("SENDING");
-            System.out.println(evt.getPropertyName());
-            System.out.println("_*_*_*_*_*_*_*_*_*_*_*_*_*_");
+            logger.log(Level.FINE,"SENDING");
+            logger.log(Level.FINE,evt.getPropertyName());
+            logger.log(Level.FINE,separator);
 
         }
-        System.out.println("END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " ");
+        logger.log(Level.FINE,"END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " ");
 
     }
 

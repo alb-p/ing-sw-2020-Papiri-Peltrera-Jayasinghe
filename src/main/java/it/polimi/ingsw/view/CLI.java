@@ -11,6 +11,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Command line interface implementation.
@@ -23,7 +25,7 @@ public class CLI extends RemoteView implements Runnable {
     private final Scanner scanner;
     private final SantoriniPrintStream printer;
     private String playerInput;
-    private SocketServerConnection connection;
+    private final SocketServerConnection connection;
     private String nickname;
     private Color color;
     private boolean nickValidate = false;
@@ -31,9 +33,10 @@ public class CLI extends RemoteView implements Runnable {
     private boolean godlySelected = false;
     private boolean winnerDetected = false;
     private boolean endTurn;
-    private ModelView modelView;
+    private final ModelView modelView;
     private static final String arrangeGodList = "%d- %-20s";
     private static final String arrangeColorList = "%d- %-15s";
+    private final Logger logger = Logger.getLogger("cli");
 
     /**
      * Instantiates a new Cli.
@@ -54,21 +57,6 @@ public class CLI extends RemoteView implements Runnable {
     /**
      * Welcome message.
      */
-    /*
-    public void welcomeMessage() {
-        printer.println("\n" +
-                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" +
-                ANSIColor.BLUE + "░░░░░╔╦═╦╗░░░░░░░░░░░░░╔╗░░░░░░░░░░░░\n" +
-                "░░░░░║║║║╠═╦╗╔═╦═╦══╦═╗║╚╦═╗░░░░░░░░░\n" +
-                "░░░░░║║║║║╩╣╚╣═╣╬║║║║╩╣║╔╣╬║░░░░░░░░░\n" +
-                "░░░░░╚═╩═╩═╩═╩═╩═╩╩╩╩═╝╚═╩═╝░░░░░░░░░\n" +
-                "░░░░░╔══╗░░░░░╔╗░░░░╔╗░░╔╗░░░░░░░░░░░\n" +
-                "░░░░░║══╬═╗╔═╦╣╚╦═╦╦╬╬═╦╬╣░░░░░░░░░░░\n" +
-                "░░░░░╠══║╬╚╣║║║╔╣╬║╔╣║║║║║░░░░░░░░░░░\n" +
-                "░░░░░╚══╩══╩╩═╩═╩═╩╝╚╩╩═╩╝░░░░░░░░░░░\n" +
-                ANSIColor.WHITE + "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░\n" + ANSIColor.RESET);
-    }*/
-
     public void welcomeMessage(){
         printer.println("\n"+
                 "  _    _      _                            \n" +
@@ -85,12 +73,12 @@ public class CLI extends RemoteView implements Runnable {
                         "                | || (_) |                 \n" +
                         "                 \\__\\___/                  \n" +
                         "                                           \n" +
-                        " _____             _             _       _ \n" +
+                        ANSIColor.BLUE+" _____             _             _       _ \n" +
                         "/  ___|           | |           (_)     (_)\n" +
                         "\\ `--.  __ _ _ __ | |_ ___  _ __ _ _ __  _ \n" +
                         " `--. \\/ _` | '_ \\| __/ _ \\| '__| | '_ \\| |\n" +
                         "/\\__/ / (_| | | | | || (_) | |  | | | | | |\n" +
-                        "\\____/ \\__,_|_| |_|\\__\\___/|_|  |_|_| |_|_|\n" +
+                        "\\____/ \\__,_|_| |_|\\__\\___/|_|  |_|_| |_|_|\n" + ANSIColor.RESET+
                         "                                           \n" +
                         "                                           "
 
@@ -277,7 +265,6 @@ public class CLI extends RemoteView implements Runnable {
         message.setId(getPlayerId());
         String s;
         String isNumber;
-        //TODO deidere convenzione per inizializzazione dei controlli o 9 o -2
         int indexGod = 9;
         //printer.println();
         if (modelView.getChosenGods().size() == 1) {
@@ -597,7 +584,7 @@ public class CLI extends RemoteView implements Runnable {
             System.exit(0);
 
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
 
     }
@@ -715,14 +702,13 @@ public class CLI extends RemoteView implements Runnable {
         try {
             this.wait();
         } catch (InterruptedException | IllegalMonitorStateException e) {
-            System.out.println("ILLEGAL MONITOR");
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
     }
 
     /**
-     * It notifies the player game is ready: all the players.
-     * //TODO da finire
+     * It notifies the player game is ready: all the players are in the room.
+     *
      */
     @Override
     protected synchronized void gameReady() {
@@ -881,7 +867,7 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
-        printer.println(modelView.getPlayer(message.getId()).getNickname() + "\n" +
+        printer.println(ANSIColor.BACK_YELLOW+modelView.getPlayer(message.getId()).getNickname()+ANSIColor.RESET + "\n" +
                 "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
                 "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
                 "$$ |  $$ |$$ /  $$ |$$ /  \\__|      $$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |\n" +
@@ -892,7 +878,7 @@ public class CLI extends RemoteView implements Runnable {
                 "\\__|  \\__|\\__|  \\__| \\______/       \\__/     \\__| \\______/ \\__|  \\__|\n" +
                 "                                                                     \n" +
                 "                                                                     \n" +
-                "                                                                     ");
+                "                                                                     "+ANSIColor.RESET);
 
         notify();
     }

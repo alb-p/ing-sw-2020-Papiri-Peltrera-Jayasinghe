@@ -24,8 +24,7 @@ public class IslandBoard{
     }
 
     /**
-     * Returns the slot
-     * int the parameter position.
+     * Returns the slot in the parameter position.
      *
      * @param coordinate the coordinate
      * @return the slot
@@ -37,47 +36,8 @@ public class IslandBoard{
         }
         else{
             logger.log(Level.WARNING, "Invalid Coordinate");
-            //TODO checking valid Coordinate, add logger if necessary
             return null;
         }
-    }
-
-    /**
-     * Is perimeter boolean.
-     *
-     * @param coordinate the coordinate
-     * @return true if coordinate is in the perimeter
-     */
-//TODO controllare che venga usato più di una volta altrimenti metterlo solo in Hestia
-    public boolean isPerimeter(Coordinate coordinate) {
-        int row = coordinate.getRow();
-        int col = coordinate.getCol();
-        return row == 0 || row == 4 || col == 0 || col == 4;
-    }
-
-    /**
-     * To string string.
-     *
-     * @return the string
-     */
-    public String toString (){
-        StringBuilder total = new StringBuilder(5*5*2);
-
-        total.append("        \u2554\u2550\u2550\u2566\u2550\u2550\u2566\u2550\u2550\u2566\u2550\u2550\u2566\u2550\u2550\u2557").append('\n');
-        total.append("        \u2551"+board[4][0]+"\u2551"+board[4][1]+"\u2551"+board[4][2]+"\u2551"+board[4][3]+"\u2551"+board[4][4]+"\u2551").append('\n');
-        total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');
-        total.append("        \u2551"+board[3][0]+"\u2551"+board[3][1]+"\u2551"+board[3][2]+"\u2551"+board[3][3]+"\u2551"+board[3][4]+"\u2551").append('\n');
-        total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');
-        total.append("        \u2551"+board[2][0]+"\u2551"+board[2][1]+"\u2551"+board[2][2]+"\u2551"+board[2][3]+"\u2551"+board[2][4]+"\u2551").append('\n');
-        total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');
-        total.append("        \u2551"+board[1][0]+"\u2551"+board[1][1]+"\u2551"+board[1][2]+"\u2551"+board[1][3]+"\u2551"+board[1][4]+"\u2551").append('\n');
-        total.append("        \u2560\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u256C\u2550\u2550\u2563").append('\n');
-        total.append("        \u2551"+board[0][0]+"\u2551"+board[0][1]+"\u2551"+board[0][2]+"\u2551"+board[0][3]+"\u2551"+board[0][4]+"\u2551").append('\n');
-        total.append("        \u255A\u2550\u2550\u2569\u2550\u2550\u2569\u2550\u2550\u2569\u2550\u2550\u2569\u2550\u2550\u255D").append('\n');
-        total.append("         \u24FF  \u24F5  \u24F6  \u24F7  \u24F8 ").append('\n');
-
-
-        return (total.toString());
     }
 
 

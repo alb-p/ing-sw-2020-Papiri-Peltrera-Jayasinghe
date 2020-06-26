@@ -18,13 +18,13 @@ import java.nio.file.StandardCopyOption;
  */
 public class HomePanel extends JPanel implements ActionListener {
     private PropertyChangeSupport homePanelListeners = new PropertyChangeSupport(this);
-    private Image image;
-    private CustomButton playButton;
-    private CustomButton helpButton;
-    private CustomButton exitButton;
-    private CustomButton settingsButton;
-    private JLayeredPane layeredPane;
-    private JPanel home;
+    private final Image image;
+    private final CustomButton playButton;
+    private final CustomButton helpButton;
+    private final CustomButton exitButton;
+    private final CustomButton settingsButton;
+    private final JLayeredPane layeredPane;
+    private final JPanel home;
     private JPanel settings;
     Dimension frameDimension;
     MakeSound music;

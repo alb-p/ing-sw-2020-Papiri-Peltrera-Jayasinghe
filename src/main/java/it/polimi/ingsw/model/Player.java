@@ -82,34 +82,50 @@ public class Player {
      */
     public void setCard(String card) {
 
-        if (card.equals("APOLLO")) {
-            this.card = new Apollo();
-        } else if (card.equals("ARTEMIS")) {
-            this.card = new Artemis();
-        } else if (card.equals("ATHENA")) {
-            this.card = new Athena();
-        } else if (card.equals("ATLAS")) {
-            this.card = new Atlas();
-        } else if (card.equals("CHRONUS")) {
-            this.card = new Chronus();
-        } else if (card.equals("DEMETER")) {
-            this.card = new Demeter();
-        } else if (card.equals("HEPHAESTUS")) {
-            this.card = new Hephaestus();
-        } else if (card.equals("HESTIA")) {
-            this.card = new Hestia();
-        } else if (card.equals("HYPNUS")) {
-            this.card = new Hypnus();
-        } else if (card.equals("MINOTAUR")) {
-            this.card = new Minotaur();
-        } else if (card.equals("PAN")) {
-            this.card = new Pan();
-        } else if(card.equals("POSEIDON")) {
-            this.card = new Poseidon();
-        } else if (card.equals("PROMETHEUS")) {
-            this.card = new Prometheus();
-        } else if (card.equals("ZEUS")) {
-            this.card = new Zeus();
+        switch (card) {
+            case "APOLLO":
+                this.card = new Apollo();
+                break;
+            case "ARTEMIS":
+                this.card = new Artemis();
+                break;
+            case "ATHENA":
+                this.card = new Athena();
+                break;
+            case "ATLAS":
+                this.card = new Atlas();
+                break;
+            case "CHRONUS":
+                this.card = new Chronus();
+                break;
+            case "DEMETER":
+                this.card = new Demeter();
+                break;
+            case "HEPHAESTUS":
+                this.card = new Hephaestus();
+                break;
+            case "HESTIA":
+                this.card = new Hestia();
+                break;
+            case "HYPNUS":
+                this.card = new Hypnus();
+                break;
+            case "MINOTAUR":
+                this.card = new Minotaur();
+                break;
+            case "PAN":
+                this.card = new Pan();
+                break;
+            case "POSEIDON":
+                this.card = new Poseidon();
+                break;
+            case "PROMETHEUS":
+                this.card = new Prometheus();
+                break;
+            case "ZEUS":
+                this.card = new Zeus();
+                break;
+            default: this.card = new BasicGodCard();
         }
     }
 
@@ -190,11 +206,11 @@ public class Player {
      * @param board the board
      */
     public void playerTreeSetup(IslandBoard board) {
-        TreeActionNode tree = this.card.cardTreeSetup(this.getWorker(0), board);
+        TreeActionNode treeActionNode = this.card.cardTreeSetup(this.getWorker(0), board);
         TreeActionNode temp = this.card.cardTreeSetup(this.getWorker(1), board);
         for (TreeActionNode t : temp.getChildren())
-            tree.addChild(t);
-        this.tree = tree;
+            treeActionNode.addChild(t);
+        this.tree = treeActionNode;
     }
 
     /**
