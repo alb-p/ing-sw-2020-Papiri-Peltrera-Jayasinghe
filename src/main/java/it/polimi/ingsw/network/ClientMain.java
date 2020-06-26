@@ -1,8 +1,6 @@
 package it.polimi.ingsw.network;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
+import java.io.UnsupportedEncodingException;
 import java.util.Scanner;
 
 /**
@@ -20,12 +18,13 @@ public class ClientMain {
      * @param args the args
      */
     public static void main(String[] args) {
-        System.setProperty("file.encoding", "UTF-8");
+        //System.setProperty("file.encoding", "UTF-8");
         //String ip = "127.0.0.1";
         //String ip = "87.18.127.100";
         String ip = "localhost";
         int port = 4566;
         int chosenUI = 1;
+        boolean useUnicode = !System.getProperty("os.name").startsWith("Windows");
 
 /*
         if (args.length != 0) {
@@ -64,12 +63,14 @@ public class ClientMain {
                     chosenUI = Integer.parseInt(nums);
                 } else chosenUI = -1;
             } while (chosenUI != 0 && chosenUI != 1);
-            System.out.println("CHOSEN UI " + chosenUI);
         }
 
 
-        new SocketServerConnection(ip, port, chosenUI);
-
+        try {
+            new SocketServerConnection(ip, port, chosenUI, useUnicode);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
 
 
     }

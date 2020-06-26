@@ -24,7 +24,7 @@ public class SocketServerConnection implements Runnable{
     private final String ip;
     private final int port;
     boolean online = false;
-    private RemoteView view;
+    private final RemoteView view;
     private ObjectInputStream inputStream;
     private ObjectOutputStream printStream;
     private final Logger logger = Logger.getLogger("network.ssc");
@@ -38,11 +38,11 @@ public class SocketServerConnection implements Runnable{
      * @param port     the port
      * @param chosenUI the chosen ui
      */
-    public SocketServerConnection(String ip, int port, int chosenUI) {
+    public SocketServerConnection(String ip, int port, int chosenUI, boolean useUnicode) throws UnsupportedEncodingException {
         this.ip = ip;
         this.port = port;
         if (chosenUI == 0) {
-            this.view = new CLI(this);
+            this.view = new CLI(this, useUnicode);
             new Thread(this.view).start();
         } else {
             this.view = new GUI(this);

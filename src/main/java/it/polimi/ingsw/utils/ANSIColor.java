@@ -41,12 +41,11 @@ public enum ANSIColor {
 
         if(System.getProperty("os.name").startsWith("Windows")){
             this.escape = "";
-            //RESET = "";
         }
         else{
             this.escape = escape;
-            //RESET = "\u001B[0m";
         }
+
 
     }
 
