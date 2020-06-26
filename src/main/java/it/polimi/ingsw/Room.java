@@ -30,7 +30,7 @@ public class Room {
     /**
      * Add player.
      *
-     * @param connection the connection
+     * @param connection the connection of the player
      */
     public void addPlayer(SocketClientConnection connection){
         if (this.playersPerGame > connections.size()) {
@@ -39,7 +39,7 @@ public class Room {
     }
 
     /**
-     * Is ready boolean.
+     * The room is full and ready to start a game.
      *
      * @return the boolean
      */
@@ -48,7 +48,7 @@ public class Room {
     }
 
     /**
-     * Sets num of players.
+     * Sets number of players.
      *
      * @param playersPerGame the players per game
      */
@@ -67,7 +67,7 @@ public class Room {
 
 
     /**
-     * Start.
+     * Starts the setup.
      */
     public void start() {
         Model model = new Model();

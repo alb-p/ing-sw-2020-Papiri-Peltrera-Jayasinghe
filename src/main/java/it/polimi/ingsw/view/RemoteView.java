@@ -7,25 +7,14 @@ import it.polimi.ingsw.utils.messages.*;
 import java.beans.PropertyChangeEvent;
 
 /**
- * The type Remote view.
+ * The type Remote view is extended by CLI and GUI.
+ * Represents the view in the MVC pattern.
  */
 public abstract class RemoteView implements Runnable {
-    //client invoca funzioni di questa classe per richiedere input
-    // all'utente a seguito di richieste specifiche
-    private ModelView modelView = new ModelView();
+
+    private final ModelView modelView = new ModelView();
     private SocketServerConnection connection;
     private int id;
-
-    /**
-     * Gets monitor.
-     *
-     * @return the monitor
-     */
-    public static Object getMonitor() {
-        return monitor;
-    }
-
-    final static Object monitor = new Object();
 
     /**
      * Instantiates a new Remote view.
@@ -61,7 +50,8 @@ public abstract class RemoteView implements Runnable {
     }
 
     /**
-     * Notify event.
+     * Method called by SocketServerConnection whenever
+     * a new event is received by the client.
      *
      * @param evt the evt
      */
@@ -107,6 +97,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Player has lost.
+     * Notifies to the player that someone has lost.
      *
      * @param message the message
      */
@@ -117,6 +108,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Winner detected.
+     * Notifies to the player that someone has won.
      *
      * @param newValue the new value
      */
@@ -124,6 +116,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * End turn.
+     * Notifies to the player that someone has ended his turn.
      *
      * @param message the message
      */
@@ -133,6 +126,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Sets worker.
+     * Notifies to the player that someone has setup his worker.
      *
      * @param message the message
      */
@@ -144,6 +138,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Sets first player.
+     * Notifies to the player that godly has chosen the firstPlayer.
      *
      * @param message the message
      */
@@ -155,6 +150,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Actions available.
+     * Notifies to the player that the actual player has available the actions in the message.
      *
      * @param message the message
      */
@@ -166,6 +162,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Assigned god.
+     * Notifies to the player that someone has chosen his god.
      *
      * @param message the message
      */
@@ -176,6 +173,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Chosen gods.
+     * Notifies to the player that godly has chosen the gods.
      *
      * @param message the message
      */
@@ -194,6 +192,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Color received.
+     * Notifies to the player that someone has chosen his color.
      *
      * @param message the message
      */
@@ -203,6 +202,7 @@ public abstract class RemoteView implements Runnable {
 
     /**
      * Nickname received.
+     * Notifies to the player that someone has chosen his nickname.
      *
      * @param message the message
      */
