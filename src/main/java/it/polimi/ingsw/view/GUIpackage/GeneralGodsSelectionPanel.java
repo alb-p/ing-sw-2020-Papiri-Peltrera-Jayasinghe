@@ -18,6 +18,8 @@ import java.util.ArrayList;
 
 /**
  * The type General gods selection panel.
+ * it is the screen where the godly chooses
+ * the god cards of the game
  */
 public class GeneralGodsSelectionPanel extends JPanel implements ActionListener, MouseListener, PropertyChangeListener {
 
@@ -115,8 +117,8 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     }
 
     /**
-     * Action performed.
-     *
+     * when the submit button is pressed, a notify is
+     * sent to the GUI class
      * @param actionEvent the action event
      */
     @Override
@@ -156,7 +158,8 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     }
 
     /**
-     * Property change.
+     * when all players have set the nickname a notification
+     * is sent from the ModelView
      *
      * @param propertyChangeEvent the property change event
      */
@@ -209,9 +212,12 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
     }
 
     /**
-     * Mouse entered.
      *
-     * @param e the e
+     * when the mouse hovers over the
+     * god icon, its characteristics are
+     * shown in detail
+     *
+     * @param e the event
      */
     @Override
     public void mouseEntered(MouseEvent e) {

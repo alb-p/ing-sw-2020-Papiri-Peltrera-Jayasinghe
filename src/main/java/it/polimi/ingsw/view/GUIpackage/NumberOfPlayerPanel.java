@@ -12,6 +12,8 @@ import java.io.IOException;
 
 /**
  * The type Number of player panel.
+ * is the screen where you choose
+ * the number of players
  */
 public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     private final PropertyChangeSupport numberOfPlayerPanelListeners = new PropertyChangeSupport(this);
@@ -88,7 +90,8 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Paint component.
+     * Paint component. set the background
+     * image of the panel
      *
      * @param g the g
      */
@@ -100,7 +103,8 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
 
 
     /**
-     * Action performed.
+     * manages interactions with clicks
+     * on the buttons on this screen.
      *
      * @param actionEvent the action event
      */

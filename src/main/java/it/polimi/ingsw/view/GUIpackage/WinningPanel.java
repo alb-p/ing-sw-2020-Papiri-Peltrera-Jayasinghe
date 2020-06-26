@@ -6,14 +6,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * it is the panel that displays
+ * the victory message for the winner
+ */
 public class WinningPanel extends JPanel implements ActionListener {
 
 
     ImageIcon frames;
     private Timer timer;
     int currentFrame = 1;
-
-    private PropertyChangeSupport lista;
 
 
     public WinningPanel() {
@@ -23,6 +25,9 @@ public class WinningPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * starts the timer
+     */
 
     public void startTransition() {
 
@@ -32,7 +37,9 @@ public class WinningPanel extends JPanel implements ActionListener {
     }
 
 
-
+    /**
+     * updates the background image
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -44,13 +51,17 @@ public class WinningPanel extends JPanel implements ActionListener {
 
     }
 
+    /**
+     * action triggered by the timer
+     *
+     * @param e
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        if (this.currentFrame == 207) {
+        if (this.currentFrame == 200) {
             timer.stop();
             frames=null;
-            System.gc();//consiglia di far partire il garbage collector
         } else {
             repaint();
             Toolkit.getDefaultToolkit().sync();

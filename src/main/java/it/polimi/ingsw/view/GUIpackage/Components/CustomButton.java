@@ -9,6 +9,8 @@ import java.awt.event.MouseListener;
 
 /**
  * The type Custom button.
+ * component that allows you to create a button
+ * that changes its characteristics based on mouse actions
  */
 public class CustomButton extends JButton implements MouseListener{
 
@@ -52,7 +54,7 @@ public class CustomButton extends JButton implements MouseListener{
 
 
     /**
-     * Mouse pressed.
+     * Mouse pressed. Start click sound
      *
      * @param mouseEvent the mouse event
      */
@@ -62,7 +64,7 @@ public class CustomButton extends JButton implements MouseListener{
     }
 
     /**
-     * Mouse released.
+     * Mouse released. change its icon
      *
      * @param mouseEvent the mouse event
      */
@@ -72,7 +74,7 @@ public class CustomButton extends JButton implements MouseListener{
     }
 
     /**
-     * Mouse entered.
+     * Mouse entered. change its icon
      *
      * @param mouseEvent the mouse event
      */
@@ -82,7 +84,7 @@ public class CustomButton extends JButton implements MouseListener{
     }
 
     /**
-     * Mouse exited.
+     * Mouse exited. change its icon
      *
      * @param mouseEvent the mouse event
      */

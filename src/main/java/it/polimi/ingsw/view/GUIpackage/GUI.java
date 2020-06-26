@@ -21,6 +21,7 @@ import static java.lang.Thread.sleep;
 
 /**
  * The type Gui.
+ * subclass of remoteview
  */
 public class GUI extends RemoteView implements Runnable, PropertyChangeListener {
     private ModelView modelView;
@@ -61,7 +62,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Player has lost.
+     * Fire event of playerHasLost
      *
      * @param message the message
      */
@@ -72,7 +73,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Winner detected.
+     * Fire event of winnerDetected
      *
      * @param message the message
      */
@@ -82,7 +83,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * End turn.
+     * Fire event of endTurnConfirm
      *
      * @param message the message
      */
@@ -93,7 +94,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Sets worker.
+     * Fire event of workerConfirm
      *
      * @param message the message
      */
@@ -104,7 +105,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Sets first player.
+     * Sets first player and start island animation
      *
      * @param message the message
      */
@@ -127,7 +128,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Assigned god.
+     * manages the assignment of the gods
+     * and behaviors after this phase
      *
      * @param message the message
      */
@@ -144,7 +146,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Chosen gods.
+     *
+     * manages the phase of choosing the god card
      *
      * @param newValue the new value
      */
@@ -159,7 +162,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Sets godly.
+     * Sets godly and redirect to next screen
      *
      * @param message the message
      */
@@ -176,7 +179,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Color received.
+     * manages the receipt of the color confirmation
      *
      * @param message the message
      */
@@ -189,7 +192,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Nickname received.
+     * manages the receipt of the nickname confirmation
      *
      * @param message the message
      */
@@ -205,7 +208,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
 //GODLY RECEIVED
 
     /**
-     * Game ready.
+     * is started when all participants of the game have joined
      */
     @Override
     protected void gameReady() {
@@ -214,7 +217,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Choose number of players setup message.
+     * starts when you press the play button
+     * and allows you to choose the number of players
      *
      * @return the setup message
      */
@@ -233,7 +237,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Run.
+     * opens the window and starts the first screen (logo animation)
      */
     @Override
     public void run() {
@@ -250,7 +254,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     /**
-     * Property change.
+     * Handle events fired from client's panels
      *
      * @param evt the evt
      */

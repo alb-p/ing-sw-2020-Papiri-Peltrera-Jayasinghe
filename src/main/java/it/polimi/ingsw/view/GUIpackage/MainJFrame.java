@@ -11,7 +11,8 @@ import java.beans.PropertyChangeListener;
 import java.io.IOException;
 
 /**
- * The type Main j frame.
+ * The type Main Jframe.
+ * it contains all the various screens of the game
  */
 public class MainJFrame extends JFrame implements PropertyChangeListener {
 
@@ -90,7 +91,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     }
 
     /**
-     * Start logo.
+     * Start logo animation.
      */
     public void startLogo(){
         layout.show(getContentPane(),"LogoPanel");
@@ -99,7 +100,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     }
 
     /**
-     * Start island animation.
+     * Start island animation and musics
      */
     public void startIslandAnimation(){
         layout.show(getContentPane(),"IslandAnimationPanel");
@@ -111,7 +112,8 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
     }
 
     /**
-     * Property change.
+     * Handle the events launched
+     * by LogoPanel and IslandAnimationPanel
      *
      * @param propertyChangeEvent the property change event
      */

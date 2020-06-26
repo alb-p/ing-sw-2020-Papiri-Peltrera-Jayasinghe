@@ -9,6 +9,8 @@ import java.beans.PropertyChangeSupport;
 
 /**
  * The type Island animation panel.
+ * panel that allows the animation of
+ * the island before starting the match
  */
 public class IslandAnimationPanel extends JPanel implements ActionListener {
 
@@ -32,7 +34,7 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Start transition.
+     * Start timer.
      */
     public void startTransition() {
 
@@ -60,7 +62,9 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Action performed.
+     * is triggered by the timer. if the
+     * transition is complete, a notification
+     * is sent to the gui class
      *
      * @param e the e
      */
@@ -70,7 +74,6 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
             timer.stop();
             lista.firePropertyChange("islandTransitionEnded",null,true);
             frames=null;
-            System.gc();//consiglia di far partire il garbage collector
         } else {
             repaint();
             Toolkit.getDefaultToolkit().sync();

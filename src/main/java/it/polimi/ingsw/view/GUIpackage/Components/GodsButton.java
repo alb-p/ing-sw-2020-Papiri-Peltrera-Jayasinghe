@@ -5,6 +5,7 @@ import java.awt.*;
 
 /**
  * The type Gods button.
+ * a button used to select the gods for a match
  */
 public class GodsButton extends JButton {
 
@@ -33,7 +34,7 @@ public class GodsButton extends JButton {
 
 
     /**
-     * Set selected.
+     * Set selected. the button is painted is yellow
      */
     public void setSelected(){
         selected = true;
@@ -42,7 +43,7 @@ public class GodsButton extends JButton {
     }
 
     /**
-     * Set unselected.
+     * Set unselected. cancel the yellow selection
      */
     public void setUnselected(){
         selected = false;
@@ -52,13 +53,14 @@ public class GodsButton extends JButton {
 
     /**
      * Paint component.
+     * apply icon to button
+     *
      *
      * @param g the g
      */
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
-      //  g.drawImage(this.image, 0, 0, this);
         if(selected){
             godMiniature.paintIcon(this, g, 0,0);
             g.drawImage(this.glow.getImage(), 0, 0, this);

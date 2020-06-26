@@ -17,6 +17,8 @@ import java.util.ArrayList;
 
 /**
  * The type God selection panel.
+ * it is the screen where the player
+ * chooses his god card
  */
 public class GodSelectionPanel extends JPanel implements ActionListener, MouseListener, PropertyChangeListener {
 
@@ -126,9 +128,9 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
     }
 
     /**
-     * Action performed.
-     *
-     * @param actionEvent the action event
+     * manages the choice of cards.
+     * if the submit button is pressed,
+     * a notification is sent to the gui class
      */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
@@ -158,9 +160,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
     }
 
     /**
-     * Property change.
-     *
-     * @param propertyChangeEvent the property change event
+     * Handle the events fired from the ModelView
      */
     @Override
     public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
@@ -193,7 +193,8 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
 
     /**
-     * Sets buttons.
+     * to each GodButton it associates
+     * the listeners and the properties
      */
     private void setupButtons() {
 
@@ -253,9 +254,11 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
     }
 
     /**
-     * Mouse entered.
+     * when the mouse hovers over the
+     * god icon, its characteristics are
+     * shown in detail
      *
-     * @param e the e
+     * @param e the event
      */
     @Override
     public void mouseEntered(MouseEvent e) {
