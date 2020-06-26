@@ -4,7 +4,9 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * The type God message.
+ * The type God message is a message
+ * that vehicles the information
+ * of the choice of a god.
  */
 public class GodMessage implements Message, Serializable {
 
@@ -44,7 +46,7 @@ public class GodMessage implements Message, Serializable {
     /**
      * Sets id.
      *
-     * @param i the
+     * @param i the id of the player with this god
      */
     @Override
     public void setId(int i) {
@@ -54,7 +56,7 @@ public class GodMessage implements Message, Serializable {
     /**
      * Gets id.
      *
-     * @return the id
+     * @return the id of the player with this god
      */
     @Override
     public int getId() {

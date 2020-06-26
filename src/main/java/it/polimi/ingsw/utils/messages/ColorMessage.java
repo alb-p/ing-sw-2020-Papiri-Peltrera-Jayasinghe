@@ -7,12 +7,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
- * The type Color message.
+ * The type Color message is a message
+ * that vehicles color information.
  */
 public class ColorMessage implements Message, Serializable {
 
     private static final long serialVersionUID = -4150974628324626570L;
-    private String message;
     private Color color;
     private int id;
 
@@ -46,18 +46,16 @@ public class ColorMessage implements Message, Serializable {
     }
 
     /**
-     * Gets message.
-     *
-     * @return the message
+     * @return null
      */
     public String getMessage() {
-        return this.message;
+        return null;
     }
 
     /**
      * Sets id.
      *
-     * @param i the
+     * @param i the id
      */
     @Override
     public void setId(int i) {

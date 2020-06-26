@@ -3,7 +3,8 @@ package it.polimi.ingsw.utils.messages;
 import java.io.Serializable;
 
 /**
- * The type Nickname message.
+ * The type Nickname message is a message
+ * that vehicles the nickname information.
  */
 public class NicknameMessage implements Message , Serializable {
 

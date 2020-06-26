@@ -5,7 +5,9 @@ import it.polimi.ingsw.network.SocketClientConnection;
 import java.io.Serializable;
 
 /**
- * The interface Message.
+ * The interface Message represents how
+ * information needs to be transferred
+ * between client and server.
  */
 public interface Message{
 

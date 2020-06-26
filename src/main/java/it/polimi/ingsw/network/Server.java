@@ -63,7 +63,7 @@ public class Server {
                         socketConnection.setId(room.currentPlayerId()-1);
                     }
                 }
-            } catch (Exception e) {
+            } catch (IOException e) {
                 logger.log(Level.WARNING, e.getMessage());
             }
         }
