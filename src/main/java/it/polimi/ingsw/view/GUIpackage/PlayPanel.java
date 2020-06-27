@@ -247,7 +247,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         /**
-         * create all the components
+         * Create all the components
          * inside the panel
          */
         public void infoCreate() {
@@ -416,7 +416,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
     /**
-     * Try build.
+     *  Handles the build action movement.
      *
      * @param t       the t
      * @param actions the actions
@@ -444,7 +444,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     /**
-     * Send workers.
+     * Send workers after moving the in the desired positions.
      */
     private void sendWorkers() {
         for (int j = 0; j < 2; j++) {
@@ -522,7 +522,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
     /**
-     * Message center turn.
+     * Modifies the text in the Message center
+     * during the game.
      */
     private void messageCenterTurn() {
         if (modelView.getWinnerId() == -1) {
@@ -563,7 +564,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
     /**
-     * Message player setting workers.
+     * Modifies the text in the Message center
+     * during the workers setup.
      */
     private void messagePlayerSettingWorkers() {
         if (modelView.getActualPlayerId() == playerID) {
@@ -588,7 +590,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
 
     /**
-     * Send action.
+     * Send action and requests for new actions.
      *
      * @param attemptedAction the attempted action
      */
@@ -597,7 +599,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         myTurn = false;
         if (buildDome) {
             buildDome = false;
-            //domeButton.setForeground(Color.BLACK); //meh
             domeButton.setIcon(buildDomeIcon);
         }
         domeButton.setVisible(false);
@@ -623,6 +624,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     /**
      * The type Drag and drop.
+     * Extends Transfer Handler to support drag and
+     * drop of an TransferableImage object.
      */
 //this class extends transfer handler and enables components to drag and drop elements
     protected class DragAndDrop extends TransferHandler {
@@ -632,6 +635,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         /**
          * Gets source actions.
+         * The actions that can be done with this transferHandler.
          *
          * @param c the c
          * @return the source actions
@@ -642,9 +646,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         /**
-         * Create transferable transferable.
+         * Create transferable object, that is wanted to
+         * be drag and dropped.
          *
-         * @param c the c
+         * @param c the source component
          * @return the transferable
          */
         @Override
@@ -659,8 +664,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
         /**
          * Export done.
+         * The drag and drop has had a positive outcome.
          *
-         * @param source the source
+         * @param source the source of the drag and drop
          * @param data   the data
          * @param action the action
          */
@@ -697,7 +703,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * Can import boolean.
          *
          * @param support the support
-         * @return the boolean
+         * @return true if the transferHandler supports
+         *          the flavor of the transferable
          */
         @Override
         public boolean canImport(TransferSupport support) {
@@ -705,10 +712,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         /**
-         * Import data boolean.
+         * Handles the drag and drop action when it comes to the
+         * destination of the drag.
          *
          * @param support the support
-         * @return the boolean
+         * @return the outcome of the drag and drop action
          */
         @Override
         public boolean importData(TransferSupport support) {
@@ -784,9 +792,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
     /**
-     * The type Transferable image.
+     * The type Transferable image is the object that can be
+     * dragged and dropped.
      */
-    class TransferableImage implements Transferable {
+    private class TransferableImage implements Transferable {
         private final Image image;
         private final Coordinate coordinate;
 
@@ -794,7 +803,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * Instantiates a new Transferable image.
          *
          * @param image the image
-         * @param coord the coord
+         * @param coord the coordinate of the source
          */
         public TransferableImage(Image image, Coordinate coord) {
             this.image = image;
@@ -802,7 +811,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         }
 
         /**
-         * Get transfer data flavors data flavor [ ].
+         * Get the flavor that represent the transferable.
          *
          * @return the data flavor [ ]
          */
@@ -814,7 +823,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * Is data flavor supported boolean.
          *
          * @param flavor the flavor
-         * @return the boolean
+         * @return true if the param is supported by this transferable
          */
         public boolean isDataFlavorSupported(DataFlavor flavor) {
             return DataFlavor.imageFlavor.equals(flavor);
