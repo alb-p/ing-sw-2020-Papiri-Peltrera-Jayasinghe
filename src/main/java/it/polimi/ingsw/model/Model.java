@@ -225,7 +225,7 @@ public class Model {
      * @return true if a winner has been found
      */
     public boolean checkWinner(int id) {
-        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)) {
+        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)&&!winnerDetected) {
             winnerDetected = true;
             modelListeners.firePropertyChange("winnerDetected", null,
                     new WinnerMessage(id, this.getPlayer(id).getNickName()));
