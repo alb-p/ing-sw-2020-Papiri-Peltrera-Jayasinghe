@@ -16,9 +16,11 @@ public class WinningPanel extends JPanel implements ActionListener {
     ImageIcon frames;
     private Timer timer;
     int currentFrame = 1;
+    JPanel playPanel;
 
 
-    public WinningPanel() {
+    public WinningPanel(JPanel p) {
+        playPanel=p;
         setOpaque(false);
         setBounds(0,0,GUI.getDimension().width,GUI.getDimension().height);
         frames = new ImageIcon(this.getClass().getResource("/Win/Win" + (currentFrame) + ".png"));
@@ -42,13 +44,11 @@ public class WinningPanel extends JPanel implements ActionListener {
      */
     @Override
     protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        frames.paintIcon(this, g, 0, 0);
+        g.drawImage(frames.getImage(),0,0,playPanel);
+    }
 
-        this.currentFrame++;
-        frames=new ImageIcon(this.getClass().getResource("/Win/Win" + (currentFrame) + ".png"));
-
-
+    @Override
+    public void repaint() {
     }
 
     /**
@@ -61,9 +61,11 @@ public class WinningPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 200) {
             timer.stop();
-            frames=null;
+
         } else {
-            repaint();
+            this.currentFrame++;
+            frames=new ImageIcon(this.getClass().getResource("/Win/Win" + (currentFrame) + ".png"));
+
             Toolkit.getDefaultToolkit().sync();
         }
 
@@ -73,3 +75,6 @@ public class WinningPanel extends JPanel implements ActionListener {
 
 
 }
+
+
+
