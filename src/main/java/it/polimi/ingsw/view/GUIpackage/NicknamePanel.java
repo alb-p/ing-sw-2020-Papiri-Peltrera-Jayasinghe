@@ -112,6 +112,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource().equals(submitButton)) {
+            String checkSpaces = (nickToFill.getText()).replace(" ", "");
             boolean valid = true;
             for (String s : invalidNicknames) {
                 if (s.equals(nickToFill.getText())) {
@@ -119,14 +120,15 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
                     break;
                 }
             }
-            if(valid && !nickToFill.getText().equalsIgnoreCase("")){
+            if(valid && !checkSpaces.equalsIgnoreCase("") && nickToFill.getText().length() <= 20){
                 nickPanelListener.firePropertyChange("nicknameReceived", null, nickToFill.getText());
                 submitButton.setEnabled(false);
                 attemptedNick = nickToFill.getText();
             } else {
                 nickToFill.setText("");
                 new MakeSound().playSound("/Sounds/warn.wav",-10f,false);
-                invalidNickLabel.setText("nickname already assigned!");
+                if(!valid) invalidNickLabel.setText("nickname already assigned!");
+                else invalidNickLabel.setText("invalid nickname");
                 invalidNickLabel.setVisible(true);
             }
 
