@@ -15,7 +15,7 @@ import java.beans.PropertyChangeSupport;
 public class IslandAnimationPanel extends JPanel implements ActionListener {
 
 
-    ImageIcon frames;
+    Image frames;
     private Timer timer;
     int currentFrame = 1;
 
@@ -28,8 +28,6 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     public IslandAnimationPanel() {
 
         lista = new PropertyChangeSupport(this);
-
-        frames = new ImageIcon(this.getClass().getResource("/IslandAnimation/island" + (currentFrame) + ".jpg"));
 
     }
 
@@ -52,12 +50,7 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        frames.paintIcon(this, g, 0, 0);
-
-        this.currentFrame++;
-        frames=new ImageIcon(this.getClass().getResource("/IslandAnimation/island" + (currentFrame) + ".jpg"));
-
-
+        g.drawImage(frames,0,0,this);
 
     }
 
@@ -73,8 +66,9 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
         if (this.currentFrame == 120) {
             timer.stop();
             lista.firePropertyChange("islandTransitionEnded",null,true);
-            frames=null;
         } else {
+            frames=new ImageIcon(this.getClass().getResource("/IslandAnimation/island" + (currentFrame) + ".jpg")).getImage();
+            this.currentFrame++;
             repaint();
             Toolkit.getDefaultToolkit().sync();
         }
