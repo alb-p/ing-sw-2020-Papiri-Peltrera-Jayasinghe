@@ -1,7 +1,9 @@
 package it.polimi.ingsw.model;
 
 /**
- * The type Basic god card.
+ * The type Basic god card uses the basic rules
+ * of the game so any god can extend this class and
+ * override only the method that involves the special power.
  */
 public class BasicGodCard {
 
