@@ -15,7 +15,7 @@ import static java.lang.Thread.sleep;
 public class LogoPanel extends JPanel implements ActionListener {
 
 
-    ImageIcon frames;
+    Image frames;
     private Timer timer;
     int currentFrame = 1;
 
@@ -29,7 +29,6 @@ public class LogoPanel extends JPanel implements ActionListener {
 
         list = new PropertyChangeSupport(this);
 
-        frames = new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg"));
 
     }
 
@@ -51,12 +50,7 @@ public class LogoPanel extends JPanel implements ActionListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        frames.paintIcon(this, g, 0, 0);
-
-        this.currentFrame++;
-        frames=new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg"));
-
-
+        g.drawImage(frames,0,0,this);
     }
 
     /**
@@ -71,8 +65,9 @@ public class LogoPanel extends JPanel implements ActionListener {
         if (this.currentFrame == 90) {
             timer.stop();
             list.firePropertyChange("logoTransitionEnded",null,true);//attiva propertyChange dei listeners con passando in questo caso delle stringhe
-            frames=null;
         } else {
+            frames=new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg")).getImage();
+            this.currentFrame++;
             repaint();
             Toolkit.getDefaultToolkit().sync();
         }
