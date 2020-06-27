@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The type Play panel.
@@ -41,7 +43,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final JLayeredPane layeredPane = new JLayeredPane();
     private final MakeSound music = new MakeSound();
     private final MakeSound music2 = new MakeSound();
-
+    private final Logger logger = Logger.getLogger("playpanel");
 
     private final ImageIcon buildDomeIcon;
     private final ImageIcon buildDomeClicked;
@@ -729,7 +731,20 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          */
         @Override
         public boolean canImport(TransferSupport support) {
-            return support.isDataFlavorSupported(DataFlavor.imageFlavor);
+            if(support.getTransferable().isDataFlavorSupported(DataFlavor.imageFlavor)){
+                try {
+                    if(support.getTransferable().getTransferData(DataFlavor.imageFlavor) instanceof TransferableImage){
+                        return true;
+                    }
+                } catch (UnsupportedFlavorException e) {
+                    System.out.println("717 PLAYPANEL");
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    logger.log(Level.WARNING, e.getMessage());
+                    return false;
+                }
+            }
+            return false;
         }
 
         /**
@@ -793,6 +808,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                                     WorkerIcon icon = new WorkerIcon(modelView.getBoard().getSlot(sourceCoord).getColor().getName().toLowerCase());
                                     icon.setVisible(false);
                                     movementPanel.add(icon);
+                                    myTurn = false;
                                     attemptedAction = attemptedMove;
                                     icon.startTransition(boardOfButtons[sourceCoord.getRow()][sourceCoord.getCol()].getLocation(), tDest.getLocation());
                                     icon.addWorkerIconListener(PlayPanel.this);
@@ -803,9 +819,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             }
                         }
                     }
-                } catch (
-                        UnsupportedFlavorException | IOException e) {
-                    e.printStackTrace();
+                } catch (UnsupportedFlavorException | IOException e) {
+                    logger.log(Level.SEVERE, e.getMessage());
+                    return false;
                 }
             }
             return dragAndDropResult;
