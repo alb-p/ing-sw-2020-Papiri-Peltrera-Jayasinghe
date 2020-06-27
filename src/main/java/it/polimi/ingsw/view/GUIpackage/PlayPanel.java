@@ -238,8 +238,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         boolean showing = false;
         int idShowing = 0;
         JButton exit = new JButton();
-        Font font;
-        Image nameBase;
 
         /**
          * Instantiates a new Info panel.
@@ -248,8 +246,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             super();
             this.setOpaque(false);
             this.setLayout(null);
-            nameBase = new ImageIcon(getClass().getResource("/Gameplay/nameBase.png")).getImage();
-
         }
 
         /**
@@ -296,15 +292,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         g.drawImage(tab, 0, 0, PlayPanel.this);
                     }
                 };
-
-                try {
-                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
-                } catch (FontFormatException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
 
                 tabPosition.add(new Point(0, y));
                 y -= 150;
@@ -366,11 +353,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             super.paintComponent(g);
             if (showing) {
                 g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
-                g.setColor(Color.WHITE);
-                g.setFont(font.deriveFont(Font.PLAIN,25));
-                g.drawImage(nameBase, 0, 225, PlayPanel.this);
-                g.drawString(modelView.getPlayer(idShowing).getNickname(),40,257);
-
             }
         }
 
@@ -731,9 +713,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          */
         @Override
         public boolean canImport(TransferSupport support) {
-            if(support.getTransferable().isDataFlavorSupported(DataFlavor.imageFlavor)){
+            if(support.getTransferable().isDataFlavorSupported(new DataFlavor(TransferableImage.class, "transferableImage"))){
                 try {
-                    if(support.getTransferable().getTransferData(DataFlavor.imageFlavor) instanceof TransferableImage){
+                    if(support.getTransferable().getTransferData(new DataFlavor(TransferableImage.class, "transferableImage")) instanceof TransferableImage){
                         return true;
                     }
                 } catch (UnsupportedFlavorException e) {
@@ -762,7 +744,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 try {
                     Transferable t = support.getTransferable();
                     if (t == null) return false;
-                    Object val = t.getTransferData(DataFlavor.imageFlavor);
+                    Object val = t.getTransferData(new DataFlavor(TransferableImage.class, "transferableImage"));
                     Component dest = support.getComponent();
                     if (val instanceof TransferableImage && dest instanceof TileButton && playerID == modelView.getActualPlayerId()) {
                         Coordinate sourceCoord = ((TransferableImage) val).getCoordinate();
@@ -835,6 +817,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private class TransferableImage implements Transferable {
         private final Image image;
         private final Coordinate coordinate;
+        public DataFlavor f= new DataFlavor(PlayPanel.TransferableImage.class, "transferableImage");
 
         /**
          * Instantiates a new Transferable image.
@@ -853,7 +836,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * @return the data flavor [ ]
          */
         public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{DataFlavor.imageFlavor};
+            return new DataFlavor[]{f};
         }
 
         /**
@@ -863,7 +846,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * @return true if the param is supported by this transferable
          */
         public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return DataFlavor.imageFlavor.equals(flavor);
+            return f.equals(flavor);
         }
 
         /**
@@ -874,7 +857,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * @throws UnsupportedFlavorException the unsupported flavor exception
          */
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
-            if (!DataFlavor.imageFlavor.equals(flavor)) {
+            if (!f.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);
             }
             return this;
@@ -906,7 +889,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      * Start animation.
      */
     public void startAnimation() {
-       if(seaAnimation) {
+        if(seaAnimation) {
             Thread seaAnimation = new Thread(() -> {
                 int counter = 216;
                 try {
