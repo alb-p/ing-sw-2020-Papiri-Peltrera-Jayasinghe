@@ -66,7 +66,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final TileButton[][] boardOfButtons = new TileButton[5][5];
     private final Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
     private final InfoPanel infoPanel;
-    private Boolean seaAnimation=true;
+    private Boolean seaAnimation = true;
 
     /**
      * Instantiates a new Play panel.
@@ -238,6 +238,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         boolean showing = false;
         int idShowing = 0;
         JButton exit = new JButton();
+        Font font;
+        Image nameBase;
 
         /**
          * Instantiates a new Info panel.
@@ -246,6 +248,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             super();
             this.setOpaque(false);
             this.setLayout(null);
+            nameBase = new ImageIcon(getClass().getResource("/Gameplay/nameBase.png")).getImage();
+
         }
 
         /**
@@ -292,6 +296,15 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         g.drawImage(tab, 0, 0, PlayPanel.this);
                     }
                 };
+
+                try {
+                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
+                } catch (FontFormatException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
                 tabPosition.add(new Point(0, y));
                 y -= 150;
@@ -353,6 +366,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             super.paintComponent(g);
             if (showing) {
                 g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
+                g.setColor(Color.WHITE);
+                g.setFont(font.deriveFont(Font.PLAIN,25));
+                g.drawImage(nameBase, 0, 225, PlayPanel.this);
+                g.drawString(modelView.getPlayer(idShowing).getNickname(),40,257);
+
             }
         }
 
@@ -421,7 +439,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     }
 
     /**
-     *  Handles the build action movement.
+     * Handles the build action movement.
      *
      * @param t       the t
      * @param actions the actions
@@ -500,12 +518,12 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 playPanelListener.firePropertyChange("actionRequest", false, true);
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
-            if(modelView.getWinnerId() == playerID){
+            if (modelView.getWinnerId() == playerID) {
                 messageCenter.setForeground(new Color(255, 235, 140));
-                WinningPanel p=new WinningPanel(this);
-                layeredPane.add(p,JLayeredPane.POPUP_LAYER);
+                WinningPanel p = new WinningPanel(this);
+                layeredPane.add(p, JLayeredPane.POPUP_LAYER);
                 p.startTransition();
-            }else  messageCenter.setForeground(new Color(255,255,255));
+            } else messageCenter.setForeground(new Color(255, 255, 255));
             messageCenter.setText("Game ended");
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
             if (attemptedAction != null) {
@@ -519,8 +537,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             } else if (playerID == modelView.getDeletedPlayerId()) {
                 messageCenter.setText("You have lost");
             }
-        }else if (evt.getPropertyName().equalsIgnoreCase("SeaAnimation")) {
-            this.seaAnimation= (Boolean) evt.getNewValue();
+        } else if (evt.getPropertyName().equalsIgnoreCase("SeaAnimation")) {
+            this.seaAnimation = (Boolean) evt.getNewValue();
         }
 
         repaint();
@@ -661,7 +679,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         protected Transferable createTransferable(JComponent c) {
             Transferable t = null;
             if (c instanceof TileButton) {
-                System.out.println("CREO TRANSFERABLE");
                 t = new TransferableImage(((TileButton) c).getWorker(), ((TileButton) c).getCoordinate());
             }
             return t;
@@ -709,13 +726,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          *
          * @param support the support
          * @return true if the transferHandler supports
-         *          the flavor of the transferable
+         * the flavor of the transferable
          */
         @Override
         public boolean canImport(TransferSupport support) {
-            if(support.getTransferable().isDataFlavorSupported(new DataFlavor(TransferableImage.class, "transferableImage"))){
+            if (support.getTransferable().isDataFlavorSupported(new DataFlavor(TransferableImage.class, "transferableImage"))) {
                 try {
-                    if(support.getTransferable().getTransferData(new DataFlavor(TransferableImage.class, "transferableImage")) instanceof TransferableImage){
+                    if (support.getTransferable().getTransferData(new DataFlavor(TransferableImage.class, "transferableImage")) instanceof TransferableImage) {
                         return true;
                     }
                 } catch (UnsupportedFlavorException e) {
@@ -724,10 +741,13 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 } catch (IOException e) {
                     logger.log(Level.WARNING, e.getMessage());
                     return false;
+                } catch (ClassCastException e) {
+                    e.printStackTrace();
                 }
             }
             return false;
         }
+
 
         /**
          * Handles the drag and drop action when it comes to the
@@ -817,7 +837,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private class TransferableImage implements Transferable {
         private final Image image;
         private final Coordinate coordinate;
-        public DataFlavor f= new DataFlavor(PlayPanel.TransferableImage.class, "transferableImage");
+        public DataFlavor dataFTranferable = new DataFlavor(PlayPanel.TransferableImage.class, "transferableImage");
 
         /**
          * Instantiates a new Transferable image.
@@ -836,7 +856,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * @return the data flavor [ ]
          */
         public DataFlavor[] getTransferDataFlavors() {
-            return new DataFlavor[]{f};
+            return new DataFlavor[]{dataFTranferable};
         }
 
         /**
@@ -846,7 +866,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * @return true if the param is supported by this transferable
          */
         public boolean isDataFlavorSupported(DataFlavor flavor) {
-            return f.equals(flavor);
+            return dataFTranferable.equals(flavor);
         }
 
         /**
@@ -857,7 +877,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
          * @throws UnsupportedFlavorException the unsupported flavor exception
          */
         public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException {
-            if (!f.equals(flavor)) {
+            if (!dataFTranferable.equals(flavor)) {
                 throw new UnsupportedFlavorException(flavor);
             }
             return this;
@@ -889,7 +909,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      * Start animation.
      */
     public void startAnimation() {
-        if(seaAnimation) {
+        if (seaAnimation) {
             Thread seaAnimation = new Thread(() -> {
                 int counter = 216;
                 try {
@@ -924,7 +944,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      */
     public void startSounds() {
 
-        music2.playSound("/Sounds/environment.wav",-20f,true);
+        music2.playSound("/Sounds/environment.wav", -20f, true);
 
         Thread backgroundSounds = new Thread(() -> {
             Random r = new Random();
