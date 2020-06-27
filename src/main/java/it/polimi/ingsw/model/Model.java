@@ -270,6 +270,7 @@ public class Model {
             for (Player player : players) {
                 if (player.getId() != id) winnerID = player.getId();
             }
+            winnerDetected=true;
             modelListeners.firePropertyChange("winnerDetected", null,
                     new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
         }
