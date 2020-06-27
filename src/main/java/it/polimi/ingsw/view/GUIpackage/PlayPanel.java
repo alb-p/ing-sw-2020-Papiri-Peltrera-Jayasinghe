@@ -675,6 +675,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     if (!workerPlaced) {
                         if (!tSource.getCoordinate().equals(new Coordinate(-1, -1))) {
                             workerPositions.remove(tSource.getCoordinate());
+                        } else {
+                            tSource.getParent().remove(tSource);
                         }
                         if (workerPositions.size() == 2 && tSource.getCoordinate().equals(new Coordinate(-1, -1))) {
                             submitButton.setEnabled(true);

@@ -74,7 +74,7 @@ public class TurnHandler implements PropertyChangeListener {
         } else if(evt.getPropertyName().equalsIgnoreCase("playerDisconnected")){
             if(gameStarted){
                 this.model.removeModelListener((PropertyChangeListener)evt.getOldValue());
-                if((int)evt.getNewValue() != playerDefeatedID)playerHasLost((int)evt.getNewValue());
+                if((int)evt.getNewValue() != playerDefeatedID && !model.isWinnerDetected())playerHasLost((int)evt.getNewValue());
             }
             else {
                 this.model.removeModelListener((PropertyChangeListener)evt.getOldValue());
