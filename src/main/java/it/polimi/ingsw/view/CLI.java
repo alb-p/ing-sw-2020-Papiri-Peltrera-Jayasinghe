@@ -867,7 +867,7 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
-        printer.println(ANSIColor.BACK_YELLOW+modelView.getPlayer(message.getId()).getNickname()+ANSIColor.RESET + "\n" +
+        printer.println("\n\t"+ANSIColor.BACK_YELLOW+modelView.getPlayer(message.getId()).getNickname()+ANSIColor.RESET + "\n\n" +
                 "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
                 "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
                 "$$ |  $$ |$$ /  $$ |$$ /  \\__|      $$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |\n" +
