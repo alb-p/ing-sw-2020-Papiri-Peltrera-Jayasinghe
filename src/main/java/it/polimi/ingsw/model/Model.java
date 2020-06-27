@@ -265,12 +265,14 @@ public class Model {
      * @param id the id of the winner
      */
     public void endGameForNoAvailableMoves(int id) {
-        int winnerID = -1;
-        for (Player player : players) {
-            if (player.getId() != id) winnerID = player.getId();
+        if(!winnerDetected){
+            int winnerID = -1;
+            for (Player player : players) {
+                if (player.getId() != id) winnerID = player.getId();
+            }
+            modelListeners.firePropertyChange("winnerDetected", null,
+                    new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
         }
-        modelListeners.firePropertyChange("winnerDetected", null,
-                new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
     }
 
     /**
