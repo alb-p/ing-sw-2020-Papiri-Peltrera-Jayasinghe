@@ -236,6 +236,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         boolean showing = false;
         int idShowing = 0;
         JButton exit = new JButton();
+        Font font;
+        Image nameBase;
 
         /**
          * Instantiates a new Info panel.
@@ -244,6 +246,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             super();
             this.setOpaque(false);
             this.setLayout(null);
+            nameBase = new ImageIcon(getClass().getResource("/Gameplay/nameBase.png")).getImage();
+
         }
 
         /**
@@ -256,6 +260,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             godsTabs = new ArrayList<>();
             godsInfos = new ArrayList<>();
             tabPosition = new ArrayList<>();
+
 
             this.add(exit);
             exit.setIcon(new ImageIcon(this.getClass().getResource("/Gameplay/exit.png")));
@@ -284,10 +289,20 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     @Override
                     protected void paintComponent(Graphics g) {
                         super.paintComponent(g);
+
                         g.drawImage(godMiniature, 4, 33, PlayPanel.this);
                         g.drawImage(tab, 0, 0, PlayPanel.this);
                     }
                 };
+
+                try {
+                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
+                } catch (FontFormatException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
 
                 tabPosition.add(new Point(0, y));
                 y -= 150;
@@ -317,6 +332,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 if (((JButton) e.getSource()).getName().equalsIgnoreCase("exit")) {
                     PlayPanel.this.playPanelListener.firePropertyChange("PlayerToDisconnect", false, true);
                 }
+
                 int id = Integer.parseInt(((JButton) e.getSource()).getName());
                 if (showing && id == idShowing) {
                     showing = false;
@@ -348,6 +364,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             super.paintComponent(g);
             if (showing) {
                 g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
+                g.setColor(Color.WHITE);
+                g.setFont(font.deriveFont(Font.PLAIN,25));
+                g.drawImage(nameBase, 0, 225, PlayPanel.this);
+                g.drawString(modelView.getPlayer(idShowing).getNickname(),40,257);
+
             }
         }
 

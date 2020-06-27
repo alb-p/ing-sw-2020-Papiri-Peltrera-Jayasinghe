@@ -28,6 +28,8 @@ public class LogoPanel extends JPanel implements ActionListener {
     public LogoPanel() {
 
         list = new PropertyChangeSupport(this);
+        frames=new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg")).getImage();
+
 
 
     }
@@ -51,6 +53,9 @@ public class LogoPanel extends JPanel implements ActionListener {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         g.drawImage(frames,0,0,this);
+
+        frames=new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg")).getImage();
+
     }
 
     /**
@@ -66,7 +71,6 @@ public class LogoPanel extends JPanel implements ActionListener {
             timer.stop();
             list.firePropertyChange("logoTransitionEnded",null,true);//attiva propertyChange dei listeners con passando in questo caso delle stringhe
         } else {
-            frames=new ImageIcon(this.getClass().getResource("/Logo/Logo" + (currentFrame) + ".jpg")).getImage();
             this.currentFrame++;
             repaint();
             Toolkit.getDefaultToolkit().sync();
