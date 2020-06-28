@@ -1,5 +1,6 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.messages.ColorMessage;
 import it.polimi.ingsw.utils.messages.GodMessage;
 import it.polimi.ingsw.utils.messages.InitialCardsMessage;

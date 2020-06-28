@@ -1,6 +1,7 @@
 package it.polimi.ingsw.model;
 
-import org.junit.Assert;
+import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.utils.Coordinate;
 import org.junit.Before;
 import org.junit.Test;
 

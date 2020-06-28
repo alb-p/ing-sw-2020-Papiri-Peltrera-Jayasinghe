@@ -1,8 +1,8 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Coordinate;
-import it.polimi.ingsw.model.VirtualSlot;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.VirtualSlot;
 
 import javax.swing.*;
 import java.awt.*;

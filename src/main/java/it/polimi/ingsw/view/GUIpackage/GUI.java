@@ -1,13 +1,12 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.model.Action;
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.network.SocketServerConnection;
+import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.network.client.SocketServerConnection;
 import it.polimi.ingsw.utils.messages.*;
 import it.polimi.ingsw.view.ModelView;
 import it.polimi.ingsw.view.RemoteView;
 
-import javax.swing.*;
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,7 +16,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.lang.Thread.interrupted;
 import static java.lang.Thread.sleep;
 
 

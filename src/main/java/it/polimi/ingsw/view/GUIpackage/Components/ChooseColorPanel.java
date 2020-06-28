@@ -1,6 +1,6 @@
 package it.polimi.ingsw.view.GUIpackage.Components;
 
-import it.polimi.ingsw.model.Color;
+import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.messages.ColorMessage;
 
 import javax.swing.*;

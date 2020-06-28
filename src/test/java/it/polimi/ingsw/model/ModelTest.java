@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.gods.Atlas;
+import it.polimi.ingsw.model.gods.Atlas;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;

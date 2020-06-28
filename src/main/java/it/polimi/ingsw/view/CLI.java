@@ -1,9 +1,11 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.network.ClientMain;
-import it.polimi.ingsw.network.SocketServerConnection;
+import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.network.client.ClientMain;
+import it.polimi.ingsw.network.client.SocketServerConnection;
 import it.polimi.ingsw.utils.ANSIColor;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;

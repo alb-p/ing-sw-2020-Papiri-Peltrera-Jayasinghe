@@ -1,5 +1,10 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.actions.Build;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.VirtualBoard;
+
 /**
  * The type Basic god card uses the basic rules
  * of the game so any god can extend this class and

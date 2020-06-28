@@ -91,7 +91,7 @@
                                 <classifier>GC20</classifier> <!-- This will be appended with the jar created with finalName tag value if present-->
                                 <archive>
                                     <manifest>
-                                        <mainClass>it.polimi.ingsw.network.ClientMain</mainClass>
+                                        <mainClass>it.polimi.ingsw.network.client.ClientMain</mainClass>
 
                                     </manifest>
                                 </archive>
@@ -99,7 +99,9 @@
                                     <include>**/*.*</include>
                                 </includes>
                                 <excludes>
-                                    <exclude>**/test.*</exclude>
+                                    <exclude>**/model/**</exclude>
+                                    <exclude>**/controller/**</exclude>
+                                    <exclude>**/network/server/**</exclude>
                                 </excludes>
                             </configuration>
                         </execution>
@@ -116,16 +118,16 @@
                                 <classifier>GC20</classifier> <!-- This will be appended with the jar created-->
                                 <archive>
                                     <manifest>
-                                        <mainClass>it.polimi.ingsw.network.ServerMain</mainClass>
+                                        <mainClass>it.polimi.ingsw.network.server.ServerMain</mainClass>
 
                                     </manifest>
                                 </archive>
                                 <includes>
-                                    <include>**/*.*</include>
+                                    <include>**/it/**</include>
                                 </includes>
                                 <excludes>
-                                    <exclude>**/*Test.*</exclude>
-                                    <exclude>**/resources/*</exclude>
+                                    <exclude>**/view/**</exclude>
+                                    <exclude>**/network/client/**</exclude>
                                 </excludes>
                             </configuration>
                         </execution>

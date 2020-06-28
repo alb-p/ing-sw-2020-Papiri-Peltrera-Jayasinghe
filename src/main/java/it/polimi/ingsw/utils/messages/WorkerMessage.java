@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages;
 
-import it.polimi.ingsw.model.Coordinate;
+import it.polimi.ingsw.utils.Coordinate;
 
 import java.io.Serializable;
 

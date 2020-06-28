@@ -1,7 +1,10 @@
 package it.polimi.ingsw.view.GUIpackage;
 
+import it.polimi.ingsw.actions.Build;
 import it.polimi.ingsw.model.*;
-import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.VirtualSlot;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
 import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;

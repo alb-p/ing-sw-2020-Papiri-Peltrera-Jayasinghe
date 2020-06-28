@@ -1,6 +1,6 @@
 package it.polimi.ingsw.utils.messages;
 
-import it.polimi.ingsw.model.Action;
+import it.polimi.ingsw.actions.Action;
 
 import java.io.Serializable;
 import java.util.ArrayList;

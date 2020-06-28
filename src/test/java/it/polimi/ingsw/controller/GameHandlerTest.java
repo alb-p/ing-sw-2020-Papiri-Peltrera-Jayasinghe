@@ -1,7 +1,8 @@
 package it.polimi.ingsw.controller;
 
-import it.polimi.ingsw.gods.Pan;
 import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.messages.*;
 import org.junit.Before;
 import org.junit.Test;

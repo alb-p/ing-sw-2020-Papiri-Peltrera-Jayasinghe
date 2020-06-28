@@ -1,7 +1,5 @@
 package it.polimi.ingsw.utils;
 
-import it.polimi.ingsw.network.ClientMain;
-
 /**
  * The enum Ansi color.
  */

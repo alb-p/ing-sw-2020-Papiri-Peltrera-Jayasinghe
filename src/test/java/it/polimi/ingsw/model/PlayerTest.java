@@ -1,6 +1,8 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.gods.Demeter;
+import it.polimi.ingsw.model.gods.Demeter;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -25,7 +27,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void playerSetupTest() throws Exception {
+    public void playerSetupTest() {
         assertEquals("playerTest", player.getNickName());
         assertEquals(Color.BLUE, player.getWorker(0).getColor());
         assertEquals(Color.BLUE, player.getWorker(1).getColor());

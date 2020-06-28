@@ -1,8 +1,7 @@
 package it.polimi.ingsw.model;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.model.Coordinate;
-import it.polimi.ingsw.model.Worker;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
@@ -16,7 +15,7 @@ public class WorkerTest {
     }
 
     @Test
-    public void getOldPositionTest() throws Exception {
+    public void getOldPositionTest() {
         Worker worker = new Worker(3, 3, "WHITE");
         worker.setPosition(new Coordinate(0, 0));
         assertEquals(new Coordinate(3, 3).getRow(), worker.getOldPosition().getRow());

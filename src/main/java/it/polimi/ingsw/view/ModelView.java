@@ -1,6 +1,10 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.*;
+import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.utils.Color;
+import it.polimi.ingsw.utils.Coordinate;
+import it.polimi.ingsw.utils.VirtualBoard;
+import it.polimi.ingsw.utils.VirtualSlot;
 import it.polimi.ingsw.utils.messages.ColorMessage;
 import it.polimi.ingsw.utils.messages.NicknameMessage;
 

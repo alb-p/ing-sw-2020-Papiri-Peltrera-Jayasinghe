@@ -1,11 +1,11 @@
 package it.polimi.ingsw.model;
 
 
+import it.polimi.ingsw.utils.Coordinate;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.*;
 

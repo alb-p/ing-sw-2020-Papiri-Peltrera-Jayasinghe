@@ -1,7 +1,7 @@
 package it.polimi.ingsw.view;
 
-import it.polimi.ingsw.model.VirtualSlot;
-import it.polimi.ingsw.network.SocketServerConnection;
+import it.polimi.ingsw.utils.VirtualSlot;
+import it.polimi.ingsw.network.client.SocketServerConnection;
 import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeEvent;

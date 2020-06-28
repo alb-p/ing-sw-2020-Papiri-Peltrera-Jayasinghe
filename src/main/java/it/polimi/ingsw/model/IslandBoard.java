@@ -1,5 +1,7 @@
 package it.polimi.ingsw.model;
 
+import it.polimi.ingsw.utils.Coordinate;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

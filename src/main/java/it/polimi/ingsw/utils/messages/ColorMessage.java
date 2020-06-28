@@ -1,10 +1,8 @@
 package it.polimi.ingsw.utils.messages;
 
-import it.polimi.ingsw.model.Color;
-import it.polimi.ingsw.network.SocketClientConnection;
+import it.polimi.ingsw.utils.Color;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * The type Color message is a message

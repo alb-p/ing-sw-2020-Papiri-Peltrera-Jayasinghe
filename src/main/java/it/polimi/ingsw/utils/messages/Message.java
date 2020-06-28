@@ -1,9 +1,5 @@
 package it.polimi.ingsw.utils.messages;
 
-import it.polimi.ingsw.network.SocketClientConnection;
-
-import java.io.Serializable;
-
 /**
  * The interface Message represents how
  * information needs to be transferred
