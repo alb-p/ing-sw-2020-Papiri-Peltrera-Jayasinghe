@@ -66,7 +66,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final TileButton[][] boardOfButtons = new TileButton[5][5];
     private final Image banner = new ImageIcon(this.getClass().getResource("/Gameplay/messageCenter.jpg")).getImage().getScaledInstance(960, 70, Image.SCALE_SMOOTH);
     private final InfoPanel infoPanel;
-    private Boolean seaAnimation = true;
+    private Boolean seaAnimationCheck = true;
 
     /**
      * Instantiates a new Play panel.
@@ -238,7 +238,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         boolean showing = false;
         int idShowing = 0;
         JButton exit = new JButton();
-        Font font;
+        Font customFont;
         Image nameBase;
 
         /**
@@ -276,8 +276,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
             int y = GUI.getDimension().height - 150;
 
-            for (int i = 0; i < modelView.getPlayers().size(); i++) {
-                ModelView.PlayerView p = modelView.getPlayer(i);
+            for (int v = 0; v < modelView.getPlayers().size(); v++) {
+                ModelView.PlayerView p = modelView.getPlayer(v);
                 godsInfos.add(new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + " info.jpg")).getImage().getScaledInstance(212, 450, Image.SCALE_SMOOTH));
 
                 JButton button = new JButton() {
@@ -298,11 +298,9 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 };
 
                 try {
-                    font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
-                } catch (FontFormatException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
+                } catch (FontFormatException | IOException e) {
+                    logger.log(Level.WARNING, e.getMessage());
                 }
 
 
@@ -311,7 +309,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 button.addActionListener(this);
                 button.setBackground(new Color(0, 0, 0, 0));
                 button.setName(Integer.toString(p.getId()));
-                button.setBounds(tabPosition.get(i).x, tabPosition.get(i).y, 45, 110);
+                button.setBounds(tabPosition.get(v).x, tabPosition.get(v).y, 45, 110);
                 button.setBorder(null);
                 button.setContentAreaFilled(false);
                 godsTabs.add(button);
@@ -367,7 +365,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (showing) {
                 g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
                 g.setColor(Color.WHITE);
-                g.setFont(font.deriveFont(Font.PLAIN,25));
+                g.setFont(customFont.deriveFont(Font.PLAIN,25));
                 g.drawImage(nameBase, 0, 225, PlayPanel.this);
                 g.drawString(modelView.getPlayer(idShowing).getNickname(),40,257);
 
@@ -538,7 +536,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 messageCenter.setText("You have lost");
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("SeaAnimation")) {
-            this.seaAnimation = (Boolean) evt.getNewValue();
+            this.seaAnimationCheck = (Boolean) evt.getNewValue();
         }
 
         repaint();
@@ -735,14 +733,11 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     if (support.getTransferable().getTransferData(new DataFlavor(TransferableImage.class, "transferableImage")) instanceof TransferableImage) {
                         return true;
                     }
-                } catch (UnsupportedFlavorException e) {
-                    System.out.println("717 PLAYPANEL");
-                    e.printStackTrace();
+                } catch (UnsupportedFlavorException | ClassCastException e) {
+                    logger.log(Level.WARNING, e.getMessage());
                 } catch (IOException e) {
                     logger.log(Level.WARNING, e.getMessage());
                     return false;
-                } catch (ClassCastException e) {
-                    e.printStackTrace();
                 }
             }
             return false;
@@ -909,7 +904,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      * Start animation.
      */
     public void startAnimation() {
-        if (seaAnimation) {
+        if (seaAnimationCheck) {
             Thread seaAnimation = new Thread(() -> {
                 int counter = 216;
                 try {
@@ -929,7 +924,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     }
 
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, e.getMessage());
                 }
 
 
@@ -953,7 +948,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                     Thread.sleep(r.nextInt(60000) + 120000); //tra 2 e 3 min
                     music.playSound("/Sounds/environment" + r.nextInt(3) + ".wav", -5f, false);
                 } catch (InterruptedException e) {
-                    e.printStackTrace();
+                    logger.log(Level.SEVERE, e.getMessage());
                 }
             }
         });

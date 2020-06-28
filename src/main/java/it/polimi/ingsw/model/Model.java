@@ -79,20 +79,14 @@ public class Model {
      */
     public boolean addWorker(int playerIndex, Coordinate c, int workerIndex) {
         oldBoard = cloneVBoard(board);
-        try {
-            if (c.isValid() && board.infoSlot(c).isFree()) {
-                board.infoSlot(c).occupy(this.getPlayer(playerIndex).getWorker(workerIndex));
-                this.getPlayer(playerIndex).getWorker(workerIndex).setPosition(c);
-            } else {
-                return false;
-            }
-
-            notifyChanges();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (c.isValid() && board.infoSlot(c).isFree()) {
+            board.infoSlot(c).occupy(this.getPlayer(playerIndex).getWorker(workerIndex));
+            this.getPlayer(playerIndex).getWorker(workerIndex).setPosition(c);
+        } else {
+            return false;
         }
-        return false;
+        notifyChanges();
+        return true;
     }
 
 
@@ -225,7 +219,7 @@ public class Model {
      * @return true if a winner has been found
      */
     public boolean checkWinner(int id) {
-        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard)&&!winnerDetected) {
+        if (this.getPlayer(id).getCard().winningCondition(this.getPlayer(id).getActualWorker(), board, oldBoard) && !winnerDetected) {
             winnerDetected = true;
             modelListeners.firePropertyChange("winnerDetected", null,
                     new WinnerMessage(id, this.getPlayer(id).getNickName()));
@@ -265,12 +259,12 @@ public class Model {
      * @param id the id of the winner
      */
     public void endGameForNoAvailableMoves(int id) {
-        if(!winnerDetected){
+        if (!winnerDetected) {
             int winnerID = -1;
             for (Player player : players) {
                 if (player.getId() != id) winnerID = player.getId();
             }
-            winnerDetected=true;
+            winnerDetected = true;
             modelListeners.firePropertyChange("winnerDetected", null,
                     new WinnerMessage(winnerID, this.getPlayer(winnerID).getNickName()));
         }
@@ -288,7 +282,7 @@ public class Model {
 
 
     /**
-     *  A player has chose to end his turn.
+     * A player has chose to end his turn.
      *
      * @param id the id
      */

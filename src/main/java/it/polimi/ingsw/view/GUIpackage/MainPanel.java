@@ -23,6 +23,7 @@ public class MainPanel extends JPanel {
 
 
         addMouseListener(new MouseAdapter() {
+            @Override
             public void mousePressed(MouseEvent e) {
                 initialClick = e.getPoint();
             }

@@ -23,17 +23,17 @@ import java.util.ArrayList;
  */
 public class GeneralGodsSelectionPanel extends JPanel implements ActionListener, MouseListener, PropertyChangeListener {
 
-    private PropertyChangeSupport generalGodSelectionListener = new PropertyChangeSupport(this);
-    private ArrayList<String[]> gods;
-    private ArrayList<GodsButton> godsButton = new ArrayList<>();
-    private ArrayList<String> selectedGods = new ArrayList<>();
-    private JLabel title;
-    private JButton submit;
+    private final PropertyChangeSupport generalGodSelectionListener = new PropertyChangeSupport(this);
+    private final ArrayList<String[]> gods;
+    private final ArrayList<GodsButton> godsButton = new ArrayList<>();
+    private final ArrayList<String> selectedGods = new ArrayList<>();
+    private final JLabel title;
+    private final JButton submit;
     private int playerPerGame = 0;
     private ImageIcon imagedx;
-    private ImageIcon imagesx;
+    private final ImageIcon imagesx;
     private Dimension frameDimension;
-    private JPanel paneldx;
+    private final JPanel paneldx;
 
 
     /**

@@ -4,7 +4,6 @@ import javax.sound.sampled.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.*;
-import java.nio.charset.StandardCharsets;
 
 /**
  * The type Make sound.
@@ -15,8 +14,6 @@ public class MakeSound implements PropertyChangeListener {
     private Clip clip;
     String settings="On";
     int generalVolume=0;
-
-
 
 
     /**
@@ -81,7 +78,8 @@ public class MakeSound implements PropertyChangeListener {
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("SoundsOn")) {
            this.settings="On";
-        }if (evt.getPropertyName().equalsIgnoreCase("SoundsOff")) {
+        }
+        if (evt.getPropertyName().equalsIgnoreCase("SoundsOff")) {
             this.settings="Off";
         }
 

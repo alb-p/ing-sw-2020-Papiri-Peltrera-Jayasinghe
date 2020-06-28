@@ -20,15 +20,11 @@ import java.util.ArrayList;
  * who is the player who starts the turn
  */
 public class FirstPlayerSelectionPanel extends JPanel implements ActionListener, PropertyChangeListener {
-
-    private JPanel panel = new JPanel();
-
-
-    private PropertyChangeSupport firstPlayerSelectionListener = new PropertyChangeSupport(this);
-    private Dimension frameDimension;
-    private Image image;
-    private JPanel innerPanel;
-    Font font;
+    private final PropertyChangeSupport firstPlayerSelectionListener = new PropertyChangeSupport(this);
+    private final Dimension frameDimension;
+    private final Image image;
+    private final JPanel innerPanel;
+    Font customFont;
 
 
     /**
@@ -55,7 +51,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
         JLabel title = new JLabel("Choose first player: ");
         title.setForeground(Color.WHITE);
         title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
+        customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //carica font
 
 
 
@@ -67,7 +63,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
         innerPanel.add(title);
         innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
 
-        title.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/18));
+        title.setFont(customFont.deriveFont(Font.PLAIN,frameDimension.width/18));
 
         this.setLayout(new GridBagLayout());
         this.add(innerPanel);
@@ -119,7 +115,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
             choosePlayer.setAlignmentX(Component.CENTER_ALIGNMENT);
             choosePlayer.setBorder(null);
             choosePlayer.setContentAreaFilled(false);//trasparenza
-            choosePlayer.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/30));
+            choosePlayer.setFont(customFont.deriveFont(Font.PLAIN,frameDimension.width/30));
             innerPanel.add(choosePlayer);
             innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/25))));
         }

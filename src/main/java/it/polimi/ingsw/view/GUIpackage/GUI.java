@@ -14,6 +14,8 @@ import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import static java.lang.Thread.interrupted;
 import static java.lang.Thread.sleep;
@@ -24,11 +26,11 @@ import static java.lang.Thread.sleep;
  * subclass of remoteview
  */
 public class GUI extends RemoteView implements Runnable, PropertyChangeListener {
-    private ModelView modelView;
-    private SocketServerConnection connection;
+    private final ModelView modelView;
+    private final SocketServerConnection connection;
     private MainJFrame window;
     private Integer numOfPlayers = 1;
-
+    Logger logger = Logger.getLogger("gui.view");
     /**
      * Gets dimension.
      *
@@ -229,7 +231,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         try {
             wait();
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, e.getMessage());
         }
         message.setField(numOfPlayers);
 
@@ -244,10 +246,8 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         //create and show gui
         try {
             window = new MainJFrame(this, modelView);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (FontFormatException e) {
-            e.printStackTrace();
+        } catch (IOException | FontFormatException e) {
+            logger.log(Level.WARNING, e.getMessage());
         }
         window.setVisible(true);
         window.startLogo();
@@ -286,7 +286,6 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             ArrayList<String> selectedGods = (ArrayList<String>) evt.getNewValue();
             for (String s : selectedGods) message.addToSelectedList(s);
             getConnection().sendEvent(new PropertyChangeEvent(this, "notify1ofNGod", false, message));
-            System.out.println("SENDED GODS");
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
 
         } else if (evt.getPropertyName().equalsIgnoreCase("godSelected")) {

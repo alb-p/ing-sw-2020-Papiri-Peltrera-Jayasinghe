@@ -35,10 +35,10 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
     private ImageIcon imagedx;
     private ImageIcon imagesx;
-    private ImageIcon imageInnerPanel;
+    private final ImageIcon imageInnerPanel;
     private Dimension frameDimension;
     private JPanel paneldx;
-    Font font;
+    Font customFont;
 
     /**
      * Instantiates a new God selection panel.
@@ -86,9 +86,9 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
 
 
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf"));
+            customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf"));
         }catch(IOException | FontFormatException e){
-            font = label.getFont();
+            customFont = label.getFont();
         }
 
 
@@ -99,13 +99,13 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         label = new JLabel("Wait, opponent player is selecting...");
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         label.setForeground(new Color(255, 235, 140));
-        label.setFont(font.deriveFont(Font.PLAIN,40));
+        label.setFont(customFont.deriveFont(Font.PLAIN,40));
         buttonPanel.setOpaque(false);
         submit = new CustomButton("/GodSelection/next/next");
         submit.addActionListener(this);
 
         updates = new JLabel("");
-        updates.setFont(font.deriveFont(Font.PLAIN,20));
+        updates.setFont(customFont.deriveFont(Font.PLAIN,20));
         panelsx.add(Box.createRigidArea(new Dimension(50,50)));
         innerPanel3.add(label);
         panelsx.add(innerPanel3);
@@ -185,7 +185,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         } else if(propertyChangeEvent.getPropertyName().equalsIgnoreCase("myTurn")){
             myTurn =true;
             label.setText("Select your god!");
-            label.setFont(font.deriveFont(Font.PLAIN,50));
+            label.setFont(customFont.deriveFont(Font.PLAIN,50));
 
         }
 

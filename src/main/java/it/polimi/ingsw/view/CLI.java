@@ -426,7 +426,7 @@ public class CLI extends RemoteView implements Runnable {
                         null, new GenericMessage()));
                 wait();
                 if (!modelView.getActionsAvailable().isEmpty() && getPlayerId() == modelView.getActualPlayerId() && !winnerDetected) {
-                    ArrayList<String> choices = modelView.getActionChoices();
+                    List<String> choices = modelView.getActionChoices();
                     Action action = null;
                     do {
                         int choiceIndex = 0;

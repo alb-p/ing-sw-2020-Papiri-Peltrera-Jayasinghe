@@ -23,10 +23,8 @@ public class GodsButton extends JButton {
     public GodsButton(String god){
         this.name=god;
         this.setBorder(null);
-        this.setContentAreaFilled(false);//trasparenza
+        this.setContentAreaFilled(false);
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
-        /*this.glow=new ImageIcon(this.getClass().getResource("/GodsMiniature/glow.png"));//overlay glow
-        this.godMiniature=new ImageIcon(this.getClass().getResource("/GodsMiniature/"+god+".png"));*/
         this.glow=new ImageIcon(this.getClass().getResource("/GodSelection/gold.png"));//overlay glow
         this.godMiniature=new ImageIcon(this.getClass().getResource("/GodSelection/"+this.name.toLowerCase()+".png"));
         this.setIcon(godMiniature);

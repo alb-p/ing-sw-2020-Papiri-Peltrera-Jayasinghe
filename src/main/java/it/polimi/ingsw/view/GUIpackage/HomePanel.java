@@ -65,7 +65,7 @@ public class HomePanel extends JPanel implements ActionListener {
         helpButton.addActionListener(this);
         settingsButton.addActionListener(this);
         exitButton.addActionListener(this);
-        home.add(Box.createVerticalStrut((int) (frameDimension.height/2)));
+        home.add(Box.createVerticalStrut((frameDimension.height/2)));
         home.add(playButton);
         home.add(Box.createVerticalStrut(frameDimension.height/24));
         home.add(helpButton);
@@ -151,7 +151,7 @@ public class HomePanel extends JPanel implements ActionListener {
      */
     public class Settings extends JPanel implements ActionListener{
 
-        Font font;
+        Font customFont;
 
         Image background;
         JButton musicButton;
@@ -167,10 +167,8 @@ public class HomePanel extends JPanel implements ActionListener {
             this.setBorder(BorderFactory.createEmptyBorder(50,40,30,40));
 
             try {
-                font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
-            } catch (FontFormatException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+                customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
+            } catch (FontFormatException | IOException e) {
                 e.printStackTrace();
             }
 
@@ -192,9 +190,9 @@ public class HomePanel extends JPanel implements ActionListener {
             animationButton.addActionListener(this);
 
             JLabel musicLabel=new JLabel("Music");
-            musicLabel.setFont(font.deriveFont(Font.PLAIN,40));
+            musicLabel.setFont(customFont.deriveFont(Font.PLAIN,40));
             JLabel animationLabel=new JLabel("Sea animation");
-            animationLabel.setFont(font.deriveFont(Font.PLAIN,40));
+            animationLabel.setFont(customFont.deriveFont(Font.PLAIN,40));
 
 
 

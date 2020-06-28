@@ -19,7 +19,7 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     private Timer timer;
     int currentFrame = 1;
 
-    private PropertyChangeSupport lista;
+    private final PropertyChangeSupport islandAnimSupport;
 
 
     /**
@@ -27,8 +27,7 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
      */
     public IslandAnimationPanel() {
 
-        lista = new PropertyChangeSupport(this);
-
+        islandAnimSupport = new PropertyChangeSupport(this);
         frames = new ImageIcon(this.getClass().getResource("/IslandAnimation/island" + (currentFrame) + ".jpg"));
 
     }
@@ -68,7 +67,7 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (this.currentFrame == 120) {
             timer.stop();
-            lista.firePropertyChange("islandTransitionEnded",null,true);
+            islandAnimSupport.firePropertyChange("islandTransitionEnded",null,true);
             frames=null;
         } else {
             this.currentFrame++;
@@ -86,6 +85,6 @@ public class IslandAnimationPanel extends JPanel implements ActionListener {
      */
     @Override
     public void addPropertyChangeListener(PropertyChangeListener listener) { //aggiunge listener alla lista
-        lista.addPropertyChangeListener(listener);
+        islandAnimSupport.addPropertyChangeListener(listener);
     }
 }

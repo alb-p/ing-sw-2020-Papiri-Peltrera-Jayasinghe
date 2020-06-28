@@ -11,14 +11,15 @@ import java.util.Collections;
 
 /**
  * The type Model view.
+ * It contains all the information about the game and it is usually update after confirm by server messages
  */
 public class ModelView {
 
-    private VirtualBoard board = new VirtualBoard();
-    private ArrayList<Color> colors = new ArrayList<>();
-    private ArrayList<PlayerView> players = new ArrayList<>();
+    private final VirtualBoard board = new VirtualBoard();
+    private final ArrayList<Color> colors = new ArrayList<>();
+    private final ArrayList<PlayerView> players = new ArrayList<>();
     private ArrayList<String[]> gods = new ArrayList<>();
-    private ArrayList<String[]> chosenGods = new ArrayList<>();
+    private final ArrayList<String[]> chosenGods = new ArrayList<>();
     private ArrayList<Action> actionsAvailable = new ArrayList<>();
     private int actualPlayerId;
     private int godlyId;
@@ -26,13 +27,13 @@ public class ModelView {
     private int deletedPlayerId = -1;
     private int winnerId = -1;
     private boolean optional;
-    private PropertyChangeSupport nickNameListener = new PropertyChangeSupport(this);
-    private PropertyChangeSupport colorListener = new PropertyChangeSupport(this);
-    private PropertyChangeSupport selectedGodsListener = new PropertyChangeSupport(this);
-    private PropertyChangeSupport selectedSingleGodListener = new PropertyChangeSupport(this);
-    private PropertyChangeSupport boardListener = new PropertyChangeSupport(this);
-    private PropertyChangeSupport firstPlayerListener = new PropertyChangeSupport(this);
-    private PropertyChangeSupport actionListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport nickNameListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport colorListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport selectedGodsListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport selectedSingleGodListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport boardListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport firstPlayerListener = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport actionListener = new PropertyChangeSupport(this);
 
     /**
      * Instantiates a new Model view.
@@ -431,7 +432,7 @@ public class ModelView {
      */
     public ArrayList<String> getActionChoices() {
         ArrayList<String> choices = new ArrayList<>();
-        Boolean found = false;
+        boolean found = false;
         for (Action a : actionsAvailable) {
             for (String s : choices) {
                 if (s.equalsIgnoreCase(a.getActionName())) {

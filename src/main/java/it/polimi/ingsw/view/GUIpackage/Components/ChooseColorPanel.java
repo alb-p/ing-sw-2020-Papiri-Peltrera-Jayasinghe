@@ -11,7 +11,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 
 /**
@@ -21,15 +20,15 @@ import java.util.Collections;
  */
 public class ChooseColorPanel extends JPanel implements ActionListener, PropertyChangeListener {
 
-    private int playerId;
+    private final int playerId;
     private Color attemptedColor = null;
-    private JButton colorButton1;
-    private JButton colorButton2;
-    private JButton colorButton3;
-    private ArrayList<Color> colors = new ArrayList<>();
-    private PropertyChangeSupport colorPanelListener = new PropertyChangeSupport(this);
-    private Dimension frameDimension;
-    Image background;
+    private final JButton colorButton1;
+    private final JButton colorButton2;
+    private final JButton colorButton3;
+    private final ArrayList<Color> colors = new ArrayList<>();
+    private final PropertyChangeSupport colorPanelListener = new PropertyChangeSupport(this);
+    private final Dimension frameDimension;
+    Image colorBackground;
 
     /**
      * Instantiates a new Choose color panel.
@@ -40,7 +39,7 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     public ChooseColorPanel(int id, Dimension d) {
         frameDimension=d;
 
-        background= new ImageIcon(this.getClass().getResource("/Colors/BG.jpg")).getImage();
+        colorBackground = new ImageIcon(this.getClass().getResource("/Colors/BG.jpg")).getImage();
         colorButton1 = new CustomButton("/Colors/blue");
         colorButton1.addActionListener(this);
         colorButton2 = new CustomButton("/Colors/red");
@@ -136,6 +135,6 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
      */
     @Override
     protected void paintComponent(Graphics g) {
-        g.drawImage(this.background, 0, 0, this);
+        g.drawImage(this.colorBackground, 0, 0, this);
     }
 }

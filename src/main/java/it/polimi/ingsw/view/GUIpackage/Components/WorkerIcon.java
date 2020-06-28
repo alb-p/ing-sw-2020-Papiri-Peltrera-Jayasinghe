@@ -6,7 +6,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 
 /**
  * The type Worker icon.
@@ -21,15 +20,16 @@ public class WorkerIcon extends JLabel implements ActionListener {
     private final String color;
     private final PropertyChangeSupport workerIconListeners = new PropertyChangeSupport(this);
 
-    int x,
-    y,
-    xfinale,
-    yfinale;
-    float deltax,
-    deltay;
+    int posX;
+    int posY;
+    int finalX;
+    int finalY;
 
-    float exactX,
-    exactY;
+    float deltaX;
+    float deltaY;
+
+    float exactX;
+    float exactY;
 
 
     /**
@@ -41,11 +41,9 @@ public class WorkerIcon extends JLabel implements ActionListener {
         if(color.equalsIgnoreCase("white")) {
             this.color = "tan";
         } else this.color=color;
-        System.out.println("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png");
-        ImageIcon frames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
-        this.setIcon(frames);
+        ImageIcon workerFrames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
+        this.setIcon(workerFrames);
         setBounds(0, 0, 67, 192);
-
     }
 
 
@@ -56,18 +54,18 @@ public class WorkerIcon extends JLabel implements ActionListener {
      * @param end   the end
      */
     public synchronized void startTransition(Point start,Point end) {
-        x=start.x+7;
-        exactX=x;
-        y=start.y-55;
-        exactY=y;
+        posX =start.x+7;
+        exactX= posX;
+        posY =start.y-55;
+        exactY= posY;
 
-        xfinale=end.x+7;
-        yfinale=end.y-55;
+        finalX =end.x+7;
+        finalY =end.y-55;
 
-        deltax= (xfinale-x)/23;
-        deltay=(yfinale-y)/23;
+        deltaX = (finalX - posX)/23;
+        deltaY=(finalY - posY)/23;
 
-        setLocation(x,y);
+        setLocation(posX, posY);
         timer = new Timer(50, this){
             @Override
             public void start() {
@@ -95,17 +93,16 @@ public class WorkerIcon extends JLabel implements ActionListener {
             timer.stop();
             frames=null;
             workerIconListeners.firePropertyChange("movementTransitionEnded", false, true);
-            System.gc();//consiglia di far partire il garbage collector
 
         } else {
             this.setIcon(frames);
-            exactX=exactX+deltax;
-            x= (int) exactX;
+            exactX=exactX+ deltaX;
+            posX = (int) exactX;
 
-            exactY=exactY+deltay;
-            y= (int) exactY;
+            exactY=exactY+deltaY;
+            posY = (int) exactY;
 
-            setLocation(x,y);
+            setLocation(posX, posY);
             this.currentFrame++;
             frames= new ImageIcon(this.getClass().getResource("/WorkersAnimation/"+this.color+"/"+this.color+(currentFrame) + ".png"));
         }
