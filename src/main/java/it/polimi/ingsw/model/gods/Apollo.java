@@ -2,6 +2,7 @@ package it.polimi.ingsw.model.gods;
 
 import it.polimi.ingsw.actions.Action;
 import it.polimi.ingsw.actions.Build;
+import it.polimi.ingsw.actions.Move;
 import it.polimi.ingsw.model.*;
 import it.polimi.ingsw.utils.Coordinate;
 
