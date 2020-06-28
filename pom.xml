@@ -119,7 +119,6 @@
                                 <archive>
                                     <manifest>
                                         <mainClass>it.polimi.ingsw.network.server.ServerMain</mainClass>
-
                                     </manifest>
                                 </archive>
                                 <includes>

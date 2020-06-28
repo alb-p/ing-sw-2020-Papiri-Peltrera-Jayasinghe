@@ -49,8 +49,6 @@ public class PanTest {
 
         player.selectWorker(new Coordinate(2, 0));
         assertTrue(card.turnHandler(player,board,new Move(new Coordinate(2,0),new Coordinate(2,1))));
-        System.out.println(virtualBoard);
-        System.out.println(board);
         assertTrue(card.winningCondition(player.getWorker(0),board,virtualBoard));
     }
 

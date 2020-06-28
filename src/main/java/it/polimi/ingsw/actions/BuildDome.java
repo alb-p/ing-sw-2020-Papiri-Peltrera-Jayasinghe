@@ -20,7 +20,7 @@ public class BuildDome extends Build implements Serializable {
      * @param end   the end coordinate
      */
     public BuildDome(Coordinate start, Coordinate end) {
-        super( start, end);
+        super(start, end);
     }
 
     /**
@@ -30,7 +30,7 @@ public class BuildDome extends Build implements Serializable {
      */
     @Override
     public String getActionName() {
-        return  "Build a dome";
+        return "Build a dome";
     }
 
     /**
@@ -41,8 +41,8 @@ public class BuildDome extends Build implements Serializable {
      */
     @Override
     public boolean equals(Object o) {
-        if(!(o instanceof BuildDome)) return false;
-        return(this.getStart().equals(((BuildDome) o).getStart()) &&
+        if (!(o instanceof BuildDome)) return false;
+        return (this.getStart().equals(((BuildDome) o).getStart()) &&
                 this.getEnd().equals(((BuildDome) o).getEnd()));
     }
 
@@ -55,5 +55,5 @@ public class BuildDome extends Build implements Serializable {
     public int hashCode() {
         return super.hashCode();
     }
-}
 
+}
