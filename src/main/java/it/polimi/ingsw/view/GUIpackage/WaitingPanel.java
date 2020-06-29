@@ -10,9 +10,9 @@ import java.io.IOException;
 public class WaitingPanel extends JPanel {
 
 
-    Image homeBackground;
+    private final Image homeBackground;
     private final JLabel label;
-    JLabel animation;
+    private JLabel animation;
     private final Dimension frameDimension;
 
     /**

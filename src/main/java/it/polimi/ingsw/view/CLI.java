@@ -20,7 +20,6 @@ import java.util.logging.Logger;
  * Command line interface implementation.
  * It includes ASCII extended chars but they will be converted for Windows OS.
  * All the necessary data information for this class during the game is taken from the ModelView
- *
  */
 public class CLI extends RemoteView implements Runnable {
 
@@ -44,7 +43,7 @@ public class CLI extends RemoteView implements Runnable {
      * Instantiates a new Cli.
      *
      * @param connection
-     * @param useAscii depending on OS
+     * @param useAscii   depending on OS
      * @throws UnsupportedEncodingException
      */
     public CLI(SocketServerConnection connection, boolean useAscii) throws UnsupportedEncodingException {
@@ -59,33 +58,34 @@ public class CLI extends RemoteView implements Runnable {
     /**
      * Welcome message.
      */
-    public void welcomeMessage(){
-        printer.println("\n"+
+    public void welcomeMessage() {
+        printer.println("\n" +
                 "  _    _      _                            \n" +
-                        " | |  | |    | |                           \n" +
-                        " | |  | | ___| | ___ ___  _ __ ___   ___   \n" +
-                        " | |/\\| |/ _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\  \n" +
-                        " \\  /\\  /  __/ | (_| (_) | | | | | |  __/  \n" +
-                        "  \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \n" +
-                        "                                           \n" +
-                        "                 _                         \n" +
-                        "                | |                        \n" +
-                        "                | |_ ___                   \n" +
-                        "                | __/ _ \\                  \n" +
-                        "                | || (_) |                 \n" +
-                        "                 \\__\\___/                  \n" +
-                        "                                           \n" +
-                        ANSIColor.BLUE+" _____             _             _       _ \n" +
-                        "/  ___|           | |           (_)     (_)\n" +
-                        "\\ `--.  __ _ _ __ | |_ ___  _ __ _ _ __  _ \n" +
-                        " `--. \\/ _` | '_ \\| __/ _ \\| '__| | '_ \\| |\n" +
-                        "/\\__/ / (_| | | | | || (_) | |  | | | | | |\n" +
-                        "\\____/ \\__,_|_| |_|\\__\\___/|_|  |_|_| |_|_|\n" + ANSIColor.RESET+
-                        "                                           \n" +
-                        "                                           "
+                " | |  | |    | |                           \n" +
+                " | |  | | ___| | ___ ___  _ __ ___   ___   \n" +
+                " | |/\\| |/ _ \\ |/ __/ _ \\| '_ ` _ \\ / _ \\  \n" +
+                " \\  /\\  /  __/ | (_| (_) | | | | | |  __/  \n" +
+                "  \\/  \\/ \\___|_|\\___\\___/|_| |_| |_|\\___|  \n" +
+                "                                           \n" +
+                "                 _                         \n" +
+                "                | |                        \n" +
+                "                | |_ ___                   \n" +
+                "                | __/ _ \\                  \n" +
+                "                | || (_) |                 \n" +
+                "                 \\__\\___/                  \n" +
+                "                                           \n" +
+                ANSIColor.BLUE + " _____             _             _       _ \n" +
+                "/  ___|           | |           (_)     (_)\n" +
+                "\\ `--.  __ _ _ __ | |_ ___  _ __ _ _ __  _ \n" +
+                " `--. \\/ _` | '_ \\| __/ _ \\| '__| | '_ \\| |\n" +
+                "/\\__/ / (_| | | | | || (_) | |  | | | | | |\n" +
+                "\\____/ \\__,_|_| |_|\\__\\___/|_|  |_|_| |_|_|\n" + ANSIColor.RESET +
+                "                                           \n" +
+                "                                           "
 
-                );
+        );
     }
+
     /**
      * Ask to the first connected player the number of players for the game
      *
@@ -130,7 +130,7 @@ public class CLI extends RemoteView implements Runnable {
         do {
             startingBrackets();
             playerInput = scanner.nextLine();
-            checkSpaces = playerInput.replace(" ","");
+            checkSpaces = playerInput.replace(" ", "");
         } while (checkSpaces.equals("") || !modelView.checkNickname(playerInput) || playerInput.length() > 20);
         this.nickname = playerInput;
         message.setNickname(playerInput);
@@ -172,7 +172,7 @@ public class CLI extends RemoteView implements Runnable {
         printBreakers();
         printer.println("+-------------------------------------------------+");
         printer.print("|   Hey ");
-        printer.printf("%-42s", (nickname  + "!"));
+        printer.printf("%-42s", (nickname + "!"));
         printer.print("|\n");
         printer.print("|   Which colour you want to choose? Available:   |\n" +
                 "+-------------------------------------------------+\n");
@@ -496,8 +496,6 @@ public class CLI extends RemoteView implements Runnable {
     }
 
 
-
-
     /**
      * Parse user's action input string looking for valid couple of Coordinate.
      *
@@ -532,7 +530,7 @@ public class CLI extends RemoteView implements Runnable {
      * Print the VirtualBoard stored in ModelView.
      */
     public void printBoard() {
-        if (!winnerDetected){
+        if (!winnerDetected) {
             String board = this.modelView.getBoard().toString();
             printer.println(board);
         }
@@ -556,7 +554,6 @@ public class CLI extends RemoteView implements Runnable {
 
     /**
      * It calls all the specific method for ask input to the player and manage the entire game
-     *
      */
     @Override
     public void run() {
@@ -710,7 +707,6 @@ public class CLI extends RemoteView implements Runnable {
 
     /**
      * It notifies the player game is ready: all the players are in the room.
-     *
      */
     @Override
     protected synchronized void gameReady() {
@@ -869,7 +865,7 @@ public class CLI extends RemoteView implements Runnable {
     @Override
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
-        if(message.getId() != getPlayerId()) {
+        if (message.getId() != getPlayerId()) {
             printer.println("\n\t" + ANSIColor.BACK_YELLOW + modelView.getPlayer(message.getId()).getNickname() + ANSIColor.RESET + "\n\n" +
                     "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
                     "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
@@ -883,7 +879,7 @@ public class CLI extends RemoteView implements Runnable {
                     "                                                                     \n" +
                     "                                                                     " + ANSIColor.RESET);
         } else {
-            printer.println("\n"+
+            printer.println("\n" +
                     "$$\\     $$\\  $$$$$$\\  $$\\   $$\\       $$\\      $$\\ $$$$$$\\ $$\\   $$\\ \n" +
                     "\\$$\\   $$  |$$  __$$\\ $$ |  $$ |      $$ | $\\  $$ |\\_$$  _|$$$\\  $$ |\n" +
                     " \\$$\\ $$  / $$ /  $$ |$$ |  $$ |      $$ |$$$\\ $$ |  $$ |  $$$$\\ $$ |\n" +
@@ -894,10 +890,21 @@ public class CLI extends RemoteView implements Runnable {
                     "    \\__|     \\______/  \\______/       \\__/     \\__|\\______|\\__|  \\__|\n" +
                     "                                                                     \n" +
                     "                                                                     \n" +
-                    "                                                                     "+ANSIColor.RESET);
+                    "                                                                     " + ANSIColor.RESET);
         }
 
         notify();
+    }
+
+    @Override
+    protected void endGame() {
+        printer.println("\n\n\n+-----------------------------------------+\n" +
+                "|                                         |\n" +
+                "|     A player left the lobby, please     |\n" +
+                "|            start a new game.            |\n" +
+                "|                                         |\n" +
+                "+-----------------------------------------+");
+        System.exit(0);
     }
 
     /**

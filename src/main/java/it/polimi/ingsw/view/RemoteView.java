@@ -90,9 +90,12 @@ public abstract class RemoteView implements Runnable {
             winnerDetected((WinnerMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("endGame")) {
             connection.closeConnection();
-            System.exit(0);
+            endGame();
+            //System.exit(0);
         }
     }
+
+    protected abstract void endGame();
 
     /**
      * Player has lost.
