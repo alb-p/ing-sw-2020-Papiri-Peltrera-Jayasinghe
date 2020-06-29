@@ -18,10 +18,11 @@ public class WinningPanel extends JPanel implements ActionListener {
     JPanel playPanel;
 
 
-    public WinningPanel(JPanel p) {
+    public WinningPanel(JPanel p, boolean onAnimation) {
         playPanel=p;
         setOpaque(false);
         setBounds(0,0,GUI.getDimension().width,GUI.getDimension().height);
+        if(!onAnimation) currentFrame=200;
         frames = new ImageIcon(this.getClass().getResource("/Win/Win" + (currentFrame) + ".png"));
 
     }
@@ -32,6 +33,7 @@ public class WinningPanel extends JPanel implements ActionListener {
 
     public void startTransition() {
 
+        currentFrame=1;
         timer = new Timer(30, this);
         timer.start();
 
@@ -70,6 +72,7 @@ public class WinningPanel extends JPanel implements ActionListener {
 
 
     }
+
 
 
 
