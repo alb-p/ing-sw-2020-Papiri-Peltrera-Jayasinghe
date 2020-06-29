@@ -21,7 +21,7 @@ public class ClientMain {
         //System.setProperty("file.encoding", "UTF-8");
         //String ip = "127.0.0.1";
         //String ip = "87.18.127.100";
-        String ip = "localhost";
+        String ip = "gc20.ddns.net";
         int port = 4566;
         int chosenUI = 1;
         boolean useUnicode = !System.getProperty("os.name").startsWith("Windows");
