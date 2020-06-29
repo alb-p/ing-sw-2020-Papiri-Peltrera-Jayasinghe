@@ -489,7 +489,6 @@ public class CLI extends RemoteView implements Runnable {
                     printBreakers();
 
                 }
-                //if (winnerDetected) return;
             }
             wait();
         }
@@ -866,7 +865,7 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
         if (message.getId() != getPlayerId()) {
-            printer.println("\n\t" + ANSIColor.BACK_YELLOW + modelView.getPlayer(message.getId()).getNickname() + ANSIColor.RESET + "\n\n" +
+            printer.println("\n\t\t" + ANSIColor.BACK_YELLOW+ANSIColor.WHITE+ANSIColor.BOLD + modelView.getPlayer(message.getId()).getNickname() + ANSIColor.RESET + "\n\n" +
                     "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
                     "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
                     "$$ |  $$ |$$ /  $$ |$$ /  \\__|      $$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |\n" +
