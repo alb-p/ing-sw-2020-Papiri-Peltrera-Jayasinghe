@@ -1,7 +1,9 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
 import it.polimi.ingsw.utils.messages.NicknameMessage;
-import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.GUI;
+import it.polimi.ingsw.view.GUIpackage.components.MakeSound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +40,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
      * @param id the id of the player
      */
     public NicknamePanel(int id) {
-        imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int)(0.82*GUI.getDimension().height),(int)(0.625*GUI.getDimension().height),Image.SCALE_SMOOTH);
+        imageNick  = new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int)(0.82* GUI.getDimension().height),(int)(0.625*GUI.getDimension().height),Image.SCALE_SMOOTH);
 
         this.image = new ImageIcon(this.getClass().getResource("/Name/setupBG.jpg")).getImage();
         Font font;

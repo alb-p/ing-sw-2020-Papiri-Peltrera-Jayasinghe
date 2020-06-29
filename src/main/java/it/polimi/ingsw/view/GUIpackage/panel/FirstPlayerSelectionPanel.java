@@ -1,6 +1,7 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
 import it.polimi.ingsw.utils.messages.NicknameMessage;
+import it.polimi.ingsw.view.GUIpackage.GUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -35,7 +36,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
      * @throws FontFormatException the font format exception
      */
     public FirstPlayerSelectionPanel() throws IOException, FontFormatException {
-        frameDimension=GUI.getDimension();
+        frameDimension= GUI.getDimension();
 
         innerPanel =new JPanel(){
             Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (frameDimension.width/1.5),(int) (frameDimension.height/1.95),Image.SCALE_SMOOTH);

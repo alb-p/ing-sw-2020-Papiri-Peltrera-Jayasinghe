@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUIpackage.Components;
+package it.polimi.ingsw.view.GUIpackage.components;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,8 +1,9 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.components;
 
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.VirtualSlot;
+import it.polimi.ingsw.view.GUIpackage.GUI;
 
 import javax.swing.*;
 import java.awt.*;

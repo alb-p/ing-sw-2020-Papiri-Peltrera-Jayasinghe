@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.components;
 
 import javax.sound.sampled.*;
 import java.beans.PropertyChangeEvent;

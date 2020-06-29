@@ -1,8 +1,6 @@
 package it.polimi.ingsw.view.GUIpackage;
 
-import it.polimi.ingsw.view.GUIpackage.Components.ChooseColorPanel;
-import it.polimi.ingsw.view.GUIpackage.Components.EndGamePanel;
-import it.polimi.ingsw.view.GUIpackage.Components.IslandAnimationPanel;
+import it.polimi.ingsw.view.GUIpackage.panel.*;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;

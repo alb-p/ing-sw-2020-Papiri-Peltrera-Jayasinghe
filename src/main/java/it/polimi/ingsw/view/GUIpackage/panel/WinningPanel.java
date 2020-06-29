@@ -1,4 +1,6 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
+
+import it.polimi.ingsw.view.GUIpackage.GUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -21,7 +23,7 @@ public class WinningPanel extends JPanel implements ActionListener {
     public WinningPanel(JPanel p, boolean onAnimation) {
         playPanel=p;
         setOpaque(false);
-        setBounds(0,0,GUI.getDimension().width,GUI.getDimension().height);
+        setBounds(0,0, GUI.getDimension().width,GUI.getDimension().height);
         if(!onAnimation) currentFrame=200;
         frames = new ImageIcon(this.getClass().getResource("/Win/Win" + (currentFrame) + ".png"));
 

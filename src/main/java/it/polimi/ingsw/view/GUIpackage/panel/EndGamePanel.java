@@ -1,5 +1,6 @@
-package it.polimi.ingsw.view.GUIpackage.Components;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
 import it.polimi.ingsw.view.GUIpackage.GUI;
 
 import javax.swing.*;

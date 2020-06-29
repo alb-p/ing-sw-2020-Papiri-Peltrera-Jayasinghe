@@ -1,6 +1,8 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
-import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.GUI;
+import it.polimi.ingsw.view.GUIpackage.components.MakeSound;
 
 import javax.swing.*;
 import java.awt.*;
@@ -41,7 +43,7 @@ public class HomePanel extends JPanel implements ActionListener {
         layeredPane=new JLayeredPane();
         home=new JPanel();
         home.setLayout(new BoxLayout(home, BoxLayout.Y_AXIS));
-        home.setBounds(0,0,GUI.getDimension().width,GUI.getDimension().height);
+        home.setBounds(0,0, GUI.getDimension().width,GUI.getDimension().height);
         home.setOpaque(false);
         music=new MakeSound();
 

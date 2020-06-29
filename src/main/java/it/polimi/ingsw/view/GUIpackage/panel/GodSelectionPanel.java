@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
-import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
-import it.polimi.ingsw.view.GUIpackage.Components.GodsButton;
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.components.GodsButton;
+import it.polimi.ingsw.view.GUIpackage.GUI;
 
 import javax.swing.*;
 import java.awt.*;
@@ -78,7 +79,7 @@ public class GodSelectionPanel extends JPanel implements ActionListener, MouseLi
         JPanel innerPanel3=new JPanel(new FlowLayout());
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         panelsx.setLayout(new BoxLayout(panelsx, BoxLayout.Y_AXIS));
-        frameDimension=GUI.getDimension();
+        frameDimension= GUI.getDimension();
         paneldx.setPreferredSize(new Dimension((int)(frameDimension.width/2.823),frameDimension.height));
         panelsx.setPreferredSize(new Dimension((int)(frameDimension.width/1.548),frameDimension.height));
         buttonPanel.setLayout(new GridBagLayout());

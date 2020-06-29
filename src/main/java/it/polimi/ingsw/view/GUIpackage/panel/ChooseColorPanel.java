@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.GUIpackage.Components;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
 import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.messages.ColorMessage;
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
 
 import javax.swing.*;
 import java.awt.*;

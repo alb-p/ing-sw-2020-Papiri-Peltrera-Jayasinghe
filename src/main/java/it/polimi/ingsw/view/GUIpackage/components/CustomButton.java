@@ -1,6 +1,5 @@
-package it.polimi.ingsw.view.GUIpackage.Components;
+package it.polimi.ingsw.view.GUIpackage.components;
 
-import it.polimi.ingsw.view.GUIpackage.MakeSound;
 
 import javax.swing.*;
 import java.awt.*;

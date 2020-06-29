@@ -1,7 +1,8 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
-import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
-import it.polimi.ingsw.view.GUIpackage.Components.GodsButton;
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.components.GodsButton;
+import it.polimi.ingsw.view.GUIpackage.GUI;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
@@ -74,7 +75,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
         godsList.setLayout(flow);
         this.setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
         panelsx.setLayout(new BoxLayout(panelsx, BoxLayout.Y_AXIS));
-        frameDimension=GUI.getDimension();
+        frameDimension= GUI.getDimension();
         submit.setEnabled(false);
         godsList.setOpaque(false);
         submit.addActionListener(this);

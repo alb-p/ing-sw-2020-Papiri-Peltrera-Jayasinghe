@@ -1,4 +1,4 @@
-package it.polimi.ingsw.view.GUIpackage;
+package it.polimi.ingsw.view.GUIpackage.panel;
 
 import it.polimi.ingsw.actions.Build;
 import it.polimi.ingsw.actions.Move;
@@ -7,8 +7,11 @@ import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.VirtualSlot;
 import it.polimi.ingsw.utils.messages.GenericMessage;
 import it.polimi.ingsw.utils.messages.WorkerMessage;
-import it.polimi.ingsw.view.GUIpackage.Components.CustomButton;
-import it.polimi.ingsw.view.GUIpackage.Components.WorkerIcon;
+import it.polimi.ingsw.view.GUIpackage.components.CustomButton;
+import it.polimi.ingsw.view.GUIpackage.components.WorkerIcon;
+import it.polimi.ingsw.view.GUIpackage.GUI;
+import it.polimi.ingsw.view.GUIpackage.components.MakeSound;
+import it.polimi.ingsw.view.GUIpackage.components.TileButton;
 import it.polimi.ingsw.view.ModelView;
 
 import javax.swing.*;
@@ -47,7 +50,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final MakeSound music = new MakeSound();
     private final MakeSound music2 = new MakeSound();
     private final Logger logger = Logger.getLogger("playpanel");
-
+    private final Font customFont;
     private final ImageIcon buildDomeIcon;
     private final ImageIcon buildDomeClicked;
     private final ModelView modelView;
@@ -57,6 +60,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     private final JPanel boardPanel;
     private final JPanel workerToSet = new JPanel();
     private final JLabel messageCenter;
+    private final Color yellowColor = new Color(255, 235, 140);
     private final JButton submitButton = new CustomButton("/Gameplay/submit_workers");
     private final JButton domeButton = new JButton() {
         @Override
@@ -77,14 +81,15 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      * @param modelView the model view
      */
     public PlayPanel(ModelView modelView, HomePanel homePanel) {
+        Font customFont1;
         messageCenter = new JLabel();
-        Font messageFont;
         try {
-            messageFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 35); //carica font
+            customFont1 = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 35); //carica font
         } catch (IOException | FontFormatException e) {
-            messageFont = messageCenter.getFont();
+            customFont1 = messageCenter.getFont();
         }
 
+        customFont = customFont1;
         layeredPane.setPreferredSize(GUI.getDimension());
 
 
@@ -92,7 +97,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         homePanel.addHomePanelListener(music2);
         homePanel.addHomePanelListener(this);
 
-        messageCenter.setFont(messageFont);
+        messageCenter.setFont(customFont);
         messageCenter.setHorizontalAlignment(SwingConstants.CENTER);
         this.modelView = modelView;
         this.setLayout(new BorderLayout());
@@ -241,7 +246,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         boolean showing = false;
         int idShowing = 0;
         JButton exit = new JButton();
-        Font customFont;
         Image nameBase;
 
         /**
@@ -284,8 +288,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 godsInfos.add(new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + " info.jpg")).getImage().getScaledInstance(212, 450, Image.SCALE_SMOOTH));
 
                 JButton button = new JButton() {
-                    Image godMiniature = new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + ".png")).getImage().getScaledInstance(32, 46, Image.SCALE_SMOOTH);
-                    Image tab = new ImageIcon(getClass().getResource("/Gameplay/tab.png")).getImage();
+                    final Image godMiniature = new ImageIcon(getClass().getResource("/GodSelection/" + p.getGod()[0].toLowerCase() + ".png")).getImage().getScaledInstance(32, 46, Image.SCALE_SMOOTH);
+                    final Image tab = new ImageIcon(getClass().getResource("/Gameplay/tab.png")).getImage();
 
                     @Override
                     public void repaint() {
@@ -299,12 +303,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         g.drawImage(tab, 0, 0, PlayPanel.this);
                     }
                 };
-
-                try {
-                    customFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
-                } catch (FontFormatException | IOException e) {
-                    logger.log(Level.WARNING, e.getMessage());
-                }
 
 
                 tabPosition.add(new Point(0, y));
@@ -520,12 +518,23 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             }
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
             if (modelView.getWinnerId() == playerID) {
-                messageCenter.setForeground(new Color(255, 235, 140));
-                WinningPanel p = new WinningPanel(this,seaAnimationCheck);
-                layeredPane.add(p, JLayeredPane.POPUP_LAYER);
-                p.startTransition();
+                messageCenter.setForeground(yellowColor);
+                WinningPanel winningPanel = new WinningPanel(this,seaAnimationCheck);
+                layeredPane.add(winningPanel, JLayeredPane.POPUP_LAYER);
+                winningPanel.startTransition();
             } else messageCenter.setForeground(new Color(255, 255, 255));
             messageCenter.setText("Game ended");
+            JPanel loserPanel = new JPanel();
+            loserPanel.setVisible(true);
+            loserPanel.setBounds(0,0, GUI.getDimension().width,GUI.getDimension().height);
+            loserPanel.setLayout(new GridBagLayout());
+            loserPanel.setBackground(new Color(0, 0, 0, 100));
+            JLabel loserLabel = new JLabel("You have lost");
+            loserLabel.setFont(messageCenter.getFont());
+            loserLabel.setForeground(new Color(255,255,255));
+            loserLabel.setFont(customFont.deriveFont(Font.PLAIN,GUI.getDimension().width/18));
+            loserPanel.add(loserLabel);
+            layeredPane.add(loserPanel, JLayeredPane.POPUP_LAYER);
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
             if (attemptedAction != null) {
                 sendAction(attemptedAction);
@@ -555,7 +564,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 //show options
                 List<String> choices = (List<String>) modelView.getActionChoices().clone();
                 if (choices.size() == 1) {
-                    messageCenter.setForeground(new Color(255, 235, 140));
+                    messageCenter.setForeground(yellowColor);
                     messageCenter.setText("It's your turn, make your " + choices.get(0));
                 } else {
                     if (choices.contains("end turn") && modelView.isOptional()) {
@@ -573,7 +582,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                         message.append(" or ");
                     }
                     message.append(choices.get(choices.size() - 1));
-                    messageCenter.setForeground(new Color(255, 235, 140));
+                    messageCenter.setForeground(yellowColor);
                     messageCenter.setText(message.toString());
                 }
             } else {
@@ -593,7 +602,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
      */
     private void messagePlayerSettingWorkers() {
         if (modelView.getActualPlayerId() == playerID) {
-            messageCenter.setForeground(new Color(255, 235, 140));
+            messageCenter.setForeground(yellowColor);
             messageCenter.setText("Select your workers!");
         } else {
             messageCenter.setForeground(Color.WHITE);
