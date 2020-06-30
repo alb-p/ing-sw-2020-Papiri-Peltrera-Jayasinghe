@@ -522,19 +522,21 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 WinningPanel winningPanel = new WinningPanel(this,seaAnimationCheck);
                 layeredPane.add(winningPanel, JLayeredPane.POPUP_LAYER);
                 winningPanel.startTransition();
-            } else messageCenter.setForeground(new Color(255, 255, 255));
+            } else {
+                messageCenter.setForeground(new Color(255, 255, 255));
+                JPanel loserPanel = new JPanel();
+                loserPanel.setVisible(true);
+                loserPanel.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
+                loserPanel.setLayout(new GridBagLayout());
+                loserPanel.setBackground(new Color(0, 0, 0, 100));
+                JLabel loserLabel = new JLabel("You have lost");
+                loserLabel.setFont(messageCenter.getFont());
+                loserLabel.setForeground(new Color(255, 255, 255));
+                loserLabel.setFont(customFont.deriveFont(Font.PLAIN, GUI.getDimension().width / 18));
+                loserPanel.add(loserLabel);
+                layeredPane.add(loserPanel, JLayeredPane.POPUP_LAYER);
+            }
             messageCenter.setText("Game ended");
-            JPanel loserPanel = new JPanel();
-            loserPanel.setVisible(true);
-            loserPanel.setBounds(0,0, GUI.getDimension().width,GUI.getDimension().height);
-            loserPanel.setLayout(new GridBagLayout());
-            loserPanel.setBackground(new Color(0, 0, 0, 100));
-            JLabel loserLabel = new JLabel("You have lost");
-            loserLabel.setFont(messageCenter.getFont());
-            loserLabel.setForeground(new Color(255,255,255));
-            loserLabel.setFont(customFont.deriveFont(Font.PLAIN,GUI.getDimension().width/18));
-            loserPanel.add(loserLabel);
-            layeredPane.add(loserPanel, JLayeredPane.POPUP_LAYER);
         } else if (evt.getPropertyName().equalsIgnoreCase("movementTransitionEnded")) {
             if (attemptedAction != null) {
                 sendAction(attemptedAction);
