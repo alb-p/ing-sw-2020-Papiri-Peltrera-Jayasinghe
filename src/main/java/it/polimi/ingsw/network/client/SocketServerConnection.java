@@ -67,7 +67,7 @@ public class SocketServerConnection implements Runnable{
             inputStream = new ObjectInputStream(socket.getInputStream());
             printStream = new ObjectOutputStream(socket.getOutputStream());
 
-            while (true) {
+            while (!socket.isClosed()) {
                 final Object inputObject = inputStream.readObject();
 
                 if (inputObject instanceof PropertyChangeEvent) {
@@ -109,6 +109,7 @@ public class SocketServerConnection implements Runnable{
     public void sendEvent(PropertyChangeEvent evt) {
         //Client debug function
         debug(evt);
+        if(socket.isClosed())return;
         try {
             if (evt.getNewValue() instanceof Message) {
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());
@@ -128,7 +129,7 @@ public class SocketServerConnection implements Runnable{
      */
     public void closeConnection() {
         try {
-            socket.close();
+            if(!socket.isClosed())socket.close();
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }

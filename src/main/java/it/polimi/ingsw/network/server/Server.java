@@ -13,8 +13,7 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    private static final int PORT = 4566;
-    private final ServerSocket serverSocket = new ServerSocket(PORT);
+    private  ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
     private Room room = new Room(executor);
     private final Logger logger = Logger.getLogger("server");
@@ -24,7 +23,9 @@ public class Server {
      *
      * @throws IOException the io exception
      */
-    public Server() throws IOException {
+    public Server(int port) throws IOException {
+        serverSocket = new ServerSocket(port);
+
     }
 
 

@@ -19,8 +19,15 @@ public class ServerMain {
     public static void main(String[] args){
 
         Server server;
+        int port = 4566;
+        if(args.length >0){
+            String arg = args[0].replaceAll("[^0-9]", "");
+            if (!arg.equals("")){
+                port = Integer.parseInt(arg);
+            }
+        }
         try {
-            server = new Server();
+            server = new Server(port);
             server.run();
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());
