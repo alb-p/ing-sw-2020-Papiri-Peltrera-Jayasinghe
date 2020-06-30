@@ -10,22 +10,28 @@ import static org.junit.Assert.*;
 
 public class ArtemisTest {
 
-    BasicGodCard card = new Artemis();
-    IslandBoard board = new IslandBoard();
+    BasicGodCard card;
+    IslandBoard board;
 
     @Before
     public void init() {
-
-        board.infoSlot(new Coordinate(1, 3)).occupy(new Worker(new Coordinate(1, 3), Color.RED));
+        card = new Artemis();
+        board = new IslandBoard();
 
     }
 
 
     @Test
     public void cardTreeSetupTest() {
-        TreeActionNode root= card.cardTreeSetup(board.infoSlot(new Coordinate(1,3)).getWorker(),board);
+        Player player = new Player(0, "Pippo", Color.RED);
+        player.setCard("ARTEMIS");
+        player.selectWorker(new Coordinate(2, 0));
+        board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
+        player.getWorker(0).setPosition(new Coordinate(2, 0));
+        TreeActionNode root= card.cardTreeSetup(player.getWorker(0),board);
         assertEquals(1, root.getChildrenActions().size());
         assertEquals(2, root.getChildren().get(0).getChildrenActions().size());
+        assertEquals("move", root.getChildrenActions().get(0).getActionName());
         assertEquals("move", root.getChildren().get(0).getChildrenActions().get(1).getActionName());
         assertFalse(root.getChildren().get(0).getChildren().get(5).isLeaf());
     }

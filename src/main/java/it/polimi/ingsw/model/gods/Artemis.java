@@ -24,16 +24,12 @@ public class Artemis extends BasicGodCard {
      */
     @Override
     public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
-        TreeActionNode root =  super.cardTreeSetup(worker, board); //creo l'albero normale
-
-        for(TreeActionNode t: root.getChildren()) { //applico uno pseudo cardtreesetup basic per ogni nodo move dell'albero
+        TreeActionNode root =  super.cardTreeSetup(worker, board);
+        for(TreeActionNode t: root.getChildren()) {
             Coordinate firstMoveCoord=t.getData().getEnd();
-
             for (Coordinate c1 : firstMoveCoord.getAdjacentCoords()) {
-
                 if (board.infoSlot(c1).isFree() &&
                         (board.infoSlot(firstMoveCoord).getConstructionLevel() - board.infoSlot(c1).getConstructionLevel() >= -1 )) {
-
                     TreeActionNode moveNode = new TreeActionNode(new Move(firstMoveCoord, c1));
                     for (Coordinate c2 : c1.getAdjacentCoords()) {
                         if (board.infoSlot(c2).isFree()) {
@@ -41,12 +37,11 @@ public class Artemis extends BasicGodCard {
                             moveNode.addChild(buildNode);
                         }
                     }
-                    if(worker.getPosition().isAdjacent(c1)) { //se dopo la seconda move sono vicino alla primissima posizione del worker
-                        TreeActionNode buildNode = new TreeActionNode(new Build(c1, worker.getPosition()));  //allora posso costruire in quella posizione
+                    if(worker.getPosition().isAdjacent(c1)) {
+                        TreeActionNode buildNode = new TreeActionNode(new Build(c1, worker.getPosition()));
                         moveNode.addChild(buildNode);
                     }
                     t.addChild(moveNode);
-
                 }
             }
         }

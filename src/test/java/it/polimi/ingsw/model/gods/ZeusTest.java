@@ -40,7 +40,7 @@ public class ZeusTest {
     public void buildUnderOwnPosition() {
         board.infoSlot(new Coordinate(1, 0)).free();
         Player player = new Player(0, "Pluto", Color.BLUE);
-        player.setCard("ZUES");
+        player.setCard("ZEUS");
         board.infoSlot(new Coordinate(0,0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(0,0));
         board.infoSlot(new Coordinate(3,0)).occupy(player.getWorker(1));
@@ -60,7 +60,7 @@ public class ZeusTest {
     public void winningCondition() {
         board.infoSlot(new Coordinate(1, 0)).free();
         Player player = new Player(0, "Pluto", Color.BLUE);
-        player.setCard("ZUES");
+        player.setCard("ZEUS");
         board.infoSlot(new Coordinate(0,0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(0,0));
         board.infoSlot(new Coordinate(3,0)).occupy(player.getWorker(1));

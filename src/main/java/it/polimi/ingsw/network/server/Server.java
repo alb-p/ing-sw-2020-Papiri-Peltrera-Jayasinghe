@@ -17,7 +17,7 @@ public class Server {
     private final ServerSocket serverSocket = new ServerSocket(PORT);
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
     private Room room = new Room(executor);
-    private Logger logger = Logger.getLogger("server");
+    private final Logger logger = Logger.getLogger("server");
 
     /**
      * Instantiates a new Server.
@@ -38,6 +38,7 @@ public class Server {
      */
     public void run() {
         while (true) {
+            logger.log(Level.INFO, "Server started");
             try {
                 Socket newSocket = serverSocket.accept();
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket);

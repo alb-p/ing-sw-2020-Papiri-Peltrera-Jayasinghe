@@ -9,6 +9,8 @@ import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.messages.ActionMessage;
 
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The type Player represent one
@@ -30,6 +32,7 @@ public class Player {
 
     private int id;
     private Worker actualWorker;
+    Logger logger = Logger.getLogger("player.model");
 
 
     /**
@@ -235,7 +238,8 @@ public class Player {
         this.actualWorker = board.infoSlot(message.getStart()).getWorker();
         this.tree = attemptedActionNode;
         if (!this.card.turnHandler(this, board, message)) {
-            return false;//TODO mettere warning
+            logger.log(Level.WARNING, "card turnHandler return false");
+            return false;
         }
 
 
