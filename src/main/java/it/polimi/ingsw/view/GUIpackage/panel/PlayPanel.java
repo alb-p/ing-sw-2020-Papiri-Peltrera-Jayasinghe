@@ -922,18 +922,18 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     public void startAnimation() {
         if (seaAnimationCheck) {
             Thread seaAnimation = new Thread(() -> {
-                int counter = 216;
+                int counter = 1;
                 try {
                     while (true) {
-                        while (counter < 320) {
+                        while (counter < 105) {
                             Thread.sleep(50);
-                            this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
+                            this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/sea" + (counter) + ".jpg")).getImage();
                             counter++;
                             repaint();
                         }
-                        while (counter > 216) {
+                        while (counter > 1) {
                             Thread.sleep(50);
-                            this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/island0" + (counter) + ".jpg")).getImage();
+                            this.bgIsland = new ImageIcon(this.getClass().getResource("/seaAnimation/sea" + (counter) + ".jpg")).getImage();
                             counter--;
                             repaint();
                         }
