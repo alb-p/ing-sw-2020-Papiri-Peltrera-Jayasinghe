@@ -56,7 +56,10 @@ public class Athena extends BasicGodCard {
 
 
             }
-        } else {
+        }
+        /* IF A GOD THAT ALLOW A MOVE AFTER BUILD IS IMPLEMENTED add this code ↓
+
+        else {
             if (node.getData() instanceof Move) {
                 int start = board.infoSlot(node.getData().getStart()).getConstructionLevel();
                 int end = board.infoSlot(node.getData().getEnd()).getConstructionLevel();
@@ -64,7 +67,7 @@ public class Athena extends BasicGodCard {
                 if (end - start > 0) node.getParent().removeChild(index);
             }
 
-        }
+        }*/
 
     }
 

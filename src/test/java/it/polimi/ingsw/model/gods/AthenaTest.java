@@ -37,27 +37,25 @@ public class AthenaTest {
         Player enemy = new Player(1, "Pluto", Color.BLUE);
         player.setCard("PAN");
 
-        //aggiungo un worker mio in 2,0
+
+        //add my worker in 2,0
         board.infoSlot(new Coordinate(2, 0)).occupy(player.getWorker(0));
         player.getWorker(0).setPosition(new Coordinate(2, 0));
         player.selectWorker(new Coordinate(2, 0));
-        //muovo il worker in 1,0 per attivare athena
+        //move my worker in 1,0 to activate athena's special powers
         assertTrue(card.turnHandler(player,board,new Move(new Coordinate(2,0),new Coordinate(1,0))));
-        //metto worker avversario in 0,0
+        //place opponent worker in 0,0
         board.infoSlot(new Coordinate(0, 0)).occupy(enemy.getWorker(0));
         enemy.getWorker(0).setPosition(new Coordinate(0, 0));
-        //creo albero dell'avversario
+        //create opponent's action tree
         TreeActionNode root= card.cardTreeSetup(board.infoSlot(new Coordinate(0,0)).getWorker(),board);
 
-        //faccio correggere albero avversario da athena
+        //athena correction on opponent tree
         card.specialRule(root,board);
-
 
         assertTrue(root.getChildren().size()==0);
 
 
-
-
-
     }
+
 }
