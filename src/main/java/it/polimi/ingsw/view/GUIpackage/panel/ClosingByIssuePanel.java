@@ -8,22 +8,24 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This panel shows up whenever,
  * during a setup, another player
  * leave the game.
  */
-public class EndGamePanel extends JPanel implements ActionListener {
+public class ClosingByIssuePanel extends JPanel implements ActionListener {
 
     private final Image image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
-    private CustomButton exitButton;
+    private final CustomButton exitButton;
 
-    public EndGamePanel(){
+    public ClosingByIssuePanel(List<String> labelStrings){
         this.setLayout(new GridBagLayout());
 
         JPanel innerPanel =new JPanel(){
-            Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (GUI.getDimension().width/1.5),(int) (GUI.getDimension().height/1.95),Image.SCALE_SMOOTH);
+            final Image image= new ImageIcon(this.getClass().getResource("/SelectPlayers/panel.png")).getImage().getScaledInstance((int) (GUI.getDimension().width/1.5),(int) (GUI.getDimension().height/1.95),Image.SCALE_SMOOTH);
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -31,20 +33,22 @@ public class EndGamePanel extends JPanel implements ActionListener {
             }
         };
         Font font;
-        JLabel label = new JLabel();
         try {
             font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")); //upload font
         } catch (FontFormatException | IOException e) {
-            font = label.getFont();
+            font = this.getFont();
         }
 
-        label.setFont(font.deriveFont(Font.PLAIN,GUI.getDimension().width/18));
-        label.setForeground(Color.WHITE);
-        label.setText("A player left the lobby,");
-        JLabel label2 = new JLabel();
-        label2.setFont(font.deriveFont(Font.PLAIN,GUI.getDimension().width/18));
-        label2.setForeground(Color.WHITE);
-        label2.setText("please restart the game");
+        List<JLabel> labels = new ArrayList<>();
+
+        for(String s : labelStrings ){
+            JLabel label = new JLabel();
+            label.setFont(font.deriveFont(Font.PLAIN,GUI.getDimension().width/18));
+            label.setForeground(Color.WHITE);
+            label.setText(s);
+            labels.add(label);
+        }
+
 
         exitButton = new CustomButton("/Home/exit");
         exitButton.addActionListener(this);
@@ -52,12 +56,12 @@ public class EndGamePanel extends JPanel implements ActionListener {
         innerPanel.setLayout(new BoxLayout(innerPanel,BoxLayout.Y_AXIS));
 
         innerPanel.setPreferredSize(new Dimension((int) (GUI.getDimension().width/1.5), (int) (GUI.getDimension().height/1.95)));
-
         innerPanel.add(Box.createRigidArea(new Dimension(0, GUI.getDimension().height/12)));
-        innerPanel.add(label);
-        label.setAlignmentX(Component.CENTER_ALIGNMENT);
-        innerPanel.add(label2);
-        label2.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        for(JLabel label : labels){
+            innerPanel.add(label);
+            label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        }
         innerPanel.add(Box.createRigidArea(new Dimension(0, GUI.getDimension().height/16)));
         innerPanel.add(exitButton);
         innerPanel.setOpaque(false);

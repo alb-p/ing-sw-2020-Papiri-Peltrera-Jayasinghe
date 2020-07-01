@@ -53,6 +53,11 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     }
 
     @Override
+    protected void invalidAlert() {
+        ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "invalidAlertPanel");
+    }
+
+    @Override
     protected void endGame() {
         ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "endGamePanel");
     }

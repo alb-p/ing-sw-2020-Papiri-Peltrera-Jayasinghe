@@ -247,6 +247,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         int idShowing = 0;
         JButton exit = new JButton();
         Image nameBase;
+        Image nameBaseRed;
 
         /**
          * Instantiates a new Info panel.
@@ -256,7 +257,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             this.setOpaque(false);
             this.setLayout(null);
             nameBase = new ImageIcon(getClass().getResource("/Gameplay/nameBase.png")).getImage();
-
+            nameBaseRed = new ImageIcon(getClass().getResource("/Gameplay/nameBaseRed.png")).getImage();
         }
 
         /**
@@ -367,7 +368,8 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
                 g.setColor(Color.WHITE);
                 g.setFont(customFont.deriveFont(Font.PLAIN,25));
-                g.drawImage(nameBase, 0, 225, PlayPanel.this);
+                if(idShowing == playerID) g.drawImage(nameBaseRed, 0, 225, PlayPanel.this);
+                else g.drawImage(nameBase, 0, 225, PlayPanel.this);
                 g.drawString(modelView.getPlayer(idShowing).getNickname(),40,257);
 
             }

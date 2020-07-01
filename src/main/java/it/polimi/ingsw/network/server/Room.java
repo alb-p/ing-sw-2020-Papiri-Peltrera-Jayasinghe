@@ -15,7 +15,7 @@ import java.util.concurrent.ExecutorService;
 public class Room {
 
     private final ExecutorService executor;
-    private ArrayList<SocketClientConnection> connections = new ArrayList<>();
+    private final ArrayList<SocketClientConnection> connections = new ArrayList<>();
     private int playersPerGame = 0;
 
     /**

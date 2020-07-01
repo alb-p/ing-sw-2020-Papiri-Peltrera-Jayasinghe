@@ -61,7 +61,9 @@ public abstract class RemoteView implements Runnable {
         if (propertyName.equalsIgnoreCase("gameReady")) {
             setPlayerId((int) evt.getNewValue());
             gameReady();
-        } else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
+        } else if (propertyName.equalsIgnoreCase("invalidServer")) {
+            this.invalidAlert();
+        }else if (propertyName.equalsIgnoreCase("nicknameConfirm")) {
             this.nicknameReceived((NicknameMessage) evt.getNewValue());
         } else if (propertyName.equalsIgnoreCase("colorConfirm")) {
             this.colorReceived((ColorMessage) evt.getNewValue());
@@ -93,6 +95,8 @@ public abstract class RemoteView implements Runnable {
             endGame();
         }
     }
+
+    protected abstract void invalidAlert();
 
     protected abstract void endGame();
 

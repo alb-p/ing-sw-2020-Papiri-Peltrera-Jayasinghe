@@ -931,4 +931,16 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    @Override
+    protected void invalidAlert(){
+        printer.println("\n\n\n+-----------------------------------------+\n" +
+                "|                                         |\n" +
+                "|     A connection issue has occurred     |\n" +
+                "|         please check parameters.        |\n" +
+                "|         See readMe for more info        |\n" +
+                "|                                         |\n" +
+                "+-----------------------------------------+");
+        System.exit(0);
+    }
+
 }

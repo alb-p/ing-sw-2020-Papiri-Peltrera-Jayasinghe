@@ -8,6 +8,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * The type Main Jframe.
@@ -55,8 +57,11 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         contentPane.add("NicknamePanel",nickPane);
         nickPane.addNicknamePanelListener(gui);
         modelView.addNicknameListener(nickPane);
-        EndGamePanel endGamePanel = new EndGamePanel();
+        ClosingByIssuePanel endGamePanel = new ClosingByIssuePanel(new ArrayList<>( Arrays.asList("A player left the lobby,", "please restart the game")));
         contentPane.add(endGamePanel, "endGamePanel");
+        ClosingByIssuePanel invalidAlertPanel = new ClosingByIssuePanel(new ArrayList<>( Arrays.asList("A connection issue occurred,",
+                "please check parameters.")));
+        contentPane.add(invalidAlertPanel, "invalidAlertPanel");
         ChooseColorPanel colorPanel = new ChooseColorPanel(gui.getPlayerId(),this.getSize());
         colorPanel.addColorPanelListener(gui);
         modelView.addColorListener(colorPanel);
