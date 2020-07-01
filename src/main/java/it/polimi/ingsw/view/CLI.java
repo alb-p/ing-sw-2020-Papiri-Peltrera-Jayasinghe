@@ -473,13 +473,13 @@ public class CLI extends RemoteView implements Runnable {
                                 }
                             }
                         }
-                    } while (action == null && !endTurn);
+                    } while (action == null && !endTurn && modelView.getActualPlayerId()==getPlayerId());
 
                     if (endTurn) {
                         modelView.getActionsAvailable().clear();
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "endTurn", null, new GenericMessage()));
-                    } else {
+                    } else if(action!=null){
                         ActionMessage mess = new ActionMessage();
                         mess.setAction(action);
                         modelView.getActionsAvailable().clear();
@@ -662,7 +662,7 @@ public class CLI extends RemoteView implements Runnable {
                         "that can be used throughout the game. Many God Powers change the way\n" +
                         "Workers move and build.\n" +
                         "TYPE MAN OR INFO DURING THE GAME TO SHOW THE POWER OF YOUR GOD\n\n" +
-                        "Developers: Alberto Papiri, Giole Peltrera, Sandro Shamal Jajasynghe\n\n");
+                        "Developers: Alberto Papiri, Gioele Peltrera, Sandro Shamal Jayasinghe\n\n");
             }
         } while (choiceMenu != 0);
         new Thread(getConnection()).start();
@@ -850,10 +850,12 @@ public class CLI extends RemoteView implements Runnable {
      * @param message the message
      */
     @Override
-    protected synchronized void endTurn(NicknameMessage message) {
+    protected  void endTurn(NicknameMessage message) {
         super.endTurn(message);
         endTurn = false;
-        notify();
+        synchronized (this){
+            notify();
+        }
     }
 
     /**
@@ -897,6 +899,7 @@ public class CLI extends RemoteView implements Runnable {
 
     @Override
     protected void endGame() {
+
         printer.println("\n\n\n+-----------------------------------------+\n" +
                 "|                                         |\n" +
                 "|     A player left the lobby, please     |\n" +
@@ -912,11 +915,13 @@ public class CLI extends RemoteView implements Runnable {
      * @param message the message
      */
     @Override
-    protected synchronized void playerHasLost(GenericMessage message) {
+    protected  void playerHasLost(GenericMessage message) {
         super.playerHasLost(message);
-        printer.println("\n" + modelView.getPlayer(message.getId()).getColor().colorizedText(modelView.getPlayer(message.getId()).getNickname()) + " has lost for no available moves!\n");
-        printBreakers();
-        notify();
+        synchronized (this) {
+            printer.println("\n" + modelView.getPlayer(message.getId()).getColor().colorizedText(modelView.getPlayer(message.getId()).getNickname()) + " has lost for no available moves!\n");
+            printBreakers();
+            notify();
+        }
     }
 
 }
