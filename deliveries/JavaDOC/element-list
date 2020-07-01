@@ -8,4 +8,5 @@ it.polimi.ingsw.utils
 it.polimi.ingsw.utils.messages
 it.polimi.ingsw.view
 it.polimi.ingsw.view.GUIpackage
-it.polimi.ingsw.view.GUIpackage.Components
+it.polimi.ingsw.view.GUIpackage.components
+it.polimi.ingsw.view.GUIpackage.panel
