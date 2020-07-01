@@ -91,7 +91,6 @@ public abstract class RemoteView implements Runnable {
         } else if (propertyName.equalsIgnoreCase("endGame")) {
             connection.closeConnection();
             endGame();
-            //System.exit(0);
         }
     }
 
@@ -104,7 +103,7 @@ public abstract class RemoteView implements Runnable {
      * @param message the message
      */
     protected void playerHasLost(GenericMessage message) {
-        if(message.getId() == modelView.getActualPlayerId())modelView.setNextPlayerId();
+        if (message.getId() == modelView.getActualPlayerId()) modelView.setNextPlayerId();
     }
 
     /**

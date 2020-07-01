@@ -672,7 +672,7 @@ public class CLI extends RemoteView implements Runnable {
     /**
      * It prepares the color message and, after player choice, send it.
      */
-    private synchronized void colorChoice() {
+    private void colorChoice() {
         while (!colorValidate) {
             ColorMessage message = askColor();
             waitingValidation(new PropertyChangeEvent(this, "notifyColor", false, message));
@@ -682,7 +682,7 @@ public class CLI extends RemoteView implements Runnable {
     /**
      * It prepares the nickname message and, after player choice, send it.
      */
-    private synchronized void nickChoice() {
+    private void nickChoice() {
         while (!nickValidate) {
             NicknameMessage message = askNicknamePlayer();
             waitingValidation(new PropertyChangeEvent(this, "notifyNickname", false, message));
@@ -697,10 +697,13 @@ public class CLI extends RemoteView implements Runnable {
      */
     public void waitingValidation(PropertyChangeEvent evt) {
         getConnection().sendEvent(evt);
-        try {
-            this.wait();
-        } catch (InterruptedException | IllegalMonitorStateException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+        synchronized (this) {
+
+            try {
+                this.wait();
+            } catch (InterruptedException | IllegalMonitorStateException e) {
+                logger.log(Level.SEVERE, e.getMessage());
+            }
         }
     }
 
@@ -916,11 +919,14 @@ public class CLI extends RemoteView implements Runnable {
      */
     @Override
     protected  void playerHasLost(GenericMessage message) {
-        super.playerHasLost(message);
         synchronized (this) {
-            printer.println("\n" + modelView.getPlayer(message.getId()).getColor().colorizedText(modelView.getPlayer(message.getId()).getNickname()) + " has lost for no available moves!\n");
+            printer.println("\n" + modelView.getPlayer(message.getId()).getColor().colorizedText(modelView.getPlayer(message.getId()).getNickname()) + " has lost!\n");
             printBreakers();
-            notify();
+            //if(message.getId()==modelView.getActualPlayerId())notify();
+            if(message.getId()==modelView.getActualPlayerId()) {
+                modelView.setNextPlayerId();
+                notify();
+            }
         }
     }
 

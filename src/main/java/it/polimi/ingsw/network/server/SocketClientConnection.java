@@ -24,7 +24,7 @@ import java.util.logging.Logger;
 public class SocketClientConnection implements Runnable, PropertyChangeListener {
 
     private Socket socket;
-    private  ObjectOutputStream outSocket;
+    private ObjectOutputStream outSocket;
     private ObjectInputStream inSocket;
     private final PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
     private Logger logger = Logger.getLogger("network.scc");
@@ -109,13 +109,12 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     /**
      * Fires to the controller the events coming
      * from the view.
-     *
      */
     @Override
     public void run() {
         try {
             sendEvent(new PropertyChangeEvent(this, "gameReady", null, id));
-            while (socket.isConnected()) {
+            while (!socket.isClosed()) {
                 Object inputObject = inSocket.readObject();
                 if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message
@@ -128,10 +127,14 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                     socket.close();
                 }
             }
-
-            socket.close();
         } catch (IOException | ClassNotFoundException exception) {
-            logger.log(Level.SEVERE, exception.getMessage());
+            logger.log(Level.WARNING, "Connection id " + id + " lost  " + exception.getMessage());
+            sccListeners.firePropertyChange("playerDisconnected", this, id);
+            try {
+                socket.close();
+            } catch (IOException e) {
+                logger.log(Level.WARNING, "catch close disconnected player");
+            }
         }
 
     }
@@ -155,11 +158,11 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
      */
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        sendEvent(evt);
+        if (!socket.isClosed()) sendEvent(evt);
         if (evt.getPropertyName().equalsIgnoreCase("endGame")) {
             try {
                 socket.close();
-                System.out.println("DOPO ENDGAME CHIUDO CONNESSIONE " + id);
+                logger.log(Level.FINE, "Closed well id " + id);
             } catch (IOException e) {
                 logger.log(Level.SEVERE, e.getMessage());
             }
@@ -183,7 +186,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
         } catch (IOException e) {
             try {
                 socket.close();
-                logger.log(Level.INFO,"Connection " + id + " SOCKET CLOSED");
+                logger.log(Level.INFO, "Connection " + id + " SOCKET CLOSED");
             } catch (IOException ioException) {
                 logger.log(Level.SEVERE, e.getMessage());
             } finally {

@@ -13,10 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *  * The type Socket Server connection is the linker to the server
- *  * for the client
+ * The type Socket Server connection is the linker to the server
+ *      for the client.
  *
- *  .*/
+ */
 public class SocketServerConnection implements Runnable{
 
     private Socket socket;
@@ -109,7 +109,7 @@ public class SocketServerConnection implements Runnable{
     public void sendEvent(PropertyChangeEvent evt) {
         //Client debug function
         debug(evt);
-        if(socket.isClosed())return;
+        if (socket.isClosed()) return;
         try {
             if (evt.getNewValue() instanceof Message) {
                 ((Message) evt.getNewValue()).setId(view.getPlayerId());
@@ -120,7 +120,7 @@ public class SocketServerConnection implements Runnable{
                 printStream.flush();
             }
         } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage());
+            logger.log(Level.SEVERE, " Socket closed server side " + e.getMessage());
         }
     }
 
@@ -129,7 +129,7 @@ public class SocketServerConnection implements Runnable{
      */
     public void closeConnection() {
         try {
-            if(!socket.isClosed())socket.close();
+            if (!socket.isClosed()) socket.close();
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage());
         }
@@ -143,31 +143,31 @@ public class SocketServerConnection implements Runnable{
      */
     private void debug(PropertyChangeEvent evt) {
         String separator = "_*_*_*_*_*_*_*_*_*_*_*_*_*_";
-        logger.log(Level.FINE,"---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " ");
+        logger.log(Level.FINE, "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " " + "---DEBUG ID " + " ");
         if (evt.getNewValue() instanceof Message) {
             if (evt.getNewValue() instanceof ActionMessage) {
-                logger.log(Level.FINE,"ACTION MESSAGE SENDING");
-                logger.log(Level.FINE,evt.getPropertyName());
+                logger.log(Level.FINE, "ACTION MESSAGE SENDING");
+                logger.log(Level.FINE, evt.getPropertyName());
                 Action a = ((ActionMessage) evt.getNewValue()).getAction();
-                logger.log(Level.FINE,a.getActionName() + a.getStart() + a.getEnd());
+                logger.log(Level.FINE, a.getActionName() + a.getStart() + a.getEnd());
             }
-            logger.log(Level.FINE,separator);
+            logger.log(Level.FINE, separator);
         } else if (evt.getNewValue() instanceof GenericMessage) {
-            logger.log(Level.FINE,"GENERIC MESSAGE SENDING");
-            logger.log(Level.FINE,evt.getPropertyName());
-            logger.log(Level.FINE,separator);
+            logger.log(Level.FINE, "GENERIC MESSAGE SENDING");
+            logger.log(Level.FINE, evt.getPropertyName());
+            logger.log(Level.FINE, separator);
         } else if (evt.getNewValue() instanceof NicknameMessage) {
-            logger.log(Level.FINE,"NICKNAME MESSAGE SENDING");
-            logger.log(Level.FINE,evt.getPropertyName());
-            logger.log(Level.FINE,"NICK : " + ((NicknameMessage) evt.getNewValue()).getNickname());
-            logger.log(Level.FINE,separator);
+            logger.log(Level.FINE, "NICKNAME MESSAGE SENDING");
+            logger.log(Level.FINE, evt.getPropertyName());
+            logger.log(Level.FINE, "NICK : " + ((NicknameMessage) evt.getNewValue()).getNickname());
+            logger.log(Level.FINE, separator);
         } else {
-            logger.log(Level.FINE,"SENDING");
-            logger.log(Level.FINE,evt.getPropertyName());
-            logger.log(Level.FINE,separator);
+            logger.log(Level.FINE, "SENDING");
+            logger.log(Level.FINE, evt.getPropertyName());
+            logger.log(Level.FINE, separator);
 
         }
-        logger.log(Level.FINE,"END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " ");
+        logger.log(Level.FINE, "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " " + "END---DEBUG ID " + " ");
 
     }
 
