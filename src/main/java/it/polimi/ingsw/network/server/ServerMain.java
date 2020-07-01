@@ -28,6 +28,7 @@ public class ServerMain {
         }
         try {
             server = new Server(port);
+            logger.log(Level.INFO, "Server started");
             server.run();
         } catch (Exception e) {
             logger.log(Level.SEVERE, e.getMessage());

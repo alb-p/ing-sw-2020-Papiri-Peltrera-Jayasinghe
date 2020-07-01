@@ -138,11 +138,8 @@ public class BasicGodCard {
      */
     public boolean winningCondition(Worker w, IslandBoard board, VirtualBoard virtualBoard) {
 
-        if (virtualBoard.getSlot(new Coordinate(w.getOldPosition().getRow(), w.getOldPosition().getCol())).getLevel() == 2 &&
-                board.infoSlot(w.getPosition()).getConstructionLevel() == 3) {
-            return true;
-        }
-        return false;
+        return  (virtualBoard.getSlot(new Coordinate(w.getOldPosition().getRow(), w.getOldPosition().getCol())).getLevel() == 2 &&
+                board.infoSlot(w.getPosition()).getConstructionLevel() == 3);
     }
 }
 

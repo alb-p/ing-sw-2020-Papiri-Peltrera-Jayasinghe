@@ -25,7 +25,6 @@ public class Hestia extends BasicGodCard {
     public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
 
         TreeActionNode root = super.cardTreeSetup(worker, board);
-        ;
         for (TreeActionNode move : root.getChildren()) {
             for (TreeActionNode firstBuild : move.getChildren()) {
                 for (Coordinate c : firstBuild.getData().getStart().getAdjacentCoords()) {

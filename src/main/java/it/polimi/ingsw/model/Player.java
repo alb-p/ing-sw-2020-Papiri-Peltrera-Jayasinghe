@@ -32,7 +32,7 @@ public class Player {
 
     private int id;
     private Worker actualWorker;
-    Logger logger = Logger.getLogger("player.model");
+    private final Logger logger = Logger.getLogger("player.model");
 
 
     /**

@@ -9,6 +9,8 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * The type Game handler is the controller used for
@@ -17,7 +19,7 @@ import java.util.Random;
 public class GameHandler implements PropertyChangeListener {
 
     private final InitSetup data;
-    private final HashMap<Integer, String> playersMap = new HashMap<>();      //associazione    ID -> nome
+    private final HashMap<Integer, String> playersMap = new HashMap<>();
     private final Model model;
     private TurnHandler turnHandler;
     private final int playersPerGame;
@@ -25,7 +27,7 @@ public class GameHandler implements PropertyChangeListener {
     private int currentPlayerID = -1;
     private boolean atLeastOneGod = false;
     private boolean workerPlaced = false;
-
+    private final Logger logger = Logger.getLogger("gameHandler.controller");
     /**
      * Instantiates a new Game handler.
      *
@@ -91,10 +93,11 @@ public class GameHandler implements PropertyChangeListener {
                         firstPlayerChosenID = i;
                         currentPlayerID = firstPlayerChosenID;
                         turnHandler.setTotalTurnCounter(i);
-                        data.FirstPlayer(message);
+                        data.firstPlayer(message);
                         break;
                     }
                 }
+                logger.log(Level.INFO, "A new match is starting...");
             }
 
         } else if (evt.getPropertyName().equals("notifyWorker") && firstPlayerChosenID != -1) {

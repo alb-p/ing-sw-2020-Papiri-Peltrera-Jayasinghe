@@ -141,8 +141,6 @@ public class TurnHandler implements PropertyChangeListener {
      */
     public void setTotalTurnCounter(int id) {
         this.totalTurnCounter = id;
-        System.out.println(model.getPlayer(0).getNickName() + " ID"+0);
-        System.out.println(model.getPlayer(1).getNickName() + " ID"+1);
     }
 
 

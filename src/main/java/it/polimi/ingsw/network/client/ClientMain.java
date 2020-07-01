@@ -18,7 +18,6 @@ public class ClientMain {
      * @param args the args
      */
     public static void main(String[] args) {
-        //System.setProperty("file.encoding", "UTF-8");
         //String ip = "127.0.0.1";
         //String ip = "87.18.127.100";
         String ip = "gc20.ddns.net";
@@ -26,7 +25,7 @@ public class ClientMain {
         int chosenUI = 1;
         boolean useUnicode = !System.getProperty("os.name").startsWith("Windows");
 
-/*
+
         if (args.length != 0) {
             int arg = 0;
             if (args[arg].equalsIgnoreCase("CLI")) {
@@ -42,8 +41,8 @@ public class ClientMain {
             }
         }
 
-*/
 
+/*
         if (args.length != 0) {
             ip = args[0];
             if (args.length > 1) {
@@ -65,6 +64,8 @@ public class ClientMain {
             } while (chosenUI != 0 && chosenUI != 1);
         }
 
+
+ */
 
         try {
             new SocketServerConnection(ip, port, chosenUI, useUnicode);

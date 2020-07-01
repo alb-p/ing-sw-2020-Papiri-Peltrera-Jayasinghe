@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  */
 public class IslandBoard{
 
-    private Logger logger = Logger.getLogger("model.board");
+    private final Logger logger = Logger.getLogger("model.board");
     Slot[][] board = new Slot[5][5];
 
     /**

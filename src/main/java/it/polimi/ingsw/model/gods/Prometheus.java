@@ -28,7 +28,6 @@ public class Prometheus extends BasicGodCard {
     @Override
     public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
         TreeActionNode moveNode;
-        moveNode = null;
         TreeActionNode root = super.cardTreeSetup(worker, board);
         for (Coordinate c1 : worker.getPosition().getAdjacentCoords()) {     //first build
             if (board.infoSlot(c1).isFree()) {

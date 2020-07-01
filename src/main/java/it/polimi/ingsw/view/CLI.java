@@ -130,6 +130,7 @@ public class CLI extends RemoteView implements Runnable {
         do {
             startingBrackets();
             playerInput = scanner.nextLine();
+            checkInputExit(playerInput);
             checkSpaces = playerInput.replace(" ", "");
         } while (checkSpaces.equals("") || !modelView.checkNickname(playerInput) || playerInput.length() > 20);
         this.nickname = playerInput;
@@ -150,6 +151,7 @@ public class CLI extends RemoteView implements Runnable {
         do {
             printAvailableColors();
             playerInput = scanner.nextLine();
+            checkInputExit(playerInput);
             isNumber = playerInput.replaceAll("[^1-9]", "");
             if (!isNumber.equals("")) {
                 indexColor = Integer.parseInt(isNumber);
@@ -268,7 +270,6 @@ public class CLI extends RemoteView implements Runnable {
         String s;
         String isNumber;
         int indexGod = 9;
-        //printer.println();
         if (modelView.getChosenGods().size() == 1) {
             message.setGod(modelView.getChosenGods().get(0)[0]);
             modelView.getPlayer(getPlayerId()).setGod(modelView.getChosenGods().get(0));
@@ -308,7 +309,7 @@ public class CLI extends RemoteView implements Runnable {
      * Quit the game if input string contains exit or quit.
      * Support function
      *
-     * @param input
+     * @param input player's input
      */
     private void checkInputExit(String input) {
         if (input.contains("exit") || input.contains("quit")) {
@@ -325,7 +326,7 @@ public class CLI extends RemoteView implements Runnable {
      * @throws InterruptedException the interrupted exception
      */
     public synchronized void firstPlayer() throws InterruptedException {
-        int indexNickname = -2;
+        int indexNickname = 9;
 
         if (getPlayerId() == modelView.getGodlyId()) {
             NicknameMessage message = new NicknameMessage();
@@ -344,7 +345,7 @@ public class CLI extends RemoteView implements Runnable {
                 if (!isNumber.equals("")) {
                     indexNickname = Integer.parseInt(isNumber);
                     indexNickname -= 1;
-                    if (indexNickname < modelView.getPlayers().size()) {
+                    if (indexNickname < modelView.getPlayers().size() && indexNickname >= 0) {
                         if (s.contains("info") || s.contains("man")) {
                             printer.println(modelView.getGods().get(indexNickname)[0]);
                             printer.println(modelView.getGods().get(indexNickname)[1]);
@@ -498,7 +499,7 @@ public class CLI extends RemoteView implements Runnable {
     /**
      * Parse user's action input string looking for valid couple of Coordinate.
      *
-     * @param input
+     * @param input got from user typing
      * @return the array list of Start and End Coordinate
      */
     public List<Coordinate> parseCoordinateAction(String input) {

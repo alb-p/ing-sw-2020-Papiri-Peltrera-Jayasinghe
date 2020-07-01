@@ -46,7 +46,6 @@ public class Poseidon extends BasicGodCard {
                                             extraBuild1Level = standardTemp1Level;
                                         }
                                         if (extraBuild1Level <= 4) {
-                                            //standardBuildLevel = standardTemp1Level;
                                             TreeActionNode build1 = new TreeActionNode(new Build(otherCoordinate, extraBuild1));
                                             buildNode.addChild(build1);
                                             for (Coordinate extraBuild2 : otherCoordinate.getAdjacentCoords()) {
@@ -66,8 +65,6 @@ public class Poseidon extends BasicGodCard {
                                                             extraBuild2Level = extra1Temp2Level;
                                                         }
                                                         if (extraBuild2Level <= 4) {
-                                                            //standardBuildLevel = standardTemp2Level;
-                                                            //extraBuild1Level = extra1Temp2Level;
                                                             TreeActionNode build2 = new TreeActionNode(new Build(otherCoordinate, extraBuild2));
                                                             build1.addChild(build2);
                                                             for (Coordinate extraBuild3 : otherCoordinate.getAdjacentCoords()) {

@@ -24,5 +24,6 @@ public enum Construction {
      *
      * @return the string
      */
+    @Override
     public String toString(){return this.symbol;}
 }

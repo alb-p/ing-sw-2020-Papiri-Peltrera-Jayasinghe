@@ -135,7 +135,6 @@ public class InitSetup {
      */
     public void addChosenGod(String chosenGod, InitialCardsMessage mess) {
         this.chosenGods.add(chosenGod);
-        System.out.println("GODS SIZE:: " + gods.size() + "HO AGGIUNTO:: " + chosenGod);
         for (int i = 0; i < gods.size(); i++) {
             if (gods.get(i).equals(chosenGod)) {
                 this.gods.remove(i);
@@ -225,7 +224,7 @@ public class InitSetup {
      *
      * @param mess the mess
      */
-    public void FirstPlayer(NicknameMessage mess) {
+    public void firstPlayer(NicknameMessage mess) {
         initSetupListeners.firePropertyChange("firstPlayerConfirmed", null, mess);
     }
 

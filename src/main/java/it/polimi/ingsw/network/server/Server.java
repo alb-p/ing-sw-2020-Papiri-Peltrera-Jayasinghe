@@ -39,13 +39,11 @@ public class Server {
      */
     public void run() {
         while (true) {
-            logger.log(Level.INFO, "Server started");
             try {
                 Socket newSocket = serverSocket.accept();
                 SocketClientConnection socketConnection = new SocketClientConnection(newSocket);
 
                 synchronized (room) {
-                    logger.log(Level.INFO,"Server synchronized on Room");
                     if (room.isUninitialized()) {
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
                         room.setNumOfPlayers(numOfPlayers);
@@ -56,6 +54,7 @@ public class Server {
                         socketConnection.setId(room.currentPlayerId()-1);
                         if(room.isReady())room.start();
                     }else{
+                        logger.log(Level.INFO,"All players are connected, setup starts");
                         room= new Room(executor);
                         int numOfPlayers  = socketConnection.askNumOfPlayers();
                         room.setNumOfPlayers(numOfPlayers);

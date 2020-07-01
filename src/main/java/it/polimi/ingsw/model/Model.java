@@ -25,7 +25,7 @@ public class Model {
     private VirtualBoard oldBoard = new VirtualBoard();
     private final PropertyChangeSupport modelListeners = new PropertyChangeSupport(this);
     private boolean winnerDetected = false;
-    Logger logger = Logger.getLogger("model");
+    private final Logger logger = Logger.getLogger("model");
 
     /**
      * Add model listener.
