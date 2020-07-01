@@ -24,14 +24,16 @@ To win the game, players must move one of their two characters to the third leve
       <li>Hestia</li>
       <li>Hypnus</li>
       <li>Poseidon</li>
-      <li>Hestia</li>
       <li>Zeus</li>
     </ul>
     </li>
 </ul>
 
 <h4>Documentation</h4>
-
+<ul>
+<li><a href = "https://github.com/alb-p/ing-sw-2020-Papiri-Peltrera-Jayasinghe/tree/master/deliveries/Javadoc"><b>JavaDoc</b> </a></li>
+<li><a href = "https://github.com/alb-p/ing-sw-2020-Papiri-Peltrera-Jayasinghe/tree/master/deliveries/Coverage"><b>JavaDoc</b></a></li>
+</ul>
 
 
 <h2>How to run</h2> 
@@ -42,7 +44,7 @@ UTF-8 support is strongly recommended for a more enjoyable CLI gaming experience
 <h4> Client </h4>
 
 ```bash
-$ java -jar SantoriniClient.jar -cli ip-address port
+$ java -jar SantoriniClient.jar cli ip-address port
 ```
 <ul>
 <li>type <code>-cli</code> to play by <i>Command Line Interface</i> [CLI]. <i>Graphical User Interface</i> [GUI] will be launched by default. </li>
@@ -64,5 +66,5 @@ All flags are optional. With no flags the server will start on localhost.
 
 <h2>Developers: Group GC20</h2>
 <a href = "https://github.com/alb-p/"><b>10566115 Alberto Papiri</b> </a><br>
-<a href = "https://github.com/gioelepeltrera/"><b>10560633 Giole Peltrera</b> </a><br>
+<a href = "https://github.com/gioelepeltrera/"><b>10560633 Gioele Peltrera</b> </a><br>
 <a href = "https://github.com/sandroJaya/"><b>10530600 Sandro Shamal Jayasinghe</b> </a>

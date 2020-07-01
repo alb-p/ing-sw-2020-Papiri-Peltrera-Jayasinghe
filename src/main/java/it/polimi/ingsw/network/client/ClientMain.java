@@ -18,9 +18,9 @@ public class ClientMain {
      * @param args the args
      */
     public static void main(String[] args) {
-        //String ip = "127.0.0.1";
+        String ip = "127.0.0.1";
         //String ip = "87.18.127.100";
-        String ip = "gc20.ddns.net";
+        //String ip = "gc20.ddns.net";
         int port = 4566;
         int chosenUI = 1;
         boolean useUnicode = !System.getProperty("os.name").startsWith("Windows");
@@ -28,7 +28,7 @@ public class ClientMain {
 
         if (args.length != 0) {
             int arg = 0;
-            if (args[arg].equalsIgnoreCase("CLI")) {
+            if (args[arg].equalsIgnoreCase("-CLI")) {
                 chosenUI = 0;
                 arg++;
             }

@@ -33,13 +33,13 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
      * @throws FontFormatException the font format exception
      */
     public MainJFrame(GUI gui, ModelView modelView) throws IOException, FontFormatException {
-
+        this.setIconImage(new ImageIcon(this.getClass().getResource("/Home/IconS.png")).getImage());
+        this.setTitle("Santorini");
         this.setDefaultCloseOperation(MainJFrame.EXIT_ON_CLOSE);
         this.setSize(GUI.getDimension());
-        this.setUndecorated(true); //nasconde titlebar
-        this.setResizable(true);
-        // window.setBackground(new Color(0, 0, 0, 0)); //trasperenza
-        this.setLocationRelativeTo(null); //posiziona al centro all'apertura
+        this.setUndecorated(true);
+        this.setResizable(false);
+        this.setLocationRelativeTo(null);
         layout = new CardLayout();
         contentPane = new MainPanel(this);
         contentPane.setLayout(layout);
