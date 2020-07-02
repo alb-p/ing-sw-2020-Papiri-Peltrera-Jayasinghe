@@ -74,6 +74,11 @@ public class SocketServerConnection implements Runnable{
                     view.notifyEvent((PropertyChangeEvent) inputObject);
                 } else if (inputObject instanceof SetupMessage) {
                     view.askNumOfPlayers();
+                } else if (inputObject instanceof GenericMessage){
+                    if(((GenericMessage) inputObject).getMessage().equalsIgnoreCase("acceptedDisconnection")){
+                        socket.close();
+                        System.exit(0);
+                    }
                 }
 
             }

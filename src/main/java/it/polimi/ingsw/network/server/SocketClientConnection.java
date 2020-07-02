@@ -124,6 +124,8 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 } else if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getPropertyName().equalsIgnoreCase("playerDisconnected")) {
                     sccListeners.firePropertyChange("playerDisconnected", this, id);
+                    send(new GenericMessage(id,"acceptedDisconnection"));
+                    System.out.println("ACCEPTED ID "+id);
                     socket.close();
                 }
             }

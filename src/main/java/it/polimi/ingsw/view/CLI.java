@@ -314,8 +314,6 @@ public class CLI extends RemoteView implements Runnable {
     private void checkInputExit(String input) {
         if (input.contains("exit") || input.contains("quit")) {
             connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
-            connection.closeConnection();
-            System.exit(0);
         }
     }
 
@@ -420,14 +418,16 @@ public class CLI extends RemoteView implements Runnable {
      *
      * @throws InterruptedException the interrupted exception
      */
-    private synchronized void play() throws InterruptedException {
-        while (!winnerDetected || getPlayerId() == modelView.getDeletedPlayerId()) {
+    private void play() throws InterruptedException {
+        while (!winnerDetected && getPlayerId() != modelView.getDeletedPlayerId()) {
             modelView.getActionsAvailable().clear();
             while (getPlayerId() == modelView.getActualPlayerId() && !endTurn) {
-                if (winnerDetected) return;
+                if (winnerDetected || getPlayerId()==modelView.getDeletedPlayerId()) return;
                 connection.sendEvent(new PropertyChangeEvent(this, "actionsRequest",
                         null, new GenericMessage()));
-                wait();
+                synchronized (this) {
+                    wait();
+                }
                 if (!modelView.getActionsAvailable().isEmpty() && getPlayerId() == modelView.getActualPlayerId() && !winnerDetected) {
                     List<String> choices = modelView.getActionChoices();
                     Action action = null;
@@ -474,13 +474,13 @@ public class CLI extends RemoteView implements Runnable {
                                 }
                             }
                         }
-                    } while (action == null && !endTurn && modelView.getActualPlayerId()==getPlayerId());
+                    } while (action == null && !endTurn && modelView.getActualPlayerId() == getPlayerId());
 
                     if (endTurn) {
                         modelView.getActionsAvailable().clear();
                         connection.sendEvent(new PropertyChangeEvent(this,
                                 "endTurn", null, new GenericMessage()));
-                    } else if(action!=null){
+                    } else if (action != null) {
                         ActionMessage mess = new ActionMessage();
                         mess.setAction(action);
                         modelView.getActionsAvailable().clear();
@@ -491,7 +491,9 @@ public class CLI extends RemoteView implements Runnable {
 
                 }
             }
-            wait();
+            synchronized (this) {
+                wait();
+            }
         }
     }
 
@@ -579,8 +581,11 @@ public class CLI extends RemoteView implements Runnable {
             setupWorkers();
             allWorkerPlaced();
             play();
-
-            System.exit(0);
+            String exit = "";
+            while(true) {
+                exit = scanner.nextLine();
+                checkInputExit(exit);
+            }
 
         } catch (InterruptedException e) {
             logger.log(Level.SEVERE, e.getMessage());
@@ -854,10 +859,10 @@ public class CLI extends RemoteView implements Runnable {
      * @param message the message
      */
     @Override
-    protected  void endTurn(NicknameMessage message) {
+    protected void endTurn(NicknameMessage message) {
         super.endTurn(message);
         endTurn = false;
-        synchronized (this){
+        synchronized (this) {
             notify();
         }
     }
@@ -871,7 +876,7 @@ public class CLI extends RemoteView implements Runnable {
     protected synchronized void winnerDetected(WinnerMessage message) {
         winnerDetected = true;
         if (message.getId() != getPlayerId()) {
-            printer.println("\n\t\t" + ANSIColor.BACK_YELLOW+ANSIColor.WHITE+ANSIColor.BOLD + modelView.getPlayer(message.getId()).getNickname() + ANSIColor.RESET + "\n\n" +
+            printer.println("\n\t\t" + ANSIColor.BACK_YELLOW + ANSIColor.WHITE + ANSIColor.BOLD + modelView.getPlayer(message.getId()).getNickname() + ANSIColor.RESET + "\n\n" +
                     "$$\\   $$\\  $$$$$$\\   $$$$$$\\        $$\\      $$\\  $$$$$$\\  $$\\   $$\\ \n" +
                     "$$ |  $$ |$$  __$$\\ $$  __$$\\       $$ | $\\  $$ |$$  __$$\\ $$$\\  $$ |\n" +
                     "$$ |  $$ |$$ /  $$ |$$ /  \\__|      $$ |$$$\\ $$ |$$ /  $$ |$$$$\\ $$ |\n" +
@@ -897,8 +902,7 @@ public class CLI extends RemoteView implements Runnable {
                     "                                                                     \n" +
                     "                                                                     " + ANSIColor.RESET);
         }
-
-        notify();
+        connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
     }
 
     @Override
@@ -910,7 +914,7 @@ public class CLI extends RemoteView implements Runnable {
                 "|            start a new game.            |\n" +
                 "|                                         |\n" +
                 "+-----------------------------------------+");
-        System.exit(0);
+        connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
     }
 
     /**
@@ -919,12 +923,12 @@ public class CLI extends RemoteView implements Runnable {
      * @param message the message
      */
     @Override
-    protected  void playerHasLost(GenericMessage message) {
+    protected void playerHasLost(GenericMessage message) {
         synchronized (this) {
             printer.println("\n" + modelView.getPlayer(message.getId()).getColor().colorizedText(modelView.getPlayer(message.getId()).getNickname()) + " has lost!\n");
             printBreakers();
             //if(message.getId()==modelView.getActualPlayerId())notify();
-            if(message.getId()==modelView.getActualPlayerId()) {
+            if (message.getId() == modelView.getActualPlayerId()) {
                 modelView.setNextPlayerId();
                 notify();
             }
@@ -932,7 +936,7 @@ public class CLI extends RemoteView implements Runnable {
     }
 
     @Override
-    protected void invalidAlert(){
+    protected void invalidAlert() {
         printer.println("\n\n\n+-----------------------------------------+\n" +
                 "|                                         |\n" +
                 "|     A connection issue has occurred     |\n" +

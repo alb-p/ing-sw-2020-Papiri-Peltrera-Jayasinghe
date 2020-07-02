@@ -104,7 +104,6 @@ public class BasicGodCard {
      */
     public TreeActionNode cardTreeSetup(Worker worker, IslandBoard board) {
         TreeActionNode tree = new TreeActionNode(null);
-        if(worker == null) System.out.println("worker nulll");
         for (Coordinate c1 : worker.getPosition().getAdjacentCoords()) {  //check around worker position to perform a Move
 
             if (board.infoSlot(c1).isFree() &&

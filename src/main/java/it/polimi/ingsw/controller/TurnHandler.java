@@ -128,7 +128,6 @@ public class TurnHandler implements PropertyChangeListener {
     public int actualPlayerID() {
         if (playerDefeatedID == totalTurnCounter % playersPerGame) {
             totalTurnCounter++;
-            System.out.println("SERVER SALTO IL MORTO");
         }
         return totalTurnCounter % playersPerGame;
     }

@@ -323,8 +323,6 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
             connection.sendEvent(new PropertyChangeEvent(this, "endTurn", null, message));
         }else if(evt.getPropertyName().equalsIgnoreCase("playerToDisconnect")){
             connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
-            connection.closeConnection();
-            System.exit(0);
         }
     }
 }

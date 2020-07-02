@@ -22,11 +22,10 @@ public class GenericMessage implements Message , Serializable {
      * Instantiates a new Generic message.
      *
      * @param i        the
-     * @param nickname the nickname
      * @param message  the message
      */
-    public GenericMessage(int i,String nickname, String message){
-        this.message=nickname+message;
+    public GenericMessage(int i, String message){
+        this.message=message;
         this.id=i;
     }
 

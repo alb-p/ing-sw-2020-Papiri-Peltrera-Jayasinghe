@@ -333,24 +333,25 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (e.getSource() instanceof JButton) {
                 if (((JButton) e.getSource()).getName().equalsIgnoreCase("exit")) {
                     PlayPanel.this.playPanelListener.firePropertyChange("PlayerToDisconnect", false, true);
-                }
-
-                int id = Integer.parseInt(((JButton) e.getSource()).getName());
-                if (showing && id == idShowing) {
-                    showing = false;
-                    tabPosition.get(id).x -= 212;
-
                 } else {
-                    if (showing) {
-                        tabPosition.get(idShowing).x -= 212;
-                        godsTabs.get(idShowing).setLocation(tabPosition.get(idShowing));
-                    }
-                    idShowing = id;
-                    showing = true;
-                    tabPosition.get(id).x += 212;
 
+                    int id = Integer.parseInt(((JButton) e.getSource()).getName());
+                    if (showing && id == idShowing) {
+                        showing = false;
+                        tabPosition.get(id).x -= 212;
+
+                    } else {
+                        if (showing) {
+                            tabPosition.get(idShowing).x -= 212;
+                            godsTabs.get(idShowing).setLocation(tabPosition.get(idShowing));
+                        }
+                        idShowing = id;
+                        showing = true;
+                        tabPosition.get(id).x += 212;
+
+                    }
+                    godsTabs.get(id).setLocation(tabPosition.get(id));
                 }
-                godsTabs.get(id).setLocation(tabPosition.get(id));
             }
             PlayPanel.this.repaint();
         }
@@ -367,10 +368,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
             if (showing) {
                 g.drawImage(godsInfos.get(idShowing), 0, 270, PlayPanel.this);
                 g.setColor(Color.WHITE);
-                g.setFont(customFont.deriveFont(Font.PLAIN,25));
-                if(idShowing == playerID) g.drawImage(nameBaseRed, 0, 225, PlayPanel.this);
+                g.setFont(customFont.deriveFont(Font.PLAIN, 25));
+                if (idShowing == playerID) g.drawImage(nameBaseRed, 0, 225, PlayPanel.this);
                 else g.drawImage(nameBase, 0, 225, PlayPanel.this);
-                g.drawString(modelView.getPlayer(idShowing).getNickname(),40,257);
+                g.drawString(modelView.getPlayer(idShowing).getNickname(), 40, 257);
 
             }
         }
@@ -387,6 +388,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
     /**
      * manages interactions with clicks
      * on the buttons on this panel
+     *
      * @param e the e
      */
     @Override
@@ -521,7 +523,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
         } else if (evt.getPropertyName().equalsIgnoreCase("winnerDetected")) {
             if (modelView.getWinnerId() == playerID) {
                 messageCenter.setForeground(yellowColor);
-                WinningPanel winningPanel = new WinningPanel(this,seaAnimationCheck);
+                WinningPanel winningPanel = new WinningPanel(this, seaAnimationCheck);
                 layeredPane.add(winningPanel, JLayeredPane.POPUP_LAYER);
                 winningPanel.startTransition();
             } else {

@@ -202,7 +202,7 @@ public class Model {
         message.setOptional(getPlayer(id).essentialDone());
         if (!message.getChoices().isEmpty()) {
             modelListeners.firePropertyChange("actionsAvailable", null, message);
-        } else notifyPlayerHasLost(id);
+        }
     }
 
 
@@ -282,7 +282,7 @@ public class Model {
      */
     public void notifyPlayerHasLost(int id) {
         modelListeners.firePropertyChange("playerLostDetected", null,
-                new GenericMessage(id, "", " has no more available actions!"));
+                new GenericMessage(id, "has no more available actions!"));
     }
 
 

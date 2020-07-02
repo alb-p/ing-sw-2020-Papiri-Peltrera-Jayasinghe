@@ -155,7 +155,6 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
             }
         }
         submit.setEnabled(selectedGods.size() == playerPerGame);
-        System.out.println(selectedGods);
     }
 
     /**
