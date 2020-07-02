@@ -46,6 +46,7 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         this.setContentPane(contentPane);
         logo = new LogoPanel();
         contentPane.add("LogoPanel", logo);
+        contentPane.add( "WaitingNumberOfPlayers", new WaitingPanel("Waiting connections...",gui));
         contentPane.add( "InitialWaitingPanel", new WaitingPanel("Waiting for players...",gui));
         homePanel =  new HomePanel(this.getSize());
         homePanel.addHomePanelListener(gui);

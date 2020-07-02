@@ -122,7 +122,10 @@ public class WaitingPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
+
         waitingListeners.firePropertyChange("PlayerToDisconnect", false, true);
+        if(this.label.getText().equalsIgnoreCase("Waiting connections..."))
+            System.exit(0);
 
     }
 }
