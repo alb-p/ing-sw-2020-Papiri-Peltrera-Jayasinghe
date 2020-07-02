@@ -24,8 +24,7 @@ public class Pan extends BasicGodCard {
      */
     @Override
     public boolean winningCondition(Worker worker, IslandBoard board, VirtualBoard virtualBoard) {
-        if (virtualBoard.getSlot(new Coordinate(worker.getOldPosition().getRow(),worker.getOldPosition().getCol())).getLevel() == 2 &&
-                board.infoSlot(worker.getPosition()).getConstructionLevel() == 0) {
+        if ((virtualBoard.getSlot(new Coordinate(worker.getOldPosition().getRow(),worker.getOldPosition().getCol())).getLevel() - board.infoSlot(worker.getPosition()).getConstructionLevel()) >= 2) {
             return true;
         }
         return super.winningCondition(worker, board, virtualBoard);
