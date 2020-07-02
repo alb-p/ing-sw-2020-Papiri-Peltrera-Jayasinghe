@@ -7,6 +7,10 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The type Santorini print stream.
+ * It is used for those OS don't support Unicode
+ */
 public class SantoriniPrintStream extends PrintStream {
 
     boolean useUnicode;
@@ -38,12 +42,25 @@ public class SantoriniPrintStream extends PrintStream {
     }
 
 
+    /**
+     * Instantiates a new Santorini print stream.
+     *
+     * @param out        the OutputStream
+     * @param useUnicode boolean value depending on OS used
+     * @throws UnsupportedEncodingException the unsupported encoding exception
+     */
     SantoriniPrintStream(OutputStream out, boolean useUnicode) throws UnsupportedEncodingException {
         super(out, true, "UTF-8");
         this.useUnicode = useUnicode;
     }
 
 
+    /**
+     * Println override.
+     * If a char is in the charMap it is replace with the corresponding one
+     *
+     * @param s the string have to be processed
+     */
     @Override
     public void println(String s) {
         if (!useUnicode) {
