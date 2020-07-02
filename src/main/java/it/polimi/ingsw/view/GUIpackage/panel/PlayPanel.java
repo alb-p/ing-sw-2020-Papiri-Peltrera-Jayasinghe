@@ -3,6 +3,7 @@ package it.polimi.ingsw.view.GUIpackage.panel;
 import it.polimi.ingsw.actions.Build;
 import it.polimi.ingsw.actions.Move;
 import it.polimi.ingsw.actions.Action;
+import it.polimi.ingsw.model.Player;
 import it.polimi.ingsw.utils.Coordinate;
 import it.polimi.ingsw.utils.VirtualSlot;
 import it.polimi.ingsw.utils.messages.GenericMessage;
@@ -402,7 +403,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                             selected = t.getCoordinate();
                         }
                     }
-                    if (selected == null) {
+                    if (selected == null &&! actions.isEmpty()) {
                         Coordinate startBuild = actions.get(0).getStart();
                         for (Action a : actions) {
                             if (!a.getStart().equals(startBuild)) return;
@@ -527,16 +528,16 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 winningPanel.startTransition();
             } else {
                 messageCenter.setForeground(new Color(255, 255, 255));
-                JPanel loserPanel = new JPanel();
+                JPanel loserPanel = new JPanel(){
+                    @Override
+                    protected void paintComponent(Graphics g) {
+                        g.drawImage(new ImageIcon(this.getClass().getResource("/Gameplay/loser.png")).getImage(),0,0, PlayPanel.this);
+                    }
+                };
                 loserPanel.setVisible(true);
                 loserPanel.setBounds(0, 0, GUI.getDimension().width, GUI.getDimension().height);
                 loserPanel.setLayout(new GridBagLayout());
-                loserPanel.setBackground(new Color(0, 0, 0, 100));
-                JLabel loserLabel = new JLabel("You have lost");
-                loserLabel.setFont(messageCenter.getFont());
-                loserLabel.setForeground(new Color(255, 255, 255));
-                loserLabel.setFont(customFont.deriveFont(Font.PLAIN, (float)GUI.getDimension().width / 18));
-                loserPanel.add(loserLabel);
+                loserPanel.setOpaque(false);
                 layeredPane.add(loserPanel, JLayeredPane.POPUP_LAYER);
             }
             messageCenter.setText("Game ended");
