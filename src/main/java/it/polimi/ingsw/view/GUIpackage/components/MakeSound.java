@@ -44,7 +44,7 @@ public class MakeSound implements PropertyChangeListener {
                 e.printStackTrace();
             }
 
-            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);//per controllare il volume
+            FloatControl gainControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);//volume control
             gainControl.setValue(volume); // Reduce volume by "volume" decibels.
 
             if (loop) clip.loop(Clip.LOOP_CONTINUOUSLY);

@@ -9,7 +9,6 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.beans.Visibility;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -300,7 +299,6 @@ public class Model {
         getPlayer(id).setEndTurn();
         modelListeners.firePropertyChange("endTurnConfirm", null,
                 new NicknameMessage(id, this.getPlayer(id).getNickName()));
-        //notifyChanges();
     }
 
     /**

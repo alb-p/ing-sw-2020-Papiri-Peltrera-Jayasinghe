@@ -20,7 +20,7 @@ import java.nio.file.StandardCopyOption;
  * is the home screen after the logoPanel.
  */
 public class HomePanel extends JPanel implements ActionListener {
-    private PropertyChangeSupport homePanelListeners = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport homePanelListeners = new PropertyChangeSupport(this);
     private final Image image;
     private final CustomButton playButton;
     private final CustomButton helpButton;
@@ -29,8 +29,8 @@ public class HomePanel extends JPanel implements ActionListener {
     private final JLayeredPane layeredPane;
     private final JPanel home;
     private JPanel settings;
-    Dimension frameDimension;
-    MakeSound music;
+    private final Dimension frameDimension;
+    private final MakeSound music;
 
 
     /**
@@ -46,18 +46,9 @@ public class HomePanel extends JPanel implements ActionListener {
         home.setBounds(0,0, GUI.getDimension().width,GUI.getDimension().height);
         home.setOpaque(false);
         music=new MakeSound();
-
-
-
-
-
-
-
         frameDimension=d;
 
         this.image = new ImageIcon(this.getClass().getResource("/Home/home_title.jpg")).getImage();
-
-
         playButton = new CustomButton("/Home/play");
 
         helpButton = new CustomButton("/Home/help");
@@ -153,17 +144,17 @@ public class HomePanel extends JPanel implements ActionListener {
      */
     public class Settings extends JPanel implements ActionListener{
 
-        Font customFont;
+        private Font customFont;
 
-        Image background;
-        JButton musicButton;
-        JButton animationButton;
-        CustomButton confirm;
+        private final Image backgroundSetting;
+        private final JButton musicButton;
+        private final JButton animationButton;
+        private final CustomButton confirm;
 
 
         public Settings(){
             this.setBounds(200,300,559,371);
-            this.background = new ImageIcon(this.getClass().getResource("/Home/settings.png")).getImage();
+            this.backgroundSetting = new ImageIcon(this.getClass().getResource("/Home/settings.png")).getImage();
             this.setLayout(new GridLayout(3,2,0,30));
             this.setOpaque(false);
             this.setBorder(BorderFactory.createEmptyBorder(50,40,30,40));
@@ -211,7 +202,7 @@ public class HomePanel extends JPanel implements ActionListener {
         @Override
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
-            g.drawImage(this.background, 0, 0, this);
+            g.drawImage(this.backgroundSetting, 0, 0, this);
         }
 
 

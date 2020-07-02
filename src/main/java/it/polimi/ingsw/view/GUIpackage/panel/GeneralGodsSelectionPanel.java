@@ -107,7 +107,7 @@ public class GeneralGodsSelectionPanel extends JPanel implements ActionListener,
             font = title.getFont();
         }
 
-        title.setFont(font.deriveFont(Font.PLAIN,frameDimension.width/15));
+        title.setFont(font.deriveFont(Font.PLAIN,(float)frameDimension.width/15));
         godsList.add(submit);
         panelsx.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/30))));
         panelsx.add(title);

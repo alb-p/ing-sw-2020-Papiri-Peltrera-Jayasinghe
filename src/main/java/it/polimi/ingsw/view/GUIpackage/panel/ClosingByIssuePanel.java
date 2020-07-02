@@ -46,7 +46,7 @@ public class ClosingByIssuePanel extends JPanel implements ActionListener {
 
         for(String s : labelStrings ){
             JLabel label = new JLabel();
-            label.setFont(font.deriveFont(Font.PLAIN,GUI.getDimension().width/18));
+            label.setFont(font.deriveFont(Font.PLAIN,(float)GUI.getDimension().width/18));
             label.setForeground(Color.WHITE);
             label.setText(s);
             labels.add(label);

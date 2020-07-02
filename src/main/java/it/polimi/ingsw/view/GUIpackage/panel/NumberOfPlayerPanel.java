@@ -62,15 +62,6 @@ public class NumberOfPlayerPanel extends JPanel implements ActionListener {
         threePlayers.addActionListener(this);
 
 
-
-
-
-
-
-
-
-
-
         innerPanel2.setOpaque(false);
         innerPanel.setOpaque(false);
 

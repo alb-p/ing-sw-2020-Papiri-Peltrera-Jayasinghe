@@ -40,7 +40,6 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     private final PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
     private Image bgIsland = new ImageIcon(this.getClass().getResource("/IslandAnimation/island120.jpg")).getImage();
-    int i = 0;
     boolean workerPlaced = false;
     boolean play = false;
     boolean myTurn = false;
@@ -536,7 +535,7 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
                 JLabel loserLabel = new JLabel("You have lost");
                 loserLabel.setFont(messageCenter.getFont());
                 loserLabel.setForeground(new Color(255, 255, 255));
-                loserLabel.setFont(customFont.deriveFont(Font.PLAIN, GUI.getDimension().width / 18));
+                loserLabel.setFont(customFont.deriveFont(Font.PLAIN, (float)GUI.getDimension().width / 18));
                 loserPanel.add(loserLabel);
                 layeredPane.add(loserPanel, JLayeredPane.POPUP_LAYER);
             }

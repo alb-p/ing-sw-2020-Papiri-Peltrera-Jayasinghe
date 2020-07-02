@@ -32,6 +32,7 @@ public enum Color{
      *
      * @return the string
      */
+    @Override
     public String toString(){
         return (solidColor + symbol);
     }

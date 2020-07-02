@@ -96,7 +96,7 @@ public class Coordinate implements Serializable {
             for (int j = -1; j < 2; j++) {
                 if (this.getCol() + i < 5 && this.getCol() + i >= 0
                         && this.getRow() + j < 5 && this.getRow() + j >= 0
-                        && (i != 0 || j != 0)){
+                        && (i != 0 || j != 0)) {
                     list.add(new Coordinate(this.getRow() + j, this.getCol() + i));
 
                 }
