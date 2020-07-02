@@ -905,6 +905,10 @@ public class CLI extends RemoteView implements Runnable {
         connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
     }
 
+    /**
+     * It prints a player disconection message
+     *
+     */
     @Override
     protected void endGame() {
 
@@ -935,6 +939,10 @@ public class CLI extends RemoteView implements Runnable {
         }
     }
 
+    /**
+     * It prints a connection issue message
+     *
+     */
     @Override
     protected void invalidAlert() {
         printer.println("\n\n\n+-----------------------------------------+\n" +
