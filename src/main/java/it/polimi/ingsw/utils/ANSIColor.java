@@ -25,9 +25,7 @@ public enum ANSIColor {
     REVERSED("\u001B[7m"),
     RESET("\u001B[0m");
 
-    //public static final String RESET = "\u001B[0m";
-    //public final String RESET;
-    private String escape;
+    private final String escape;
 
     /**
      * Instantiates a new Ansi color.
@@ -45,16 +43,6 @@ public enum ANSIColor {
 
     }
 
-
-    /**
-     * Gets escape.
-     *
-     * @return the escape
-     */
-    public String getEscape()
-    {
-        return escape;
-    }
 
     /**
      * To string string.

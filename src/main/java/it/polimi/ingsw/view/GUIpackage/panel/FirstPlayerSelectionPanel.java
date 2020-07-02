@@ -64,7 +64,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
         innerPanel.add(title);
         innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/20))));
 
-        title.setFont(customFont.deriveFont(Font.PLAIN,frameDimension.width/18));
+        title.setFont(customFont.deriveFont(Font.PLAIN,(float)frameDimension.width/18));
 
         this.setLayout(new GridBagLayout());
         this.add(innerPanel);
@@ -115,8 +115,8 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
             choosePlayer.addActionListener(this);
             choosePlayer.setAlignmentX(Component.CENTER_ALIGNMENT);
             choosePlayer.setBorder(null);
-            choosePlayer.setContentAreaFilled(false);//trasparenza
-            choosePlayer.setFont(customFont.deriveFont(Font.PLAIN,frameDimension.width/30));
+            choosePlayer.setContentAreaFilled(false);//trasparency
+            choosePlayer.setFont(customFont.deriveFont(Font.PLAIN,(float)frameDimension.width/30));
             innerPanel.add(choosePlayer);
             innerPanel.add(Box.createRigidArea(new Dimension(0,(int) (frameDimension.height/25))));
         }

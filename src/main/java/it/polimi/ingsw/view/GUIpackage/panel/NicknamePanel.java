@@ -44,20 +44,14 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
 
         this.image = new ImageIcon(this.getClass().getResource("/Name/setupBG.jpg")).getImage();
         Font font;
-        Font labelFont;
-        Font errorFont;
         textLabel = new JLabel();
         try {
-            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 40); //carica font
-            labelFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 60); //carica font
-            errorFont = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 30); //carica font
+            font = Font.createFont(Font.TRUETYPE_FONT, getClass().getResourceAsStream("/CustomFont.otf")).deriveFont(Font.PLAIN, 40); //upload font
         }catch(IOException | FontFormatException e){
             font = textLabel.getFont();
-            labelFont = textLabel.getFont();
-            errorFont = textLabel.getFont();
         }
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        textLabel.setFont(labelFont);
+        textLabel.setFont(font.deriveFont(Font.PLAIN,60));
         textLabel.setText("Enter your nickname");
         textLabel.setForeground(Color.WHITE);
         textLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -66,7 +60,7 @@ public class NicknamePanel extends JPanel implements ActionListener , PropertyCh
         nickToFill.setHorizontalAlignment(JTextField.CENTER);
         nickToFill.setForeground(Color.WHITE);
         invalidNickLabel = new JLabel();
-        invalidNickLabel.setFont(errorFont);
+        invalidNickLabel.setFont(font.deriveFont(Font.PLAIN,30));
         invalidNickLabel.setForeground(new Color(241, 204, 118, 255));
         nickToFill.setOpaque(false);
         nicknameJPanel = new JPanel(new BorderLayout());

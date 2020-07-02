@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import static java.lang.Thread.sleep;
 
 
 /**
@@ -271,7 +270,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (evt.getPropertyName().equalsIgnoreCase("play")) {
-           ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "InitialWaitingPanel");
+           ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "WaitingNumberOfPlayers");
             new Thread(getConnection()).start();
         } else if (evt.getPropertyName().equalsIgnoreCase("numberOfPlayers")) {
             ((CardLayout) window.getContentPane().getLayout()).show(window.getContentPane(), "WaitingNumberOfPlayers");

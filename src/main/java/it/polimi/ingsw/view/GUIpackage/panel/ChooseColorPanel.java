@@ -56,7 +56,7 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
         this.add(colorButton1);
         this.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/10),0)));
         this.add(colorButton2);
-        this.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/12),0)));
+        this.add(Box.createRigidArea(new Dimension((int) (frameDimension.width/11),0)));
         this.add(colorButton3);
 
 
