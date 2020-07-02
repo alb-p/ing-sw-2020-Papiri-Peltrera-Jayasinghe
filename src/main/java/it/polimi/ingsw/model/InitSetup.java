@@ -15,11 +15,11 @@ import java.util.Collections;
  */
 public class InitSetup {
 
-    private ArrayList<Color> colors;
-    private ArrayList<String> nicknames;
-    private ArrayList<String> gods;
-    private ArrayList<String> chosenGods;
-    private PropertyChangeSupport initSetupListeners = new PropertyChangeSupport(this);
+    private final ArrayList<Color> colors;
+    private final ArrayList<String> nicknames;
+    private final ArrayList<String> gods;
+    private final ArrayList<String> chosenGods;
+    private final PropertyChangeSupport initSetupListeners = new PropertyChangeSupport(this);
 
     /**
      * Instantiates a new Init setup.

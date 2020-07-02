@@ -15,7 +15,7 @@ public class ActionTest {
     BasicGodCard card;
 
     @Before
-    public void setupBoardTest() throws Exception {
+    public void setupBoardTest() {
 
         player = new Player(0, "NICK", "WHITE");
         board = new IslandBoard();
@@ -36,7 +36,7 @@ public class ActionTest {
     }
 
     @Test
-    public void cardMoveTest() throws Exception {
+    public void cardMoveTest() {
         player.playerTreeSetup(board);
         player.selectWorker(new Coordinate(2,2));
 
@@ -50,7 +50,7 @@ public class ActionTest {
     }
 
     @Test
-    public void playerMoveTest() throws Exception {
+    public void playerMoveTest() {
         player.playerTreeSetup(board);
         player.selectWorker(new Coordinate(2,2));
         assertTrue(player.turnHandler(board,

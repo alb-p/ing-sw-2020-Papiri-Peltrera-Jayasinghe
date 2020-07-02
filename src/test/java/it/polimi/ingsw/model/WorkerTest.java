@@ -4,12 +4,13 @@ import it.polimi.ingsw.utils.Color;
 import it.polimi.ingsw.utils.Coordinate;
 import org.junit.Test;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class WorkerTest {
     @Test
     public void getPositionTest() {
         Worker worker = new Worker(3, 3, "WHITE");
-        assertEquals(true, new Coordinate(3, 3).equals(worker.getPosition()));
+        assertTrue(new Coordinate(3, 3).equals(worker.getPosition()));
         assertEquals(new Coordinate(3, 3).getRow(), worker.getPosition().getRow());
         assertEquals(new Coordinate(3, 3).getCol(), worker.getPosition().getCol());
     }

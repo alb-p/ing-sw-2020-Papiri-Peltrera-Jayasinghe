@@ -45,13 +45,13 @@ public class HypnusTest {
         assertTrue(card.turnHandler(enemy, board, new Move(new Coordinate(3, 3), new Coordinate(2, 3))));
         TreeActionNode root = card.cardTreeSetup(board.infoSlot(new Coordinate(2, 3)).getWorker(), board);
         TreeActionNode tempW1 = card.cardTreeSetup(board.infoSlot(new Coordinate(0, 0)).getWorker(), board);
-        TreeActionNode rootplayer = card.cardTreeSetup(board.infoSlot(new Coordinate(2, 0)).getWorker(), board);
+        TreeActionNode rootPlayer = card.cardTreeSetup(board.infoSlot(new Coordinate(2, 0)).getWorker(), board);
         //Hypnus modify opponent tree
         for (TreeActionNode t : tempW1.getChildren())
             root.addChild(t);
         assertEquals(9, root.getChildren().size());
         card.specialRule(root, board);
-        assertEquals(4, rootplayer.getChildren().size());
+        assertEquals(4, rootPlayer.getChildren().size());
         assertEquals(1, root.getChildren().size());
     }
 

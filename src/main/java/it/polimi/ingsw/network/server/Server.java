@@ -13,7 +13,7 @@ import java.util.logging.Logger;
  */
 public class Server {
 
-    private  ServerSocket serverSocket;
+    private final ServerSocket serverSocket;
     private final ExecutorService executor = Executors.newFixedThreadPool(128);
     private Room room = new Room(executor);
     private final Logger logger = Logger.getLogger("server");

@@ -44,16 +44,16 @@ public class TreeActionNodeTest {
         node.addChild(nodeMove);
         node.addChild(nodeBuild);
         ArrayList<TreeActionNode> list = node.getChildren();
-        assertTrue(list.size() == 2);
-        assertTrue(list.get(0).getData().getActionName().equals("move"));
-        assertTrue(list.get(1).getData().getActionName().equals("build"));
+        assertEquals(2, list.size());
+        assertEquals("move", list.get(0).getData().getActionName());
+        assertEquals("build", list.get(1).getData().getActionName());
     }
 
     @Test
     public void getParentTest() {
         nodeMove.addChild(nodeBuild);
         node.addChild(nodeMove);
-        assertTrue(nodeBuild.getParent() != null);
+        assertNotNull(nodeBuild.getParent());
         assertTrue(nodeBuild.getParent().getData() instanceof Move);
 
     }
