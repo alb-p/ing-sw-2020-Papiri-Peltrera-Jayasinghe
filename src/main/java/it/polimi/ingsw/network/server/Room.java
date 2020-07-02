@@ -4,7 +4,6 @@ import it.polimi.ingsw.controller.GameHandler;
 import it.polimi.ingsw.controller.TurnHandler;
 import it.polimi.ingsw.model.InitSetup;
 import it.polimi.ingsw.model.Model;
-import it.polimi.ingsw.network.server.SocketClientConnection;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;

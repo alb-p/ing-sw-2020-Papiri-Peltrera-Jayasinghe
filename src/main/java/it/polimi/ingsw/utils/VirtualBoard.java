@@ -6,7 +6,7 @@ package it.polimi.ingsw.utils;
 public class VirtualBoard {
 
 
-    private VirtualSlot[][] board = new VirtualSlot[5][5];
+    private final VirtualSlot[][] board = new VirtualSlot[5][5];
 
     /**
      * Instantiates a new Virtual board.

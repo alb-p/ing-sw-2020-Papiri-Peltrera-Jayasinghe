@@ -14,7 +14,6 @@ public class SlotTest {
     public void constructionOneDomeTest() throws Exception {
         Slot s= new Slot();
         s.construct(Construction.FLOOR);
-        //testo che costruita una cosa quella cella non è più libera
         Assert.assertEquals(1, s.getConstructionLevel());
         s.construct(Construction.FLOOR);
         Assert.assertEquals(2,s.getConstructionLevel());

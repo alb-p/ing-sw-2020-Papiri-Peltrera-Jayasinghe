@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public class Slot {
 
-    private Construction buildings[] = new Construction[4];
+    private final Construction[] buildings = new Construction[4];
     private boolean free;
     private Worker worker;
 

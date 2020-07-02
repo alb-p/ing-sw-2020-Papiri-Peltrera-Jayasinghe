@@ -8,8 +8,9 @@ import java.util.ArrayList;
  * Represents the position of a slot on the board
  */
 public class Coordinate implements Serializable {
-    private int row;
-    private int col;
+    private static final long serialVersionUID = -8521958880278804553L;
+    private final int row;
+    private final int col;
 
     /**
      * Instantiates a new Coordinate.
@@ -78,10 +79,7 @@ public class Coordinate implements Serializable {
      * @return the boolean
      */
     public boolean equals(Coordinate that) {
-        if (this.getCol() == that.getCol() && this.getRow() == that.getRow()) {
-            return true;
-        }
-        return false;
+        return this.getCol() == that.getCol() && this.getRow() == that.getRow();
 
     }
 
@@ -115,9 +113,6 @@ public class Coordinate implements Serializable {
      * @return the boolean
      */
     public boolean isValid() {
-        if (((this.getRow() < 0 || this.getRow() > 4) || (this.getCol() < 0 || this.getCol() > 4))) {
-            return false;
-        }
-        return true;
+        return (this.getRow() >= 0 && this.getRow() <= 4) && (this.getCol() >= 0 && this.getCol() <= 4);
     }
 }

@@ -9,8 +9,8 @@ import it.polimi.ingsw.utils.Coordinate;
  */
 public class Worker {
 
-    private Color color;
-    private Coordinate[] coord;
+    private final Color color;
+    private final Coordinate[] coordinates;
 
 
     /**
@@ -21,10 +21,10 @@ public class Worker {
      * @param color the color
      */
     public Worker(int row, int col, String color) {
-        this.coord = new Coordinate[3];
-        this.coord[0] = new Coordinate(row, col);
-        this.coord[1] = new Coordinate(row, col);
-        this.coord[2] = new Coordinate(row, col);
+        this.coordinates = new Coordinate[3];
+        this.coordinates[0] = new Coordinate(row, col);
+        this.coordinates[1] = new Coordinate(row, col);
+        this.coordinates[2] = new Coordinate(row, col);
         this.color = Enum.valueOf(Color.class, color.toUpperCase());
     }
 
@@ -35,10 +35,10 @@ public class Worker {
      * @param color      the color
      */
     public Worker(Coordinate coordinate, String color) {
-        this.coord = new Coordinate[3];
-        this.coord[0] = coordinate;
-        this.coord[1] = coordinate;
-        this.coord[2] = coordinate;
+        this.coordinates = new Coordinate[3];
+        this.coordinates[0] = coordinate;
+        this.coordinates[1] = coordinate;
+        this.coordinates[2] = coordinate;
         this.color = Enum.valueOf(Color.class, color.toUpperCase());
     }
 
@@ -49,10 +49,10 @@ public class Worker {
      * @param color      the color
      */
     public Worker(Coordinate coordinate, Color color) {
-        this.coord = new Coordinate[3];
-        this.coord[0] = coordinate;
-        this.coord[1] = coordinate;
-        this.coord[2] = coordinate;
+        this.coordinates = new Coordinate[3];
+        this.coordinates[0] = coordinate;
+        this.coordinates[1] = coordinate;
+        this.coordinates[2] = coordinate;
         this.color = color;
     }
 
@@ -63,7 +63,7 @@ public class Worker {
      * @return the position
      */
     public Coordinate getPosition() {
-        return this.coord[0];
+        return this.coordinates[0];
     }
 
     /**
@@ -72,7 +72,7 @@ public class Worker {
      * @return the old position
      */
     public Coordinate getOldPosition() {
-        return this.coord[1];
+        return this.coordinates[1];
     }
 
     /**
@@ -81,9 +81,9 @@ public class Worker {
      * @param coordinate the coordinate
      */
     public void setPosition(Coordinate coordinate) {
-        this.coord[2] = this.coord[1];
-        this.coord[1] = this.coord[0];
-        this.coord[0] = coordinate;
+        this.coordinates[2] = this.coordinates[1];
+        this.coordinates[1] = this.coordinates[0];
+        this.coordinates[0] = coordinate;
     }
 
     /**

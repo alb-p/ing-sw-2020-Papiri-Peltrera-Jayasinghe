@@ -13,7 +13,7 @@ public class IslandBoardTest {
     IslandBoard board;
 
     @Before
-    public void init() throws Exception {
+    public void init(){
         board = new IslandBoard();
         board.infoSlot(new Coordinate(4, 4)).construct(Construction.FLOOR);
         board.infoSlot(new Coordinate(4, 4)).construct(Construction.FLOOR);
@@ -28,9 +28,10 @@ public class IslandBoardTest {
 
     @Test
     public void infoSlotTest() {
-
+        //Warning is logged for those two lines
         assertNull(board.infoSlot(new Coordinate(-1, 1)));
         assertNull(board.infoSlot(new Coordinate(-1, -1)));
+
         assertNotNull(board.infoSlot(new Coordinate(0, 0)));
         assertNotNull(board.infoSlot(new Coordinate(4, 0)));
         assertNotNull(board.infoSlot(new Coordinate(3, 1)));
@@ -44,6 +45,5 @@ public class IslandBoardTest {
         assertEquals(0, board.infoSlot(new Coordinate(1, 1)).getConstructionLevel());
         assertNotNull(board.infoSlot(new Coordinate(1,1)).getWorker());
         assertFalse(board.infoSlot(new Coordinate(1, 1)).isFree());
-
     }
 }

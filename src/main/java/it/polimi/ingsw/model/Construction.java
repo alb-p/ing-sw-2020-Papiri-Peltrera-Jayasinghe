@@ -8,7 +8,7 @@ public enum Construction {
     FLOOR("F"),
     DOME("D");
 
-    private String symbol;
+    private final String symbol;
 
     /**
      * Instantiates a new Construction.
