@@ -86,7 +86,9 @@ public class ClosingByIssuePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if(actionEvent.getSource().equals(exitButton)){
-            closingByIssuePanelListeners.firePropertyChange("playerToDisconnect", false, true);
+            if(((JButton)(actionEvent.getSource())).getParent().getParent().getName().equals("invalidAlertPanel")){
+                System.exit(0);
+            } else closingByIssuePanelListeners.firePropertyChange("playerToDisconnect", false, true);
         }
     }
 }

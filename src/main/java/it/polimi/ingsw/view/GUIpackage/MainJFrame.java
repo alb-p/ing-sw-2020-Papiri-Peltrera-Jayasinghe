@@ -59,10 +59,12 @@ public class MainJFrame extends JFrame implements PropertyChangeListener {
         nickPane.addNicknamePanelListener(gui);
         modelView.addNicknameListener(nickPane);
         ClosingByIssuePanel endGamePanel = new ClosingByIssuePanel(new ArrayList<>( Arrays.asList("A player left the lobby,", "please restart the game")));
+        endGamePanel.setName("endGamePanel");
         contentPane.add(endGamePanel, "endGamePanel");
         endGamePanel.addClosingByIssuePanelListener(gui);
         ClosingByIssuePanel invalidAlertPanel = new ClosingByIssuePanel(new ArrayList<>( Arrays.asList("A connection issue occurred,",
                 "please check parameters.")));
+        invalidAlertPanel.setName("invalidAlertPanel");
         contentPane.add(invalidAlertPanel, "invalidAlertPanel");
         invalidAlertPanel.addClosingByIssuePanelListener(gui);
         ChooseColorPanel colorPanel = new ChooseColorPanel(gui.getPlayerId(),this.getSize());
