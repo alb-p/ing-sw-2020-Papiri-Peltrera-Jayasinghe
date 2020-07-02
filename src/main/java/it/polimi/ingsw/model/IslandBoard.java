@@ -12,7 +12,7 @@ import java.util.logging.Logger;
 public class IslandBoard{
 
     private final Logger logger = Logger.getLogger("model.board");
-    Slot[][] board = new Slot[5][5];
+    private final Slot[][] board = new Slot[5][5];
 
     /**
      * Instantiates a new Island board.
@@ -41,6 +41,16 @@ public class IslandBoard{
             return null;
         }
     }
+
+    public Slot[][] getBoard() {
+        return board;
+    }
+
+    public int getLength(){
+        return board.length;
+    }
+
+
 
 
 

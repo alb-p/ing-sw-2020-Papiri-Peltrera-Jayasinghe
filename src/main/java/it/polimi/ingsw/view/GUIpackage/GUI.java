@@ -38,7 +38,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         return new Dimension(960, 720);
     }
 
-    private PropertyChangeSupport guiListeners = new PropertyChangeSupport(this);
+    private final PropertyChangeSupport guiListeners = new PropertyChangeSupport(this);
 
     /**
      * Instantiates a new Gui.
@@ -321,7 +321,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
         } else if(evt.getPropertyName().equalsIgnoreCase("end turn")){
             Message message = (GenericMessage) evt.getNewValue();
             connection.sendEvent(new PropertyChangeEvent(this, "endTurn", null, message));
-        }else if(evt.getPropertyName().equalsIgnoreCase("playerToDisconnect")){
+        } else if(evt.getPropertyName().equalsIgnoreCase("playerToDisconnect")){
             connection.sendEvent(new PropertyChangeEvent(this, "playerDisconnected", null, true));
         }
     }

@@ -157,8 +157,8 @@ public class Model {
      */
     public void notifyChanges() {
         VirtualSlot oldVSlot;
-        for (int i = 0; i < board.board.length; i++) {
-            for (int j = 0; j < board.board.length; j++) {
+        for (int i = 0; i < board.getLength(); i++) {
+            for (int j = 0; j < board.getLength(); j++) {
                 oldVSlot = oldBoard.getSlot(new Coordinate(i, j));
                 Color color = null;
                 if (board.infoSlot(new Coordinate(i, j)).getWorker() != null) {
@@ -210,11 +210,11 @@ public class Model {
     /**
      * Build tree.
      *
-     * @param ID the id
+     * @param id the id
      */
-    public void buildTree(int ID) {
-        getPlayer(ID).playerTreeSetup(board);
-        treeEditorBySpecialRule(ID);
+    public void buildTree(int id) {
+        getPlayer(id).playerTreeSetup(board);
+        treeEditorBySpecialRule(id);
     }
 
 

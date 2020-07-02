@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ public class ClosingByIssuePanel extends JPanel implements ActionListener {
 
     private final Image image = new ImageIcon(this.getClass().getResource("/Home/HomeBG.jpg")).getImage();
     private final CustomButton exitButton;
+    private final PropertyChangeSupport closingByIssuePanelListeners = new PropertyChangeSupport(this);
 
     public ClosingByIssuePanel(List<String> labelStrings){
         this.setLayout(new GridBagLayout());
@@ -70,6 +73,9 @@ public class ClosingByIssuePanel extends JPanel implements ActionListener {
 
     }
 
+    public void addClosingByIssuePanelListener(PropertyChangeListener listener){
+        closingByIssuePanelListeners.addPropertyChangeListener(listener);
+    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -80,7 +86,7 @@ public class ClosingByIssuePanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if(actionEvent.getSource().equals(exitButton)){
-            System.exit(0);
+            closingByIssuePanelListeners.firePropertyChange("playerToDisconnect", false, true);
         }
     }
 }
