@@ -36,7 +36,6 @@ public class Slot {
      * Construct.
      *
      * @param c the c
-     * @throws Exception the exception
      */
     public boolean construct(Construction c){
         for (int i = 0; i < buildings.length; i++) {
