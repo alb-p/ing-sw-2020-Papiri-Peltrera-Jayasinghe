@@ -125,7 +125,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                         ((PropertyChangeEvent) inputObject).getPropertyName().equalsIgnoreCase("playerDisconnected")) {
                     sccListeners.firePropertyChange("playerDisconnected", this, id);
                     send(new GenericMessage(id,"acceptedDisconnection"));
-                    System.out.println("ACCEPTED ID "+id);
                     socket.close();
                 }
             }
@@ -161,14 +160,6 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
         if (!socket.isClosed()) sendEvent(evt);
-        if (evt.getPropertyName().equalsIgnoreCase("endGame")) {
-            try {
-                socket.close();
-                logger.log(Level.FINE, "Closed well id " + id);
-            } catch (IOException e) {
-                logger.log(Level.SEVERE, e.getMessage());
-            }
-        }
     }
 
     /**
