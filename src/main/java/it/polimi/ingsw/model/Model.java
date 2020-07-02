@@ -9,6 +9,7 @@ import it.polimi.ingsw.utils.messages.*;
 
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.beans.Visibility;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -241,12 +242,16 @@ public class Model {
      */
     public void removePlayer(int id) {
         for (int i = 0; i < 2; i++) {
-            board.infoSlot(getPlayer(id).getWorker(i).getPosition()).free();
+            Coordinate workerPos = getPlayer(id).getWorker(i).getPosition();
+            VirtualSlot vSlot = new VirtualSlot(null, board.infoSlot(workerPos).getConstructionLevel(),board.infoSlot(workerPos).hasADome(),workerPos);
+            board.infoSlot(workerPos).free();
             getPlayer(id).getWorker(i).setPosition(new Coordinate(-1, -1));
+            modelListeners.firePropertyChange("deltaUpdate", null, vSlot);
+
         }
         Player toRemove = getPlayer(id);
         players.remove(toRemove);
-        notifyChanges();
+
     }
 
     /**
