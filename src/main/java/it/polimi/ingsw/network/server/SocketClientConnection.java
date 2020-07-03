@@ -118,7 +118,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
                 if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getNewValue() instanceof Message
                         && ((Message) ((PropertyChangeEvent) inputObject).getNewValue()).getId() == id) {
-                    receiveDebug((PropertyChangeEvent) inputObject);
+                    //receiveDebug((PropertyChangeEvent) inputObject);
                     sccListeners.firePropertyChange((PropertyChangeEvent) inputObject);
                 } else if (inputObject instanceof PropertyChangeEvent &&
                         ((PropertyChangeEvent) inputObject).getPropertyName().equalsIgnoreCase("playerDisconnected")) {
@@ -168,7 +168,7 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
      * @param evt the evt to forward
      */
     public void sendEvent(PropertyChangeEvent evt) {
-        debug(evt);
+        //debug(evt);
         try {
             synchronized (outSocket) {
                 outSocket.reset();
