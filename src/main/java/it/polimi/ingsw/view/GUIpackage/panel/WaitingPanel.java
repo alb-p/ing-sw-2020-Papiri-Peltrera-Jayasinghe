@@ -18,11 +18,11 @@ public class WaitingPanel extends JPanel implements ActionListener {
 
     private final Image homeBackground;
     private final JLabel label;
-    private JLabel animation;
+    private final JLabel animation;
     private final Dimension frameDimension;
-    JLayeredPane layeredPane;
-    JButton exit;
-    JPanel waitingContainer;
+    private final JLayeredPane layeredPane;
+    private final JButton exit;
+    private final JPanel waitingContainer;
 
     private PropertyChangeSupport waitingListeners = new PropertyChangeSupport(this);
 

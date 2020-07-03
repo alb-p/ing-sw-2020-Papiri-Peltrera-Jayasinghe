@@ -11,8 +11,8 @@ import java.io.Serializable;
 public class GodMessage implements Message, Serializable {
 
     private static final long serialVersionUID = 1648566943652144363L;
-    String message;
-    String god;
+    private String message;
+    private String god;
     int id;
 
 

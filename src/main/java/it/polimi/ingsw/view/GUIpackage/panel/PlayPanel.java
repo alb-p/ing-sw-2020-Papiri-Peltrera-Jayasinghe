@@ -41,10 +41,10 @@ public class PlayPanel extends JPanel implements ActionListener, PropertyChangeL
 
     private final PropertyChangeSupport playPanelListener = new PropertyChangeSupport(this);
     private Image bgIsland = new ImageIcon(this.getClass().getResource("/IslandAnimation/island120.jpg")).getImage();
-    boolean workerPlaced = false;
-    boolean play = false;
-    boolean myTurn = false;
-    boolean firstPlayerSelected = false;
+    private boolean workerPlaced = false;
+    private boolean play = false;
+    private boolean myTurn = false;
+    private boolean firstPlayerSelected = false;
     private final ArrayList<Coordinate> workerPositions = new ArrayList<>();
     private final JLayeredPane layeredPane = new JLayeredPane();
     private final MakeSound music = new MakeSound();

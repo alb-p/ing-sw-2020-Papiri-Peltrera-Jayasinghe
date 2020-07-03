@@ -9,10 +9,10 @@ import java.awt.*;
  */
 public class GodsButton extends JButton {
 
-    ImageIcon glow;
-    ImageIcon godMiniature;
-    boolean selected= false;
-    String name;
+    private final ImageIcon glow;
+    private final ImageIcon godMiniature;
+    private boolean selected= false;
+    private final String name;
 
 
     /**

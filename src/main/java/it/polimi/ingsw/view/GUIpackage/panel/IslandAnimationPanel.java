@@ -15,9 +15,9 @@ import java.beans.PropertyChangeSupport;
 public class IslandAnimationPanel extends JPanel implements ActionListener {
 
 
-    ImageIcon frames;
+    private ImageIcon frames;
     private Timer timer;
-    int currentFrame = 1;
+    private int currentFrame = 1;
 
     private final PropertyChangeSupport islandAnimSupport;
 

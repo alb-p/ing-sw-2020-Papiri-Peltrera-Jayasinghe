@@ -20,16 +20,16 @@ public class WorkerIcon extends JLabel implements ActionListener {
     private final String color;
     private final PropertyChangeSupport workerIconListeners = new PropertyChangeSupport(this);
 
-    int posX;
-    int posY;
-    int finalX;
-    int finalY;
+    private int posX;
+    private int posY;
+    private int finalX;
+    private int finalY;
 
-    float deltaX;
-    float deltaY;
+    private float deltaX;
+    private float deltaY;
 
-    float exactX;
-    float exactY;
+    private float exactX;
+    private float exactY;
 
 
     /**

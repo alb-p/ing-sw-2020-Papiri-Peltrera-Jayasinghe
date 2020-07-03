@@ -10,7 +10,7 @@ import java.io.Serializable;
 public class WinnerMessage implements Message, Serializable {
 
     private static final long serialVersionUID = 7815827983162006979L;
-    private final int id;
+    private int id;
     private final String message;
 
     /**
@@ -37,11 +37,11 @@ public class WinnerMessage implements Message, Serializable {
     /**
      * Sets id.
      *
-     * @param i the
+     * @param id the id
      */
     @Override
-    public void setId(int i) {
-
+    public void setId(int id) {
+        this.id = id;
     }
 
     /**

@@ -8,7 +8,7 @@ import java.util.logging.Logger;
  */
 public class ServerMain {
 
-    private static Logger logger = Logger.getLogger("serverMain");
+    private static final Logger logger = Logger.getLogger("serverMain");
 
 
     /**
@@ -21,9 +21,10 @@ public class ServerMain {
         Server server;
         int port = 4566;
         if(args.length >0){
-            String arg = args[0].replaceAll("[^0-9]", "");
-            if (!arg.equals("")){
-                port = Integer.parseInt(arg);
+            try{
+                port = Integer.parseInt(args[0]);
+            } catch(NumberFormatException e){
+                logger.log(Level.SEVERE, "Invalid port argument");
             }
         }
         try {

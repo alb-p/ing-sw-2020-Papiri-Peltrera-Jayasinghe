@@ -29,7 +29,7 @@ public class ChooseColorPanel extends JPanel implements ActionListener, Property
     private final ArrayList<Color> colors = new ArrayList<>();
     private final PropertyChangeSupport colorPanelListener = new PropertyChangeSupport(this);
     private final Dimension frameDimension;
-    Image colorBackground;
+    private final Image colorBackground;
 
     /**
      * Instantiates a new Choose color panel.

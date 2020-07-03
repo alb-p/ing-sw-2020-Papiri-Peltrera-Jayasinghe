@@ -27,7 +27,7 @@ public class GUI extends RemoteView implements Runnable, PropertyChangeListener 
     private final SocketServerConnection connection;
     private MainJFrame window;
     private Integer numOfPlayers = 1;
-    Logger logger = Logger.getLogger("gui.view");
+    private Logger logger = Logger.getLogger("gui.view");
     /**
      * Gets dimension.
      *

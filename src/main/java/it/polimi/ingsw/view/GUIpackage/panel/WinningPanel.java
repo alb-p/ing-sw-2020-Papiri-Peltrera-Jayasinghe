@@ -14,10 +14,10 @@ import java.awt.event.ActionListener;
 public class WinningPanel extends JPanel implements ActionListener {
 
 
-    ImageIcon frames;
+    private ImageIcon frames;
     private Timer timer;
-    int currentFrame = 1;
-    JPanel playPanel;
+    private int currentFrame = 1;
+    private final JPanel playPanel;
 
 
     public WinningPanel(JPanel p, boolean onAnimation) {

@@ -13,10 +13,10 @@ import java.awt.event.MouseListener;
  */
 public class CustomButton extends JButton implements MouseListener{
 
-    ImageIcon normal;
-    ImageIcon onMouse;
-    ImageIcon pressed;
-    MakeSound music;
+    private final ImageIcon normal;
+    private final ImageIcon onMouse;
+    private final ImageIcon pressed;
+    private final MakeSound music;
 
     /**
      * Instantiates a new Custom button.
@@ -28,7 +28,7 @@ public class CustomButton extends JButton implements MouseListener{
         this.music= new MakeSound();
         this.setBorderPainted(false);
         this.setBorder(null);
-        this.setContentAreaFilled(false);//trasparenza
+        this.setContentAreaFilled(false);
         this.setOpaque(false);
         this.setAlignmentX(Component.CENTER_ALIGNMENT);
 

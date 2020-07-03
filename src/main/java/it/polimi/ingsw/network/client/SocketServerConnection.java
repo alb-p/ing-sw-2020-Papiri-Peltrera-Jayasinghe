@@ -85,6 +85,7 @@ public class SocketServerConnection implements Runnable{
         } catch (ClassNotFoundException e) {
             logger.log(Level.SEVERE, e.getMessage());
         } catch (NullPointerException | IOException e){
+            logger.log(Level.WARNING, e.getMessage());
             view.notifyEvent(new PropertyChangeEvent(this, "invalidServer", false, true));
         }
     }

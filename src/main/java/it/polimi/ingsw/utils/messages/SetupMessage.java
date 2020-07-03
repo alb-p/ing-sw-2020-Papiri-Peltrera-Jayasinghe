@@ -12,6 +12,7 @@ public class SetupMessage implements Message, Serializable {
     private static final long serialVersionUID = -7411184900368970103L;
     private String message = "How many players for the game?";
     private int field = 0;
+    private int id;
 
 
     /**
@@ -25,13 +26,13 @@ public class SetupMessage implements Message, Serializable {
     }
 
     /**
-     * Sets id.
+     * Never used because players don't already exist
      *
-     * @param i the
+     * @param id the id
      */
     @Override
-    public void setId(int i) {
-
+    public void setId(int id) {
+        this.id  = id;
     }
 
     /**

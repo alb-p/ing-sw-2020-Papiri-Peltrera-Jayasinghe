@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class SantoriniPrintStream extends PrintStream {
 
-    boolean useUnicode;
+    protected boolean useUnicode;
 
     private static final Map<Character, Character> charMap;
 

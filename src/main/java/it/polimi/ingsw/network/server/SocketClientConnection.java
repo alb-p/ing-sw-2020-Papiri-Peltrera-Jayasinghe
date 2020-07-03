@@ -27,10 +27,9 @@ public class SocketClientConnection implements Runnable, PropertyChangeListener 
     private ObjectOutputStream outSocket;
     private ObjectInputStream inSocket;
     private final PropertyChangeSupport sccListeners = new PropertyChangeSupport(this);
-    private Logger logger = Logger.getLogger("network.scc");
+    private final Logger logger = Logger.getLogger("network.scc");
 
     private int id;
-    private boolean active = true;
 
     /**
      * Instantiates a new Socket client connection.

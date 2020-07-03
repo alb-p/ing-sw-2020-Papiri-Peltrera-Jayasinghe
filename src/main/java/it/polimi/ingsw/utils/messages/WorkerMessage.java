@@ -19,13 +19,13 @@ public class WorkerMessage implements Message, Serializable {
     /**
      * Instantiates a new Worker message.
      *
-     * @param ID the id
-     * @param n  the n
+     * @param id the id
+     * @param n  the worker number
      */
-    public WorkerMessage(int ID, int n) {
-        this.id = ID;
+    public WorkerMessage(int id, int n) {
+        this.id = id;
         this.workerNumber=n;
-        this.message = "Posiziona il worker n."+workerNumber;
+        this.message = "";
     }
 
     /**

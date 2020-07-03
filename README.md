@@ -33,6 +33,7 @@ To win the game, players must move one of their two characters to the third leve
 <ul>
 <li><a href = "https://github.com/alb-p/ing-sw-2020-Papiri-Peltrera-Jayasinghe/tree/master/deliveries/Javadoc.zip"><b>JavaDoc</b> </a></li>
 <li><a href = "https://github.com/alb-p/ing-sw-2020-Papiri-Peltrera-Jayasinghe/tree/master/deliveries/Coverage.zip"><b>Coverage</b></a></li>
+<li><a href = "https://github.com/alb-p/ing-sw-2020-Papiri-Peltrera-Jayasinghe/tree/master/deliveries/UML"><b>UML diagrams</b></a></li>
 </ul>
 
 
@@ -40,6 +41,13 @@ To win the game, players must move one of their two characters to the third leve
 <h4> Prerequisites </h4>
 <p>The game requires Java 11 or later versions to run.<br>
 UTF-8 support is strongly recommended for a more enjoyable CLI gaming experience.</p>
+
+<h4> Create jars with Maven</h4>
+
+```bash
+$ mvn package
+```
+Create server and client jars with Maven from command line. They will be created in the <i>target</i> folder of the project.
 
 <h4> Client </h4>
 

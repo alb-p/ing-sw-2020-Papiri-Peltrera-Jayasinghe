@@ -25,7 +25,7 @@ public class FirstPlayerSelectionPanel extends JPanel implements ActionListener,
     private final Dimension frameDimension;
     private final Image image;
     private final JPanel innerPanel;
-    Font customFont;
+    private final Font customFont;
 
 
     /**

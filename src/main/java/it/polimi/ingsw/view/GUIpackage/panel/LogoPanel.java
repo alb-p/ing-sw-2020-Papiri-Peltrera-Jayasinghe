@@ -15,11 +15,11 @@ import static java.lang.Thread.sleep;
 public class LogoPanel extends JPanel implements ActionListener {
 
 
-    Image frames;
+    private Image frames;
     private Timer timer;
-    int currentFrame = 1;
+    private int currentFrame = 1;
 
-    private PropertyChangeSupport list;
+    private final PropertyChangeSupport list;
 
 
     /**
